@@ -610,8 +610,8 @@ MonoBehaviour:
         destinationDialogueID: 5
         isConnector: 0
         priority: 2
-      conditionsString: Variable["PlayerDead"] == true
-      userScript: 
+      conditionsString: 
+      userScript: Variable["PlayerDead"] = true
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -665,8 +665,8 @@ MonoBehaviour:
         destinationDialogueID: 6
         isConnector: 0
         priority: 2
-      conditionsString: Variable["PlayerDead"] == false
-      userScript: 
+      conditionsString: 
+      userScript: Variable["PlayerDead"] = false
       onExecute:
         m_PersistentCalls:
           m_Calls: []
