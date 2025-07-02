@@ -337,7 +337,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Variable["isTalkToOthersInDay3"] = true
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -545,7 +545,7 @@ MonoBehaviour:
         isConnector: 0
         priority: 2
       conditionsString: 
-      userScript: 
+      userScript: Variable["isTalkToOthersInDay3"] = true
       onExecute:
         m_PersistentCalls:
           m_Calls: []
@@ -1106,8 +1106,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 2.6623154}
-    canvasZoom: 1.03
+    canvasScrollPosition: {x: 142.96793, y: 0}
+    canvasZoom: 0.85000014
   - id: 3
     fields:
     - title: Title
@@ -1522,8 +1522,8 @@ MonoBehaviour:
       falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks: []
-      conditionsString: Variable["isTalkToOthersInDay3"] == false and (Variable["Day"]
-        == 3)
+      conditionsString: Variable["Day"] == 3 and (Variable["isTalkToOthersInDay3"]
+        == false)
       userScript: 
       onExecute:
         m_PersistentCalls:

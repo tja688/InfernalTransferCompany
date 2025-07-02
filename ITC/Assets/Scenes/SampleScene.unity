@@ -815,6 +815,7 @@ GameObject:
   - component: {fileID: 726805303}
   - component: {fileID: 726805304}
   - component: {fileID: 726805305}
+  - component: {fileID: 726805306}
   m_Layer: 0
   m_Name: NPC Barks
   m_TagString: Untagged
@@ -1161,6 +1162,31 @@ MonoBehaviour:
   useBarkTitlePicker: 1
   useQuestNamePicker: 1
   selectedDatabase: {fileID: 11400000, guid: b02228596d8a7e348a5e9b14dd35c1d1, type: 2}
+--- !u!114 &726805306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726805298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 274b80ab5b659c646ba9338870d14625, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_overrideName: 
+  m_overrideUseMessage: 
+  maxUseDistance: 5
+  events:
+    onSelect:
+      m_PersistentCalls:
+        m_Calls: []
+    onDeselect:
+      m_PersistentCalls:
+        m_Calls: []
+    onUse:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &839216000
 GameObject:
   m_ObjectHideFlags: 0
@@ -1976,8 +2002,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1425249788594072842, guid: 4d6f2e047373079448f746690cdc4305, type: 3}
       propertyPath: displaySettings.cameraSettings.defaultSequence
-      value: '[Condition: Variable["Day"] == 3 and Variable["isTalkToOthersInDay3"]
-        == false] SetVariable("isTalkToOthersInDay3", true)'
+      value: Delay({{end}})
       objectReference: {fileID: 0}
     - target: {fileID: 1425249788604025518, guid: 4d6f2e047373079448f746690cdc4305, type: 3}
       propertyPath: m_LocalPosition.x
