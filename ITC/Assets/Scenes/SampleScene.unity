@@ -1976,9 +1976,8 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1425249788594072842, guid: 4d6f2e047373079448f746690cdc4305, type: 3}
       propertyPath: displaySettings.cameraSettings.defaultSequence
-      value: 'Lua(print(''LUA IS WORKING''))
-
-'
+      value: '[Condition: Variable["Day"] == 3 and Variable["isTalkToOthersInDay3"]
+        == false] SetVariable("isTalkToOthersInDay3", true)'
       objectReference: {fileID: 0}
     - target: {fileID: 1425249788604025518, guid: 4d6f2e047373079448f746690cdc4305, type: 3}
       propertyPath: m_LocalPosition.x
