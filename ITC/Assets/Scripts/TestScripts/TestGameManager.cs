@@ -12,4 +12,15 @@ public class TestGameManager : MonoBehaviour
         DialogueLua.SetVariable("isTalkToOthersInDay3", false);
     }
     
+
+    public void ExitApplication()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // 编辑器模式退出
+#else
+    Application.Quit(); // 打包后退出游戏
+#endif
+    }
+
+    
 }
