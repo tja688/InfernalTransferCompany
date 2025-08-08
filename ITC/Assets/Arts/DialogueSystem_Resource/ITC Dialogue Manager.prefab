@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1425249788582124942, guid: 4d6f2e047373079448f746690cdc4305, type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1425249788582124942, guid: 4d6f2e047373079448f746690cdc4305, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1596609345
+      objectReference: {fileID: 0}
     - target: {fileID: 1425249788594072842, guid: 4d6f2e047373079448f746690cdc4305, type: 3}
       propertyPath: initialDatabase
       value: 
@@ -15,7 +23,7 @@ PrefabInstance:
     - target: {fileID: 1425249788594072842, guid: 4d6f2e047373079448f746690cdc4305, type: 3}
       propertyPath: displaySettings.dialogueUI
       value: 
-      objectReference: {fileID: 119578, guid: 59188e770d1a95b4ab5f30e101912937, type: 3}
+      objectReference: {fileID: 119578, guid: bc093c7c0c6489c4596c4f49dfcc1bfb, type: 3}
     - target: {fileID: 1425249788604025518, guid: 4d6f2e047373079448f746690cdc4305, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -59,6 +67,18 @@ PrefabInstance:
     - target: {fileID: 1425249788604325774, guid: 4d6f2e047373079448f746690cdc4305, type: 3}
       propertyPath: m_Name
       value: ITC Dialogue Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5058387288409067670, guid: 4d6f2e047373079448f746690cdc4305, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5058387288409067670, guid: 4d6f2e047373079448f746690cdc4305, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 5058387288409067670, guid: 4d6f2e047373079448f746690cdc4305, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
