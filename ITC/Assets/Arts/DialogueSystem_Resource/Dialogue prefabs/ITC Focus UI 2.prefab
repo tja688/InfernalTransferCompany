@@ -628,9 +628,28 @@ MonoBehaviour:
   subtitleRoot: {fileID: 22498732}
   liftDistance: 200
   subtitleMoveTime: 0.22
-  subtitleCurve:
+  subtitleEase: 0
+  subtitleCustomCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 3
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -638,18 +657,56 @@ MonoBehaviour:
   enterOffsetY: -60
   enterDuration: 0.28
   itemStagger: 0.035
-  enterCurve:
+  enterEase: 0
+  enterCustomCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 3
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   lockInteractableDuringEnter: 1
   exitDuration: 0.18
   exitSlideY: 40
-  exitCurve:
+  exitEase: 4
+  exitCustomCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 3
+      outSlope: 3
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -981,10 +1038,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22450870}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 16, y: -8}
+  m_SizeDelta: {x: 128, y: 22}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &22272242
 CanvasRenderer:
@@ -1817,10 +1874,10 @@ RectTransform:
   - {fileID: 22472826}
   m_Father: {fileID: 22428976}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 26}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 106, y: -17}
+  m_SizeDelta: {x: 100, y: 26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &22294854
 CanvasRenderer:
@@ -2287,10 +2344,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22428976}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 22}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 28, y: -15}
+  m_SizeDelta: {x: 48, y: 22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &22283120
 CanvasRenderer:
@@ -2740,7 +2797,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0.000009953976}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 80}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &11400418
 MonoBehaviour:
