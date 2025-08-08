@@ -237,6 +237,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3038381424979213612, guid: af5f9cda9c5420744bd93c2e04a2c3f3, type: 3}
+      propertyPath: displaySettings.inputSettings.alwaysForceResponseMenu
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3038381424979213612, guid: af5f9cda9c5420744bd93c2e04a2c3f3, type: 3}
+      propertyPath: displaySettings.subtitleSettings.showPCSubtitlesDuringLine
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3038381424979213612, guid: af5f9cda9c5420744bd93c2e04a2c3f3, type: 3}
+      propertyPath: displaySettings.subtitleSettings.skipPCSubtitleAfterResponseMenu
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3038381424989720488, guid: af5f9cda9c5420744bd93c2e04a2c3f3, type: 3}
       propertyPath: m_Name
       value: ITC Dialogue Manager
@@ -281,6 +293,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3038381425012051368, guid: af5f9cda9c5420744bd93c2e04a2c3f3, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 4817649917982612495}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -294,6 +310,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -9047861404888424259, guid: ee1617069656e504cbe5792dda4f894c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -8653719598885068355, guid: ee1617069656e504cbe5792dda4f894c, type: 3}
       propertyPath: m_Name
       value: "\u51E4\u51F0\u6E2F\u53E3.\u5BF9\u8BDD"
@@ -338,6 +358,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4268437263993414426, guid: ee1617069656e504cbe5792dda4f894c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -1434182712255326429, guid: ee1617069656e504cbe5792dda4f894c, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -346,7 +370,15 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1981842024448379458, guid: ee1617069656e504cbe5792dda4f894c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2789506625918396230, guid: ee1617069656e504cbe5792dda4f894c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2885112913849265723, guid: ee1617069656e504cbe5792dda4f894c, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -355,6 +387,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4321835370828197670, guid: ee1617069656e504cbe5792dda4f894c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456539101855116787, guid: ee1617069656e504cbe5792dda4f894c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017696966089637984, guid: ee1617069656e504cbe5792dda4f894c, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -420,6 +460,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
+--- !u!20 &4817649917982612495 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7361969184711311431, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
+  m_PrefabInstance: {fileID: 4817649917982612494}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

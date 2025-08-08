@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!20 &185779728 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7361969184711311431, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
+  m_PrefabInstance: {fileID: 1518514466}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1297609037
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -127,10 +132,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3038381424979213612, guid: af5f9cda9c5420744bd93c2e04a2c3f3, type: 3}
-      propertyPath: displaySettings.dialogueUI
-      value: 
-      objectReference: {fileID: 119578, guid: 59188e770d1a95b4ab5f30e101912937, type: 3}
     - target: {fileID: 3038381424989720488, guid: af5f9cda9c5420744bd93c2e04a2c3f3, type: 3}
       propertyPath: m_Name
       value: ITC Dialogue Manager
@@ -175,6 +176,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3038381425012051368, guid: af5f9cda9c5420744bd93c2e04a2c3f3, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 185779728}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -191,6 +196,10 @@ PrefabInstance:
     - target: {fileID: -8653719598885068355, guid: 30eab3affa248ab41bd2fcdc7a8e0476, type: 3}
       propertyPath: m_Name
       value: "\u9910\u5385"
+      objectReference: {fileID: 0}
+    - target: {fileID: -8653719598885068355, guid: 30eab3affa248ab41bd2fcdc7a8e0476, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: 30eab3affa248ab41bd2fcdc7a8e0476, type: 3}
       propertyPath: m_LocalPosition.x
@@ -240,6 +249,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3931836858151669390, guid: 30eab3affa248ab41bd2fcdc7a8e0476, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2301827457969328936, guid: 30eab3affa248ab41bd2fcdc7a8e0476, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -2241752459471464492, guid: 30eab3affa248ab41bd2fcdc7a8e0476, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -269,6 +286,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3936826526701144710, guid: 30eab3affa248ab41bd2fcdc7a8e0476, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4083413026104441052, guid: 30eab3affa248ab41bd2fcdc7a8e0476, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
