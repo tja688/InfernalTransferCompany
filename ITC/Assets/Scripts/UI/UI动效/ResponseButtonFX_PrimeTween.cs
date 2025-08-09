@@ -39,6 +39,9 @@ public class ResponseButtonFX_PrimeTween : MonoBehaviour,
         if (label != null) _labelNormalColor = label.color;
         if (icon  != null) _iconNormalColor  = icon.color;
         if (iconRect != null) _iconNormalScale = iconRect.localScale;
+        
+        PrimeTweenConfig.warnEndValueEqualsCurrent = false;
+
     }
 
     void OnEnable() {
@@ -99,12 +102,12 @@ public class ResponseButtonFX_PrimeTween : MonoBehaviour,
     // ------ Click 闪红（不阻塞对话系统回调） ------
     public void OnPointerDown(PointerEventData e) {
         if (label == null) return;
-
+    
         _tClickFlash.Stop();
-
+    
         // 立即到红 -> 等待 -> 回到原色/当前 Hover 色（谁在当前就回谁）
         var afterColor = IsHoveringOrSelected() ? labelHoverColor : _labelNormalColor;
-
+    
         // 先瞬间到红（0.02 更利落）
         _tClickFlash = Tween.Custom(0f, 1f, 0.02f, onValueChange: t => {
             label.color = Color.Lerp(label.color, labelClickFlashColor, t);
@@ -117,7 +120,24 @@ public class ResponseButtonFX_PrimeTween : MonoBehaviour,
             });
         });
     }
+    
+    // // ------ Click 变红（不阻塞对话系统回调） ------
+    // public void OnPointerDown(PointerEventData e) {
+    //     if (label == null) return;
+    //
+    //     // 取消上一次点击的恢复计时
+    //     _tClickFlash.Stop();
+    //
+    //     // 立刻变红
+    //     label.color = labelClickFlashColor;
+    //
+    //     // 0.5 秒后恢复为“默认原色”（_labelNormalColor）
+    //     _tClickFlash = Tween.Delay(0.5f).OnComplete(() => {
+    //         if (label != null) label.color = _labelNormalColor;
+    //     });
+    // }
 
+    
     bool IsHoveringOrSelected() {
         // 简易判断：若当前颜色更靠近 hover 色（或按钮被 EventSystem 选中）
         if (label == null) return false;
