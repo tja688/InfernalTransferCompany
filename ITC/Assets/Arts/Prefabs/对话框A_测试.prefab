@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 6782896766753701064}
   - component: {fileID: 7064223543721507857}
   - component: {fileID: 5372753958062516071}
-  - component: {fileID: 1445267631027921380}
-  - component: {fileID: 8947428103405416009}
   - component: {fileID: -6070819129945724694}
   m_Layer: 5
   m_Name: "\u5BF9\u8BDD\u6846A_\u6D4B\u8BD5"
@@ -69,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8249174939609143692, guid: a26e66802e00ce74db92514a7840a4d1, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -79,45 +77,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1445267631027921380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1229256404554156849}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74886bae18988a143805e2287bc22aea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteA: {fileID: 8249174939609143692, guid: a26e66802e00ce74db92514a7840a4d1, type: 3}
-  spriteB: {fileID: -1819552834655441770, guid: a26e66802e00ce74db92514a7840a4d1, type: 3}
-  anchoredPosA: {x: -463, y: -96}
-  anchoredPosB: {x: -463, y: 160}
-  anchoredPosC: {x: -509, y: 117}
-  durationAB: 0.35
-  durationBC: 0.3
-  moveEaseAB: 4
-  moveEaseBC: 4
-  fadeEaseAB: 1
-  fadeEaseBC: 1
-  enableDebugKeys: 1
-  keyTowardA: 113
-  keyTowardC: 101
-  current: 0
---- !u!225 &8947428103405416009
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1229256404554156849}
-  m_Enabled: 0
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!114 &-6070819129945724694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,7 +89,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5feb94e16ceac794aba4dfd1096449e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textLabel: {fileID: 3382665061249083582}
+  bgImage: {fileID: 5372753958062516071}
+  label: {fileID: 3382665061249083582}
+  group: {fileID: 0}
+  spriteA: {fileID: 8249174939609143692, guid: a26e66802e00ce74db92514a7840a4d1, type: 3}
+  spriteB: {fileID: -1819552834655441770, guid: a26e66802e00ce74db92514a7840a4d1, type: 3}
   showSpeakerPrefix: 0
   charactersPerSecond: 35
   punctuationPause: 0.12
