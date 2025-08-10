@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7064223543721507857}
   - component: {fileID: 5372753958062516071}
   - component: {fileID: -6070819129945724694}
+  - component: {fileID: -2823595295514418628}
   m_Layer: 5
   m_Name: "\u5BF9\u8BDD\u6846A_\u6D4B\u8BD5"
   m_TagString: Untagged
@@ -99,6 +100,18 @@ MonoBehaviour:
   punctuationPause: 0.12
   punctuationChars: ".,;!?\uFF0C\u3002\uFF1B\uFF01\uFF1F\u2026"
   debugLog: 0
+--- !u!225 &-2823595295514418628
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229256404554156849}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &4379695714206948721
 GameObject:
   m_ObjectHideFlags: 0
