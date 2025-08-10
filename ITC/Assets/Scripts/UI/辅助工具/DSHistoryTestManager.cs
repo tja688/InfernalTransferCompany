@@ -17,7 +17,11 @@ using PrimeTween;
 /// 特殊隐藏规则：
 /// - B→C：移动过程中保持可见，抵达后再隐藏；
 /// - C→B：直接显示 B（可位置移动，但不淡入）；
-/// - 其它所有进入 C：立即隐藏，然后移动到 C（移动期间保持隐藏）。
+/// - A→C：A→D（保持可见）→ 在 D 隐藏 → D→C（隐藏移动）
+///
+/// 悬停优化：
+/// - 鼠标进入滚动区域时，所有单位轻微放大 + 随机轻微摇摆（呼吸+摆动）；移出时复位停止。
+/// - 滚轮冷却：scrollThrottle（秒）可调，避免滚得太快。
 /// </summary>
 public class HistoryDialogueManager_SlotsWithD : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IScrollHandler {
     [Header("Prefab & Hierarchy")]
@@ -38,19 +42,43 @@ public class HistoryDialogueManager_SlotsWithD : MonoBehaviour, IPointerEnterHan
 
     [Header("Scroll")]
     public bool   enableScroll     = true;
-    public float  scrollNotch      = 1f;
-    public double scrollThrottle   = 0.12;
+    public float  scrollNotch      = 1f;     // 累计阈值（滚轮增量达到该值触发一次）
+    [Tooltip("滚轮触发冷却，单位：秒")]
+    public double scrollThrottle   = 0.12;   // ✅ 可调冷却
 
     [Header("Guards & Filters")]
     public bool   onlyShowNPC      = true;
     public double dedupeWindow     = 0.10;
     public bool   debugLog         = false;
 
+    [Header("Hover FX (pointer over scrollArea)")]
+    public bool  enableHoverFx   = true;
+    [Tooltip("进入悬停时的基准缩放")]
+    public float hoverScale      = 1.04f;
+    [Tooltip("呼吸式缩放幅度（在 hoverScale 上下微幅脉动）")]
+    public float hoverPulse      = 0.02f;
+    [Tooltip("轻微摆动角度（度）")]
+    public float hoverAngleDeg   = 1.5f;
+    [Tooltip("进入悬停放大的时长")]
+    public float hoverInDuration = 0.15f;
+    [Tooltip("呼吸/摆动的往返时长")]
+    public float hoverLoopDuration = 1.6f;
+    public Ease  hoverEase       = Ease.InOutSine;
+
     // 时间顺序：旧 -> 新
     readonly List<RecordUnitView> units = new();
 
     // 正在执行 A->D（随后 D->C）过渡的条目集合；这些条目在层级上应压在最顶
     readonly HashSet<RecordUnitView> exitingAToD = new();
+
+    // 悬停动画句柄
+    readonly Dictionary<RecordUnitView, Tween> loopScale = new();
+    readonly Dictionary<RecordUnitView, Tween> loopRotate = new();
+    readonly Dictionary<RecordUnitView, Tween> enterScale = new();
+
+    // 记录进入悬停前的原始变换，用于稳定起点 & 平滑复位
+    readonly Dictionary<RecordUnitView, Vector3> originalScale = new();
+    readonly Dictionary<RecordUnitView, float>   originalAngleZ = new();
 
     // 最新条目的索引（units 内）
     int topIndex = -1;
@@ -89,6 +117,9 @@ public class HistoryDialogueManager_SlotsWithD : MonoBehaviour, IPointerEnterHan
         DSGlobalMessageBridge.OnConvLine  -= OnConversationLine;
         DSGlobalMessageBridge.OnConvStart -= OnConversationStart;
         DSGlobalMessageBridge.OnConvEnd   -= OnConversationEnd;
+
+        // 防止悬停未退出时被销毁：统一收尾
+        StopHoverEffectsForAll(resetTransform: true);
     }
 
     void OnConversationStart(Transform actor) {
@@ -123,7 +154,8 @@ public class HistoryDialogueManager_SlotsWithD : MonoBehaviour, IPointerEnterHan
         units.Add(u);
         topIndex = units.Count - 1;
 
-        string speaker = s.speakerInfo?.Name;
+        string speaker = s.speakerInfo?.Name; // 注意：是 name（有些版本是 Name，按你的工程字段）
+
         bool followLatest = (focusedTopIndex < 0);
 
         if (followLatest) {
@@ -214,8 +246,7 @@ public class HistoryDialogueManager_SlotsWithD : MonoBehaviour, IPointerEnterHan
                     // C→B：直接显示 B，不做淡入，可带位移动画
                     item.ApplySlotBVisual();
                     if (animated) {
-                        // 先立刻可见
-                        if (item.group) item.group.alpha = 1f;
+                        if (item.group) item.group.alpha = 1f; // 立刻可见
                         item.MoveTo(posB, moveDuration, moveEase);
                     } else {
                         item.SetAnchoredPositionInstant(posB);
@@ -246,7 +277,6 @@ public class HistoryDialogueManager_SlotsWithD : MonoBehaviour, IPointerEnterHan
                         PutToC_DirectHide(item, instantPosition: true);
                     }
                 } else if (prev == Slot.A) {
-                    // 新增规则：A→D→C 中转
                     AtoC_viaD(item, animated);
                 } else {
                     if (animated) {
@@ -257,7 +287,6 @@ public class HistoryDialogueManager_SlotsWithD : MonoBehaviour, IPointerEnterHan
                 }
                 currentSlots[item] = Slot.C;
             }
-
         }
     }
 
@@ -270,8 +299,7 @@ public class HistoryDialogueManager_SlotsWithD : MonoBehaviour, IPointerEnterHan
         currentSlots[u] = Slot.D;
     }
 
-// 规则：A→C 走中转：A(可见) → D(可见) → [在D隐藏] → C(隐藏移动)
-// 过渡期间将该条目加入 exitingAToD，使其层级永远在最顶，直到抵达 D 并隐藏为止
+    // A→C 走中转：A(可见) → D(可见) → [在D隐藏] → C(隐藏移动)；过渡中置顶
     void AtoC_viaD(RecordUnitView u, bool animated) {
         var rt = u.GetComponent<RectTransform>();
 
@@ -280,13 +308,10 @@ public class HistoryDialogueManager_SlotsWithD : MonoBehaviour, IPointerEnterHan
         ReorderLayers();
 
         if (!animated) {
-            // 非动画：直接在 D 隐藏再放到 C
             u.SetAnchoredPositionInstant(posD);
             if (u.group) u.group.alpha = 1f; // 可见到达 D
             u.ApplySlotCVisual();            // 在 D 处隐藏（alpha=0）
             u.SetAnchoredPositionInstant(posC);
-
-            // 过渡结束，移除标记并刷新层级
             exitingAToD.Remove(u);
             ReorderLayers();
             return;
@@ -311,41 +336,35 @@ public class HistoryDialogueManager_SlotsWithD : MonoBehaviour, IPointerEnterHan
                     }, ease: moveEase)
                     .OnComplete(() => {
                         u.SetAnchoredPositionInstant(posC); // 归一化
-
-                        // 过渡结束，移除标记并刷新层级
                         exitingAToD.Remove(u);
                         ReorderLayers();
                     });
             });
     }
 
-
-    // 规则：B→C 移动保持可见，抵达后再隐藏
+    // B→C：移动保持可见，抵达后隐藏
     void MoveToC_KeepVisibleThenHide(RecordUnitView u) {
         var rt = u.GetComponent<RectTransform>();
         Vector2 fromPos = rt.anchoredPosition;
         Vector2 toPos   = posC;
         float   keepA   = u.group ? u.group.alpha : 1f;
 
-        // 移动期间维持当前 alpha
         Tween.Custom(0f, 1f, moveDuration, t => {
             rt.anchoredPosition = Vector2.Lerp(fromPos, toPos, t);
             if (u.group) u.group.alpha = keepA;
         }, ease: moveEase)
         .OnComplete(() => {
-            // 抵达后再隐藏（切 C 视觉并 alpha=0）
-            u.ApplySlotCVisual();
+            u.ApplySlotCVisual();                // 切 C 视觉并 alpha=0
             u.SetAnchoredPositionInstant(posC);
         });
     }
 
-    // 规则：其它进入 C 的情况——立即隐藏，然后移动到 C（移动期间保持隐藏）
+    // 其它进入 C：立即隐藏，然后移动到 C（期间保持隐藏）
     void PutToC_DirectHide(RecordUnitView u, bool instantPosition) {
-        u.ApplySlotCVisual(); // 内部应将 alpha 置 0
+        u.ApplySlotCVisual(); // alpha=0
         if (instantPosition) {
             u.SetAnchoredPositionInstant(posC);
         } else {
-            // 移动期间保持隐藏（alpha 已为 0）
             var rt = u.GetComponent<RectTransform>();
             Vector2 fromPos = rt.anchoredPosition;
             Vector2 toPos   = posC;
@@ -355,26 +374,162 @@ public class HistoryDialogueManager_SlotsWithD : MonoBehaviour, IPointerEnterHan
         }
     }
 
-    // ------------------- 滚轮 -------------------
+    // ------------------- 悬停特效：进入/退出 -------------------
     public void OnPointerEnter(PointerEventData e) {
-        if (!enableScroll) return;
+        if (!enableHoverFx) { pointerInside = true; return; }
         if (scrollArea == null || e.pointerEnter == scrollArea.gameObject || e.pointerEnter.transform.IsChildOf(scrollArea)) {
             pointerInside = true;
             scrollAccum = 0f;
+            StartHoverEffectsForAll();
         }
     }
 
     public void OnPointerExit(PointerEventData e) {
-        if (!enableScroll) return;
+        if (!enableHoverFx) { pointerInside = false; return; }
         pointerInside = false;
         scrollAccum = 0f;
+        StopHoverEffectsForAll(resetTransform: true);
     }
 
+    void StartHoverEffectsForAll() {
+        for (int i = 0; i < units.Count; i++) {
+            var u = units[i];
+            if (!u) continue;
+            StartHoverFor(u);
+        }
+    }
+
+    void StopHoverEffectsForAll(bool resetTransform) {
+        for (int i = 0; i < units.Count; i++) {
+            var u = units[i];
+            if (!u) continue;
+            StopHoverFor(u, resetTransform);
+        }
+    }
+
+    void StartHoverFor(RecordUnitView u) {
+        var tr = u.transform;
+
+        // 停止残留循环
+        StopHoverFor(u, resetTransform: false);
+
+        // 记录进入悬停前的原始姿态（用于稳定复位 & 防止角度跳变）
+        originalScale[u] = tr.localScale;
+        originalAngleZ[u] = tr.localEulerAngles.z;
+
+        // 先“收敛”到放大态（避免直接开启循环造成跳变）
+        Vector3 targetScale = Vector3.one * hoverScale;
+        enterScale[u] = Tween.Custom(tr.localScale, targetScale, hoverInDuration, v => tr.localScale = v, ease: hoverEase)
+            .OnComplete(() => {
+                // 保证确切停在放大态
+                tr.localScale = targetScale;
+
+                // —— 缩放呼吸：从放大态开始，先半程到 +amp，再在 [+amp <-> -amp] 之间往返 ——
+                float amp = hoverScale * hoverPulse;                    // 振幅
+                float baseS = hoverScale;                               // 中心
+                float up = baseS + amp;
+                float down = baseS - amp;
+
+                // 先做半程（base -> up），保证不突跳
+                loopScale[u] = Tween.Custom(baseS, up, hoverLoopDuration * 0.5f,
+                    s => tr.localScale = new Vector3(s, s, s), ease: hoverEase
+                ).OnComplete(() => {
+                    if (!loopScale.ContainsKey(u)) return;
+                    // 进入稳定往返：up <-> down
+                    StartScaleLoop(u, up, down);
+                });
+
+                // —— 轻微摆动（围绕原始角度为基准），使用 LerpAngle 防止 359→0 翻转 ——
+                float baseDeg = originalAngleZ.TryGetValue(u, out var ang) ? ang : tr.localEulerAngles.z;
+                StartRotateLoop(u, baseDeg, hoverAngleDeg);
+            });
+    }
+
+    void StartScaleLoop(RecordUnitView u, float fromS, float toS) {
+        var tr = u.transform;
+
+        // 从当前端点平滑到目标端点
+        loopScale[u] = Tween.Custom(fromS, toS, hoverLoopDuration,
+            s => tr.localScale = new Vector3(s, s, s),
+            ease: hoverEase
+        ).OnComplete(() => {
+            if (!loopScale.ContainsKey(u)) return; // 已被停止
+            // 反向回去，形成乒乓
+            StartScaleLoop(u, toS, fromS);
+        });
+    }
+
+
+    void StartRotateLoop(RecordUnitView u, float baseDeg, float ampDeg) {
+        var tr = u.transform;
+
+        // 先从当前角度走到 base+amp（半程），再在 [base+amp <-> base-amp] 之间往返
+        float current = tr.localEulerAngles.z;
+        float up = baseDeg + ampDeg;
+        float down = baseDeg - ampDeg;
+
+        // 半程：current -> up
+        loopRotate[u] = Tween.Custom(0f, 1f, hoverLoopDuration * 0.5f, t => {
+            float z = Mathf.LerpAngle(current, up, t);
+            var e = tr.localEulerAngles; e.z = z; tr.localEulerAngles = e;
+        }, ease: hoverEase).OnComplete(() => {
+            if (!loopRotate.ContainsKey(u)) return;
+
+            // 稳定往返：up <-> down（都用 LerpAngle）
+            void PingPong(float from, float to) {
+                loopRotate[u] = Tween.Custom(0f, 1f, hoverLoopDuration, tt => {
+                    float z = Mathf.LerpAngle(from, to, tt);
+                    var e = tr.localEulerAngles; e.z = z; tr.localEulerAngles = e;
+                }, ease: hoverEase).OnComplete(() => {
+                    if (!loopRotate.ContainsKey(u)) return;
+                    PingPong(to, from);
+                });
+            }
+            PingPong(up, down);
+        });
+    }
+
+
+    void StopHoverFor(RecordUnitView u, bool resetTransform) {
+        var tr = u.transform;
+
+        if (enterScale.TryGetValue(u, out var tIn) && tIn.isAlive) tIn.Stop();
+        enterScale.Remove(u);
+
+        if (loopScale.TryGetValue(u, out var ts) && ts.isAlive) ts.Stop();
+        loopScale.Remove(u);
+
+        if (loopRotate.TryGetValue(u, out var trt) && trt.isAlive) trt.Stop();
+        loopRotate.Remove(u);
+
+        if (resetTransform) {
+            // 缩放回原（若有记录，否则回 1）
+            Vector3 targetScale = originalScale.TryGetValue(u, out var os) ? os : Vector3.one;
+            Tween.Custom(tr.localScale, targetScale, 0.12f, v => tr.localScale = v, ease: Ease.OutSine);
+
+            // 角度用 LerpAngle 回到原始角度（若无记录则回 0）
+            float startZ = tr.localEulerAngles.z;
+            float targetZ = originalAngleZ.TryGetValue(u, out var oz) ? oz : 0f;
+            Tween.Custom(0f, 1f, 0.12f, t => {
+                float z = Mathf.LerpAngle(startZ, targetZ, t);
+                var e = tr.localEulerAngles; e.z = z; tr.localEulerAngles = e;
+            }, ease: Ease.OutSine);
+
+            // 清理记录
+            originalScale.Remove(u);
+            originalAngleZ.Remove(u);
+        }
+    }
+
+
+    // ------------------- 滚轮 -------------------
     public void OnScroll(PointerEventData e) {
         if (!enableScroll || !pointerInside) return;
         if (AnyTyping) return; // 打字中禁滚
 
+        // ✅ 使用 scrollThrottle 控制冷却（单位秒）
         if (Time.timeAsDouble - lastScrollTime < scrollThrottle) return;
+
         scrollAccum += e.scrollDelta.y;
 
         if (scrollAccum >= scrollNotch) {
@@ -405,13 +560,12 @@ public class HistoryDialogueManager_SlotsWithD : MonoBehaviour, IPointerEnterHan
         ReorderLayers();
     }
 
-// 层级：先把所有单元压底；再按顺序把“需要在上面”的提到顶。
-// 顶层顺序：先 B、再 A、最后所有正在 A->D 过渡的条目（它们盖最上）
+    // ------------------- 层级：A 顶层 > B 次顶 > 其余（C&D）底部 -------------------
     void ReorderLayers() {
         int aIdx = (focusedTopIndex >= 0) ? focusedTopIndex : topIndex;
         int bIdx = aIdx - 1;
 
-        // 先把所有条目压到最底，避免夹在父节点其他 UI 中间
+        // 先把所有条目压到底（避免夹在父节点其它 UI 中间）
         foreach (var u in units) {
             if (!u) continue;
             u.transform.SetSiblingIndex(0);
@@ -425,10 +579,8 @@ public class HistoryDialogueManager_SlotsWithD : MonoBehaviour, IPointerEnterHan
         if (tb != null) tb.SetAsLastSibling();
         if (ta != null) ta.SetAsLastSibling();
 
-        // 过渡中的条目可能不只一个（极端快速滚动时），全部放到最顶层
         foreach (var u in exitingAToD) {
             if (u) u.transform.SetAsLastSibling();
         }
     }
-
 }
