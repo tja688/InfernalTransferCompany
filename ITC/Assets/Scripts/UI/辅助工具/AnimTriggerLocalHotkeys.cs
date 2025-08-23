@@ -15,7 +15,7 @@ public class AnimTriggerLocalHotkeys : MonoBehaviour
     [System.Serializable]
     public class TriggerBinding {
         [Tooltip("Animator 中 Trigger 参数的名字（区分大小写）")]
-        public string triggerName = "trigger";
+        public string triggerName = "Start";
 
         [Tooltip("触发的按键")]
         public KeyCode key = KeyCode.Space;
