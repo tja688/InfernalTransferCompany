@@ -3631,7 +3631,7 @@ MonoBehaviour:
       isGroup: 0
       nodeColor: 
       delaySimStatus: 0
-      falseConditionAction: 
+      falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
       - originConversationID: 8
@@ -3697,6 +3697,10 @@ MonoBehaviour:
         value: "Bias(\u56FE\u5C42170, 1, 0.5)"
         type: 0
         typeString: CustomFieldType_Text
+      - title: Response Menu Sequence
+        value: 
+        type: 0
+        typeString: 
       conversationID: 8
       isRoot: 0
       isGroup: 0
@@ -3859,8 +3863,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 28.947342}
-    canvasZoom: 0.7600002
+    canvasScrollPosition: {x: 0, y: 12.554594}
+    canvasZoom: 0.97
   syncInfo:
     syncActors: 0
     syncItems: 0
