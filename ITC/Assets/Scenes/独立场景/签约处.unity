@@ -1989,6 +1989,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1334425443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1334425444}
+  m_Layer: 0
+  m_Name: "\u5377\u8F74\u52A8\u753B-Parent"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1334425444
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334425443}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8.089913, y: -2.8299892, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1879013703}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1355302153
 GameObject:
   m_ObjectHideFlags: 0
@@ -2718,7 +2750,7 @@ MonoBehaviour:
   endKey: 115
   scrollMotion: {fileID: 1066639158}
   contractMotion: {fileID: 1355302155}
-  inspectorArea: {fileID: 1156745916}
+  inspectorArea: {fileID: 0}
   stampPrefab: {fileID: 7810642173232134801, guid: a5ff1ba2dce7ba449bd4a3d58be1c38b, type: 3}
   worldCamera: {fileID: 1798426030}
   followSmoothTime: 0.06
@@ -2913,6 +2945,8 @@ GameObject:
   - component: {fileID: 1879013700}
   - component: {fileID: 1879013699}
   - component: {fileID: 1879013704}
+  - component: {fileID: 1879013705}
+  - component: {fileID: 1879013706}
   m_Layer: 0
   m_Name: "\u5377\u8F74\u52A8\u753B"
   m_TagString: Untagged
@@ -3041,12 +3075,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1879013698}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.05, y: 0.1, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 8.139914, y: 2.929989, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1334425444}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1879013704
 MonoBehaviour:
@@ -3079,6 +3113,67 @@ MonoBehaviour:
     repeatInterval: 0.12
   logOnTrigger: 0
   warnIfParamMissing: 1
+--- !u!114 &1879013705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879013698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c1b2cfe4538349468085ab494f6e59f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverAnimation: 
+  idleAnimation: 
+  targetImage: {fileID: 1334425444}
+--- !u!61 &1879013706
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879013698}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -8.139914, y: -2.929989}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 3.2799711, y: 3.0000224}
+  m_EdgeRadius: 0
 --- !u!1 &1948417694
 GameObject:
   m_ObjectHideFlags: 0
@@ -13818,7 +13913,6 @@ SceneRoots:
   - {fileID: 1716409198}
   - {fileID: 96892212}
   - {fileID: 1047853454}
-  - {fileID: 1879013703}
   - {fileID: 430926615}
   - {fileID: 1844986421}
   - {fileID: 1666955281}
@@ -13832,3 +13926,4 @@ SceneRoots:
   - {fileID: 1202609511}
   - {fileID: 631532460}
   - {fileID: 125918709}
+  - {fileID: 1334425444}
