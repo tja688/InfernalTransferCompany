@@ -8,14 +8,28 @@ using UnityEngine.UI;
 /// </summary>
 public class HeContractUIManager : MonoBehaviour
 {
-    [Header("=== UI面板引用 ===")]
-    public GameObject mainGamePanel;
+    [Header("=== None ===")]
+
     public GameObject documentVerificationPanel;
     public GameObject runeInputPanel;
     public GameObject eventPanel;
     public GameObject stampPanel;
     public GameObject soulHarvestPanel;
     public GameObject resultPanel;
+    [Header("=== 动画设置 ===")]
+
+
+    public Animator sphericalRunaAnimator;
+    public Animator diamondRunaAnimator;
+    public Animator circularRunaAnimator;
+    public Animator triangularRunaAnimator; 
+    public Animator pneumaticChannelAnimator;
+
+    public Animator leftBooklAnimator;
+    public Animator rightBookAnimator;
+    public Animator typewriterAnimator;
+    public Animator telephoneAnimator;
+    public Animator canAnimator;
 
 
 
@@ -47,8 +61,8 @@ public class HeContractUIManager : MonoBehaviour
         // 隐藏所有面板
         HideAllPanels();
         
-        // 显示主游戏面板
-        if (mainGamePanel) mainGamePanel.SetActive(true);
+  
+      
         
    
        
