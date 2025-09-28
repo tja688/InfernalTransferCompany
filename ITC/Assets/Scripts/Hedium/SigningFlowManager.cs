@@ -1,9 +1,42 @@
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+/// <summary>
+/// 文书错误类型枚举
+/// 用于标识在文书核验过程中可能出现的各种问题
+/// </summary>
+public enum DocumentError
+{
+    /// <summary>封蜡破损 - 文书的封蜡不完整</summary>
+    BrokenSeal,
 
+    /// <summary>伪造文书 - 文书本身系伪造</summary>
+    ForgeryDocument,
+
+    /// <summary>缺少水印 - 文书缺少ITC公司官方水印</summary>
+    MissingWatermark,
+
+    /// <summary>假冒墨水 - 使用了非官方墨水</summary>
+    FakeInk,
+
+    /// <summary>内容不符 - 顾客口述需求与契约内容不匹配</summary>
+    ContentMismatch,
+
+    /// <summary>日期错误 - 预约日期与当前日期不符</summary>
+    IncorrectDate,
+
+    /// <summary>身份不符 - 文书记录的身份与实际不符</summary>
+    IdentityMismatch,
+
+    /// <summary>伪装顾客 - 顾客使用假身份</summary>
+    DisguisedCustomer,
+
+    /// <summary>危险人物 - 克洛克达尔帮成员或其他危险人物</summary>
+    DangerousCustomer
+}
 #region Contract Stages
 
 /// <summary>
@@ -13,12 +46,15 @@ public class DocumentVerifier : IContractStage
 {
     private HeContractContext context;
     private HeContractUIManager uiManager;
+
     private bool completed = false;
     private bool failed = false;
-    
+    private List<DocumentError> detectedErrors = new List<DocumentError>();
+    private bool waitingForPlayerDecision = false;
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
     public string StageName => "文书核验";
+    public List<DocumentError> DetectedErrors => detectedErrors;
 
     public void Enter(HeContractContext ctx)
     {
@@ -30,69 +66,138 @@ public class DocumentVerifier : IContractStage
         // 显示文书核验UI
         uiManager?.ShowDocumentVerification(ctx);
         
-        // 自动执行核验逻辑
+        // 执行核验逻辑
         PerformDocumentVerification();
+        Debug.Assert(detectedErrors.Count>0);
+    
+       
+         Debug.Log($"检测到{detectedErrors.Count}个问题，等待玩家决策...");
+         waitingForPlayerDecision = true;
+         uiManager.EnableDocumentVerification();
+
+
+
+
     }
 
     public void Update()
     {
         // 等待UI交互或自动完成
+        if (waitingForPlayerDecision)
+        {
+
+        }
+
+
     }
 
     public void Exit()
     {
         Debug.Log("=== 文书核验阶段结束 ===");
+        if (detectedErrors.Count > 0)
+        {
+            Debug.Log($"检测到的错误: {string.Join(", ", detectedErrors)}");
+        }
     }
 
     private void PerformDocumentVerification()
     {
         var doc = context.document;
         var customer = context.customer;
+        detectedErrors.Clear();
         
         // 检查封蜡
         if (!doc.isSealed)
         {
-            Debug.Log("文书核验失败: 封蜡已破损");
-            failed = true;
-            return;
+            detectedErrors.Add(DocumentError.BrokenSeal);
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.BrokenSeal)}");
         }
         
-        // 检查是否伪造
-        if (!doc.isGenuine || !doc.hasITCWatermark || !doc.isInkGenuine)
+        // 检查文书真伪
+        if (!doc.isGenuine)
         {
-            Debug.Log("文书核验失败: 发现伪造文书");
-            failed = true;
-            return;
+            detectedErrors.Add(DocumentError.ForgeryDocument);
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.ForgeryDocument)}");
+        }
+        
+        if (!doc.hasITCWatermark)
+        {
+            detectedErrors.Add(DocumentError.MissingWatermark);
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.MissingWatermark)}");
+        }
+        
+        if (!doc.isInkGenuine)
+        {
+            detectedErrors.Add(DocumentError.FakeInk);
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.FakeInk)}");
         }
         
         // 检查内容匹配
         if (!doc.isContentMatched)
         {
-            Debug.Log("文书核验失败: 口述内容与契约不符");
-            failed = true;
-            return;
+            detectedErrors.Add(DocumentError.ContentMismatch);
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.ContentMismatch)}");
         }
         
         // 检查日期
         if (!doc.isDateCorrect)
         {
-            Debug.Log("文书核验失败: 预约日期不符");
-            failed = true;
-            return;
+            detectedErrors.Add(DocumentError.IncorrectDate);
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.IncorrectDate)}");
         }
         
         // 检查身份
-        if (!doc.isIdentityMatched || customer.isDisguised)
+        if (!doc.isIdentityMatched)
         {
-            Debug.Log("文书核验失败: 身份不符或发现伪装");
-            failed = true;
-            return;
+            detectedErrors.Add(DocumentError.IdentityMismatch);
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.IdentityMismatch)}");
         }
         
-        // 所有检查通过
-        Debug.Log("文书核验成功");
-        context.documentVerified = true;
-        completed = true;
+        if (customer.isDisguised)
+        {
+            detectedErrors.Add(DocumentError.DisguisedCustomer);
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.DisguisedCustomer)}");
+        }
+        
+        if (customer.isClocardalMember)
+        {
+            detectedErrors.Add(DocumentError.DangerousCustomer);
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.DangerousCustomer)}");
+        }
+        
+        // 判断验证结果
+        if (detectedErrors.Count > 0)
+        {
+            Debug.Log($"文书核验发现 {detectedErrors.Count} 个问题，需要拒绝签约");
+            // 玩家需要选择是否拒绝，这里先标记为需要处理
+            // 实际游戏中应该等待玩家决定
+        }
+        else
+        {
+            Debug.Log("文书核验通过，所有检查项目正常");
+            context.documentVerified = true;
+            completed = true;
+        }
+    }
+    
+    /// <summary>
+    /// 获取错误描述
+    /// </summary>
+    public static string GetErrorDescription(DocumentError error)
+    {
+        return error switch
+        {
+            DocumentError.BrokenSeal => "封蜡已破损",
+            DocumentError.ForgeryDocument => "文书系伪造",
+            DocumentError.MissingWatermark => "缺少ITC水印",
+            DocumentError.FakeInk => "墨水系假冒",
+            DocumentError.ContentMismatch => "口述内容与契约不符",
+            DocumentError.IncorrectDate => "预约日期不正确",
+            DocumentError.IdentityMismatch => "身份证明不符",
+            DocumentError.DisguisedCustomer => "顾客身份造假",
+            DocumentError.DangerousCustomer => "危险人物(克洛克达尔帮成员)",
+            _ => "未知错误"
+        };
     }
 }
 
@@ -696,6 +801,8 @@ public class SoulHarvestSystem : IContractStage
 /// </summary>
 public class SigningFlowManager : MonoBehaviour
 {
+ 
+
     [Header("=== 游戏配置 ===")]
     [Tooltip("游戏配置资源 (建议使用ScriptableObject)")]
     public HeContractGameConfig gameConfig;
@@ -928,34 +1035,93 @@ public class SigningFlowManager : MonoBehaviour
         };
     }
 
+    /// <summary>
+    /// 生成文书问题(用于测试和随机化)
+    /// </summary>
     private void GenerateDocumentIssues()
     {
-        // 10%几率生成各种文书问题
-        if (UnityEngine.Random.value < 0.1f)
+        // 使用枚举来更清晰地管理错误生成
+        var errorGenerationRules = new Dictionary<DocumentError, float>
         {
-            ctx.document.isSealed = false;
-            Debug.Log("生成文书问题: 封蜡破损");
-        }
+            { DocumentError.BrokenSeal, 0.1f },              // 10%几率封蜡破损
+            { DocumentError.ForgeryDocument, 0.05f },        // 5%几率伪造文书
+            { DocumentError.MissingWatermark, 0.03f },       // 3%几率缺少水印
+            { DocumentError.FakeInk, 0.03f },                // 3%几率假冒墨水
+            { DocumentError.ContentMismatch, 0.12f },        // 12%几率内容不匹配
+            { DocumentError.IncorrectDate, 0.1f },           // 10%几率日期错误
+            { DocumentError.DisguisedCustomer, 0.05f },      // 5%几率伪装顾客
+            { DocumentError.DangerousCustomer, 0.02f }       // 2%几率危险人物
+        };
         
-        if (UnityEngine.Random.value < 0.05f)
+        foreach (var rule in errorGenerationRules)
         {
-            ctx.document.isGenuine = false;
-            Debug.Log("生成文书问题: 伪造文书");
-        }
-        
-        if (UnityEngine.Random.value < 0.1f)
-        {
-            ctx.document.isDateCorrect = false;
-            Debug.Log("生成文书问题: 日期不符");
-        }
-        
-        if (UnityEngine.Random.value < 0.05f)
-        {
-            ctx.customer.isDisguised = true;
-            Debug.Log("生成文书问题: 顾客身份不符");
+            if (UnityEngine.Random.value < rule.Value)
+            {
+                ApplyDocumentError(rule.Key);
+            }
         }
     }
-
+    
+    /// <summary>
+    /// 应用特定的文书错误
+    /// </summary>
+    private void ApplyDocumentError(DocumentError error)
+    {
+        switch (error)
+        {
+            case DocumentError.BrokenSeal:
+                ctx.document.isSealed = false;
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
+                break;
+                
+            case DocumentError.ForgeryDocument:
+                ctx.document.isGenuine = false;
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
+                break;
+                
+            case DocumentError.MissingWatermark:
+                ctx.document.hasITCWatermark = false;
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
+                break;
+                
+            case DocumentError.FakeInk:
+                ctx.document.isInkGenuine = false;
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
+                break;
+                
+            case DocumentError.ContentMismatch:
+                ctx.document.isContentMatched = false;
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
+                break;
+                
+            case DocumentError.IncorrectDate:
+                ctx.document.isDateCorrect = false;
+                ctx.document.appointmentDate = DateTime.Today.AddDays(UnityEngine.Random.Range(-3, 4));
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
+                break;
+                
+            case DocumentError.DisguisedCustomer:
+                ctx.customer.isDisguised = true;
+                ctx.document.isIdentityMatched = false;
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
+                break;
+                
+            case DocumentError.DangerousCustomer:
+                ctx.customer.isClocardalMember = true;
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
+                break;
+        }
+    }
+    
+    /// <summary>
+    /// 获取当前契约的所有文书错误
+    /// </summary>
+    public List<DocumentError> GetCurrentDocumentErrors()
+    {
+        var currentVerifier = currentStage as DocumentVerifier;
+        return currentVerifier?.DetectedErrors ?? new List<DocumentError>();
+    }
+    
     /// <summary>
     /// 公共方法：重新开始契约
     /// </summary>

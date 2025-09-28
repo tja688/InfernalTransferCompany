@@ -8,21 +8,42 @@ using UnityEngine.UI;
 /// </summary>
 public class HeContractUIManager : MonoBehaviour
 {
-    [Header("=== None ===")]
 
-    public GameObject documentVerificationPanel;
-    public GameObject runeInputPanel;
-    public GameObject eventPanel;
-    public GameObject stampPanel;
-    public GameObject soulHarvestPanel;
-    public GameObject resultPanel;
+
+    public enum UIState
+    {
+        None,
+        DocumentVerification,
+        RuneInput,
+        EventHandling,
+        StampSelection,
+        SoulHarvest,
+
+    }
+    public event System.Action<bool> OnPlayerDecisionMade;
+    [Header("=== 触发设置 ===")]
+
+
+    public GameObject sphericalRunaGameObject;
+    public GameObject diamondRunaGameObject;
+    public GameObject circularRunaGameObject;
+    public GameObject triangularRunaGameObject;
+    public GameObject pneumaticChannelGameObject;
+
+    public GameObject leftBooklGameObject;
+    public GameObject rightBookGameObject;
+    public GameObject typewriterGameObject;
+    public GameObject telephoneGameObject;
+    public GameObject canGameObject;
+    public GameObject contractDocumentsnGameObject;
+
     [Header("=== 动画设置 ===")]
 
 
     public Animator sphericalRunaAnimator;
     public Animator diamondRunaAnimator;
     public Animator circularRunaAnimator;
-    public Animator triangularRunaAnimator; 
+    public Animator triangularRunaAnimator;
     public Animator pneumaticChannelAnimator;
 
     public Animator leftBooklAnimator;
@@ -30,8 +51,6 @@ public class HeContractUIManager : MonoBehaviour
     public Animator typewriterAnimator;
     public Animator telephoneAnimator;
     public Animator canAnimator;
-
-
 
     [Header("=== 动画设置 ===")]
     public float panelTransitionTime = 0.5f;
@@ -41,9 +60,15 @@ public class HeContractUIManager : MonoBehaviour
     private HeContractContext currentContext;
     private HeContractGameConfig gameConfig;
     private SigningFlowManager flowManager;
-    private GameObject currentActivePanel;
+    private UIState currentActivePanel=UIState.None;
     private List<GameObject> runeGridItems = new List<GameObject>();
 
+
+    public event System.Action<DocumentError> OnDocumentClicked;
+    private void Awake()
+    {
+        
+    }
     void Start()
     {
         flowManager = FindFirstObjectByType<SigningFlowManager>();
@@ -53,13 +78,21 @@ public class HeContractUIManager : MonoBehaviour
 
     }
 
+    void determineError()
+    {
+
+
+
+
+        OnDocumentClicked?.Invoke(DocumentError.DangerousCustomer);
+
+    }
     /// <summary>
     /// 初始化UI
     /// </summary>
     private void InitializeUI()
     {
-        // 隐藏所有面板
-        HideAllPanels();
+
         
   
       
@@ -70,71 +103,80 @@ public class HeContractUIManager : MonoBehaviour
         Debug.Log("Contract UI Manager initialized");
     }
 
-   
-    /// <summary>
-    /// 隐藏所有面板
-    /// </summary>
-    private void HideAllPanels()
-    {
-        var panels = new GameObject[] 
-        {
-            documentVerificationPanel, runeInputPanel, eventPanel, 
-            stampPanel, soulHarvestPanel, resultPanel
-        };
-        
-        foreach (var panel in panels)
-        {
-            if (panel) panel.SetActive(false);
-        }
-    }
-
+  
     /// <summary>
     /// 切换面板
     /// </summary>
-    public void SwitchPanel(GameObject targetPanel)
+    public void SwitchPanel(UIState targetPanel)
     {
         if (currentActivePanel == targetPanel) return;
         
         // 隐藏当前面板
-        if (currentActivePanel)
+        if (currentActivePanel != UIState.None)
         {
             StartCoroutine(HidePanelCoroutine(currentActivePanel));
         }
         
         // 显示目标面板
-        if (targetPanel)
+        if (targetPanel!=UIState.None)
         {
             currentActivePanel = targetPanel;
             StartCoroutine(ShowPanelCoroutine(targetPanel));
         }
     }
 
-    private IEnumerator HidePanelCoroutine(GameObject panel)
+    private IEnumerator HidePanelCoroutine(UIState panel)
     {
-       
-        Vector3 originalScale = panel.transform.localScale;
-        float elapsed = 0f;
-        
-        while (elapsed < panelTransitionTime / 2)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / (panelTransitionTime / 2);
-            panel.transform.localScale = Vector3.Lerp(originalScale, Vector3.zero, t);
-            yield return null;
-        }
-        
-        panel.SetActive(false);
-        panel.transform.localScale = originalScale; // 重置缩放
+
+
+
+        yield return null;
     }
     /// <summary>
     /// 
     /// </summary>
     /// <param name="panel"></param>
     /// <returns></returns>
-    private IEnumerator ShowPanelCoroutine(GameObject panel)
+    private IEnumerator ShowPanelCoroutine(UIState panel)
     {
+        switch (panel)
+        {
+            case UIState.DocumentVerification:
+
+
+                pneumaticChannelAnimator.SetTrigger("Open");
+                yield return new WaitForSeconds(3.0f);  
+                pneumaticChannelAnimator.SetTrigger("Close");
+          
+             
+
+
+
+
+
+
+                // TODO: 添加文书验证面板显示逻辑
+                break;
+            case UIState.RuneInput:
+                // TODO: 添加符文输入面板显示逻辑
+                break;
+            case UIState.EventHandling:
+                // TODO: 添加事件处理面板显示逻辑
+                break;
+            case UIState.StampSelection:
+                // TODO: 添加盖章选择面板显示逻辑
+                break;
+            case UIState.SoulHarvest:
+                // TODO: 添加灵魂收取面板显示逻辑
+                break;
+            case UIState.None:
+            default:
+                break;
+        }
+
+
+
         yield return null;
-      
     }
 
     /// <summary>
@@ -177,8 +219,21 @@ public class HeContractUIManager : MonoBehaviour
     #region 文书UI
     public void ShowDocumentVerification(HeContractContext ctx)
     {
-        SwitchPanel(documentVerificationPanel);
 
+
+
+        SwitchPanel(UIState.DocumentVerification);
+
+
+    }
+
+
+    public void EnableDocumentVerification()
+    {
+
+    }
+    public void DisableDocumentVerification()
+    {
 
     }
 
@@ -246,7 +301,7 @@ public class HeContractUIManager : MonoBehaviour
     /// </summary>
     public void ShowStampSelection(HeContractType requiredType)
     {
-        SwitchPanel(stampPanel);
+        SwitchPanel(UIState.StampSelection);
         
 
      
@@ -290,7 +345,7 @@ public class HeContractUIManager : MonoBehaviour
     /// </summary>
     public void ShowSoulHarvest(float targetPercentage)
     {
-        SwitchPanel(soulHarvestPanel);
+        SwitchPanel(UIState.SoulHarvest);
         
        
         // 开始分灵刀移动
@@ -319,7 +374,7 @@ public class HeContractUIManager : MonoBehaviour
     /// </summary>
     public void ShowGameResult(bool success, HeContractContext finalContext)
     {
-        SwitchPanel(resultPanel);
+        SwitchPanel(UIState.RuneInput);
       
         
         // 生成结果总结

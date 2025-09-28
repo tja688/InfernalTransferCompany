@@ -1151,7 +1151,7 @@ Transform:
   m_GameObject: {fileID: 451036003}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.6299996, y: -3.3650002, z: 0}
+  m_LocalPosition: {x: -4.6299996, y: -10.79, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1726,13 +1726,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e02260141f0fdb245b610e03eb9e1840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainGamePanel: {fileID: 0}
-  documentVerificationPanel: {fileID: 0}
-  runeInputPanel: {fileID: 0}
-  eventPanel: {fileID: 0}
-  stampPanel: {fileID: 0}
-  soulHarvestPanel: {fileID: 0}
-  resultPanel: {fileID: 0}
+  sphericalRunaGameObject: {fileID: 0}
+  diamondRunaGameObject: {fileID: 0}
+  circularRunaGameObject: {fileID: 0}
+  triangularRunaGameObject: {fileID: 0}
+  pneumaticChannelGameObject: {fileID: 0}
+  leftBooklGameObject: {fileID: 0}
+  rightBookGameObject: {fileID: 0}
+  typewriterGameObject: {fileID: 0}
+  telephoneGameObject: {fileID: 0}
+  canGameObject: {fileID: 0}
+  contractDocumentsnGameObject: {fileID: 0}
+  sphericalRunaAnimator: {fileID: 0}
+  diamondRunaAnimator: {fileID: 0}
+  circularRunaAnimator: {fileID: 0}
+  triangularRunaAnimator: {fileID: 0}
+  pneumaticChannelAnimator: {fileID: 1879013700}
+  leftBooklAnimator: {fileID: 0}
+  rightBookAnimator: {fileID: 0}
+  typewriterAnimator: {fileID: 0}
+  telephoneAnimator: {fileID: 0}
+  canAnimator: {fileID: 0}
   panelTransitionTime: 0.5
   uiElementFadeTime: 0.3
 --- !u!4 &696568795
