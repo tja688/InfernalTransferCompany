@@ -2,8 +2,21 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
+
+///
+///
+public const bool ProbabilityDetermine(float s)
+
+{
+   return true;
+    }
+
+
+
 /// <summary>
 /// 文书错误类型枚举
 /// 用于标识在文书核验过程中可能出现的各种问题
@@ -50,7 +63,7 @@ public class DocumentVerifier : IContractStage
     private bool completed = false;
     private bool failed = false;
     private List<DocumentError> detectedErrors = new List<DocumentError>();
-    private bool waitingForPlayerDecision = false;
+
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
     public string StageName => "文书核验";
@@ -72,21 +85,64 @@ public class DocumentVerifier : IContractStage
     
        
          Debug.Log($"检测到{detectedErrors.Count}个问题，等待玩家决策...");
-         waitingForPlayerDecision = true;
-         uiManager.EnableDocumentVerification();
 
 
+       
+        Action<DocumentError> documentClickedHandler = null;
+
+      
+        documentClickedHandler = (error) =>
+        {
+            
+
+            Debug.Log($"玩家发现了文书错误: {error}");
+            if (detectedErrors.Contains(error))
+            {
+                detectedErrors.Remove(error);
+                Debug.Log($"问题{error}已处理,核验文书不通过");
+                uiManager.SwitchPanel(HeContractUIManager.UIState.None);
+                uiManager.OnDocumentClicked -= documentClickedHandler;
+                detectedErrors.Clear();
+            }
+            else
+            {
+                Debug.Log($"问题{error}不在待处理列表中");
+                //TODO：文书判断失败逻辑
+
+
+
+
+
+            }
+        };
+        Action<DocumentError> nextStageClickedHandler = null;
+
+
+        nextStageClickedHandler = (error) =>
+        {
+
+            if (detectedErrors.Count()>0)
+            {
+                Debug.Log($"存在{error}错误，文书检验失败,记一次错误");
+                ctx.AddFailure();
+
+            }
+            else
+            {
+
+                Debug.Log($"没有任何错误，文书检验通过");
+
+
+            }
+        };
+        uiManager.OnDocumentClicked += documentClickedHandler;
 
 
     }
 
     public void Update()
     {
-        // 等待UI交互或自动完成
-        if (waitingForPlayerDecision)
-        {
-
-        }
+    
 
 
     }
@@ -198,6 +254,11 @@ public class DocumentVerifier : IContractStage
             DocumentError.DangerousCustomer => "危险人物(克洛克达尔帮成员)",
             _ => "未知错误"
         };
+    }
+
+    public static bool ProbabilityDetermine(float s)
+    {
+        return UnityEngine.Random.Range(1, 101) < s;
     }
 }
 
@@ -901,6 +962,7 @@ public class SigningFlowManager : MonoBehaviour
         
         Debug.Log($"游戏配置已初始化 - 初始满意度: {gameConfig.initialSatisfaction}, 最大失败次数: {gameConfig.maxFailCount}");
     }
+
 
     private void InitializeContract()
     {
