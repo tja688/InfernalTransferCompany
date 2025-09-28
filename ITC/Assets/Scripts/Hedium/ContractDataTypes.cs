@@ -152,8 +152,9 @@ public class HeContractContext
     
     [Header("´íÎó¼ÆÊı")]
     public int runeErrors = 0;              
-    public int stampAttempts = 0;           
-    
+    public int stampAttempts = 0;  
+    public bool isFaild = false;
+
     public void AddFailure()
     {
         failCount++;

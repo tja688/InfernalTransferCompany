@@ -78,6 +78,12 @@ public class HeContractUIManager : MonoBehaviour
 
     }
 
+
+
+    /// <summary>
+    /// 文书判断判定，这个最后绑定到签约书的点击事件上
+    /// </summary>
+
     void determineError()
     {
 
@@ -128,7 +134,41 @@ public class HeContractUIManager : MonoBehaviour
     private IEnumerator HidePanelCoroutine(UIState panel)
     {
 
+        switch (panel)
+        {
+            case UIState.DocumentVerification:
 
+
+             
+
+
+
+
+
+
+                // TODO: 取消文书验证面板显示逻辑
+                
+                break;
+            case UIState.RuneInput:
+                // TODO:  取消符文输入面板显示逻辑
+                break;
+            case UIState.EventHandling:
+                // TODO: 取消事件处理面板显示逻辑
+                break;
+            case UIState.StampSelection:
+                // TODO:  取消盖章选择面板显示逻辑
+                break;
+            case UIState.SoulHarvest:
+                // TODO:  取消灵魂收取面板显示逻辑
+                break;
+            case UIState.None:
+            default:
+                break;
+        }
+
+
+
+      
 
         yield return null;
     }
@@ -228,14 +268,6 @@ public class HeContractUIManager : MonoBehaviour
     }
 
 
-    public void EnableDocumentVerification()
-    {
-
-    }
-    public void DisableDocumentVerification()
-    {
-
-    }
 
 
     #endregion
