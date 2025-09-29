@@ -124,19 +124,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 391432827067961216}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4461462679281284882}
-        m_TargetAssemblyTypeName: UIActionAdapter, Assembly-CSharp
-        m_MethodName: OnSubmit
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &6505563711514009468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,7 +201,20 @@ MonoBehaviour:
       m_Calls: []
   OnSubmitted:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7137239451782493745}
+        m_TargetAssemblyTypeName: PixelCrushers.DialogueSystem.StandardUIResponseButton,
+          Assembly-CSharp-firstpass
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &563636083330671091
 GameObject:
   m_ObjectHideFlags: 0
@@ -1381,6 +1382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b608425042928f479ecf8d02f4d743b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableDebugLogging: 1
 --- !u!1 &1763714384307655267
 GameObject:
   m_ObjectHideFlags: 0

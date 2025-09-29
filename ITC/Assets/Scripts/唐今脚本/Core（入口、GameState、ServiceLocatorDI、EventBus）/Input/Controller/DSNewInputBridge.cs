@@ -1,4 +1,4 @@
-// DSInputBridge.cs (Refactored with Auto-Bind and Custom Inspector)
+// DSNewInputBridge.cs (最終版 - 自動追蹤設備)
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
@@ -9,20 +9,20 @@ using UnityEditor;
 #endif
 
 /// <summary>
-/// MVC中的Controller。监听Input System的输入动作，并将它们翻译成对DialogueStateManager的调用。
-/// 集成了编辑器自动绑定功能，极大简化了配置流程。
+/// MVC中的Controller。監聽Input System的輸入動作，並將它們翻譯成對DialogueStateManager的調用。
+/// 集成了編輯器自動綁定功能，並能自動追蹤最後使用的輸入設備類型。
 /// </summary>
 public class DSNewInputBridge : MonoBehaviour
 {
-    // ---------- 编辑器自动绑定功能所需字段 ----------
+    // ---------- 編輯器自動綁定功能所需字段 ----------
     [Header("Input Actions Asset (Auto Bind)")]
-    [Tooltip("拖入你的Input Actions (InputActionAsset)。脚本会尝试按命名自动匹配。")]
+    [Tooltip("拖入你的Input Actions (InputActionAsset)。腳本會嘗試按命名自動匹配。")]
     public InputActionAsset actionsAsset;
 
-    [Tooltip("在编辑器修改时自动尝试匹配一次。也可手动点击Inspector的按钮。")]
+    [Tooltip("在編輯器修改時自動嘗試匹配一次。也可手動點擊Inspector的按鈕。")]
     public bool autoBindOnValidate = true;
 
-    // ---------- 核心输入动作引用 ----------
+    // ---------- 核心輸入動作引用 ----------
     [Header("Input Action References")]
     public InputActionReference submit;
     public InputActionReference cancel;
@@ -30,26 +30,24 @@ public class DSNewInputBridge : MonoBehaviour
     public InputActionReference backlog;
     public InputActionReference quickSave;
     public InputActionReference quickLoad;
-    public InputActionReference openMenu; // 假设也需要这个
-    // ... 可根据你的InputActionAsset添加更多引用
+    public InputActionReference openMenu;
+    // ... 可根據你的InputActionAsset添加更多引用
 
     #region 生命周期与输入订阅
 
     private void OnEnable()
     {
-        // 订阅所有相关的输入动作
-        Subscribe(submit, ctx => DialogueStateManager.Instance.OnSubmitIntent());
-        Subscribe(cancel, ctx => DialogueStateManager.Instance.OnCancelIntent());
-        Subscribe(navigate, ctx => DialogueStateManager.Instance.OnNavigateIntent(ctx.ReadValue<Vector2>()));
-        Subscribe(backlog, ctx => DialogueStateManager.Instance.OnToggleBacklogIntent());
-        Subscribe(quickSave, ctx => DialogueStateManager.Instance.OnQuickSaveIntent());
-        Subscribe(quickLoad, ctx => DialogueStateManager.Instance.OnQuickLoadIntent());
-        // 可以在这里订阅 openMenu 等其他动作
+        // 使用新的、能夠追蹤設備的訂閱方法
+        SubscribeAndTrackDevice(submit, ctx => DialogueStateManager.Instance.OnSubmitIntent());
+        SubscribeAndTrackDevice(cancel, ctx => DialogueStateManager.Instance.OnCancelIntent());
+        SubscribeAndTrackDevice(navigate, ctx => DialogueStateManager.Instance.OnNavigateIntent(ctx.ReadValue<Vector2>()));
+        SubscribeAndTrackDevice(backlog, ctx => DialogueStateManager.Instance.OnToggleBacklogIntent());
+        SubscribeAndTrackDevice(quickSave, ctx => DialogueStateManager.Instance.OnQuickSaveIntent());
+        SubscribeAndTrackDevice(quickLoad, ctx => DialogueStateManager.Instance.OnQuickLoadIntent());
     }
 
     private void OnDisable()
     {
-        // 注意：Unsubscribe方法现在通过禁用action来工作，因为它无法移除匿名函数。
         Unsubscribe(submit);
         Unsubscribe(cancel);
         Unsubscribe(navigate);
@@ -58,16 +56,31 @@ public class DSNewInputBridge : MonoBehaviour
         Unsubscribe(quickLoad);
     }
 
-    private void Subscribe(InputActionReference actionRef, System.Action<InputAction.CallbackContext> handler)
+    // 【核心修改】創建一個新的訂閱方法，它會自動處理設備追蹤
+    private void SubscribeAndTrackDevice(InputActionReference actionRef, System.Action<InputAction.CallbackContext> handler)
     {
         if (actionRef == null || actionRef.action == null) return;
-        actionRef.action.performed += handler;
+
+        // 訂閱一個新的 lambda 表達式
+        actionRef.action.performed += (ctx) =>
+        {
+            // 在執行原始邏輯之前，先通知 StateManager 設備變更
+            if (DialogueStateManager.Instance != null && ctx.control != null)
+            {
+                DialogueStateManager.Instance.NotifyDeviceUsed(ctx.control.device);
+            }
+            // 然後再執行原始的回調
+            handler(ctx);
+        };
+
         actionRef.action.Enable();
     }
 
     private void Unsubscribe(InputActionReference actionRef)
     {
         if (actionRef == null || actionRef.action == null) return;
+        // 注意：因為我們在訂閱時使用了匿名(lambda)函數，舊的事件處理器無法被精確移除。
+        // 所以直接禁用Action是在OnDisable中推薦的做法，效果一致。
         actionRef.action.Disable();
     }
 
@@ -76,7 +89,6 @@ public class DSNewInputBridge : MonoBehaviour
     #if UNITY_EDITOR
     private void OnValidate()
     {
-        // 在 Inspector 发生修改时，尝试做一次自动绑定（静默模式）
         if (autoBindOnValidate)
             TryAutoBindAll(false);
     }
@@ -84,7 +96,6 @@ public class DSNewInputBridge : MonoBehaviour
 
     #region 自动绑定核心逻辑
 
-    // 字段名 → 目标 Action 名 (基于您的命名习惯)
     private static readonly (string field, string actionName)[] s_FieldToAction =
     {
         (nameof(submit),     "Submit"),
@@ -94,17 +105,13 @@ public class DSNewInputBridge : MonoBehaviour
         (nameof(quickSave),  "QuickSave"),
         (nameof(quickLoad),  "QuickLoad"),
         (nameof(openMenu),   "OpenMenu"),
-        // ... 如果未来有更多动作，在这里添加映射
     };
 
-    /// <summary>
-    /// 遍历映射表，为每个“尚未设置”的字段在actionsAsset中精确按名字查找匹配的Action。
-    /// </summary>
     public void TryAutoBindAll(bool logToConsole = true)
     {
         if (actionsAsset == null)
         {
-            if (logToConsole) Debug.LogWarning("[DSInputBridge] Actions Asset未分配，无法自动绑定。", this);
+            if (logToConsole) Debug.LogWarning("[DSInputBridge] Actions Asset未分配，無法自動綁定。", this);
             return;
         }
 
@@ -112,9 +119,9 @@ public class DSNewInputBridge : MonoBehaviour
         {
             var fieldInfo = GetType().GetField(pair.field);
             if (fieldInfo == null) continue;
-            
+
             var current = fieldInfo.GetValue(this) as InputActionReference;
-            if (current != null && current.asset != null) continue; // 如果已有引用，则跳过
+            if (current != null && current.asset != null) continue;
 
             var matches = FindActionsByName(pair.actionName);
             if (matches.Count == 1)
@@ -143,7 +150,7 @@ public class DSNewInputBridge : MonoBehaviour
         if (actionsAsset == null) return list;
         foreach (var map in actionsAsset.actionMaps)
             foreach (var act in map.actions)
-                if (act.name.Equals(actionName, System.StringComparison.OrdinalIgnoreCase)) // 忽略大小写匹配
+                if (act.name.Equals(actionName, System.StringComparison.OrdinalIgnoreCase))
                     list.Add(act);
         return list;
     }

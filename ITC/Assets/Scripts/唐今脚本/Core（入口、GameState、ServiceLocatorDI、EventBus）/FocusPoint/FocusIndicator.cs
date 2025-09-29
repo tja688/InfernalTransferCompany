@@ -1,48 +1,43 @@
-// FocusIndicator.cs (最终升级版)
+// FocusIndicator.cs (增強日誌監控版)
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
-/// <summary>
-/// 智能焦点指示器，作为键鼠/手柄的光标替代。
-/// 1. 订阅OnFocusChanged事件来追踪焦点。
-/// 2. 监听鼠标移动，检测到后自动隐藏自身并显示系统光标。
-/// 3. 焦点因键鼠/手柄改变时，自动显示自身并隐藏系统光标。
-/// </summary>
 [RequireComponent(typeof(RectTransform))]
 public class FocusIndicator : MonoBehaviour
 {
-    [Header("行为设置")]
-    [Tooltip("指示器相对于目标按钮的位置偏移")]
+    [Header("行為設置")]
+    [Tooltip("指示器相對於目標按鈕的位置偏移")]
     public Vector3 positionOffset = new Vector3(0, 0, 0);
 
-    [Tooltip("指示器是否应该匹配目标按钮的大小")]
+    [Tooltip("指示器是否應該匹配目標按鈕的大小")]
     public bool matchTargetSize = true;
 
-    [Header("智能光标控制")]
-    [Tooltip("启用此功能后，指示器将作为键鼠/手柄的光标替代")]
+    [Header("智能光標控制")]
+    [Tooltip("啟用此功能後，指示器將作為鍵鼠/手柄的光標替代")]
     public bool enableCursorControl = true;
-    
-    [Tooltip("需要链接到Input Action Asset中的Pointer > Delta [Vector2]动作")]
-    public InputActionReference pointerDeltaAction;
 
-    [Header("调试")]
-    [Tooltip("启用后，将在控制台打印详细的日志信息")]
+    [Tooltip("需要鏈接到Input Action Asset中的Pointer > Delta [Vector2]動作")]
+    public InputActionReference pointerDeltaAction;
+    
+    [Header("調試")]
+    [Tooltip("啟用後，將在控制台打印詳細的日誌信息")]
     [SerializeField] private bool enableDebugLogging = true;
+    
+    private Image spriteRenderer;
 
     private RectTransform _rectTransform;
-    private bool _isMouseInputActive = true; // 默认以鼠标模式启动
 
     private void Awake()
     {
         _rectTransform = GetComponent<RectTransform>();
+
+        spriteRenderer = this.GetComponent<Image>();
     }
 
     private void Start()
     {
-        // 尝试在Start中再次订阅，以更好地处理脚本执行顺序问题
-        SubscribeToEvents();
-        // 根据初始模式设置光标和指示器状态
-        UpdateCursorAndIndicatorState();
+        UpdateIndicatorState(null);
     }
 
     private void OnEnable()
@@ -54,26 +49,17 @@ public class FocusIndicator : MonoBehaviour
     {
         UnsubscribeFromEvents();
     }
-    
+
     private void SubscribeToEvents()
     {
-        // 确保只订阅一次
         if (DialogueStateManager.Instance != null)
         {
-            DialogueStateManager.Instance.OnFocusChanged -= HandleFocusChanged; // 先移除，防止重复订阅
+            Debug.Log($"[FocusIndicator] 正在嘗試訂閱 StateManager (ID: {DialogueStateManager.Instance.GetInstanceID()}) 的 OnFocusChanged 事件。", this);
             DialogueStateManager.Instance.OnFocusChanged += HandleFocusChanged;
-            if (enableDebugLogging) Debug.Log("[FocusIndicator] 成功订阅 OnFocusChanged 事件。", this);
         }
-        else if (enableDebugLogging)
+        else
         {
-             Debug.LogError("[FocusIndicator] StateManager.Instance 为空，订阅 OnFocusChanged 事件失败！", this);
-        }
-
-        if (pointerDeltaAction != null && pointerDeltaAction.action != null)
-        {
-            pointerDeltaAction.action.performed -= OnPointerMove;
-            pointerDeltaAction.action.performed += OnPointerMove;
-            pointerDeltaAction.action.Enable();
+            Debug.Log($"[FocusIndicator] 訂閱 StateManager 失败", this);
         }
     }
 
@@ -89,80 +75,93 @@ public class FocusIndicator : MonoBehaviour
         }
     }
 
-    // 监听鼠标/指针移动
     private void OnPointerMove(InputAction.CallbackContext context)
     {
         if (!enableCursorControl) return;
 
-        // 只有在鼠标确实移动了（而不是其他指针设备）且当前不是鼠标模式时，才切换
         if (context.control.device is Mouse && context.ReadValue<Vector2>().sqrMagnitude > 0.1f)
         {
-            if (!_isMouseInputActive)
+            if (DialogueStateManager.Instance != null)
             {
-                 if (enableDebugLogging) Debug.Log("[FocusIndicator] 检测到鼠标移动，切换到鼠标模式。", this);
-                _isMouseInputActive = true;
-                UpdateCursorAndIndicatorState();
+                 DialogueStateManager.Instance.NotifyDeviceUsed(context.control.device);
+                 UpdateIndicatorState(null);
             }
         }
     }
 
-    // 处理焦点变更
     private void HandleFocusChanged(IInteractableUI newFocus)
     {
-        if (enableDebugLogging) Debug.Log($"[FocusIndicator] 收到 OnFocusChanged 事件，新焦点: {(newFocus as MonoBehaviour)?.name ?? "null"}", this);
-
-        if (enableCursorControl)
-        {
-            // 只要焦点通过非鼠标方式改变，就切换到键鼠/手柄模式
-            if (_isMouseInputActive)
-            {
-                _isMouseInputActive = false;
-                 if (enableDebugLogging) Debug.Log("[FocusIndicator] 焦点改变，切换到键鼠/手柄模式。", this);
-            }
-        }
-        
-        UpdateCursorAndIndicatorState(newFocus);
+        Debug.Log($"[HandleFocusChanged!!!", this);
+        UpdateIndicatorState(newFocus);
     }
-    
-    // 统一更新光标和指示器状态
-    private void UpdateCursorAndIndicatorState(IInteractableUI newFocus = null)
+
+    // 【核心修改】增加超詳細的日誌
+    private void UpdateIndicatorState(IInteractableUI newFocus)
     {
-        if (enableCursorControl)
+        if (DialogueStateManager.Instance == null) return;
+
+        var lastDevice = DialogueStateManager.Instance.LastUsedDevice;
+        bool isMouseMode = (lastDevice == InputDeviceType.Mouse);
+        string newFocusName = (newFocus as MonoBehaviour)?.name ?? "null";
+
+        if (enableDebugLogging)
         {
-            Cursor.visible = _isMouseInputActive;
+            Debug.Log($"[FocusIndicator-Check] --- 狀態檢查 --- \n" +
+                      $"全局設備: {lastDevice}, IsMouseMode: {isMouseMode}\n" +
+                      $"接收到的新焦點: {newFocusName}");
         }
 
-        if (_isMouseInputActive || newFocus == null)
+        if (enableCursorControl)
         {
-            gameObject.SetActive(false);
+            Cursor.visible = isMouseMode;
+        }
+
+        if (isMouseMode || newFocus == null)
+        {
+            if (enableDebugLogging)
+            {
+                Debug.Log($"[FocusIndicator-Result] 決策: 隱藏。 原因: isMouseMode={isMouseMode}, newFocus is null?={newFocus == null}", this);
+            }
+            spriteRenderer.enabled = false;
             return;
         }
-        
-        // --- 以下为显示和定位指示器的逻辑 ---
-        gameObject.SetActive(true);
+
+        if (enableDebugLogging)
+        {
+            Debug.Log($"[FocusIndicator-Result] 決策: 顯示。 將定位到 '{newFocusName}'。", this);
+        }
+
+        spriteRenderer.enabled = true;
 
         var targetObject = (newFocus as MonoBehaviour)?.gameObject;
         if(targetObject == null) {
-            gameObject.SetActive(false);
+            spriteRenderer.enabled = false;
             return;
         }
         
-        var targetTransform = targetObject.transform;
-        
-        transform.SetParent(targetTransform, true); // 使用 worldPositionStays = true
-        transform.SetAsLastSibling(); // 确保在父级中渲染在最上层
+        var targetRect = targetObject.GetComponent<RectTransform>();
 
-        if (matchTargetSize)
+        // ==================【核心修改：只设置位置，不改变其他任何东西】==================
+        if (targetObject == null) 
         {
-            var targetRect = targetObject.GetComponent<RectTransform>();
-            if (targetRect != null)
-            {
-                _rectTransform.anchorMin = new Vector2(0, 0);
-                _rectTransform.anchorMax = new Vector2(1, 1);
-                _rectTransform.offsetMin = Vector2.zero;
-                _rectTransform.offsetMax = Vector2.zero;
-            }
+            spriteRenderer.enabled = false;
+            return;
         }
-        _rectTransform.localPosition = positionOffset; // 应用本地偏移
+
+        // 1. 先显示指示器
+        spriteRenderer.enabled = true;
+
+        // 2. 获取目标UI元素的Transform
+        var targetTransform = targetObject.transform;
+
+        // 3. 直接将指示器的世界坐标设置为目标的世界坐标
+        //    因为两者的Pivot都设置在中心(0.5, 0.5)，这会实现中心对齐
+        this.transform.position = targetTransform.position;
+
+        // 4. 在世界坐标的基础上，应用你的偏移量
+        //    注意：这里是 += 而不是 =，并且操作的是 transform.position
+        this.transform.position += positionOffset;
+
+        // ==================【修改结束，删掉所有关于大小和父对象的代码】==================
     }
 }
