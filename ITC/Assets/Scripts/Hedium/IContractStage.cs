@@ -1,5 +1,5 @@
-/// <summary>
-/// ��Լ�׶νӿ�
+﻿/// <summary>
+/// 契约阶段接口
 /// </summary>
 public interface IContractStage
 {

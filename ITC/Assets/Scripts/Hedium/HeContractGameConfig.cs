@@ -1,111 +1,111 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ÆõÔ¼ÓÎÏ·ÅäÖÃ - ScriptableObject×ÊÔ´ÎÄ¼ş
-/// ¿ÉÔÚInspectorÖĞµ÷ÕûÓÎÏ·²ÎÊı£¬Ö§³Ö¶àÖÖÄÑ¶ÈÅäÖÃ
+/// å¥‘çº¦æ¸¸æˆé…ç½® - ScriptableObjectèµ„æºæ–‡ä»¶
+/// å¯åœ¨Inspectorä¸­è°ƒæ•´æ¸¸æˆå‚æ•°ï¼Œæ”¯æŒå¤šç§éš¾åº¦é…ç½®
 /// </summary>
 [CreateAssetMenu(fileName = "HeContractGameConfig", menuName = "Hedium/Contract Game Config")]
 public class HeContractGameConfig : ScriptableObject
 {
-    [Header("=== »ù´¡Éè¶¨ ===")]
-    [Tooltip("¹Ë¿Í³õÊ¼ÂúÒâ¶È")]
+    [Header("=== åŸºç¡€è®¾å®š ===")]
+    [Tooltip("é¡¾å®¢åˆå§‹æ»¡æ„åº¦")]
     [Range(1, 5)]
     public int initialSatisfaction = 3;
     
-    [Tooltip("×î´óÊ§°Ü´ÎÊı")]
+    [Tooltip("æœ€å¤§å¤±è´¥æ¬¡æ•°")]
     [Range(1, 5)]
     public int maxFailCount = 3;
     
-    [Tooltip("×îĞ¡ÂúÒâ¶È")]
+    [Tooltip("æœ€å°æ»¡æ„åº¦")]
     [Range(0, 3)]
     public int minSatisfaction = 1;
 
-    [Header("=== ·ûÎÄÊäÈëÏµÍ³ ===")]
-    [Tooltip("·ûÎÄÊäÈëÊ±¼äÏŞÖÆ(Ãë)")]
+    [Header("=== ç¬¦æ–‡è¾“å…¥ç³»ç»Ÿ ===")]
+    [Tooltip("ç¬¦æ–‡è¾“å…¥æ—¶é—´é™åˆ¶(ç§’)")]
     [Range(5f, 30f)]
     public float runeInputTimeLimit = 10f;
     
-    [Tooltip("×î´ó·ûÎÄ´íÎó´ÎÊı")]
+    [Tooltip("æœ€å¤§ç¬¦æ–‡é”™è¯¯æ¬¡æ•°")]
     [Range(1, 5)]
     public int maxRuneErrors = 3;
     
-    [Tooltip("¶ş´Î´íÎóµ¼ÖÂÂúÒâ¶ÈÏÂ½µµÄãĞÖµ")]
+    [Tooltip("äºŒæ¬¡é”™è¯¯å¯¼è‡´æ»¡æ„åº¦ä¸‹é™çš„é˜ˆå€¼")]
     [Range(1, 3)]
     public int runeErrorSatisfactionThreshold = 2;
 
-    [Header("=== ·ûÎÄºË¶ÔÏµÍ³ ===")]
-    [Tooltip("·ûÎÄºË¶ÔÊ±¼äÏŞÖÆ(Ãë)")]
+    [Header("=== ç¬¦æ–‡æ ¸å¯¹ç³»ç»Ÿ ===")]
+    [Tooltip("ç¬¦æ–‡æ ¸å¯¹æ—¶é—´é™åˆ¶(ç§’)")]
     [Range(3f, 10f)]
     public float runeVerificationTime = 5f;
     
-    [Tooltip("ĞèÒªÕÒ³öµÄÅ¤Çú·ûÎÄÊıÁ¿")]
+    [Tooltip("éœ€è¦æ‰¾å‡ºçš„æ‰­æ›²ç¬¦æ–‡æ•°é‡")]
     [Range(1, 5)]
     public int runeVerificationCount = 3;
     
-    [Tooltip("·ûÎÄºË¶Ô´¥·¢¼¸ÂÊ")]
+    [Tooltip("ç¬¦æ–‡æ ¸å¯¹è§¦å‘å‡ ç‡")]
     [Range(0f, 1f)]
     public float runeVerificationTriggerChance = 0.3f;
 
-    [Header("=== ¸ÇÕÂÏµÍ³ ===")]
-    [Tooltip("Ó¡ÕÂĞîÁ¦Ê±¼ä(Ãë)")]
+    [Header("=== ç›–ç« ç³»ç»Ÿ ===")]
+    [Tooltip("å°ç« è“„åŠ›æ—¶é—´(ç§’)")]
     [Range(1f, 5f)]
     public float stampChargeTime = 3f;
     
-    [Tooltip("×î´ó¸ÇÕÂ³¢ÊÔ´ÎÊı")]
+    [Tooltip("æœ€å¤§ç›–ç« å°è¯•æ¬¡æ•°")]
     [Range(1, 5)]
     public int maxStampAttempts = 3;
     
-    [Tooltip("¸ÇÕÂ¾«¶ÈÈİ²î (Ô½Ğ¡Ô½ÄÑ)")]
+    [Tooltip("ç›–ç« ç²¾åº¦å®¹å·® (è¶Šå°è¶Šéš¾)")]
     [Range(0.05f, 0.3f)]
     public float stampAccuracyTolerance = 0.1f;
     
-    [Tooltip("ÍêÃÀ¸ÇÕÂµÄ×î¼ÑÊ±»ú (ĞîÁ¦Ê±¼äµÄ°Ù·Ö±È)")]
+    [Tooltip("å®Œç¾ç›–ç« çš„æœ€ä½³æ—¶æœº (è“„åŠ›æ—¶é—´çš„ç™¾åˆ†æ¯”)")]
     [Range(0.6f, 0.9f)]
     public float stampOptimalTiming = 0.8f;
 
-    [Header("=== Áé»êÊÕÈ¡ÏµÍ³ ===")]
-    [Tooltip("Áé»êÊÕÈ¡¾«¶ÈÈİ²î (°ë³É = 0.05)")]
+    [Header("=== çµé­‚æ”¶å–ç³»ç»Ÿ ===")]
+    [Tooltip("çµé­‚æ”¶å–ç²¾åº¦å®¹å·® (åŠæˆ = 0.05)")]
     [Range(0.02f, 0.1f)]
     public float soulHarvestAccuracy = 0.05f;
     
-    [Tooltip("·ÖÁéµ¶¶¶¶¯·ù¶È")]
+    [Tooltip("åˆ†çµåˆ€æŠ–åŠ¨å¹…åº¦")]
     [Range(0.01f, 0.05f)]
     public float soulCutterShake = 0.02f;
     
-    [Tooltip("·ÖÁéµ¶ÒÆ¶¯ËÙ¶È")]
+    [Tooltip("åˆ†çµåˆ€ç§»åŠ¨é€Ÿåº¦")]
     [Range(0.1f, 1f)]
     public float soulCutterMoveSpeed = 0.5f;
 
-    [Header("=== ÌØÊâÊÂ¼şÏµÍ³ ===")]
-    [Tooltip("ÌØÊâÊÂ¼ş´¥·¢¼¸ÂÊ")]
+    [Header("=== ç‰¹æ®Šäº‹ä»¶ç³»ç»Ÿ ===")]
+    [Tooltip("ç‰¹æ®Šäº‹ä»¶è§¦å‘å‡ ç‡")]
     [Range(0f, 1f)]
     public float eventTriggerChance = 0.3f;
     
-    [Tooltip("ÊÂ¼şÏìÓ¦Ê±¼ä½±ÀøãĞÖµ")]
+    [Tooltip("äº‹ä»¶å“åº”æ—¶é—´å¥–åŠ±é˜ˆå€¼")]
     [Range(0.5f, 3f)]
     public float eventQuickResponseTime = 2f;
 
-    [Header("=== ·ûÎÄÅäÖÃ ===")]
-    [Tooltip("·ûÎÄÀàĞÍÅäÖÃ")]
+    [Header("=== ç¬¦æ–‡é…ç½® ===")]
+    [Tooltip("ç¬¦æ–‡ç±»å‹é…ç½®")]
     public List<RuneConfig> runeConfigs = new List<RuneConfig>();
 
-    [Header("=== ÆõÔ¼ÀàĞÍÅäÖÃ ===")]
-    [Tooltip("ÆõÔ¼ÀàĞÍºÍ¶ÔÓ¦·ûÎÄĞòÁĞ")]
+    [Header("=== å¥‘çº¦ç±»å‹é…ç½® ===")]
+    [Tooltip("å¥‘çº¦ç±»å‹å’Œå¯¹åº”ç¬¦æ–‡åºåˆ—")]
     public List<HeContractTypeConfig> HeContractTypeConfigs = new List<HeContractTypeConfig>();
 
-    [Header("=== ÄÑ¶Èµ÷½Ú ===")]
+    [Header("=== éš¾åº¦è°ƒèŠ‚ ===")]
     [Space(10)]
-    [Tooltip("Ñ¡ÔñÔ¤ÉèÄÑ¶È")]
+    [Tooltip("é€‰æ‹©é¢„è®¾éš¾åº¦")]
     public DifficultyPreset difficultyPreset = DifficultyPreset.Normal;
     
     [Space(5)]
-    [Button("Ó¦ÓÃÄÑ¶ÈÔ¤Éè")]
+    [Button("åº”ç”¨éš¾åº¦é¢„è®¾")]
     public bool applyDifficultyPreset;
 
 
     /// <summary>
-    /// ÄÑ¶ÈÃ¶¾ÙÓÃÓÚµ÷ÕûÓÎÏ·½ø³Ì
+    /// éš¾åº¦æšä¸¾ç”¨äºè°ƒæ•´æ¸¸æˆè¿›ç¨‹
     /// </summary>
     public enum DifficultyPreset
     {
@@ -125,7 +125,7 @@ public class HeContractGameConfig : ScriptableObject
         public Sprite normalSprite;
         public Sprite corruptedSprite;
         public string description;
-        [Tooltip("ÓÃÓÚÊäÈëµÄ°´¼ü")]
+        [Tooltip("ç”¨äºè¾“å…¥çš„æŒ‰é”®")]
         public KeyCode inputKey;
     }
 
@@ -137,7 +137,7 @@ public class HeContractGameConfig : ScriptableObject
         public Color themeColor;
         public List<RuneType> requiredRuneSequence;
         public string description;
-        [Tooltip("¸ÃÆõÔ¼ÀàĞÍµÄÁé»êÊÕÈ¡°Ù·Ö±È·¶Î§")]
+        [Tooltip("è¯¥å¥‘çº¦ç±»å‹çš„çµé­‚æ”¶å–ç™¾åˆ†æ¯”èŒƒå›´")]
         [Range(0.1f, 0.8f)]
         public float minSoulPercentage = 0.2f;
         [Range(0.1f, 0.8f)]
@@ -146,11 +146,11 @@ public class HeContractGameConfig : ScriptableObject
 
     private void OnValidate()
     {
-        // È·±£ÊıÖµºÏÀíĞÔ
+        // ç¡®ä¿æ•°å€¼åˆç†æ€§
         if (minSatisfaction >= initialSatisfaction)
             minSatisfaction = Mathf.Max(0, initialSatisfaction - 1);
         
-        // ×Ô¶¯Ó¦ÓÃÄÑ¶ÈÔ¤Éè
+        // è‡ªåŠ¨åº”ç”¨éš¾åº¦é¢„è®¾
         if (applyDifficultyPreset)
         {
             ApplyDifficultyPreset(difficultyPreset);
@@ -159,7 +159,7 @@ public class HeContractGameConfig : ScriptableObject
     }
 
     /// <summary>
-    /// Ó¦ÓÃÄÑ¶ÈÔ¤Éè
+    /// åº”ç”¨éš¾åº¦é¢„è®¾
     /// </summary>
     public void ApplyDifficultyPreset(DifficultyPreset preset)
     {
@@ -206,11 +206,11 @@ public class HeContractGameConfig : ScriptableObject
                 break;
         }
         
-        //Debug.Log($"ÒÑÓ¦ÓÃ{preset}ÄÑ¶ÈÔ¤Éè");
+        //Debug.Log($"å·²åº”ç”¨{preset}éš¾åº¦é¢„è®¾");
     }
 
     /// <summary>
-    /// »ñÈ¡ÆõÔ¼ÀàĞÍµÄ·ûÎÄĞòÁĞ
+    /// è·å–å¥‘çº¦ç±»å‹çš„ç¬¦æ–‡åºåˆ—
     /// </summary>
     public List<RuneType> GetRuneSequenceForContract(HeContractType HeContractType)
     {
@@ -220,12 +220,12 @@ public class HeContractGameConfig : ScriptableObject
             return new List<RuneType>(config.requiredRuneSequence);
         }
         
-        // ·µ»ØÄ¬ÈÏĞòÁĞ
+        // è¿”å›é»˜è®¤åºåˆ—
         return GetDefaultRuneSequence(HeContractType);
     }
 
     /// <summary>
-    /// »ñÈ¡Ä¬ÈÏ·ûÎÄĞòÁĞ (Èç¹ûÅäÖÃÎª¿Õ)
+    /// è·å–é»˜è®¤ç¬¦æ–‡åºåˆ— (å¦‚æœé…ç½®ä¸ºç©º)
     /// </summary>
     private List<RuneType> GetDefaultRuneSequence(HeContractType HeContractType)
     {
@@ -245,7 +245,7 @@ public class HeContractGameConfig : ScriptableObject
     }
 
     /// <summary>
-    /// »ñÈ¡ÆõÔ¼ÀàĞÍµÄËæ»úÁé»ê°Ù·Ö±È
+    /// è·å–å¥‘çº¦ç±»å‹çš„éšæœºçµé­‚ç™¾åˆ†æ¯”
     /// </summary>
     public float GetRandomSoulPercentage(HeContractType HeContractType)
     {
@@ -255,33 +255,33 @@ public class HeContractGameConfig : ScriptableObject
             return Random.Range(config.minSoulPercentage, config.maxSoulPercentage);
         }
         
-        // Ä¬ÈÏ·¶Î§
+        // é»˜è®¤èŒƒå›´
         return Random.Range(0.2f, 0.6f);
     }
 
     /// <summary>
-    /// ÖØÖÃÎªÄ¬ÈÏÖµ
+    /// é‡ç½®ä¸ºé»˜è®¤å€¼
     /// </summary>
     [ContextMenu("Reset to Default")]
     public void ResetToDefault()
     {
         ApplyDifficultyPreset(DifficultyPreset.Normal);
         
-        // ÉèÖÃÄ¬ÈÏ·ûÎÄÅäÖÃ
+        // è®¾ç½®é»˜è®¤ç¬¦æ–‡é…ç½®
         if (runeConfigs.Count == 0)
         {
             runeConfigs = new List<RuneConfig>
             {
-                new RuneConfig { type = RuneType.Fire, displayName = "»ğ", inputKey = KeyCode.W, normalColor = Color.red },
-                new RuneConfig { type = RuneType.Water, displayName = "Ë®", inputKey = KeyCode.A, normalColor = Color.blue },
-                new RuneConfig { type = RuneType.Earth, displayName = "ÍÁ", inputKey = KeyCode.S, normalColor = new Color(0.6f, 0.4f, 0.2f) },
-                new RuneConfig { type = RuneType.Air, displayName = "·ç", inputKey = KeyCode.D, normalColor = Color.cyan },
-                new RuneConfig { type = RuneType.Light, displayName = "¹â", inputKey = KeyCode.Q, normalColor = Color.yellow },
-                new RuneConfig { type = RuneType.Dark, displayName = "°µ", inputKey = KeyCode.E, normalColor = new Color(0.3f, 0.3f, 0.3f) }
+                new RuneConfig { type = RuneType.Fire, displayName = "ç«", inputKey = KeyCode.W, normalColor = Color.red },
+                new RuneConfig { type = RuneType.Water, displayName = "æ°´", inputKey = KeyCode.A, normalColor = Color.blue },
+                new RuneConfig { type = RuneType.Earth, displayName = "åœŸ", inputKey = KeyCode.S, normalColor = new Color(0.6f, 0.4f, 0.2f) },
+                new RuneConfig { type = RuneType.Air, displayName = "é£", inputKey = KeyCode.D, normalColor = Color.cyan },
+                new RuneConfig { type = RuneType.Light, displayName = "å…‰", inputKey = KeyCode.Q, normalColor = Color.yellow },
+                new RuneConfig { type = RuneType.Dark, displayName = "æš—", inputKey = KeyCode.E, normalColor = new Color(0.3f, 0.3f, 0.3f) }
             };
         }
         
-        // ÉèÖÃÄ¬ÈÏÆõÔ¼ÀàĞÍÅäÖÃ
+        // è®¾ç½®é»˜è®¤å¥‘çº¦ç±»å‹é…ç½®
         if (HeContractTypeConfigs.Count == 0)
         {
             HeContractTypeConfigs = new List<HeContractTypeConfig>
@@ -289,7 +289,7 @@ public class HeContractGameConfig : ScriptableObject
                 new HeContractTypeConfig 
                 { 
                     HeContractType = HeContractType.Money, 
-                    displayName = "½ğÇ®ÆõÔ¼", 
+                    displayName = "é‡‘é’±å¥‘çº¦", 
                     themeColor = Color.yellow,
                     requiredRuneSequence = new List<RuneType> { RuneType.Earth, RuneType.Fire, RuneType.Light },
                     minSoulPercentage = 0.2f,
@@ -298,7 +298,7 @@ public class HeContractGameConfig : ScriptableObject
                 new HeContractTypeConfig 
                 { 
                     HeContractType = HeContractType.Fame, 
-                    displayName = "ÃûÀûÆõÔ¼", 
+                    displayName = "ååˆ©å¥‘çº¦", 
                     themeColor = Color.magenta,
                     requiredRuneSequence = new List<RuneType> { RuneType.Light, RuneType.Air, RuneType.Fire },
                     minSoulPercentage = 0.3f,
@@ -307,7 +307,7 @@ public class HeContractGameConfig : ScriptableObject
                 new HeContractTypeConfig 
                 { 
                     HeContractType = HeContractType.Skill, 
-                    displayName = "¼¼ÄÜÆõÔ¼", 
+                    displayName = "æŠ€èƒ½å¥‘çº¦", 
                     themeColor = Color.cyan,
                     requiredRuneSequence = new List<RuneType> { RuneType.Water, RuneType.Earth, RuneType.Air },
                     minSoulPercentage = 0.2f,
@@ -316,7 +316,7 @@ public class HeContractGameConfig : ScriptableObject
                 new HeContractTypeConfig 
                 { 
                     HeContractType = HeContractType.Event, 
-                    displayName = "ÊÂ¼şÆõÔ¼", 
+                    displayName = "äº‹ä»¶å¥‘çº¦", 
                     themeColor = Color.red,
                     requiredRuneSequence = new List<RuneType> { RuneType.Dark, RuneType.Fire, RuneType.Water },
                     minSoulPercentage = 0.4f,
@@ -325,12 +325,12 @@ public class HeContractGameConfig : ScriptableObject
             };
         }
         
-        Debug.Log("ÅäÖÃÒÑÖØÖÃÎªÄ¬ÈÏÖµ");
+        Debug.Log("é…ç½®å·²é‡ç½®ä¸ºé»˜è®¤å€¼");
     }
 }
 
 /// <summary>
-/// ¼ò»¯µÄButtonÌØĞÔ (Èç¹ûÏîÄ¿ÖĞÃ»ÓĞÆäËûButtonÊµÏÖ)
+/// ç®€åŒ–çš„Buttonç‰¹æ€§ (å¦‚æœé¡¹ç›®ä¸­æ²¡æœ‰å…¶ä»–Buttonå®ç°)
 /// </summary>
 public class ButtonAttribute : PropertyAttribute
 {
