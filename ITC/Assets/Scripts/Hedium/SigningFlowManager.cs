@@ -9,51 +9,51 @@ using UnityEngine.EventSystems;
 
 ///
 ///
-public const bool ProbabilityDetermine(float s)
-
-{
-   return true;
-    }
+// public const bool ProbabilityDetermine(float s)
+//
+// {
+//    return true;
+//     }
 
 
 
 /// <summary>
-/// ÎÄÊé´íÎóÀàÐÍÃ¶¾Ù
-/// ÓÃÓÚ±êÊ¶ÔÚÎÄÊéºËÑé¹ý³ÌÖÐ¿ÉÄÜ³öÏÖµÄ¸÷ÖÖÎÊÌâ
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½
+/// ï¿½ï¿½ï¿½Ú±ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½Ü³ï¿½ï¿½ÖµÄ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 /// </summary>
 public enum DocumentError
 {
-    /// <summary>·âÀ¯ÆÆËð - ÎÄÊéµÄ·âÀ¯²»ÍêÕû</summary>
+    /// <summary>ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</summary>
     BrokenSeal,
 
-    /// <summary>Î±ÔìÎÄÊé - ÎÄÊé±¾ÉíÏµÎ±Ôì</summary>
+    /// <summary>Î±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½é±¾ï¿½ï¿½ÏµÎ±ï¿½ï¿½</summary>
     ForgeryDocument,
 
-    /// <summary>È±ÉÙË®Ó¡ - ÎÄÊéÈ±ÉÙITC¹«Ë¾¹Ù·½Ë®Ó¡</summary>
+    /// <summary>È±ï¿½ï¿½Ë®Ó¡ - ï¿½ï¿½ï¿½ï¿½È±ï¿½ï¿½ITCï¿½ï¿½Ë¾ï¿½Ù·ï¿½Ë®Ó¡</summary>
     MissingWatermark,
 
-    /// <summary>¼ÙÃ°Ä«Ë® - Ê¹ÓÃÁË·Ç¹Ù·½Ä«Ë®</summary>
+    /// <summary>ï¿½ï¿½Ã°Ä«Ë® - Ê¹ï¿½ï¿½ï¿½Ë·Ç¹Ù·ï¿½Ä«Ë®</summary>
     FakeInk,
 
-    /// <summary>ÄÚÈÝ²»·û - ¹Ë¿Í¿ÚÊöÐèÇóÓëÆõÔ¼ÄÚÈÝ²»Æ¥Åä</summary>
+    /// <summary>ï¿½ï¿½ï¿½Ý²ï¿½ï¿½ï¿½ - ï¿½Ë¿Í¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½Ý²ï¿½Æ¥ï¿½ï¿½</summary>
     ContentMismatch,
 
-    /// <summary>ÈÕÆÚ´íÎó - Ô¤Ô¼ÈÕÆÚÓëµ±Ç°ÈÕÆÚ²»·û</summary>
+    /// <summary>ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ - Ô¤Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ëµ±Ç°ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½</summary>
     IncorrectDate,
 
-    /// <summary>Éí·Ý²»·û - ÎÄÊé¼ÇÂ¼µÄÉí·ÝÓëÊµ¼Ê²»·û</summary>
+    /// <summary>ï¿½ï¿½Ý²ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½Ê²ï¿½ï¿½ï¿½</summary>
     IdentityMismatch,
 
-    /// <summary>Î±×°¹Ë¿Í - ¹Ë¿ÍÊ¹ÓÃ¼ÙÉí·Ý</summary>
+    /// <summary>Î±×°ï¿½Ë¿ï¿½ - ï¿½Ë¿ï¿½Ê¹ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½</summary>
     DisguisedCustomer,
 
-    /// <summary>Î£ÏÕÈËÎï - ¿ËÂå¿Ë´ï¶û°ï³ÉÔ±»òÆäËûÎ£ÏÕÈËÎï</summary>
+    /// <summary>Î£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½Ë´ï¿½ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½</summary>
     DangerousCustomer
 }
 #region Contract Stages
 
 /// <summary>
-/// ÎÄÊéºËÑéÏµÍ³
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÏµÍ³
 /// </summary>
 public class DocumentVerifier : IContractStage
 {
@@ -66,7 +66,7 @@ public class DocumentVerifier : IContractStage
 
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
-    public string StageName => "ÎÄÊéºËÑé";
+    public string StageName => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
     public List<DocumentError> DetectedErrors => detectedErrors;
 
     public void Enter(HeContractContext ctx)
@@ -74,17 +74,17 @@ public class DocumentVerifier : IContractStage
         context = ctx;
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
         
-        Debug.Log("=== ¿ªÊ¼ÎÄÊéºËÑé½×¶Î ===");
+        Debug.Log("=== ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¶ï¿½ ===");
         
-        // ÏÔÊ¾ÎÄÊéºËÑéUI
+        // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½UI
         uiManager?.ShowDocumentVerification(ctx);
         
-        // Ö´ÐÐºËÑéÂß¼­
+        // Ö´ï¿½Ðºï¿½ï¿½ï¿½ï¿½ß¼ï¿½
         PerformDocumentVerification();
         Debug.Assert(detectedErrors.Count>0);
     
        
-         Debug.Log($"¼ì²âµ½{detectedErrors.Count}¸öÎÊÌâ£¬µÈ´ýÍæ¼Ò¾ö²ß...");
+         Debug.Log($"ï¿½ï¿½âµ½{detectedErrors.Count}ï¿½ï¿½ï¿½ï¿½ï¿½â£¬ï¿½È´ï¿½ï¿½ï¿½Ò¾ï¿½ï¿½ï¿½...");
 
 
        
@@ -95,19 +95,19 @@ public class DocumentVerifier : IContractStage
         {
             
 
-            Debug.Log($"Íæ¼Ò·¢ÏÖÁËÎÄÊé´íÎó: {error}");
+            Debug.Log($"ï¿½ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {error}");
             if (detectedErrors.Contains(error))
             {
                 detectedErrors.Remove(error);
-                Debug.Log($"ÎÊÌâ{error}ÒÑ´¦Àí,ºËÑéÎÄÊé²»Í¨¹ý");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½{error}ï¿½Ñ´ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é²»Í¨ï¿½ï¿½");
                 uiManager.SwitchPanel(HeContractUIManager.UIState.None);
                 uiManager.OnDocumentClicked -= documentClickedHandler;
                 detectedErrors.Clear();
             }
             else
             {
-                Debug.Log($"ÎÊÌâ{error}²»ÔÚ´ý´¦ÀíÁÐ±íÖÐ");
-                //TODO£ºÎÄÊéÅÐ¶ÏÊ§°ÜÂß¼­
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½{error}ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½");
+                //TODOï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Ê§ï¿½ï¿½ï¿½ß¼ï¿½
 
 
 
@@ -123,14 +123,14 @@ public class DocumentVerifier : IContractStage
 
             if (detectedErrors.Count()>0)
             {
-                Debug.Log($"´æÔÚ{error}´íÎó£¬ÎÄÊé¼ìÑéÊ§°Ü,¼ÇÒ»´Î´íÎó");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½{error}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½,ï¿½ï¿½Ò»ï¿½Î´ï¿½ï¿½ï¿½");
                 ctx.AddFailure();
 
             }
             else
             {
 
-                Debug.Log($"Ã»ÓÐÈÎºÎ´íÎó£¬ÎÄÊé¼ìÑéÍ¨¹ý");
+                Debug.Log($"Ã»ï¿½ï¿½ï¿½ÎºÎ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½");
 
 
             }
@@ -149,10 +149,10 @@ public class DocumentVerifier : IContractStage
 
     public void Exit()
     {
-        Debug.Log("=== ÎÄÊéºËÑé½×¶Î½áÊø ===");
+        Debug.Log("=== ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¶Î½ï¿½ï¿½ï¿½ ===");
         if (detectedErrors.Count > 0)
         {
-            Debug.Log($"¼ì²âµ½µÄ´íÎó: {string.Join(", ", detectedErrors)}");
+            Debug.Log($"ï¿½ï¿½âµ½ï¿½Ä´ï¿½ï¿½ï¿½: {string.Join(", ", detectedErrors)}");
         }
     }
 
@@ -162,97 +162,97 @@ public class DocumentVerifier : IContractStage
         var customer = context.customer;
         detectedErrors.Clear();
         
-        // ¼ì²é·âÀ¯
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (!doc.isSealed)
         {
             detectedErrors.Add(DocumentError.BrokenSeal);
-            Debug.Log($"ÎÄÊé´íÎó: {GetErrorDescription(DocumentError.BrokenSeal)}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {GetErrorDescription(DocumentError.BrokenSeal)}");
         }
         
-        // ¼ì²éÎÄÊéÕæÎ±
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î±
         if (!doc.isGenuine)
         {
             detectedErrors.Add(DocumentError.ForgeryDocument);
-            Debug.Log($"ÎÄÊé´íÎó: {GetErrorDescription(DocumentError.ForgeryDocument)}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {GetErrorDescription(DocumentError.ForgeryDocument)}");
         }
         
         if (!doc.hasITCWatermark)
         {
             detectedErrors.Add(DocumentError.MissingWatermark);
-            Debug.Log($"ÎÄÊé´íÎó: {GetErrorDescription(DocumentError.MissingWatermark)}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {GetErrorDescription(DocumentError.MissingWatermark)}");
         }
         
         if (!doc.isInkGenuine)
         {
             detectedErrors.Add(DocumentError.FakeInk);
-            Debug.Log($"ÎÄÊé´íÎó: {GetErrorDescription(DocumentError.FakeInk)}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {GetErrorDescription(DocumentError.FakeInk)}");
         }
         
-        // ¼ì²éÄÚÈÝÆ¥Åä
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¥ï¿½ï¿½
         if (!doc.isContentMatched)
         {
             detectedErrors.Add(DocumentError.ContentMismatch);
-            Debug.Log($"ÎÄÊé´íÎó: {GetErrorDescription(DocumentError.ContentMismatch)}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {GetErrorDescription(DocumentError.ContentMismatch)}");
         }
         
-        // ¼ì²éÈÕÆÚ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (!doc.isDateCorrect)
         {
             detectedErrors.Add(DocumentError.IncorrectDate);
-            Debug.Log($"ÎÄÊé´íÎó: {GetErrorDescription(DocumentError.IncorrectDate)}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {GetErrorDescription(DocumentError.IncorrectDate)}");
         }
         
-        // ¼ì²éÉí·Ý
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (!doc.isIdentityMatched)
         {
             detectedErrors.Add(DocumentError.IdentityMismatch);
-            Debug.Log($"ÎÄÊé´íÎó: {GetErrorDescription(DocumentError.IdentityMismatch)}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {GetErrorDescription(DocumentError.IdentityMismatch)}");
         }
         
         if (customer.isDisguised)
         {
             detectedErrors.Add(DocumentError.DisguisedCustomer);
-            Debug.Log($"ÎÄÊé´íÎó: {GetErrorDescription(DocumentError.DisguisedCustomer)}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {GetErrorDescription(DocumentError.DisguisedCustomer)}");
         }
         
         if (customer.isClocardalMember)
         {
             detectedErrors.Add(DocumentError.DangerousCustomer);
-            Debug.Log($"ÎÄÊé´íÎó: {GetErrorDescription(DocumentError.DangerousCustomer)}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {GetErrorDescription(DocumentError.DangerousCustomer)}");
         }
         
-        // ÅÐ¶ÏÑéÖ¤½á¹û
+        // ï¿½Ð¶ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½
         if (detectedErrors.Count > 0)
         {
-            Debug.Log($"ÎÄÊéºËÑé·¢ÏÖ {detectedErrors.Count} ¸öÎÊÌâ£¬ÐèÒª¾Ü¾øÇ©Ô¼");
-            // Íæ¼ÒÐèÒªÑ¡ÔñÊÇ·ñ¾Ü¾ø£¬ÕâÀïÏÈ±ê¼ÇÎªÐèÒª´¦Àí
-            // Êµ¼ÊÓÎÏ·ÖÐÓ¦¸ÃµÈ´ýÍæ¼Ò¾ö¶¨
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é·¢ï¿½ï¿½ {detectedErrors.Count} ï¿½ï¿½ï¿½ï¿½ï¿½â£¬ï¿½ï¿½Òªï¿½Ü¾ï¿½Ç©Ô¼");
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÑ¡ï¿½ï¿½ï¿½Ç·ï¿½Ü¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È±ï¿½ï¿½Îªï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
+            // Êµï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½Ó¦ï¿½ÃµÈ´ï¿½ï¿½ï¿½Ò¾ï¿½ï¿½ï¿½
         }
         else
         {
-            Debug.Log("ÎÄÊéºËÑéÍ¨¹ý£¬ËùÓÐ¼ì²éÏîÄ¿Õý³£");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½");
             context.documentVerified = true;
             completed = true;
         }
     }
     
     /// <summary>
-    /// »ñÈ¡´íÎóÃèÊö
+    /// ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public static string GetErrorDescription(DocumentError error)
     {
         return error switch
         {
-            DocumentError.BrokenSeal => "·âÀ¯ÒÑÆÆËð",
-            DocumentError.ForgeryDocument => "ÎÄÊéÏµÎ±Ôì",
-            DocumentError.MissingWatermark => "È±ÉÙITCË®Ó¡",
-            DocumentError.FakeInk => "Ä«Ë®Ïµ¼ÙÃ°",
-            DocumentError.ContentMismatch => "¿ÚÊöÄÚÈÝÓëÆõÔ¼²»·û",
-            DocumentError.IncorrectDate => "Ô¤Ô¼ÈÕÆÚ²»ÕýÈ·",
-            DocumentError.IdentityMismatch => "Éí·ÝÖ¤Ã÷²»·û",
-            DocumentError.DisguisedCustomer => "¹Ë¿ÍÉí·ÝÔì¼Ù",
-            DocumentError.DangerousCustomer => "Î£ÏÕÈËÎï(¿ËÂå¿Ë´ï¶û°ï³ÉÔ±)",
-            _ => "Î´Öª´íÎó"
+            DocumentError.BrokenSeal => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+            DocumentError.ForgeryDocument => "ï¿½ï¿½ï¿½ï¿½ÏµÎ±ï¿½ï¿½",
+            DocumentError.MissingWatermark => "È±ï¿½ï¿½ITCË®Ó¡",
+            DocumentError.FakeInk => "Ä«Ë®Ïµï¿½ï¿½Ã°",
+            DocumentError.ContentMismatch => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½",
+            DocumentError.IncorrectDate => "Ô¤Ô¼ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½È·",
+            DocumentError.IdentityMismatch => "ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+            DocumentError.DisguisedCustomer => "ï¿½Ë¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+            DocumentError.DangerousCustomer => "Î£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Ë´ï¿½ï¿½ï¿½ï¿½ï¿½Ô±)",
+            _ => "Î´Öªï¿½ï¿½ï¿½ï¿½"
         };
     }
 
@@ -263,7 +263,7 @@ public class DocumentVerifier : IContractStage
 }
 
 /// <summary>
-/// ·ûÎÄÊäÈë¹ÜÀíÆ÷
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 /// </summary>
 public class RuneInputManager : IContractStage
 {
@@ -278,7 +278,7 @@ public class RuneInputManager : IContractStage
     
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
-    public string StageName => "·ûÎÄÊäÈë";
+    public string StageName => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
 
     public void Enter(HeContractContext ctx)
     {
@@ -286,13 +286,13 @@ public class RuneInputManager : IContractStage
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
         
-        Debug.Log("=== ¿ªÊ¼·ûÎÄÊäÈë½×¶Î ===");
+        Debug.Log("=== ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¶ï¿½ ===");
         
         GenerateRequiredRunes();
         inputRunes = new List<RuneType>();
         timeRemaining = gameConfig?.runeInputTimeLimit ?? 10f;
         
-        // ·ûÎÄÊäÈëUI
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½UI
         //uiManager?.ShowRuneInput(requiredRunes);
     }
 
@@ -303,41 +303,41 @@ public class RuneInputManager : IContractStage
         timeRemaining -= Time.deltaTime;
         if (timeRemaining <= 0)
         {
-            Debug.Log("·ûÎÄÊäÈë³¬Ê±");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë³¬Ê±");
             failed = true;
             context.AddFailure();
             return;
         }
         
-        // ¼ì²éÊäÈëÍê³É
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (inputRunes.Count >= requiredRunes.Count)
         {
             CheckRuneSequence();
         }
         
-        // ´¦ÀíÊäÈë
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         HandleRuneInput();
     }
 
     public void Exit()
     {
-        Debug.Log("=== ·ûÎÄÊäÈë½×¶Î½áÊø ===");
+        Debug.Log("=== ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¶Î½ï¿½ï¿½ï¿½ ===");
     }
 
     private void GenerateRequiredRunes()
     {
-        // ´ÓÅäÖÃÎÄ¼þ»ñÈ¡·ûÎÄÐòÁÐ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (gameConfig != null)
         {
             requiredRunes = gameConfig.GetRuneSequenceForContract(context.document.HeContractType);
         }
         else
         {
-            // Ä¬ÈÏÐòÁÐ
+            // Ä¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             requiredRunes = GetDefaultRuneSequence(context.document.HeContractType);
         }
         
-        Debug.Log($"ÐèÒªÊäÈë·ûÎÄÐòÁÐ: {string.Join(", ", requiredRunes)}");
+        Debug.Log($"ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {string.Join(", ", requiredRunes)}");
     }
 
     private List<RuneType> GetDefaultRuneSequence(HeContractType HeContractType)
@@ -359,7 +359,7 @@ public class RuneInputManager : IContractStage
 
     private void HandleRuneInput()
     {
-        // WASD¼üÊäÈë´¦Àí
+        // WASDï¿½ï¿½ï¿½ï¿½ï¿½ë´¦ï¿½ï¿½
         if (Input.GetKeyDown(KeyCode.W)) ProcessRuneInput(RuneType.Fire);
         if (Input.GetKeyDown(KeyCode.A)) ProcessRuneInput(RuneType.Water);
         if (Input.GetKeyDown(KeyCode.S)) ProcessRuneInput(RuneType.Earth);
@@ -371,14 +371,14 @@ public class RuneInputManager : IContractStage
     private void ProcessRuneInput(RuneType rune)
     {
         inputRunes.Add(rune);
-        Debug.Log($"ÊäÈë·ûÎÄ: {rune}");
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {rune}");
         
-        // ¼ì²éÊÇ·ñ´íÎó
+        // ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
         int currentIndex = inputRunes.Count - 1;
         if (currentIndex < requiredRunes.Count && inputRunes[currentIndex] != requiredRunes[currentIndex])
         {
             context.runeErrors++;
-            Debug.Log($"·ûÎÄÊäÈë´íÎó! ´íÎó´ÎÊý: {context.runeErrors}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½! ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {context.runeErrors}");
             
             if (context.runeErrors >= 2)
             {
@@ -387,13 +387,13 @@ public class RuneInputManager : IContractStage
             
             if (context.runeErrors >= (gameConfig?.maxRuneErrors ?? 3))
             {
-                Debug.Log("·ûÎÄ´íÎó´ÎÊý¹ý¶à£¬Ç©Ô¼Ê§°Ü");
+                Debug.Log("ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½à£¬Ç©Ô¼Ê§ï¿½ï¿½");
                 failed = true;
                 context.AddFailure();
             }
         }
         
-        // ¸üÐÂUI
+        // ï¿½ï¿½ï¿½ï¿½UI
         uiManager?.UpdateRuneInputProgress(inputRunes.Count, context.runeErrors);
     }
 
@@ -411,11 +411,11 @@ public class RuneInputManager : IContractStage
         
         if (isCorrect)
         {
-            Debug.Log("·ûÎÄÊäÈëÍê³É!");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!");
             context.runesCompleted = true;
             completed = true;
             
-            // 30%¼¸ÂÊ´¥·¢·ûÎÄºË¶Ô
+            // 30%ï¿½ï¿½ï¿½Ê´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÄºË¶ï¿½
             if (UnityEngine.Random.value < (gameConfig?.runeVerificationTriggerChance ?? 0.3f))
             {
                 TriggerRuneVerification();
@@ -425,14 +425,14 @@ public class RuneInputManager : IContractStage
 
     private void TriggerRuneVerification()
     {
-        Debug.Log("´¥·¢·ûÎÄºË¶Ô»·½Ú");
-        // TODO: ´´½¨·ûÎÄºË¶ÔÊý¾Ý²¢ÏÔÊ¾UI
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÄºË¶Ô»ï¿½ï¿½ï¿½");
+        // TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÄºË¶ï¿½ï¿½ï¿½ï¿½Ý²ï¿½ï¿½ï¿½Ê¾UI
         // uiManager?.ShowRuneVerification(runeGridData);
     }
 }
 
 /// <summary>
-/// ÌØÊâÊÂ¼þÏµÍ³
+/// ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ÏµÍ³
 /// </summary>
 public class SpecialEventSystem : IContractStage
 {
@@ -446,7 +446,7 @@ public class SpecialEventSystem : IContractStage
     
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
-    public string StageName => "ÌØÊâÊÂ¼þ";
+    public string StageName => "ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½";
 
     public void Enter(HeContractContext ctx)
     {
@@ -454,9 +454,9 @@ public class SpecialEventSystem : IContractStage
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
         
-        Debug.Log("=== ¿ªÊ¼ÌØÊâÊÂ¼þ½×¶Î ===");
+        Debug.Log("=== ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½×¶ï¿½ ===");
         
-        // Ëæ»ú¾ö¶¨ÊÇ·ñ´¥·¢ÊÂ¼þ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ñ´¥·ï¿½ï¿½Â¼ï¿½
         float triggerChance = gameConfig?.eventTriggerChance ?? 0.3f;
         if (UnityEngine.Random.value < triggerChance)
         {
@@ -464,7 +464,7 @@ public class SpecialEventSystem : IContractStage
         }
         else
         {
-            // Ã»ÓÐÊÂ¼þ£¬Ö±½ÓÍê³É
+            // Ã»ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½
             completed = true;
             context.eventHandled = true;
         }
@@ -476,13 +476,13 @@ public class SpecialEventSystem : IContractStage
         
         eventTimer -= Time.deltaTime;
         
-        // ´¦ÀíÊÂ¼þÊäÈë
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
         HandleEventInput();
         
-        // ÊÂ¼þ³¬Ê±
+        // ï¿½Â¼ï¿½ï¿½ï¿½Ê±
         if (eventTimer <= 0)
         {
-            Debug.Log("ÌØÊâÊÂ¼þ´¦Àí³¬Ê±");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê±");
             currentEvent.OnFail?.Invoke(context);
             failed = true;
         }
@@ -490,7 +490,7 @@ public class SpecialEventSystem : IContractStage
 
     public void Exit()
     {
-        Debug.Log("=== ÌØÊâÊÂ¼þ½×¶Î½áÊø ===");
+        Debug.Log("=== ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½×¶Î½ï¿½ï¿½ï¿½ ===");
     }
 
     private void TriggerRandomEvent()
@@ -501,9 +501,9 @@ public class SpecialEventSystem : IContractStage
         currentEvent = CreateEventData(randomEventType);
         eventTimer = currentEvent.duration;
         
-        Debug.Log($"´¥·¢ÌØÊâÊÂ¼þ: {currentEvent.description}");
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½: {currentEvent.description}");
         
-        // ÌØÊâÊÂ¼þUI
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½UI
         //uiManager?.ShowSpecialEvent(currentEvent);
     }
 
@@ -515,50 +515,50 @@ public class SpecialEventSystem : IContractStage
                 return new EventData
                 {
                     type = ContractEventType.Phone,
-                    description = "µç»°Í»È»ÏìÆð£¬ÐèÒª½ÓÌý",
+                    description = "ï¿½ç»°Í»È»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½",
                     duration = 5f,
-                    OnResolve = (ctx) => { Debug.Log("³É¹¦½ÓÌýµç»°"); completed = true; ctx.eventHandled = true; },
-                    OnFail = (ctx) => { Debug.Log("Î´ÄÜ¼°Ê±½ÓÌýµç»°"); ctx.DecreaseSatisfaction(); }
+                    OnResolve = (ctx) => { Debug.Log("ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç»°"); completed = true; ctx.eventHandled = true; },
+                    OnFail = (ctx) => { Debug.Log("Î´ï¿½Ü¼ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ç»°"); ctx.DecreaseSatisfaction(); }
                 };
                 
             case ContractEventType.Gun:
                 return new EventData
                 {
                     type = ContractEventType.Gun,
-                    description = "¹Ë¿ÍÍ»È»°ÎÇ¹£¬ÐèÒªÑ¸ËÙÓ¦¶Ô!",
+                    description = "ï¿½Ë¿ï¿½Í»È»ï¿½ï¿½Ç¹ï¿½ï¿½ï¿½ï¿½ÒªÑ¸ï¿½ï¿½Ó¦ï¿½ï¿½!",
                     duration = 3f,
-                    OnResolve = (ctx) => { Debug.Log("³É¹¦»¯½âÇ¹ÐµÍþÐ²"); completed = true; ctx.eventHandled = true; ctx.IncreaseSatisfaction(); },
-                    OnFail = (ctx) => { Debug.Log("Î´ÄÜÓ¦¶ÔÇ¹ÐµÍþÐ²"); ctx.AddFailure(); }
+                    OnResolve = (ctx) => { Debug.Log("ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½Ç¹Ðµï¿½ï¿½Ð²"); completed = true; ctx.eventHandled = true; ctx.IncreaseSatisfaction(); },
+                    OnFail = (ctx) => { Debug.Log("Î´ï¿½ï¿½Ó¦ï¿½ï¿½Ç¹Ðµï¿½ï¿½Ð²"); ctx.AddFailure(); }
                 };
                 
             case ContractEventType.Epilepsy:
                 return new EventData
                 {
                     type = ContractEventType.Epilepsy,
-                    description = "¹Ë¿ÍÍ»È»ñ²ðï·¢×÷£¬ÐèÒª½ô¼±¾ÈÖú",
+                    description = "ï¿½Ë¿ï¿½Í»È»ï¿½ï¿½ï·¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
                     duration = 8f,
-                    OnResolve = (ctx) => { Debug.Log("³É¹¦¾ÈÖúñ²ðï¹Ë¿Í"); completed = true; ctx.eventHandled = true; },
-                    OnFail = (ctx) => { Debug.Log("Î´ÄÜ¼°Ê±¾ÈÖú"); ctx.DecreaseSatisfaction(); }
+                    OnResolve = (ctx) => { Debug.Log("ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¿ï¿½"); completed = true; ctx.eventHandled = true; },
+                    OnFail = (ctx) => { Debug.Log("Î´ï¿½Ü¼ï¿½Ê±ï¿½ï¿½ï¿½ï¿½"); ctx.DecreaseSatisfaction(); }
                 };
                 
             case ContractEventType.Transform:
                 return new EventData
                 {
                     type = ContractEventType.Transform,
-                    description = "¹Ë¿ÍÏÔÂ¶·ÇÈËÀàÌØÕ÷£¬ÕýÔÚ±äÐÎ!",
+                    description = "ï¿½Ë¿ï¿½ï¿½ï¿½Â¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½!",
                     duration = 4f,
-                    OnResolve = (ctx) => { Debug.Log("Õò¶¨Ó¦¶Ô·ÇÈËÀà¹Ë¿Í"); completed = true; ctx.eventHandled = true; },
-                    OnFail = (ctx) => { Debug.Log("±»·ÇÈËÀàÌØÕ÷ÏÅµ½"); ctx.DecreaseSatisfaction(2); }
+                    OnResolve = (ctx) => { Debug.Log("ï¿½ï¿½Ó¦ï¿½Ô·ï¿½ï¿½ï¿½ï¿½ï¿½Ë¿ï¿½"); completed = true; ctx.eventHandled = true; },
+                    OnFail = (ctx) => { Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½"); ctx.DecreaseSatisfaction(2); }
                 };
                 
             case ContractEventType.Dialogue:
                 return new EventData
                 {
                     type = ContractEventType.Dialogue,
-                    description = "¹Ë¿ÍÍ»È»¿ªÊ¼¶Ô»°£¬ÐèÒªÊÊµ±»ØÓ¦",
+                    description = "ï¿½Ë¿ï¿½Í»È»ï¿½ï¿½Ê¼ï¿½Ô»ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Êµï¿½ï¿½ï¿½Ó¦",
                     duration = 6f,
-                    OnResolve = (ctx) => { Debug.Log("Ç¡µ±»ØÓ¦¹Ë¿Í¶Ô»°"); completed = true; ctx.eventHandled = true; },
-                    OnFail = (ctx) => { Debug.Log("»ØÓ¦²»µ±"); ctx.DecreaseSatisfaction(); }
+                    OnResolve = (ctx) => { Debug.Log("Ç¡ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ë¿Í¶Ô»ï¿½"); completed = true; ctx.eventHandled = true; },
+                    OnFail = (ctx) => { Debug.Log("ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½"); ctx.DecreaseSatisfaction(); }
                 };
                 
             default:
@@ -570,7 +570,7 @@ public class SpecialEventSystem : IContractStage
     {
         if (currentEvent == null) return;
         
-        // ¸ù¾ÝÊÂ¼þÀàÐÍ´¦Àí²»Í¬µÄÊäÈë
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½Í´ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         switch (currentEvent.type)
         {
             case ContractEventType.Phone:
@@ -612,7 +612,7 @@ public class SpecialEventSystem : IContractStage
 }
 
 /// <summary>
-/// ¸ÇÕÂÏµÍ³
+/// ï¿½ï¿½ï¿½ï¿½ÏµÍ³
 /// </summary>
 public class StampSystem : IContractStage
 {
@@ -628,7 +628,7 @@ public class StampSystem : IContractStage
     
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
-    public string StageName => "ÆõÔ¼¸ÇÓ¡";
+    public string StageName => "ï¿½ï¿½Ô¼ï¿½ï¿½Ó¡";
 
     public void Enter(HeContractContext ctx)
     {
@@ -636,9 +636,9 @@ public class StampSystem : IContractStage
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
         
-        Debug.Log("=== ¿ªÊ¼ÆõÔ¼¸ÇÓ¡½×¶Î ===");
+        Debug.Log("=== ï¿½ï¿½Ê¼ï¿½ï¿½Ô¼ï¿½ï¿½Ó¡ï¿½×¶ï¿½ ===");
         
-        // ÏÔÊ¾Ó¡ÕÂÑ¡ÔñUI
+        // ï¿½ï¿½Ê¾Ó¡ï¿½ï¿½Ñ¡ï¿½ï¿½UI
         uiManager?.ShowStampSelection(ctx.document.HeContractType);
     }
 
@@ -658,12 +658,12 @@ public class StampSystem : IContractStage
 
     public void Exit()
     {
-        Debug.Log("=== ÆõÔ¼¸ÇÓ¡½×¶Î½áÊø ===");
+        Debug.Log("=== ï¿½ï¿½Ô¼ï¿½ï¿½Ó¡ï¿½×¶Î½ï¿½ï¿½ï¿½ ===");
     }
 
     private void HandleStampSelection()
     {
-        // Êý×Ö¼üÑ¡ÔñÓ¡ÕÂ
+        // ï¿½ï¿½ï¿½Ö¼ï¿½Ñ¡ï¿½ï¿½Ó¡ï¿½ï¿½
         if (Input.GetKeyDown(KeyCode.Alpha1)) SelectStamp(HeContractType.Money);
         if (Input.GetKeyDown(KeyCode.Alpha2)) SelectStamp(HeContractType.Fame);
         if (Input.GetKeyDown(KeyCode.Alpha3)) SelectStamp(HeContractType.Skill);
@@ -674,27 +674,27 @@ public class StampSystem : IContractStage
     {
         selectedStampType = stampType;
         
-        // ¼ì²éÓ¡ÕÂÀàÐÍÊÇ·ñÕýÈ·
+        // ï¿½ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½È·
         if (stampType != context.document.HeContractType)
         {
-            Debug.Log($"Ó¡ÕÂÀàÐÍ´íÎó! Ñ¡ÔñÁË{stampType}£¬Ó¦¸ÃÊÇ{context.document.HeContractType}");
+            Debug.Log($"Ó¡ï¿½ï¿½ï¿½ï¿½ï¿½Í´ï¿½ï¿½ï¿½! Ñ¡ï¿½ï¿½ï¿½ï¿½{stampType}ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½{context.document.HeContractType}");
             context.AddFailure();
             failed = true;
             return;
         }
         
-        Debug.Log($"ÕýÈ·Ñ¡ÔñÁË{stampType}Ó¡ÕÂ");
+        Debug.Log($"ï¿½ï¿½È·Ñ¡ï¿½ï¿½ï¿½ï¿½{stampType}Ó¡ï¿½ï¿½");
         stampSelected = true;
         StartStampCharging();
     }
 
     private void StartStampCharging()
     {
-        Debug.Log("¿ªÊ¼¸ÇÓ¡ÒÇÊ½£¬·ûÎÄ¿ªÊ¼·¢¹â...");
+        Debug.Log("ï¿½ï¿½Ê¼ï¿½ï¿½Ó¡ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½...");
         isCharging = true;
         chargeTime = 0f;
         
-        // Í¨ÖªUI¿ªÊ¼ÐîÁ¦
+        // Í¨ÖªUIï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
         uiManager?.StartStampCharging();
     }
 
@@ -706,7 +706,7 @@ public class StampSystem : IContractStage
         
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            // ¼ì²éÐîÁ¦Ê±»ú
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
             float optimalTiming = gameConfig?.stampOptimalTiming ?? 0.8f;
             float optimalTime = maxChargeTime * optimalTiming;
             float timeDiff = Mathf.Abs(chargeTime - optimalTime);
@@ -714,7 +714,7 @@ public class StampSystem : IContractStage
             
             if (timeDiff < tolerance)
             {
-                Debug.Log("ÍêÃÀ¸ÇÕÂ! ¹Ë¿ÍÂúÒâ¶ÈÌáÉý");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½! ï¿½Ë¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
                 context.IncreaseSatisfaction();
                 completed = true;
                 context.stampApplied = true;
@@ -722,28 +722,28 @@ public class StampSystem : IContractStage
             else
             {
                 context.stampAttempts++;
-                Debug.Log($"¸ÇÕÂÊ±»ú²»×¼È·£¬³¢ÊÔ´ÎÊý: {context.stampAttempts}");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½×¼È·ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½: {context.stampAttempts}");
                 
                 int maxAttempts = gameConfig?.maxStampAttempts ?? 3;
                 if (context.stampAttempts >= maxAttempts)
                 {
-                    Debug.Log("¸ÇÕÂÊ§°Ü´ÎÊý¹ý¶à£¬¹Ë¿ÍÂúÒâ¶ÈÏÂ½µ");
+                    Debug.Log("ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½à£¬ï¿½Ë¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â½ï¿½");
                     context.DecreaseSatisfaction();
                     failed = true;
                 }
                 else
                 {
-                    // ÖØÐÂ¿ªÊ¼ÐîÁ¦
+                    // ï¿½ï¿½ï¿½Â¿ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
                     chargeTime = 0f;
                     uiManager?.StartStampCharging();
                 }
             }
         }
         
-        // ÐîÁ¦³¬Ê±
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±
         if (chargeTime > maxChargeTime * 1.2f)
         {
-            Debug.Log("ÐîÁ¦³¬Ê±£¬ÐèÒªÖØÐÂ¿ªÊ¼");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Â¿ï¿½Ê¼");
             chargeTime = 0f;
             context.stampAttempts++;
         }
@@ -751,7 +751,7 @@ public class StampSystem : IContractStage
 }
 
 /// <summary>
-/// Áé»êÊÕÈ¡ÏµÍ³
+/// ï¿½ï¿½ï¿½ï¿½ï¿½È¡ÏµÍ³
 /// </summary>
 public class SoulHarvestSystem : IContractStage
 {
@@ -767,7 +767,7 @@ public class SoulHarvestSystem : IContractStage
     
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
-    public string StageName => "Áé»êÊÕÈ¡";
+    public string StageName => "ï¿½ï¿½ï¿½ï¿½ï¿½È¡";
 
     public void Enter(HeContractContext ctx)
     {
@@ -775,12 +775,12 @@ public class SoulHarvestSystem : IContractStage
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
         
-        Debug.Log("=== ¿ªÊ¼Áé»êÊÕÈ¡½×¶Î ===");
+        Debug.Log("=== ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½×¶ï¿½ ===");
         
         targetPercentage = context.document.soulPercentage;
-        Debug.Log($"ÐèÒªÊÕÈ¡ {targetPercentage * 100}% µÄÁé»ê");
+        Debug.Log($"ï¿½ï¿½Òªï¿½ï¿½È¡ {targetPercentage * 100}% ï¿½ï¿½ï¿½ï¿½ï¿½");
         
-        // ÏÔÊ¾Áé»ê·Ö¸î½çÃæ
+        // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½
         uiManager?.ShowSoulHarvest(targetPercentage);
         cutterActive = true;
     }
@@ -797,25 +797,25 @@ public class SoulHarvestSystem : IContractStage
 
     public void Exit()
     {
-        Debug.Log("=== Áé»êÊÕÈ¡½×¶Î½áÊø ===");
+        Debug.Log("=== ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½×¶Î½ï¿½ï¿½ï¿½ ===");
     }
 
     private void HandleSoulCutting()
     {
-        // ×óÓÒÒÆ¶¯·ÖÁéµ¶
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½éµ¶
         float moveInput = Input.GetAxis("Horizontal");
         float moveSpeed = gameConfig?.soulCutterMoveSpeed ?? 0.5f;
         currentCutPosition = Mathf.Clamp01(currentCutPosition + moveInput * Time.deltaTime * moveSpeed);
         
-        // Ìí¼ÓÊÖ²¿²ü¶¶Ð§¹û
+        // ï¿½ï¿½ï¿½ï¿½Ö²ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½
         cutterShake += Time.deltaTime;
         float shakeAmount = gameConfig?.soulCutterShake ?? 0.02f;
         float shakeOffset = Mathf.Sin(cutterShake * 10f) * shakeAmount;
         float actualPosition = currentCutPosition + shakeOffset;
         
-        // TODO: ¸üÐÂ·ÖÁéµ¶Î»ÖÃÏÔÊ¾
+        // TODO: ï¿½ï¿½ï¿½Â·ï¿½ï¿½éµ¶Î»ï¿½ï¿½ï¿½ï¿½Ê¾
         
-        // µã»÷½øÐÐÇÐ¸î
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¸ï¿½
         if (Input.GetMouseButtonDown(0))
         {
             PerformSoulCut(currentCutPosition);
@@ -824,27 +824,27 @@ public class SoulHarvestSystem : IContractStage
 
     private void PerformSoulCut(float cutPosition)
     {
-        Debug.Log($"ÔÚÎ»ÖÃ {cutPosition * 100}% ´¦ÇÐ¸îÁé»ê");
+        Debug.Log($"ï¿½ï¿½Î»ï¿½ï¿½ {cutPosition * 100}% ï¿½ï¿½ï¿½Ð¸ï¿½ï¿½ï¿½ï¿½");
         
-        // ¼ÆËãÎó²î
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         float error = Mathf.Abs(cutPosition - targetPercentage);
-        float allowedError = gameConfig?.soulHarvestAccuracy ?? 0.05f; // °ë³É
+        float allowedError = gameConfig?.soulHarvestAccuracy ?? 0.05f; // ï¿½ï¿½ï¿½
         
         if (error <= allowedError)
         {
-            Debug.Log("Áé»êÊÕÈ¡³É¹¦!");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½É¹ï¿½!");
             completed = true;
             context.soulHarvested = true;
         }
         else if (cutPosition > targetPercentage)
         {
-            Debug.Log("ÊÕÈ¡¹ý¶àÁé»ê£¬¹Ë¿Í¸Ðµ½±»ÆÛÆ­");
+            Debug.Log("ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê£¬ï¿½Ë¿Í¸Ðµï¿½ï¿½ï¿½ï¿½ï¿½Æ­");
             context.DecreaseSatisfaction();
             failed = true;
         }
         else
         {
-            Debug.Log("ÊÕÈ¡¹ýÉÙÁé»ê£¬ÀË·Ñ¹«Ë¾×Ê²ú");
+            Debug.Log("ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê£¬ï¿½Ë·Ñ¹ï¿½Ë¾ï¿½Ê²ï¿½");
             context.AddFailure();
             failed = true;
         }
@@ -858,37 +858,37 @@ public class SoulHarvestSystem : IContractStage
 #region Main Manager
 
 /// <summary>
-/// Ç©Ô¼Á÷³Ì¹ÜÀíÆ÷ - ÓÎÏ·Ö÷¿ØÖÆÆ÷
+/// Ç©Ô¼ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 /// </summary>
 public class SigningFlowManager : MonoBehaviour
 {
  
 
-    [Header("=== ÓÎÏ·ÅäÖÃ ===")]
-    [Tooltip("ÓÎÏ·ÅäÖÃ×ÊÔ´ (½¨ÒéÊ¹ÓÃScriptableObject)")]
+    [Header("=== ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ ===")]
+    [Tooltip("ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ (ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ScriptableObject)")]
     public HeContractGameConfig gameConfig;
     
-    [Header("=== ±¸ÓÃÅäÖÃ ===")]
-    [Tooltip("Èç¹ûÃ»ÓÐÅäÖÃ×ÊÔ´£¬Ê¹ÓÃ´ËÄÚÇ¶ÅäÖÃ")]
+    [Header("=== ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ===")]
+    [Tooltip("ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½Ê¹ï¿½Ã´ï¿½ï¿½ï¿½Ç¶ï¿½ï¿½ï¿½ï¿½")]
     public GameConfig fallbackConfig;
     
-    [Header("=== ²âÊÔÊý¾Ý ===")]
-    [Tooltip("²âÊÔÓÃµÄÆõÔ¼ÎÄÊé")]
+    [Header("=== ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ===")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½")]
     public ContractDocument testDocument;
-    [Tooltip("²âÊÔÓÃµÄ¹Ë¿ÍÐÅÏ¢")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½ï¿½ÃµÄ¹Ë¿ï¿½ï¿½ï¿½Ï¢")]
     public Customer testCustomer;
     
-    [Header("=== Ëæ»úÉú³ÉÉèÖÃ ===")]
-    [Tooltip("ÊÇ·ñÊ¹ÓÃËæ»úÉú³ÉµÄÆõÔ¼Êý¾Ý")]
+    [Header("=== ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ===")]
+    [Tooltip("ï¿½Ç·ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éµï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½")]
     public bool useRandomGeneration = true;
-    [Tooltip("Ëæ»ú¹Ë¿ÍÐÕÃûÁÐ±í")]
-    public string[] customerNames = { "°¬ÀòË¿", "ÍÐÂíË¹", "ÂêÀö", "Ô¼º²", "¿­ÉªÁÕ", "ÍþÁ®" };
-    [Tooltip("Ëæ»úÖ°ÒµÁÐ±í")]
-    public string[] occupations = { "Ìú½³", "ÉÌÈË", "Ñ§Õß", "Å©·ò", "¹¤½³", "ÊØÎÀ" };
-    [Tooltip("¹Ë¿ÍÕÕÆ¬×ÊÔ´")]
+    [Tooltip("ï¿½ï¿½ï¿½ï¿½Ë¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½")]
+    public string[] customerNames = { "ï¿½ï¿½ï¿½ï¿½Ë¿", "ï¿½ï¿½ï¿½ï¿½Ë¹", "ï¿½ï¿½ï¿½ï¿½", "Ô¼ï¿½ï¿½", "ï¿½ï¿½Éªï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½" };
+    [Tooltip("ï¿½ï¿½ï¿½Ö°Òµï¿½Ð±ï¿½")]
+    public string[] occupations = { "ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½", "Ñ§ï¿½ï¿½", "Å©ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½" };
+    [Tooltip("ï¿½Ë¿ï¿½ï¿½ï¿½Æ¬ï¿½ï¿½Ô´")]
     public Sprite[] customerPhotos;
     
-    // Ë½ÓÐ±äÁ¿
+    // Ë½ï¿½Ð±ï¿½ï¿½ï¿½
     private IContractStage currentStage;
     private Queue<IContractStage> stages;
     public HeContractContext ctx;
@@ -896,19 +896,19 @@ public class SigningFlowManager : MonoBehaviour
 
     void Start()
     {
-        // »ñÈ¡UI¹ÜÀíÆ÷
+        // ï¿½ï¿½È¡UIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         uiManager = FindFirstObjectByType<HeContractUIManager>();
         
-        // ³õÊ¼»¯ÅäÖÃ
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         InitializeConfig();
         
-        // ³õÊ¼»¯ÆõÔ¼
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ô¼
         InitializeContract();
         
-        // ÉèÖÃÁ÷³Ì½×¶Î
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì½×¶ï¿½
         SetupStages();
         
-        // ¿ªÊ¼µÚÒ»¸ö½×¶Î
+        // ï¿½ï¿½Ê¼ï¿½ï¿½Ò»ï¿½ï¿½ï¿½×¶ï¿½
         NextStage();
     }
     
@@ -918,13 +918,13 @@ public class SigningFlowManager : MonoBehaviour
         
         currentStage.Update();
         
-        // ¸üÐÂUI×´Ì¬
+        // ï¿½ï¿½ï¿½ï¿½UI×´Ì¬
         uiManager?.UpdateContext(ctx);
        // uiManager?.UpdateCurrentStage(currentStage.StageName);
         
         if (currentStage.IsCompleted)
         {
-            // ¼ì²éÊ§°ÜÌõ¼þ
+            // ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             int maxFailCount = gameConfig?.maxFailCount ?? fallbackConfig?.maxFailCount ?? 3;
             int minSatisfaction = gameConfig?.minSatisfaction ?? fallbackConfig?.minSatisfaction ?? 1;
             
@@ -938,13 +938,13 @@ public class SigningFlowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ³õÊ¼»¯ÅäÖÃ
+    /// ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     private void InitializeConfig()
     {
         if (gameConfig == null)
         {
-            Debug.LogWarning("Î´ÉèÖÃ HeContractGameConfig£¬½«Ê¹ÓÃÄ¬ÈÏÉèÖÃ");
+            Debug.LogWarning("Î´ï¿½ï¿½ï¿½ï¿½ HeContractGameConfigï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½Ä¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             
            
             gameConfig = ScriptableObject.CreateInstance<HeContractGameConfig>();
@@ -960,7 +960,7 @@ public class SigningFlowManager : MonoBehaviour
             gameConfig.ResetToDefault();
         }
         
-        Debug.Log($"ÓÎÏ·ÅäÖÃÒÑ³õÊ¼»¯ - ³õÊ¼ÂúÒâ¶È: {gameConfig.initialSatisfaction}, ×î´óÊ§°Ü´ÎÊý: {gameConfig.maxFailCount}");
+        Debug.Log($"ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½Ñ³ï¿½Ê¼ï¿½ï¿½ - ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½: {gameConfig.initialSatisfaction}, ï¿½ï¿½ï¿½Ê§ï¿½Ü´ï¿½ï¿½ï¿½: {gameConfig.maxFailCount}");
     }
 
 
@@ -968,21 +968,21 @@ public class SigningFlowManager : MonoBehaviour
     {
         ctx = new HeContractContext();
         
-        // ¾ö¶¨Ê¹ÓÃ²âÊÔÊý¾Ý»¹ÊÇËæ»úÉú³É
+        // ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (!useRandomGeneration && testCustomer != null && testDocument != null)
         {
             ctx.customer = testCustomer;
             ctx.document = testDocument;
-            Debug.Log("Ê¹ÓÃ²âÊÔÊý¾Ý³õÊ¼»¯ÆõÔ¼");
+            Debug.Log("Ê¹ï¿½Ã²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ô¼");
         }
         else
         {
             GenerateRandomContract();
-            Debug.Log("Ê¹ÓÃËæ»úÊý¾Ý³õÊ¼»¯ÆõÔ¼");
+            Debug.Log("Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ô¼");
         }
         
         ctx.satisfaction = gameConfig?.initialSatisfaction ?? 3;
-        Debug.Log($"ÆõÔ¼³õÊ¼»¯Íê³É - ¹Ë¿Í: {ctx.customer.name}, ÆõÔ¼ÀàÐÍ: {ctx.document.HeContractType}");
+        Debug.Log($"ï¿½ï¿½Ô¼ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½Ë¿ï¿½: {ctx.customer.name}, ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½: {ctx.document.HeContractType}");
     }
 
     private void SetupStages()
@@ -995,7 +995,7 @@ public class SigningFlowManager : MonoBehaviour
             new SoulHarvestSystem()
         });
         
-        Debug.Log($"Ç©Ô¼Á÷³ÌÒÑÉèÖÃ£¬¹²{stages.Count}¸ö½×¶Î");
+        Debug.Log($"Ç©Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½{stages.Count}ï¿½ï¿½ï¿½×¶ï¿½");
     }
 
     void NextStage()
@@ -1008,26 +1008,26 @@ public class SigningFlowManager : MonoBehaviour
         
         currentStage?.Exit();
         currentStage = stages.Dequeue();
-        Debug.Log($"½øÈë½×¶Î: {currentStage.StageName}");
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½×¶ï¿½: {currentStage.StageName}");
         currentStage.Enter(ctx);
     }
 
     public void EndGame(bool success)
     {
-        Debug.Log($"=== ÓÎÏ·½áÊø ===");
-        Debug.Log($"½á¹û: {(success ? "Ç©Ô¼³É¹¦" : "Ç©Ô¼Ê§°Ü")}");
-        Debug.Log($"×îÖÕÂúÒâ¶È: {ctx.satisfaction}");
-        Debug.Log($"Ê§°Ü´ÎÊý: {ctx.failCount}");
+        Debug.Log($"=== ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ ===");
+        Debug.Log($"ï¿½ï¿½ï¿½: {(success ? "Ç©Ô¼ï¿½É¹ï¿½" : "Ç©Ô¼Ê§ï¿½ï¿½")}");
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {ctx.satisfaction}");
+        Debug.Log($"Ê§ï¿½Ü´ï¿½ï¿½ï¿½: {ctx.failCount}");
         
-        // ÏÔÊ¾½á¹û½çÃæ
+        // ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         uiManager?.ShowGameResult(success, ctx);
         
-        // TODO: ±£´æÓÎÏ·½á¹û¡¢½âËø³É¾ÍµÈ
+        // TODO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¾Íµï¿½
     }
 
     private void GenerateRandomContract()
     {
-        // Éú³ÉËæ»ú¹Ë¿Í
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¿ï¿½
         ctx.customer = new Customer
         {
             name = GetRandomName(),
@@ -1036,7 +1036,7 @@ public class SigningFlowManager : MonoBehaviour
             spokenRequest = GenerateRandomSpokenRequest()
         };
         
-        // Éú³ÉËæ»úÆõÔ¼
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼
         HeContractType randomType = (HeContractType)UnityEngine.Random.Range(0, System.Enum.GetValues(typeof(HeContractType)).Length);
         
         ctx.document = new ContractDocument
@@ -1050,19 +1050,19 @@ public class SigningFlowManager : MonoBehaviour
             HeContractType = randomType
         };
         
-        // Ëæ»úÉú³ÉÒ»Ð©ÎÄÊéÎÊÌâ (ÓÃÓÚÔö¼ÓÓÎÏ·ÄÑ¶È)
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Ð©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½Ñ¶ï¿½)
         GenerateDocumentIssues();
     }
 
     private string GetRandomName()
     {
-        if (customerNames.Length == 0) return "Î´Öª¹Ë¿Í";
+        if (customerNames.Length == 0) return "Î´Öªï¿½Ë¿ï¿½";
         return customerNames[UnityEngine.Random.Range(0, customerNames.Length)];
     }
 
     private string GetRandomOccupation()
     {
-        if (occupations.Length == 0) return "ÎÞÒµ";
+        if (occupations.Length == 0) return "ï¿½ï¿½Òµ";
         return occupations[UnityEngine.Random.Range(0, occupations.Length)];
     }
 
@@ -1075,11 +1075,11 @@ public class SigningFlowManager : MonoBehaviour
     private string GenerateRandomSpokenRequest()
     {
         string[] requests = {
-            "ÎÒÏ£Íû»ñµÃ¸ü¶àµÄ²Æ¸»",
-            "ÎÒÏëÒª±äµÃ¸üÓÐÃûÆø",
-            "ÎÒ¿ÊÍûÑ§»áÐÂµÄ¼¼ÄÜ",
-            "ÎÒÐèÒª¸Ä±äÎÒµÄÃüÔË",
-            "ÎÒÏëÒª»ñµÃÁ¦Á¿"
+            "ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½Ä²Æ¸ï¿½",
+            "ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+            "ï¿½Ò¿ï¿½ï¿½ï¿½Ñ§ï¿½ï¿½ï¿½ÂµÄ¼ï¿½ï¿½ï¿½",
+            "ï¿½ï¿½ï¿½ï¿½Òªï¿½Ä±ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½",
+            "ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
         };
         
         return requests[UnityEngine.Random.Range(0, requests.Length)];
@@ -1089,30 +1089,30 @@ public class SigningFlowManager : MonoBehaviour
     {
         return type switch
         {
-            HeContractType.Money => "¿ÊÍû»ñµÃ²Æ¸»",
-            HeContractType.Fame => "ÆÚÍû»ñµÃÃûÍû",
-            HeContractType.Skill => "¿ÊÍûÊ¶¶ÁÎÄ×Ö",
-            HeContractType.Event => "Ï£Íû¸Ä±äÃüÔË",
-            _ => "Î´ÖªÐèÇó"
+            HeContractType.Money => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã²Æ¸ï¿½",
+            HeContractType.Fame => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+            HeContractType.Skill => "ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+            HeContractType.Event => "Ï£ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½",
+            _ => "Î´Öªï¿½ï¿½ï¿½ï¿½"
         };
     }
 
     /// <summary>
-    /// Éú³ÉÎÄÊéÎÊÌâ(ÓÃÓÚ²âÊÔºÍËæ»ú»¯)
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½Ú²ï¿½ï¿½Ôºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
     /// </summary>
     private void GenerateDocumentIssues()
     {
-        // Ê¹ÓÃÃ¶¾ÙÀ´¸üÇåÎúµØ¹ÜÀí´íÎóÉú³É
+        // Ê¹ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         var errorGenerationRules = new Dictionary<DocumentError, float>
         {
-            { DocumentError.BrokenSeal, 0.1f },              // 10%¼¸ÂÊ·âÀ¯ÆÆËð
-            { DocumentError.ForgeryDocument, 0.05f },        // 5%¼¸ÂÊÎ±ÔìÎÄÊé
-            { DocumentError.MissingWatermark, 0.03f },       // 3%¼¸ÂÊÈ±ÉÙË®Ó¡
-            { DocumentError.FakeInk, 0.03f },                // 3%¼¸ÂÊ¼ÙÃ°Ä«Ë®
-            { DocumentError.ContentMismatch, 0.12f },        // 12%¼¸ÂÊÄÚÈÝ²»Æ¥Åä
-            { DocumentError.IncorrectDate, 0.1f },           // 10%¼¸ÂÊÈÕÆÚ´íÎó
-            { DocumentError.DisguisedCustomer, 0.05f },      // 5%¼¸ÂÊÎ±×°¹Ë¿Í
-            { DocumentError.DangerousCustomer, 0.02f }       // 2%¼¸ÂÊÎ£ÏÕÈËÎï
+            { DocumentError.BrokenSeal, 0.1f },              // 10%ï¿½ï¿½ï¿½Ê·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            { DocumentError.ForgeryDocument, 0.05f },        // 5%ï¿½ï¿½ï¿½ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            { DocumentError.MissingWatermark, 0.03f },       // 3%ï¿½ï¿½ï¿½ï¿½È±ï¿½ï¿½Ë®Ó¡
+            { DocumentError.FakeInk, 0.03f },                // 3%ï¿½ï¿½ï¿½Ê¼ï¿½Ã°Ä«Ë®
+            { DocumentError.ContentMismatch, 0.12f },        // 12%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý²ï¿½Æ¥ï¿½ï¿½
+            { DocumentError.IncorrectDate, 0.1f },           // 10%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½
+            { DocumentError.DisguisedCustomer, 0.05f },      // 5%ï¿½ï¿½ï¿½ï¿½Î±×°ï¿½Ë¿ï¿½
+            { DocumentError.DangerousCustomer, 0.02f }       // 2%ï¿½ï¿½ï¿½ï¿½Î£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         };
         
         foreach (var rule in errorGenerationRules)
@@ -1125,7 +1125,7 @@ public class SigningFlowManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Ó¦ÓÃÌØ¶¨µÄÎÄÊé´íÎó
+    /// Ó¦ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     private void ApplyDocumentError(DocumentError error)
     {
@@ -1133,50 +1133,50 @@ public class SigningFlowManager : MonoBehaviour
         {
             case DocumentError.BrokenSeal:
                 ctx.document.isSealed = false;
-                Debug.Log($"Éú³ÉÎÄÊéÎÊÌâ: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
                 
             case DocumentError.ForgeryDocument:
                 ctx.document.isGenuine = false;
-                Debug.Log($"Éú³ÉÎÄÊéÎÊÌâ: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
                 
             case DocumentError.MissingWatermark:
                 ctx.document.hasITCWatermark = false;
-                Debug.Log($"Éú³ÉÎÄÊéÎÊÌâ: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
                 
             case DocumentError.FakeInk:
                 ctx.document.isInkGenuine = false;
-                Debug.Log($"Éú³ÉÎÄÊéÎÊÌâ: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
                 
             case DocumentError.ContentMismatch:
                 ctx.document.isContentMatched = false;
-                Debug.Log($"Éú³ÉÎÄÊéÎÊÌâ: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
                 
             case DocumentError.IncorrectDate:
                 ctx.document.isDateCorrect = false;
                 ctx.document.appointmentDate = DateTime.Today.AddDays(UnityEngine.Random.Range(-3, 4));
-                Debug.Log($"Éú³ÉÎÄÊéÎÊÌâ: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
                 
             case DocumentError.DisguisedCustomer:
                 ctx.customer.isDisguised = true;
                 ctx.document.isIdentityMatched = false;
-                Debug.Log($"Éú³ÉÎÄÊéÎÊÌâ: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
                 
             case DocumentError.DangerousCustomer:
                 ctx.customer.isClocardalMember = true;
-                Debug.Log($"Éú³ÉÎÄÊéÎÊÌâ: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
         }
     }
     
     /// <summary>
-    /// »ñÈ¡µ±Ç°ÆõÔ¼µÄËùÓÐÎÄÊé´íÎó
+    /// ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public List<DocumentError> GetCurrentDocumentErrors()
     {
@@ -1185,27 +1185,27 @@ public class SigningFlowManager : MonoBehaviour
     }
     
     /// <summary>
-    /// ¹«¹²·½·¨£ºÖØÐÂ¿ªÊ¼ÆõÔ¼
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¿ï¿½Ê¼ï¿½ï¿½Ô¼
     /// </summary>
     public void RestartContract()
     {
-        Debug.Log("ÖØÐÂ¿ªÊ¼ÆõÔ¼Ç©Ô¼Á÷³Ì");
+        Debug.Log("ï¿½ï¿½ï¿½Â¿ï¿½Ê¼ï¿½ï¿½Ô¼Ç©Ô¼ï¿½ï¿½ï¿½ï¿½");
         
-        // ÖØÖÃÓÎÏ·×´Ì¬
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·×´Ì¬
         ctx = null;
         currentStage = null;
         stages?.Clear();
         
-        // ÖØÐÂ¿ªÊ¼
+        // ï¿½ï¿½ï¿½Â¿ï¿½Ê¼
         Start();
     }
 
     /// <summary>
-    /// ¹«¹²·½·¨£ºÍË³öÓÎÏ·
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½Ï·
     /// </summary>
     public void QuitGame()
     {
-        Debug.Log("ÍË³öÓÎÏ·");
+        Debug.Log("ï¿½Ë³ï¿½ï¿½ï¿½Ï·");
         
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
@@ -1215,7 +1215,7 @@ public class SigningFlowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¹«¹²·½·¨£ºÔÝÍ£ÓÎÏ·
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½Ï·
     /// </summary>
     public void PauseGame()
     {
@@ -1223,16 +1223,16 @@ public class SigningFlowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// »ñÈ¡µ±Ç°ÓÎÏ·×´Ì¬ÐÅÏ¢ (¹©µ÷ÊÔ»òUIÊ¹ÓÃ)
+    /// ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½Ï·×´Ì¬ï¿½ï¿½Ï¢ (ï¿½ï¿½ï¿½ï¿½ï¿½Ô»ï¿½UIÊ¹ï¿½ï¿½)
     /// </summary>
     public string GetGameStateInfo()
     {
-        if (ctx == null) return "ÓÎÏ·Î´³õÊ¼»¯";
+        if (ctx == null) return "ï¿½ï¿½Ï·Î´ï¿½ï¿½Ê¼ï¿½ï¿½";
         
-        return $"µ±Ç°½×¶Î: {currentStage?.StageName ?? "ÎÞ"}\n" +
-               $"ÂúÒâ¶È: {ctx.satisfaction}\n" +
-               $"Ê§°Ü´ÎÊý: {ctx.failCount}\n" +
-               $"¹Ë¿Í: {ctx.customer?.name ?? "Î´Öª"}";
+        return $"ï¿½ï¿½Ç°ï¿½×¶ï¿½: {currentStage?.StageName ?? "ï¿½ï¿½"}\n" +
+               $"ï¿½ï¿½ï¿½ï¿½ï¿½: {ctx.satisfaction}\n" +
+               $"Ê§ï¿½Ü´ï¿½ï¿½ï¿½: {ctx.failCount}\n" +
+               $"ï¿½Ë¿ï¿½: {ctx.customer?.name ?? "Î´Öª"}";
     }
 }
 
