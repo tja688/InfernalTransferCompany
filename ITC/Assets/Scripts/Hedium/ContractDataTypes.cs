@@ -1,75 +1,75 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ÆõÔ¼ÀàĞÍÃ¶¾Ù
+/// å¥‘çº¦ç±»å‹æšä¸¾
 /// </summary>
 public enum HeContractType
 {
-    Money,      // ½ğÇ®
-    Fame,       // ÃûÀû  
-    Skill,      // ÌØ¼¼
-    Event       // ÊÂ¼ş
+    Money,      // é‡‘é’±
+    Fame,       // ååˆ©  
+    Skill,      // ç‰¹æŠ€
+    Event       // äº‹ä»¶
 }
 
 /// <summary>
-/// Í»·¢ÊÂ¼şÀàĞÍ
+/// çªå‘äº‹ä»¶ç±»å‹
 /// </summary>
 public enum ContractEventType
 {
-    Phone,      // µç»°
-    Gun,        // °ÎÇ¹
-    Epilepsy,   // ñ²ğï
-    Transform,  // ±äĞÎ
-    Dialogue    // ¶Ô»°
+    Phone,      // ç”µè¯
+    Gun,        // æ‹”æª
+    Epilepsy,   // ç™«ç—«
+    Transform,  // å˜å½¢
+    Dialogue    // å¯¹è¯
 }
 
 /// <summary>
-/// ·ûÎÄÀàĞÍ
+/// ç¬¦æ–‡ç±»å‹
 /// </summary>
 public enum RuneType
 {
-    Fire,       // »ğ
-    Water,      // Ë®
-    Earth,      // ÍÁ
-    Air,        // ·ç
-    Light,      // ¹â
-    Dark        // °µ
+    Fire,       // ç«
+    Water,      // æ°´
+    Earth,      // åœŸ
+    Air,        // é£
+    Light,      // å…‰
+    Dark        // æš—
 }
 
 /// <summary>
-/// ÓÎÏ·ÅäÖÃ
+/// æ¸¸æˆé…ç½®
 /// </summary>
 [System.Serializable]
 public class GameConfig
 {
-    [Header("»ù´¡Éè¶¨")]
+    [Header("åŸºç¡€è®¾å®š")]
     public int initialSatisfaction = 3;     
     public int maxFailCount = 3;            
     public int minSatisfaction = 1;         
     
-    [Header("·ûÎÄÊäÈë")]
+    [Header("ç¬¦æ–‡è¾“å…¥")]
     public float runeInputTimeLimit = 10f;   
     public int maxRuneErrors = 3;            
     
-    [Header("·ûÎÄºË¶Ô")]
+    [Header("ç¬¦æ–‡æ ¸å¯¹")]
     public float runeVerificationTime = 5f;  
     public int runeVerificationCount = 3;    
     public float runeVerificationTriggerChance = 0.3f; 
     
-    [Header("¸ÇÕÂÏµÍ³")]
+    [Header("ç›–ç« ç³»ç»Ÿ")]
     public float stampChargeTime = 3f;       
     public int maxStampAttempts = 3;         
     public float stampAccuracyTolerance = 0.1f; 
     
-    [Header("Áé»êÊÕÈ¡")]
+    [Header("çµé­‚æ”¶å–")]
     public float soulHarvestAccuracy = 0.05f; 
     public float soulCutterShake = 0.02f;     
 }   
 
 /// <summary>
-/// ÆõÔ¼ÎÄÊéÊı¾İ
+/// å¥‘çº¦æ–‡ä¹¦æ•°æ®
 /// </summary>
 [System.Serializable]
 public class ContractDocument
@@ -82,7 +82,7 @@ public class ContractDocument
     public float soulPercentage;           
     public HeContractType HeContractType;
     
-    [Header("ÎÄÊé×´Ì¬")]
+    [Header("æ–‡ä¹¦çŠ¶æ€")]
     public bool isSealed = true;            
     public bool isGenuine = true;           
     public bool hasITCWatermark = true;     
@@ -93,7 +93,7 @@ public class ContractDocument
 }
 
 /// <summary>
-/// ¹Ë¿ÍÊı¾İ
+/// é¡¾å®¢æ•°æ®
 /// </summary>
 [System.Serializable]
 public class Customer
@@ -107,7 +107,7 @@ public class Customer
 }
 
 /// <summary>
-/// Í»·¢ÊÂ¼şÊı¾İ
+/// çªå‘äº‹ä»¶æ•°æ®
 /// </summary>
 [System.Serializable]
 public class EventData
@@ -121,7 +121,7 @@ public class EventData
 }
 
 /// <summary>
-/// ·ûÎÄÊı¾İ
+/// ç¬¦æ–‡æ•°æ®
 /// </summary>
 [System.Serializable]
 public class RuneData
@@ -133,7 +133,7 @@ public class RuneData
 }
 
 /// <summary>
-/// ÆõÔ¼ÉÏÏÂÎÄ - ±£´æÕû¸öÇ©Ô¼Á÷³ÌµÄ×´Ì¬
+/// å¥‘çº¦ä¸Šä¸‹æ–‡ - ä¿å­˜æ•´ä¸ªç­¾çº¦æµç¨‹çš„çŠ¶æ€
 /// </summary>
 public class HeContractContext
 {
@@ -143,14 +143,14 @@ public class HeContractContext
     public int failCount = 0;               
     public bool isTerminated = false;       
     
-    [Header("Á÷³Ì×´Ì¬")]
+    [Header("æµç¨‹çŠ¶æ€")]
     public bool documentVerified = false;   
     public bool runesCompleted = false;     
     public bool eventHandled = false;       
     public bool stampApplied = false;       
     public bool soulHarvested = false;      
     
-    [Header("´íÎó¼ÆÊı")]
+    [Header("é”™è¯¯è®¡æ•°")]
     public int runeErrors = 0;              
     public int stampAttempts = 0;  
     public bool isFaild = false;
@@ -158,18 +158,18 @@ public class HeContractContext
     public void AddFailure()
     {
         failCount++;
-        Debug.Log($"Ç©Ô¼Ê§°Ü´ÎÊıÔö¼Ó: {failCount}");
+        Debug.Log($"ç­¾çº¦å¤±è´¥æ¬¡æ•°å¢åŠ : {failCount}");
     }
     
     public void DecreaseSatisfaction(int amount = 1)
     {
         satisfaction = Mathf.Max(0, satisfaction - amount);
-        Debug.Log($"¹Ë¿ÍÂúÒâ¶È½µµÍ: {satisfaction}");
+        Debug.Log($"é¡¾å®¢æ»¡æ„åº¦é™ä½: {satisfaction}");
     }
     
     public void IncreaseSatisfaction(int amount = 1)
     {
         satisfaction = Mathf.Min(5, satisfaction + amount);
-        Debug.Log($"¹Ë¿ÍÂúÒâ¶ÈÌáÉı: {satisfaction}");
+        Debug.Log($"é¡¾å®¢æ»¡æ„åº¦æå‡: {satisfaction}");
     }
 }
