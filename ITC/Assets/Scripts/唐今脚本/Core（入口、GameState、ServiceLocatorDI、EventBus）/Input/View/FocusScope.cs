@@ -1,4 +1,5 @@
-// FocusScope.cs (最终修正版 - 修复 InvalidOperationException)
+// FocusScope.cs (完整修改版)
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public class FocusScope : MonoBehaviour
 {
-    private List<IInteractableUI> _interactables = new List<IInteractableUI>(); 
+    private List<IInteractableUI> _interactables = new List<IInteractableUI>();
     private IInteractableUI _currentFocus;
     private bool _isFocused;
 
@@ -14,8 +15,8 @@ public class FocusScope : MonoBehaviour
 
     private void RefreshInteractables()
     {
-        _interactables = GetComponentsInChildren<IInteractableUI>(true).ToList(); // 改为true，查找包括未激活的
-        if (enableDebugLogging) Debug.Log($"[FocusScope] {gameObject.name}: 刷新列表，找到 {_interactables.Count} 个可交互元素。", this);
+        _interactables = GetComponentsInChildren<IInteractableUI>(true).ToList();
+        if (enableDebugLogging) Debug.Log($"[FocusScope] {gameObject.name}: 刷新列表，找到 {_interactables.Count} 個可交互元素。", this);
     }
 
     public void SetFocused(bool focused)
@@ -27,11 +28,18 @@ public class FocusScope : MonoBehaviour
 
             if (_interactables != null && _interactables.Any())
             {
-                // 【最终修正】: 使用 FirstOrDefault 代替 First，避免在没有激活按钮时抛出异常。
                 var firstActiveInteractable = _interactables.FirstOrDefault(i => (i as MonoBehaviour).isActiveAndEnabled);
-                
-                // 如果当前已有焦点则保持，否则尝试使用找到的第一个可用焦点
-                SetFocus(_currentFocus ?? firstActiveInteractable);
+
+                if (firstActiveInteractable != null)
+                {
+                    SetFocus(_currentFocus ?? firstActiveInteractable);
+                }
+                else
+                {
+                    if (enableDebugLogging) Debug.LogWarning($"[FocusScope] {gameObject.name}: 被激活，但暫未找到任何**已激活**的子元素。將在下一幀重試...", this);
+                    // 【核心修正】將協程委託給永遠激活的 StateManager 執行
+                    DialogueStateManager.Instance.RunCoroutine(RetrySetFocusAfterFrame());
+                }
             }
             else if (enableDebugLogging)
             {
@@ -44,16 +52,34 @@ public class FocusScope : MonoBehaviour
         }
     }
 
+    private IEnumerator RetrySetFocusAfterFrame()
+    {
+        yield return new WaitForEndOfFrame();
+
+        RefreshInteractables();
+        var firstActiveInteractable = _interactables.FirstOrDefault(i => (i as MonoBehaviour).isActiveAndEnabled);
+
+        if (firstActiveInteractable != null)
+        {
+            if (enableDebugLogging) Debug.Log($"[FocusScope] {gameObject.name}: 重試成功，找到可用焦點: {(firstActiveInteractable as MonoBehaviour).name}", this);
+            SetFocus(firstActiveInteractable);
+        }
+        else
+        {
+             if (enableDebugLogging) Debug.LogWarning($"[FocusScope] {gameObject.name}: 重試後，依然未找到任何已激活的子元素。", this);
+             SetFocus(null);
+        }
+    }
+
     public void HandleNavigation(Vector2 direction)
     {
         if (!_isFocused || _interactables == null || _interactables.Count < 2) return;
-        
-        // 只在当前可用的按钮中导航
+
         var activeInteractables = _interactables.Where(i => (i as MonoBehaviour).isActiveAndEnabled).ToList();
         if (activeInteractables.Count < 1) return;
 
         int currentIndex = activeInteractables.IndexOf(_currentFocus);
-        
+
         if (direction.y < -0.5f) // Down
         {
             currentIndex = (currentIndex + 1) % activeInteractables.Count;
@@ -80,21 +106,25 @@ public class FocusScope : MonoBehaviour
 
     private void SetFocus(IInteractableUI newFocus)
     {
-        if (_currentFocus == newFocus && _currentFocus != null) return;
-        if (enableDebugLogging) Debug.Log($"[FocusScope] {gameObject.name}: 尝试设置新焦点为 {(newFocus as MonoBehaviour)?.name ?? "null"}", this);
+        // 如果焦点没有实际变化，则不执行任何操作
+        if (_currentFocus == newFocus) return;
+        
+        if (enableDebugLogging) Debug.Log($"[FocusScope] {gameObject.name}: 嘗試設置新焦點为 {(newFocus as MonoBehaviour)?.name ?? "null"}", this);
 
         _currentFocus?.OnUnfocus();
         _currentFocus = newFocus;
         _currentFocus?.OnFocus();
 
+        // 【核心修改】: 将直接调用事件改为调用StateManager的统一接口
+        // 这样做的好处是逻辑更清晰，所有焦点事件都由StateManager广播
         if (DialogueStateManager.Instance != null)
         {
-            if (enableDebugLogging) Debug.Log($"[FocusScope] {gameObject.name}: 正在调用 OnFocusChanged 事件，广播新焦点: {(_currentFocus as MonoBehaviour)?.name ?? "null"}", this);
-            DialogueStateManager.Instance.OnFocusChanged?.Invoke(_currentFocus);
-        }
-        else if (enableDebugLogging)
-        {
-            Debug.LogError($"[FocusScope] {gameObject.name}: StateManager.Instance 为空，无法广播 OnFocusChanged 事件！", this);
+            if (enableDebugLogging)
+            {
+                Debug.Log($"[FocusScope] {gameObject.name}: 正在请求 StateManager 广播新焦点: {(_currentFocus as MonoBehaviour)?.name ?? "null"}", this);
+            }
+            // 通知StateManager，焦点已经改变
+            DialogueStateManager.Instance.NotifyFocusChanged(_currentFocus);
         }
     }
 }
