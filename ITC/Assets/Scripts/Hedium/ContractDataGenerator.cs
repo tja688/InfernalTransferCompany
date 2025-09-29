@@ -1,131 +1,131 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 /// <summary>
-/// ÆõÔ¼Êı¾İÉú³ÉÆ÷
-/// ¸ºÔğÉú³ÉËæ»úµÄ¹Ë¿ÍĞÅÏ¢¡¢ÆõÔ¼ÎÄÊéºÍÏà¹ØµÄÓÎÏ·Êı¾İ
+/// å¥‘çº¦æ•°æ®ç”Ÿæˆå™¨
+/// è´Ÿè´£ç”Ÿæˆéšæœºçš„é¡¾å®¢ä¿¡æ¯ã€å¥‘çº¦æ–‡ä¹¦å’Œç›¸å…³çš„æ¸¸æˆæ•°æ®
 /// </summary>
 [CreateAssetMenu(fileName = "ContractDataGenerator", menuName = "Hedium/Contract Data Generator")]
 public class ContractDataGenerator : ScriptableObject
 {
-    [Header("=== ¹Ë¿ÍÊı¾İ×ÊÔ´ ===")]
-    [Tooltip("¹Ë¿ÍĞÕÃûÊı¾İ¿â")]
+    [Header("=== é¡¾å®¢æ•°æ®èµ„æº ===")]
+    [Tooltip("é¡¾å®¢å§“åæ•°æ®åº“")]
     public CustomerNameData nameData;
     
-    [Tooltip("Ö°ÒµÊı¾İ¿â")]
+    [Tooltip("èŒä¸šæ•°æ®åº“")]
     public OccupationData occupationData;
     
-    [Tooltip("¹Ë¿ÍÕÕÆ¬×ÊÔ´")]
+    [Tooltip("é¡¾å®¢ç…§ç‰‡èµ„æº")]
     public CustomerPhotoData photoData;
 
-    [Header("=== ÆõÔ¼Ä£°å ===")]
-    [Tooltip("ÆõÔ¼ÃèÊöÄ£°å")]
+    [Header("=== å¥‘çº¦æ¨¡æ¿ ===")]
+    [Tooltip("å¥‘çº¦æè¿°æ¨¡æ¿")]
     public List<ContractTemplate> contractTemplates = new List<ContractTemplate>();
 
-    [Header("=== Éú³É¸ÅÂÊÉèÖÃ ===")]
+    [Header("=== ç”Ÿæˆæ¦‚ç‡è®¾ç½® ===")]
     [Range(0f, 1f)]
-    [Tooltip("Éú³ÉÎÄÊéÎÊÌâµÄ»ù´¡¸ÅÂÊ")]
+    [Tooltip("ç”Ÿæˆæ–‡ä¹¦é—®é¢˜çš„åŸºç¡€æ¦‚ç‡")]
     public float documentIssueChance = 0.15f;
     
     [Range(0f, 1f)]
-    [Tooltip("Éú³ÉÎ±×°¹Ë¿ÍµÄ¸ÅÂÊ")]
+    [Tooltip("ç”Ÿæˆä¼ªè£…é¡¾å®¢çš„æ¦‚ç‡")]
     public float disguiseChance = 0.08f;
     
     [Range(0f, 1f)]
-    [Tooltip("Éú³É¿ËÂå¿Ë´ï¶û°ï³ÉÔ±µÄ¸ÅÂÊ")]
+    [Tooltip("ç”Ÿæˆå…‹æ´›å…‹è¾¾å°”å¸®æˆå‘˜çš„æ¦‚ç‡")]
     public float clocardalMemberChance = 0.05f;
     
     [Range(0f, 1f)]
-    [Tooltip("Éú³ÉÄÚÈİ²»Æ¥ÅäµÄ¸ÅÂÊ")]
+    [Tooltip("ç”Ÿæˆå†…å®¹ä¸åŒ¹é…çš„æ¦‚ç‡")]
     public float contentMismatchChance = 0.12f;
 
-    [Header("=== ÄÑ¶Èµ÷½Ú ===")]
-    [Tooltip("µ±Ç°ÄÑ¶ÈµÈ¼¶")]
+    [Header("=== éš¾åº¦è°ƒèŠ‚ ===")]
+    [Tooltip("å½“å‰éš¾åº¦ç­‰çº§")]
     public int difficultyLevel = 1;
     
-    [Tooltip("ÄÑ¶È¶ÔÎÊÌâ¸ÅÂÊµÄÓ°ÏìÏµÊı")]
+    [Tooltip("éš¾åº¦å¯¹é—®é¢˜æ¦‚ç‡çš„å½±å“ç³»æ•°")]
     public float difficultyMultiplier = 1.2f;
 
     /// <summary>
-    /// Éú³ÉËæ»ú¹Ë¿ÍÊı¾İ
+    /// ç”Ÿæˆéšæœºé¡¾å®¢æ•°æ®
     /// </summary>
     public Customer GenerateRandomCustomer()
     {
         var customer = new Customer();
         
-        // Éú³É»ù´¡ĞÅÏ¢
+        // ç”ŸæˆåŸºç¡€ä¿¡æ¯
         customer.name = GenerateRandomName();
         customer.occupation = GenerateRandomOccupation();
         customer.photo = GenerateRandomPhoto();
         
-        // ¸ù¾İ¸ÅÂÊÉú³ÉÌØÊâ×´Ì¬
+        // æ ¹æ®æ¦‚ç‡ç”Ÿæˆç‰¹æ®ŠçŠ¶æ€
         float difficultyBonus = (difficultyLevel - 1) * 0.1f;
         customer.isDisguised = UnityEngine.Random.value < (disguiseChance + difficultyBonus);
         customer.isClocardalMember = UnityEngine.Random.value < (clocardalMemberChance + difficultyBonus);
         
-        // Éú³É¿ÚÍ·ÇëÇó
+        // ç”Ÿæˆå£å¤´è¯·æ±‚
         customer.spokenRequest = GenerateSpokenRequest(customer);
         
         return customer;
     }
 
     /// <summary>
-    /// Éú³ÉËæ»úÆõÔ¼ÎÄÊé
+    /// ç”Ÿæˆéšæœºå¥‘çº¦æ–‡ä¹¦
     /// </summary>
     public ContractDocument GenerateRandomContract(Customer customer)
     {
         var document = new ContractDocument();
         
-        // »ù´¡ĞÅÏ¢
+        // åŸºç¡€ä¿¡æ¯
         document.customerName = customer.name;
         document.occupation = customer.occupation;
         document.customerPhoto = customer.photo;
         document.appointmentDate = GenerateAppointmentDate();
         
-        // Éú³ÉÆõÔ¼ÀàĞÍºÍÏà¹ØĞÅÏ¢
+        // ç”Ÿæˆå¥‘çº¦ç±»å‹å’Œç›¸å…³ä¿¡æ¯
         document.HeContractType = GenerateRandomHeContractType();
         document.contractDescription = GenerateContractDescription(document.HeContractType);
         document.soulPercentage = GenerateRandomSoulPercentage(document.HeContractType);
         
-        // ¸ù¾İÄÑ¶ÈºÍ¸ÅÂÊÉú³ÉÎÄÊéÎÊÌâ
+        // æ ¹æ®éš¾åº¦å’Œæ¦‚ç‡ç”Ÿæˆæ–‡ä¹¦é—®é¢˜
         ApplyDocumentIssues(document, customer);
         
         return document;
     }
 
     /// <summary>
-    /// Éú³ÉÍêÕûµÄÆõÔ¼ÉÏÏÂÎÄ
+    /// ç”Ÿæˆå®Œæ•´çš„å¥‘çº¦ä¸Šä¸‹æ–‡
     /// </summary>
     public HeContractContext GenerateRandomHeContractContext()
     {
         var context = new HeContractContext();
         
-        // Éú³É¹Ë¿ÍºÍÆõÔ¼
+        // ç”Ÿæˆé¡¾å®¢å’Œå¥‘çº¦
         context.customer = GenerateRandomCustomer();
         context.document = GenerateRandomContract(context.customer);
         
-        // ÉèÖÃ³õÊ¼×´Ì¬
-        context.satisfaction = 3; // ½«ÔÚmanagerÖĞÊ¹ÓÃÅäÖÃ¸²¸Ç
+        // è®¾ç½®åˆå§‹çŠ¶æ€
+        context.satisfaction = 3; // å°†åœ¨managerä¸­ä½¿ç”¨é…ç½®è¦†ç›–
         context.failCount = 0;
         context.isTerminated = false;
         
         return context;
     }
 
-    #region Ë½ÓĞÉú³É·½·¨
+    #region ç§æœ‰ç”Ÿæˆæ–¹æ³•
 
     private string GenerateRandomName()
     {
         if (nameData != null && nameData.names.Count > 0)
         {
-            // ¸ù¾İÈ¨ÖØÑ¡ÔñĞÕÃû
+            // æ ¹æ®æƒé‡é€‰æ‹©å§“å
             return WeightedRandomSelection(nameData.names, item => item.weight).name;
         }
         
-        // Ä¬ÈÏĞÕÃûÁĞ±í
-        string[] defaultNames = { "°¬ÀòË¿", "ÍĞÂíË¹", "ÂêÀö", "Ô¼º²", "¿­ÉªÁÕ", "ÍşÁ®", "ÒÁÉ¯±´À­", "ÑÇÉª", "Î¬¶àÀûÑÇ", "°®µÂ»ª" };
+        // é»˜è®¤å§“ååˆ—è¡¨
+        string[] defaultNames = { "è‰¾è‰ä¸", "æ‰˜é©¬æ–¯", "ç›ä¸½", "çº¦ç¿°", "å‡¯ç‘Ÿç³", "å¨å»‰", "ä¼Šèè´æ‹‰", "äºšç‘Ÿ", "ç»´å¤šåˆ©äºš", "çˆ±å¾·å" };
         return defaultNames[UnityEngine.Random.Range(0, defaultNames.Length)];
     }
 
@@ -136,8 +136,8 @@ public class ContractDataGenerator : ScriptableObject
             return WeightedRandomSelection(occupationData.occupations, item => item.weight).name;
         }
         
-        // Ä¬ÈÏÖ°ÒµÁĞ±í
-        string[] defaultOccupations = { "Ìú½³", "ÉÌÈË", "Ñ§Õß", "Å©·ò", "¹¤½³", "ÊØÎÀ", "Ò½Ê¦", "Ò÷ÓÎÊ«ÈË", "´¬Ô±", "Ö¯¹¤" };
+        // é»˜è®¤èŒä¸šåˆ—è¡¨
+        string[] defaultOccupations = { "é“åŒ ", "å•†äºº", "å­¦è€…", "å†œå¤«", "å·¥åŒ ", "å®ˆå«", "åŒ»å¸ˆ", "åŸæ¸¸è¯—äºº", "èˆ¹å‘˜", "ç»‡å·¥" };
         return defaultOccupations[UnityEngine.Random.Range(0, defaultOccupations.Length)];
     }
 
@@ -148,21 +148,21 @@ public class ContractDataGenerator : ScriptableObject
             return WeightedRandomSelection(photoData.photos, item => item.weight).sprite;
         }
         
-        return null; // Èç¹ûÃ»ÓĞÕÕÆ¬×ÊÔ´
+        return null; // å¦‚æœæ²¡æœ‰ç…§ç‰‡èµ„æº
     }
 
     private HeContractType GenerateRandomHeContractType()
     {
-        // ¸ù¾İÄÑ¶Èµ÷Õû¸÷ÀàĞÍµÄ³öÏÖ¸ÅÂÊ
+        // æ ¹æ®éš¾åº¦è°ƒæ•´å„ç±»å‹çš„å‡ºç°æ¦‚ç‡
         var typeWeights = new Dictionary<HeContractType, float>
         {
             { HeContractType.Money, 0.3f },
             { HeContractType.Fame, 0.25f },
             { HeContractType.Skill, 0.3f },
-            { HeContractType.Event, 0.15f } // ÊÂ¼şÀàĞÍÉÔÎ¢Ï¡ÉÙ
+            { HeContractType.Event, 0.15f } // äº‹ä»¶ç±»å‹ç¨å¾®ç¨€å°‘
         };
         
-        // ÄÑ¶ÈÔ½¸ß£¬¸´ÔÓÀàĞÍ³öÏÖ¸ÅÂÊÔ½¸ß
+        // éš¾åº¦è¶Šé«˜ï¼Œå¤æ‚ç±»å‹å‡ºç°æ¦‚ç‡è¶Šé«˜
         if (difficultyLevel >= 3)
         {
             typeWeights[HeContractType.Event] += 0.1f;
@@ -175,7 +175,7 @@ public class ContractDataGenerator : ScriptableObject
 
     private string GenerateContractDescription(HeContractType HeContractType)
     {
-        // ´ÓÄ£°åÖĞ²éÕÒ¶ÔÓ¦µÄÃèÊö
+        // ä»æ¨¡æ¿ä¸­æŸ¥æ‰¾å¯¹åº”çš„æè¿°
         var templates = contractTemplates.FindAll(t => t.HeContractType == HeContractType);
         if (templates.Count > 0)
         {
@@ -183,40 +183,40 @@ public class ContractDataGenerator : ScriptableObject
             return selectedTemplate.descriptions[UnityEngine.Random.Range(0, selectedTemplate.descriptions.Count)];
         }
         
-        // Ä¬ÈÏÃèÊö
+        // é»˜è®¤æè¿°
         return HeContractType switch
         {
-            HeContractType.Money => GetRandomFromArray(new[] { "¿ÊÍû»ñµÃ²Æ¸»", "Ï£Íû²ÆÔ´¹ö¹ö", "ÏëÒª°ÚÍÑÆ¶À§" }),
-            HeContractType.Fame => GetRandomFromArray(new[] { "ÆÚÍû»ñµÃÃûÍû", "¿ÊÇóÍòÈË¾´Ñö", "ÏëÒªÃû´¹ÇàÊ·" }),
-            HeContractType.Skill => GetRandomFromArray(new[] { "¿ÊÍûÊ¶¶ÁÎÄ×Ö", "Ï£ÍûÕÆÎÕ¼¼ÒÕ", "ÏëÒª»ñµÃÖÇ»Û" }),
-            HeContractType.Event => GetRandomFromArray(new[] { "Ï£Íû¸Ä±äÃüÔË", "ÏëÒªÅ¤×ª¾ÖÃæ", "¿ÊÇóÈËÉú×ª»ú" }),
-            _ => "Î´ÖªĞèÇó"
+            HeContractType.Money => GetRandomFromArray(new[] { "æ¸´æœ›è·å¾—è´¢å¯Œ", "å¸Œæœ›è´¢æºæ»šæ»š", "æƒ³è¦æ‘†è„±è´«å›°" }),
+            HeContractType.Fame => GetRandomFromArray(new[] { "æœŸæœ›è·å¾—åæœ›", "æ¸´æ±‚ä¸‡äººæ•¬ä»°", "æƒ³è¦åå‚é’å²" }),
+            HeContractType.Skill => GetRandomFromArray(new[] { "æ¸´æœ›è¯†è¯»æ–‡å­—", "å¸Œæœ›æŒæ¡æŠ€è‰º", "æƒ³è¦è·å¾—æ™ºæ…§" }),
+            HeContractType.Event => GetRandomFromArray(new[] { "å¸Œæœ›æ”¹å˜å‘½è¿", "æƒ³è¦æ‰­è½¬å±€é¢", "æ¸´æ±‚äººç”Ÿè½¬æœº" }),
+            _ => "æœªçŸ¥éœ€æ±‚"
         };
     }
 
     private float GenerateRandomSoulPercentage(HeContractType HeContractType)
     {
-        // ¸ù¾İÆõÔ¼ÀàĞÍÉèÖÃ²»Í¬µÄÁé»ê·İ¶î·¶Î§
+        // æ ¹æ®å¥‘çº¦ç±»å‹è®¾ç½®ä¸åŒçš„çµé­‚ä»½é¢èŒƒå›´
         return HeContractType switch
         {
-            HeContractType.Money => UnityEngine.Random.Range(0.2f, 0.4f),    // ¶ş³Éµ½ËÄ³É
-            HeContractType.Fame => UnityEngine.Random.Range(0.3f, 0.5f),     // Èı³Éµ½Îå³É
-            HeContractType.Skill => UnityEngine.Random.Range(0.2f, 0.4f),    // ¶ş³Éµ½ËÄ³É
-            HeContractType.Event => UnityEngine.Random.Range(0.4f, 0.6f),    // ËÄ³Éµ½Áù³É£¨·çÏÕ¸ü¸ß£©
+            HeContractType.Money => UnityEngine.Random.Range(0.2f, 0.4f),    // äºŒæˆåˆ°å››æˆ
+            HeContractType.Fame => UnityEngine.Random.Range(0.3f, 0.5f),     // ä¸‰æˆåˆ°äº”æˆ
+            HeContractType.Skill => UnityEngine.Random.Range(0.2f, 0.4f),    // äºŒæˆåˆ°å››æˆ
+            HeContractType.Event => UnityEngine.Random.Range(0.4f, 0.6f),    // å››æˆåˆ°å…­æˆï¼ˆé£é™©æ›´é«˜ï¼‰
             _ => UnityEngine.Random.Range(0.2f, 0.5f)
         };
     }
 
     private DateTime GenerateAppointmentDate()
     {
-        // ´ó¶àÊıÇé¿öÏÂÊÇµ±Ìì£¬ÉÙÊıÇé¿öÓĞÈÕÆÚÎÊÌâ
+        // å¤§å¤šæ•°æƒ…å†µä¸‹æ˜¯å½“å¤©ï¼Œå°‘æ•°æƒ…å†µæœ‰æ—¥æœŸé—®é¢˜
         if (UnityEngine.Random.value < 0.9f)
         {
             return DateTime.Today;
         }
         else
         {
-            // Éú³É´íÎóÈÕÆÚ
+            // ç”Ÿæˆé”™è¯¯æ—¥æœŸ
             return DateTime.Today.AddDays(UnityEngine.Random.Range(-3, 4));
         }
     }
@@ -225,28 +225,28 @@ public class ContractDataGenerator : ScriptableObject
     {
         var requestTemplates = new List<string>
         {
-            "ÎÒÏ£Íû»ñµÃ¸ü¶àµÄ²Æ¸»",
-            "ÎÒÏëÒª±äµÃ¸üÓĞÃûÆø",
-            "ÎÒ¿ÊÍûÑ§»áĞÂµÄ¼¼ÄÜ",
-            "ÎÒĞèÒª¸Ä±äÎÒµÄÃüÔË",
-            "ÎÒÏëÒª»ñµÃÁ¦Á¿",
-            "ÎÒÏ£ÍûÄÜ¹»Ê¶¶ÁÎÄ×Ö",
-            "ÎÒÏëÒª°ÚÍÑÏÖÔÚµÄÀ§¾³",
-            "ÎÒ¿ÊÍû»ñµÃÖªÊ¶",
-            "ÎÒÏ£ÍûÄÜ¹»¸»Ô£ÆğÀ´",
-            "ÎÒÏëÒªÔÚÕâ¸öÊÀ½çÁôÏÂºÛ¼£"
+            "æˆ‘å¸Œæœ›è·å¾—æ›´å¤šçš„è´¢å¯Œ",
+            "æˆ‘æƒ³è¦å˜å¾—æ›´æœ‰åæ°”",
+            "æˆ‘æ¸´æœ›å­¦ä¼šæ–°çš„æŠ€èƒ½",
+            "æˆ‘éœ€è¦æ”¹å˜æˆ‘çš„å‘½è¿",
+            "æˆ‘æƒ³è¦è·å¾—åŠ›é‡",
+            "æˆ‘å¸Œæœ›èƒ½å¤Ÿè¯†è¯»æ–‡å­—",
+            "æˆ‘æƒ³è¦æ‘†è„±ç°åœ¨çš„å›°å¢ƒ",
+            "æˆ‘æ¸´æœ›è·å¾—çŸ¥è¯†",
+            "æˆ‘å¸Œæœ›èƒ½å¤Ÿå¯Œè£•èµ·æ¥",
+            "æˆ‘æƒ³è¦åœ¨è¿™ä¸ªä¸–ç•Œç•™ä¸‹ç—•è¿¹"
         };
         
-        // Èç¹ûÊÇÎ±×°Õß£¬¿ÉÄÜ»áÓĞ²»Ò»ÖÂµÄ±íÊö
+        // å¦‚æœæ˜¯ä¼ªè£…è€…ï¼Œå¯èƒ½ä¼šæœ‰ä¸ä¸€è‡´çš„è¡¨è¿°
         if (customer.isDisguised && UnityEngine.Random.value < 0.3f)
         {
-            // ¹ÊÒâËµÒ»Ğ©Ä£ºı»ò²»Ò»ÖÂµÄ»°
+            // æ•…æ„è¯´ä¸€äº›æ¨¡ç³Šæˆ–ä¸ä¸€è‡´çš„è¯
             var vagueRequests = new[]
             {
-                "ÎÒ...ÎÒÏëÒªÄÇ¸ö¶«Î÷",
-                "ÄãÖªµÀÎÒÏëÒªÊ²Ã´µÄ",
-                "°´ÕÕÎÄÊéÉÏµÄ×ö¾ÍĞĞÁË",
-                "¾ÍÊÇÆÕÍ¨µÄÄÇÖÖÆõÔ¼"
+                "æˆ‘...æˆ‘æƒ³è¦é‚£ä¸ªä¸œè¥¿",
+                "ä½ çŸ¥é“æˆ‘æƒ³è¦ä»€ä¹ˆçš„",
+                "æŒ‰ç…§æ–‡ä¹¦ä¸Šçš„åšå°±è¡Œäº†",
+                "å°±æ˜¯æ™®é€šçš„é‚£ç§å¥‘çº¦"
             };
             return GetRandomFromArray(vagueRequests);
         }
@@ -259,14 +259,14 @@ public class ContractDataGenerator : ScriptableObject
         float difficultyBonus = (difficultyLevel - 1) * 0.05f;
         float baseChance = documentIssueChance + difficultyBonus;
         
-        // ·âÀ¯ÎÊÌâ
+        // å°èœ¡é—®é¢˜
         if (UnityEngine.Random.value < baseChance * 0.8f)
         {
             document.isSealed = false;
-            Debug.Log("Éú³ÉÎÄÊéÎÊÌâ: ·âÀ¯ÆÆËğ");
+            Debug.Log("ç”Ÿæˆæ–‡ä¹¦é—®é¢˜: å°èœ¡ç ´æŸ");
         }
         
-        // Î±ÔìÎÊÌâ
+        // ä¼ªé€ é—®é¢˜
         if (UnityEngine.Random.value < baseChance * 0.3f)
         {
             switch (UnityEngine.Random.Range(0, 3))
@@ -281,37 +281,37 @@ public class ContractDataGenerator : ScriptableObject
                     document.isInkGenuine = false;
                     break;
             }
-            Debug.Log("Éú³ÉÎÄÊéÎÊÌâ: Î±ÔìÎÄÊé");
+            Debug.Log("ç”Ÿæˆæ–‡ä¹¦é—®é¢˜: ä¼ªé€ æ–‡ä¹¦");
         }
         
-        // ÈÕÆÚÎÊÌâ
+        // æ—¥æœŸé—®é¢˜
         if (UnityEngine.Random.value < baseChance && document.appointmentDate != DateTime.Today)
         {
             document.isDateCorrect = false;
-            Debug.Log("Éú³ÉÎÄÊéÎÊÌâ: ÈÕÆÚ²»·û");
+            Debug.Log("ç”Ÿæˆæ–‡ä¹¦é—®é¢˜: æ—¥æœŸä¸ç¬¦");
         }
         
-        // Éí·İÎÊÌâ
+        // èº«ä»½é—®é¢˜
         if (customer.isDisguised)
         {
             document.isIdentityMatched = false;
-            Debug.Log("Éú³ÉÎÄÊéÎÊÌâ: Éí·İ²»·û");
+            Debug.Log("ç”Ÿæˆæ–‡ä¹¦é—®é¢˜: èº«ä»½ä¸ç¬¦");
         }
         
-        // ÄÚÈİÆ¥ÅäÎÊÌâ
+        // å†…å®¹åŒ¹é…é—®é¢˜
         if (UnityEngine.Random.value < (contentMismatchChance + difficultyBonus))
         {
             document.isContentMatched = false;
-            Debug.Log("Éú³ÉÎÄÊéÎÊÌâ: ÄÚÈİ²»Æ¥Åä");
+            Debug.Log("ç”Ÿæˆæ–‡ä¹¦é—®é¢˜: å†…å®¹ä¸åŒ¹é…");
         }
     }
 
     #endregion
 
-    #region ¹¤¾ß·½·¨
+    #region å·¥å…·æ–¹æ³•
 
     /// <summary>
-    /// È¨ÖØËæ»úÑ¡Ôñ
+    /// æƒé‡éšæœºé€‰æ‹©
     /// </summary>
     private T WeightedRandomSelection<T>(List<T> items, System.Func<T, float> weightSelector)
     {
@@ -339,7 +339,7 @@ public class ContractDataGenerator : ScriptableObject
     }
 
     /// <summary>
-    /// È¨ÖØËæ»úÑ¡ÔñÆõÔ¼ÀàĞÍ
+    /// æƒé‡éšæœºé€‰æ‹©å¥‘çº¦ç±»å‹
     /// </summary>
     private HeContractType WeightedRandomHeContractType(Dictionary<HeContractType, float> weights)
     {
@@ -361,11 +361,11 @@ public class ContractDataGenerator : ScriptableObject
             }
         }
         
-        return HeContractType.Money; // Ä¬ÈÏ·µ»Ø
+        return HeContractType.Money; // é»˜è®¤è¿”å›
     }
 
     /// <summary>
-    /// ´ÓÊı×éÖĞËæ»úÑ¡ÔñÒ»¸öÔªËØ
+    /// ä»æ•°ç»„ä¸­éšæœºé€‰æ‹©ä¸€ä¸ªå…ƒç´ 
     /// </summary>
     private T GetRandomFromArray<T>(T[] array)
     {
@@ -375,7 +375,7 @@ public class ContractDataGenerator : ScriptableObject
 
     #endregion
 
-    #region Êı¾İ½á¹¹
+    #region æ•°æ®ç»“æ„
 
     [System.Serializable]
     public class ContractTemplate
@@ -422,10 +422,10 @@ public class ContractDataGenerator : ScriptableObject
 
     #endregion
 
-    #region ÑéÖ¤ºÍµ÷ÊÔ
+    #region éªŒè¯å’Œè°ƒè¯•
 
     /// <summary>
-    /// ÑéÖ¤ÅäÖÃÍêÕûĞÔ
+    /// éªŒè¯é…ç½®å®Œæ•´æ€§
     /// </summary>
     [ContextMenu("Validate Configuration")]
     public void ValidateConfiguration()
@@ -434,60 +434,60 @@ public class ContractDataGenerator : ScriptableObject
         
         if (nameData == null || nameData.names.Count == 0)
         {
-            Debug.LogWarning("ĞÕÃûÊı¾İÈ±Ê§»òÎª¿Õ");
+            Debug.LogWarning("å§“åæ•°æ®ç¼ºå¤±æˆ–ä¸ºç©º");
             issues++;
         }
         
         if (occupationData == null || occupationData.occupations.Count == 0)
         {
-            Debug.LogWarning("Ö°ÒµÊı¾İÈ±Ê§»òÎª¿Õ");
+            Debug.LogWarning("èŒä¸šæ•°æ®ç¼ºå¤±æˆ–ä¸ºç©º");
             issues++;
         }
         
         if (photoData == null || photoData.photos.Count == 0)
         {
-            Debug.LogWarning("ÕÕÆ¬Êı¾İÈ±Ê§»òÎª¿Õ");
+            Debug.LogWarning("ç…§ç‰‡æ•°æ®ç¼ºå¤±æˆ–ä¸ºç©º");
             issues++;
         }
         
         if (contractTemplates.Count == 0)
         {
-            Debug.LogWarning("ÆõÔ¼Ä£°åÎª¿Õ");
+            Debug.LogWarning("å¥‘çº¦æ¨¡æ¿ä¸ºç©º");
             issues++;
         }
         
         if (issues == 0)
         {
-            Debug.Log("ÅäÖÃÑéÖ¤Í¨¹ı!");
+            Debug.Log("é…ç½®éªŒè¯é€šè¿‡!");
         }
         else
         {
-            Debug.LogError($"·¢ÏÖ {issues} ¸öÅäÖÃÎÊÌâ");
+            Debug.LogError($"å‘ç° {issues} ä¸ªé…ç½®é—®é¢˜");
         }
     }
 
     /// <summary>
-    /// Éú³É²âÊÔÊı¾İ
+    /// ç”Ÿæˆæµ‹è¯•æ•°æ®
     /// </summary>
     [ContextMenu("Generate Test Data")]
     public void GenerateTestData()
     {
-        Debug.Log("=== Éú³É²âÊÔÊı¾İ ===");
+        Debug.Log("=== ç”Ÿæˆæµ‹è¯•æ•°æ® ===");
         
         for (int i = 0; i < 5; i++)
         {
             var context = GenerateRandomHeContractContext();
-            Debug.Log($"²âÊÔ {i + 1}: {context.customer.name} ({context.customer.occupation}) - {context.document.HeContractType} - {context.document.soulPercentage * 100:F0}%");
+            Debug.Log($"æµ‹è¯• {i + 1}: {context.customer.name} ({context.customer.occupation}) - {context.document.HeContractType} - {context.document.soulPercentage * 100:F0}%");
         }
     }
 
     #endregion
 }
 
-#region Êı¾İ×ÊÔ´Àà
+#region æ•°æ®èµ„æºç±»
 
 /// <summary>
-/// ¹Ë¿ÍĞÕÃûÊı¾İ¿â
+/// é¡¾å®¢å§“åæ•°æ®åº“
 /// </summary>
 [CreateAssetMenu(fileName = "CustomerNameData", menuName = "Hedium/Data/Customer Names")]
 public class CustomerNameData : ScriptableObject
@@ -496,7 +496,7 @@ public class CustomerNameData : ScriptableObject
 }
 
 /// <summary>
-/// Ö°ÒµÊı¾İ¿â
+/// èŒä¸šæ•°æ®åº“
 /// </summary>
 [CreateAssetMenu(fileName = "OccupationData", menuName = "Hedium/Data/Occupations")]
 public class OccupationData : ScriptableObject
@@ -505,7 +505,7 @@ public class OccupationData : ScriptableObject
 }
 
 /// <summary>
-/// ¹Ë¿ÍÕÕÆ¬Êı¾İ¿â
+/// é¡¾å®¢ç…§ç‰‡æ•°æ®åº“
 /// </summary>
 [CreateAssetMenu(fileName = "CustomerPhotoData", menuName = "Hedium/Data/Customer Photos")]
 public class CustomerPhotoData : ScriptableObject

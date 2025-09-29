@@ -1,50 +1,50 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEditor;
 
 public class ToolResetPivot : ScriptableObject
 {
-    //ÖØÖÃÄ£ĞÍµÄÖáĞÄÎªÖĞĞÄ
+    //é‡ç½®æ¨¡å‹çš„è½´å¿ƒä¸ºä¸­å¿ƒ
     [MenuItem("Tools/MyTool/ResetPivot")]
     static void ResetPivot()
     {
-        //»ñÈ¡Ñ¡ÖĞµÄÎïÌå
+        //è·å–é€‰ä¸­çš„ç‰©ä½“
         GameObject target = Selection.activeGameObject;
         string dialogTitle = "Tools/MyTool/ResetPivot";
 
         if (target == null)
         {
-            EditorUtility.DisplayDialog(dialogTitle, "Ã»ÓĞÑ¡ÖĞĞèÒªÖØÖÃÖáĞÄµÄÎïÌå!!!", "È·¶¨");
+            EditorUtility.DisplayDialog(dialogTitle, "æ²¡æœ‰é€‰ä¸­éœ€è¦é‡ç½®è½´å¿ƒçš„ç‰©ä½“!!!", "ç¡®å®š");
             return;
         }
 
-        //»ñÈ¡Ä¿±êÎïÌåÏÂËùÓĞÍø¸ñäÖÈ¾
+        //è·å–ç›®æ ‡ç‰©ä½“ä¸‹æ‰€æœ‰ç½‘æ ¼æ¸²æŸ“
         MeshRenderer[] meshRenderers = target.GetComponentsInChildren<MeshRenderer>(true);
         if (meshRenderers.Length == 0)
         {
-            EditorUtility.DisplayDialog(dialogTitle, "Ñ¡ÖĞµÄÎïÌå²»ÊÇÓĞĞ§Ä£ĞÍÎïÌå!!!", "È·¶¨");
+            EditorUtility.DisplayDialog(dialogTitle, "é€‰ä¸­çš„ç‰©ä½“ä¸æ˜¯æœ‰æ•ˆæ¨¡å‹ç‰©ä½“!!!", "ç¡®å®š");
             return;
         }
-        //½«ËùÓĞµÄÍø¸ñäÖÈ¾µÄ±ß½ç½øĞĞºÏ²¢
+        //å°†æ‰€æœ‰çš„ç½‘æ ¼æ¸²æŸ“çš„è¾¹ç•Œè¿›è¡Œåˆå¹¶
         Bounds centerBounds = meshRenderers[0].bounds;
         for (int i = 1; i < meshRenderers.Length; i++)
         {
             centerBounds.Encapsulate(meshRenderers[i].bounds);
         }
-        //´´½¨Ä¿±êµÄ¸¸ÎïÌå
+        //åˆ›å»ºç›®æ ‡çš„çˆ¶ç‰©ä½“
         Transform targetParent = new GameObject(target.name + "-Parent").transform;
 
-        //Èç¹ûÄ¿±êÔ­À´ÒÑÓĞ¸¸ÎïÌå,Ôò½«´´½¨Ä¿±ê¸¸ÎïÌåµÄ¸¸ÎïÌåÉèÎªÔ­¸¸ÎïÌå;
+        //å¦‚æœç›®æ ‡åŸæ¥å·²æœ‰çˆ¶ç‰©ä½“,åˆ™å°†åˆ›å»ºç›®æ ‡çˆ¶ç‰©ä½“çš„çˆ¶ç‰©ä½“è®¾ä¸ºåŸçˆ¶ç‰©ä½“;
         Transform originalParent = target.transform.parent;
         if (originalParent != null)
         {
             targetParent.SetParent(originalParent);
         }
-        //ÉèÖÃÄ¿±ê¸¸ÎïÌåµÄÎ»ÖÃÎªºÏ²¢ºóµÄÍø¸ñäÖÈ¾±ß½çÖĞĞÄ
+        //è®¾ç½®ç›®æ ‡çˆ¶ç‰©ä½“çš„ä½ç½®ä¸ºåˆå¹¶åçš„ç½‘æ ¼æ¸²æŸ“è¾¹ç•Œä¸­å¿ƒ
         targetParent.position = centerBounds.center;
-        //ÉèÖÃÄ¿±êÎïÌåµÄ¸¸ÎïÌå
+        //è®¾ç½®ç›®æ ‡ç‰©ä½“çš„çˆ¶ç‰©ä½“
         target.transform.parent = targetParent;
 
         Selection.activeGameObject = targetParent.gameObject;
-        EditorUtility.DisplayDialog(dialogTitle, "ÖØÖÃÄ£ĞÍÎïÌåµÄÖáĞÄÍê³É!", "È·¶¨");
+        EditorUtility.DisplayDialog(dialogTitle, "é‡ç½®æ¨¡å‹ç‰©ä½“çš„è½´å¿ƒå®Œæˆ!", "ç¡®å®š");
     }
 }
