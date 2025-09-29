@@ -1,61 +1,69 @@
-// FocusScope.cs
+// FocusScope.cs (最终修正版 - 修复 InvalidOperationException)
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-/// <summary>
-/// 管理一组IInteractableUI元素。附加在UI面板的根对象上。
-/// 负责处理来自StateManager的导航和提交请求，并管理其内部的焦点切换。
-/// </summary>
 public class FocusScope : MonoBehaviour
 {
-    private List<IInteractableUI> _interactables;
+    private List<IInteractableUI> _interactables = new List<IInteractableUI>(); 
     private IInteractableUI _currentFocus;
-    private bool _isFocused; // 此Scope是否是栈顶的活动Scope
+    private bool _isFocused;
 
-    private void Awake()
+    [SerializeField] private bool enableDebugLogging = true;
+
+    private void RefreshInteractables()
     {
-        // 自动查找所有子物体中的可交互元素
-        _interactables = GetComponentsInChildren<IInteractableUI>(false).ToList();
+        _interactables = GetComponentsInChildren<IInteractableUI>(true).ToList(); // 改为true，查找包括未激活的
+        if (enableDebugLogging) Debug.Log($"[FocusScope] {gameObject.name}: 刷新列表，找到 {_interactables.Count} 个可交互元素。", this);
     }
 
-    /// <summary>
-    /// 当此Scope被Push到栈顶或从栈顶Pop时，由StateManager调用。
-    /// </summary>
     public void SetFocused(bool focused)
     {
         _isFocused = focused;
-        if (_isFocused && _interactables.Any())
+        if (_isFocused)
         {
-            // 当Scope被激活时，默认聚焦到第一个元素或之前记住的焦点
-            SetFocus(_currentFocus ?? _interactables.First(i => (i as MonoBehaviour).isActiveAndEnabled));
+            RefreshInteractables();
+
+            if (_interactables != null && _interactables.Any())
+            {
+                // 【最终修正】: 使用 FirstOrDefault 代替 First，避免在没有激活按钮时抛出异常。
+                var firstActiveInteractable = _interactables.FirstOrDefault(i => (i as MonoBehaviour).isActiveAndEnabled);
+                
+                // 如果当前已有焦点则保持，否则尝试使用找到的第一个可用焦点
+                SetFocus(_currentFocus ?? firstActiveInteractable);
+            }
+            else if (enableDebugLogging)
+            {
+                 Debug.LogWarning($"[FocusScope] {gameObject.name}: 被激活，但未找到任何可交互的子元素。", this);
+            }
         }
-        else if (!focused)
+        else
         {
-            // 当Scope被钝化时，清除焦点
             SetFocus(null);
         }
     }
 
     public void HandleNavigation(Vector2 direction)
     {
-        if (!_isFocused || _interactables.Count < 2) return;
+        if (!_isFocused || _interactables == null || _interactables.Count < 2) return;
         
-        // 注意：这是一个简化的导航逻辑，仅适用于线性列表（垂直或水平）。
-        // 更复杂的网格布局需要更高级的算法（如基于UI元素的屏幕位置计算）。
-        int currentIndex = _interactables.IndexOf(_currentFocus);
+        // 只在当前可用的按钮中导航
+        var activeInteractables = _interactables.Where(i => (i as MonoBehaviour).isActiveAndEnabled).ToList();
+        if (activeInteractables.Count < 1) return;
+
+        int currentIndex = activeInteractables.IndexOf(_currentFocus);
+        
         if (direction.y < -0.5f) // Down
         {
-            currentIndex = (currentIndex + 1) % _interactables.Count;
+            currentIndex = (currentIndex + 1) % activeInteractables.Count;
         }
         else if (direction.y > 0.5f) // Up
         {
-            currentIndex = (currentIndex - 1 + _interactables.Count) % _interactables.Count;
+            currentIndex = (currentIndex < 1) ? (activeInteractables.Count - 1) : (currentIndex - 1);
         }
-        // 可在此添加左右导航逻辑...
 
-        SetFocus(_interactables[currentIndex]);
+        SetFocus(activeInteractables[currentIndex]);
     }
 
     public void HandleSubmission()
@@ -67,20 +75,26 @@ public class FocusScope : MonoBehaviour
     public void HandleCancel()
     {
         if (!_isFocused) return;
-        // 默认的取消行为可以是Pop自己，例如关闭菜单
-        // 具体的关闭逻辑应该由管理此Scope的UIView来做
         Debug.Log($"Cancel intent received in scope: {gameObject.name}. A UI Manager should now PopScope().");
     }
 
     private void SetFocus(IInteractableUI newFocus)
     {
-        if (_currentFocus == newFocus) return;
+        if (_currentFocus == newFocus && _currentFocus != null) return;
+        if (enableDebugLogging) Debug.Log($"[FocusScope] {gameObject.name}: 尝试设置新焦点为 {(newFocus as MonoBehaviour)?.name ?? "null"}", this);
 
         _currentFocus?.OnUnfocus();
         _currentFocus = newFocus;
         _currentFocus?.OnFocus();
 
-        // 通知StateManager，焦点已变更 (观察者模式)
-        DialogueStateManager.Instance?.OnFocusChanged?.Invoke(_currentFocus);
+        if (DialogueStateManager.Instance != null)
+        {
+            if (enableDebugLogging) Debug.Log($"[FocusScope] {gameObject.name}: 正在调用 OnFocusChanged 事件，广播新焦点: {(_currentFocus as MonoBehaviour)?.name ?? "null"}", this);
+            DialogueStateManager.Instance.OnFocusChanged?.Invoke(_currentFocus);
+        }
+        else if (enableDebugLogging)
+        {
+            Debug.LogError($"[FocusScope] {gameObject.name}: StateManager.Instance 为空，无法广播 OnFocusChanged 事件！", this);
+        }
     }
 }
