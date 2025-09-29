@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,53 +7,47 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-///
-///
-// public const bool ProbabilityDetermine(float s)
-//
-// {
-//    return true;
-//     }
+
 
 
 
 /// <summary>
-/// �����������ö��
-/// ���ڱ�ʶ�������������п��ܳ��ֵĸ�������
+/// 文书错误类型枚举
+/// 用于标识在文书核验过程中可能出现的各种问题
 /// </summary>
 public enum DocumentError
 {
-    /// <summary>�������� - ����ķ���������</summary>
+    /// <summary>封蜡破损 - 文书的封蜡不完整</summary>
     BrokenSeal,
 
-    /// <summary>α������ - ���鱾��ϵα��</summary>
+    /// <summary>伪造文书 - 文书本身系伪造</summary>
     ForgeryDocument,
 
-    /// <summary>ȱ��ˮӡ - ����ȱ��ITC��˾�ٷ�ˮӡ</summary>
+    /// <summary>缺少水印 - 文书缺少ITC公司官方水印</summary>
     MissingWatermark,
 
-    /// <summary>��ðīˮ - ʹ���˷ǹٷ�īˮ</summary>
+    /// <summary>假冒墨水 - 使用了非官方墨水</summary>
     FakeInk,
 
-    /// <summary>���ݲ��� - �˿Ϳ�����������Լ���ݲ�ƥ��</summary>
+    /// <summary>内容不符 - 顾客口述需求与契约内容不匹配</summary>
     ContentMismatch,
 
-    /// <summary>���ڴ��� - ԤԼ�����뵱ǰ���ڲ���</summary>
+    /// <summary>日期错误 - 预约日期与当前日期不符</summary>
     IncorrectDate,
 
-    /// <summary>��ݲ��� - �����¼�������ʵ�ʲ���</summary>
+    /// <summary>身份不符 - 文书记录的身份与实际不符</summary>
     IdentityMismatch,
 
-    /// <summary>αװ�˿� - �˿�ʹ�ü����</summary>
+    /// <summary>伪装顾客 - 顾客使用假身份</summary>
     DisguisedCustomer,
 
-    /// <summary>Σ������ - ����˴�����Ա������Σ������</summary>
+    /// <summary>危险人物 - 克洛克达尔帮成员或其他危险人物</summary>
     DangerousCustomer
 }
 #region Contract Stages
 
 /// <summary>
-/// �������ϵͳ
+/// 文书核验系统
 /// </summary>
 public class DocumentVerifier : IContractStage
 {
@@ -66,7 +60,7 @@ public class DocumentVerifier : IContractStage
 
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
-    public string StageName => "�������";
+    public string StageName => "文书核验";
     public List<DocumentError> DetectedErrors => detectedErrors;
 
     public void Enter(HeContractContext ctx)
@@ -74,17 +68,17 @@ public class DocumentVerifier : IContractStage
         context = ctx;
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
         
-        Debug.Log("=== ��ʼ�������׶� ===");
+        Debug.Log("=== 开始文书核验阶段 ===");
         
-        // ��ʾ�������UI
+        // 显示文书核验UI
         uiManager?.ShowDocumentVerification(ctx);
         
-        // ִ�к����߼�
+        // 执行核验逻辑
         PerformDocumentVerification();
         Debug.Assert(detectedErrors.Count>0);
     
        
-         Debug.Log($"��⵽{detectedErrors.Count}�����⣬�ȴ���Ҿ���...");
+         Debug.Log($"检测到{detectedErrors.Count}个问题，等待玩家决策...");
 
 
        
@@ -95,19 +89,19 @@ public class DocumentVerifier : IContractStage
         {
             
 
-            Debug.Log($"��ҷ������������: {error}");
+            Debug.Log($"玩家发现了文书错误: {error}");
             if (detectedErrors.Contains(error))
             {
                 detectedErrors.Remove(error);
-                Debug.Log($"����{error}�Ѵ���,�������鲻ͨ��");
+                Debug.Log($"问题{error}已处理,核验文书不通过");
                 uiManager.SwitchPanel(HeContractUIManager.UIState.None);
                 uiManager.OnDocumentClicked -= documentClickedHandler;
                 detectedErrors.Clear();
             }
             else
             {
-                Debug.Log($"����{error}���ڴ������б���");
-                //TODO�������ж�ʧ���߼�
+                Debug.Log($"问题{error}不在待处理列表中");
+                //TODO：文书判断失败逻辑
 
 
 
@@ -123,14 +117,14 @@ public class DocumentVerifier : IContractStage
 
             if (detectedErrors.Count()>0)
             {
-                Debug.Log($"����{error}�����������ʧ��,��һ�δ���");
+                Debug.Log($"存在{error}错误，文书检验失败,记一次错误");
                 ctx.AddFailure();
 
             }
             else
             {
 
-                Debug.Log($"û���κδ����������ͨ��");
+                Debug.Log($"没有任何错误，文书检验通过");
 
 
             }
@@ -149,10 +143,10 @@ public class DocumentVerifier : IContractStage
 
     public void Exit()
     {
-        Debug.Log("=== �������׶ν��� ===");
+        Debug.Log("=== 文书核验阶段结束 ===");
         if (detectedErrors.Count > 0)
         {
-            Debug.Log($"��⵽�Ĵ���: {string.Join(", ", detectedErrors)}");
+            Debug.Log($"检测到的错误: {string.Join(", ", detectedErrors)}");
         }
     }
 
@@ -162,97 +156,97 @@ public class DocumentVerifier : IContractStage
         var customer = context.customer;
         detectedErrors.Clear();
         
-        // ������
+        // 检查封蜡
         if (!doc.isSealed)
         {
             detectedErrors.Add(DocumentError.BrokenSeal);
-            Debug.Log($"�������: {GetErrorDescription(DocumentError.BrokenSeal)}");
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.BrokenSeal)}");
         }
         
-        // ���������α
+        // 检查文书真伪
         if (!doc.isGenuine)
         {
             detectedErrors.Add(DocumentError.ForgeryDocument);
-            Debug.Log($"�������: {GetErrorDescription(DocumentError.ForgeryDocument)}");
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.ForgeryDocument)}");
         }
         
         if (!doc.hasITCWatermark)
         {
             detectedErrors.Add(DocumentError.MissingWatermark);
-            Debug.Log($"�������: {GetErrorDescription(DocumentError.MissingWatermark)}");
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.MissingWatermark)}");
         }
         
         if (!doc.isInkGenuine)
         {
             detectedErrors.Add(DocumentError.FakeInk);
-            Debug.Log($"�������: {GetErrorDescription(DocumentError.FakeInk)}");
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.FakeInk)}");
         }
         
-        // �������ƥ��
+        // 检查内容匹配
         if (!doc.isContentMatched)
         {
             detectedErrors.Add(DocumentError.ContentMismatch);
-            Debug.Log($"�������: {GetErrorDescription(DocumentError.ContentMismatch)}");
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.ContentMismatch)}");
         }
         
-        // �������
+        // 检查日期
         if (!doc.isDateCorrect)
         {
             detectedErrors.Add(DocumentError.IncorrectDate);
-            Debug.Log($"�������: {GetErrorDescription(DocumentError.IncorrectDate)}");
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.IncorrectDate)}");
         }
         
-        // ������
+        // 检查身份
         if (!doc.isIdentityMatched)
         {
             detectedErrors.Add(DocumentError.IdentityMismatch);
-            Debug.Log($"�������: {GetErrorDescription(DocumentError.IdentityMismatch)}");
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.IdentityMismatch)}");
         }
         
         if (customer.isDisguised)
         {
             detectedErrors.Add(DocumentError.DisguisedCustomer);
-            Debug.Log($"�������: {GetErrorDescription(DocumentError.DisguisedCustomer)}");
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.DisguisedCustomer)}");
         }
         
         if (customer.isClocardalMember)
         {
             detectedErrors.Add(DocumentError.DangerousCustomer);
-            Debug.Log($"�������: {GetErrorDescription(DocumentError.DangerousCustomer)}");
+            Debug.Log($"文书错误: {GetErrorDescription(DocumentError.DangerousCustomer)}");
         }
         
-        // �ж���֤���
+        // 判断验证结果
         if (detectedErrors.Count > 0)
         {
-            Debug.Log($"������鷢�� {detectedErrors.Count} �����⣬��Ҫ�ܾ�ǩԼ");
-            // �����Ҫѡ���Ƿ�ܾ��������ȱ��Ϊ��Ҫ����
-            // ʵ����Ϸ��Ӧ�õȴ���Ҿ���
+            Debug.Log($"文书核验发现 {detectedErrors.Count} 个问题，需要拒绝签约");
+            // 玩家需要选择是否拒绝，这里先标记为需要处理
+            // 实际游戏中应该等待玩家决定
         }
         else
         {
-            Debug.Log("�������ͨ�������м����Ŀ����");
+            Debug.Log("文书核验通过，所有检查项目正常");
             context.documentVerified = true;
             completed = true;
         }
     }
     
     /// <summary>
-    /// ��ȡ��������
+    /// 获取错误描述
     /// </summary>
     public static string GetErrorDescription(DocumentError error)
     {
         return error switch
         {
-            DocumentError.BrokenSeal => "����������",
-            DocumentError.ForgeryDocument => "����ϵα��",
-            DocumentError.MissingWatermark => "ȱ��ITCˮӡ",
-            DocumentError.FakeInk => "īˮϵ��ð",
-            DocumentError.ContentMismatch => "������������Լ����",
-            DocumentError.IncorrectDate => "ԤԼ���ڲ���ȷ",
-            DocumentError.IdentityMismatch => "���֤������",
-            DocumentError.DisguisedCustomer => "�˿�������",
-            DocumentError.DangerousCustomer => "Σ������(����˴�����Ա)",
-            _ => "δ֪����"
+            DocumentError.BrokenSeal => "封蜡已破损",
+            DocumentError.ForgeryDocument => "文书系伪造",
+            DocumentError.MissingWatermark => "缺少ITC水印",
+            DocumentError.FakeInk => "墨水系假冒",
+            DocumentError.ContentMismatch => "口述内容与契约不符",
+            DocumentError.IncorrectDate => "预约日期不正确",
+            DocumentError.IdentityMismatch => "身份证明不符",
+            DocumentError.DisguisedCustomer => "顾客身份造假",
+            DocumentError.DangerousCustomer => "危险人物(克洛克达尔帮成员)",
+            _ => "未知错误"
         };
     }
 
@@ -263,7 +257,7 @@ public class DocumentVerifier : IContractStage
 }
 
 /// <summary>
-/// �������������
+/// 符文输入管理器
 /// </summary>
 public class RuneInputManager : IContractStage
 {
@@ -278,7 +272,7 @@ public class RuneInputManager : IContractStage
     
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
-    public string StageName => "��������";
+    public string StageName => "符文输入";
 
     public void Enter(HeContractContext ctx)
     {
@@ -286,13 +280,13 @@ public class RuneInputManager : IContractStage
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
         
-        Debug.Log("=== ��ʼ��������׶� ===");
+        Debug.Log("=== 开始符文输入阶段 ===");
         
         GenerateRequiredRunes();
         inputRunes = new List<RuneType>();
         timeRemaining = gameConfig?.runeInputTimeLimit ?? 10f;
         
-        // ��������UI
+        // 符文输入UI
         //uiManager?.ShowRuneInput(requiredRunes);
     }
 
@@ -303,41 +297,41 @@ public class RuneInputManager : IContractStage
         timeRemaining -= Time.deltaTime;
         if (timeRemaining <= 0)
         {
-            Debug.Log("�������볬ʱ");
+            Debug.Log("符文输入超时");
             failed = true;
             context.AddFailure();
             return;
         }
         
-        // ����������
+        // 检查输入完成
         if (inputRunes.Count >= requiredRunes.Count)
         {
             CheckRuneSequence();
         }
         
-        // ��������
+        // 处理输入
         HandleRuneInput();
     }
 
     public void Exit()
     {
-        Debug.Log("=== ��������׶ν��� ===");
+        Debug.Log("=== 符文输入阶段结束 ===");
     }
 
     private void GenerateRequiredRunes()
     {
-        // �������ļ���ȡ��������
+        // 从配置文件获取符文序列
         if (gameConfig != null)
         {
             requiredRunes = gameConfig.GetRuneSequenceForContract(context.document.HeContractType);
         }
         else
         {
-            // Ĭ������
+            // 默认序列
             requiredRunes = GetDefaultRuneSequence(context.document.HeContractType);
         }
         
-        Debug.Log($"��Ҫ�����������: {string.Join(", ", requiredRunes)}");
+        Debug.Log($"需要输入符文序列: {string.Join(", ", requiredRunes)}");
     }
 
     private List<RuneType> GetDefaultRuneSequence(HeContractType HeContractType)
@@ -359,7 +353,7 @@ public class RuneInputManager : IContractStage
 
     private void HandleRuneInput()
     {
-        // WASD�����봦��
+        // WASD键输入处理
         if (Input.GetKeyDown(KeyCode.W)) ProcessRuneInput(RuneType.Fire);
         if (Input.GetKeyDown(KeyCode.A)) ProcessRuneInput(RuneType.Water);
         if (Input.GetKeyDown(KeyCode.S)) ProcessRuneInput(RuneType.Earth);
@@ -371,14 +365,14 @@ public class RuneInputManager : IContractStage
     private void ProcessRuneInput(RuneType rune)
     {
         inputRunes.Add(rune);
-        Debug.Log($"�������: {rune}");
+        Debug.Log($"输入符文: {rune}");
         
-        // ����Ƿ����
+        // 检查是否错误
         int currentIndex = inputRunes.Count - 1;
         if (currentIndex < requiredRunes.Count && inputRunes[currentIndex] != requiredRunes[currentIndex])
         {
             context.runeErrors++;
-            Debug.Log($"�����������! �������: {context.runeErrors}");
+            Debug.Log($"符文输入错误! 错误次数: {context.runeErrors}");
             
             if (context.runeErrors >= 2)
             {
@@ -387,13 +381,13 @@ public class RuneInputManager : IContractStage
             
             if (context.runeErrors >= (gameConfig?.maxRuneErrors ?? 3))
             {
-                Debug.Log("���Ĵ���������࣬ǩԼʧ��");
+                Debug.Log("符文错误次数过多，签约失败");
                 failed = true;
                 context.AddFailure();
             }
         }
         
-        // ����UI
+        // 更新UI
         uiManager?.UpdateRuneInputProgress(inputRunes.Count, context.runeErrors);
     }
 
@@ -411,11 +405,11 @@ public class RuneInputManager : IContractStage
         
         if (isCorrect)
         {
-            Debug.Log("�����������!");
+            Debug.Log("符文输入完成!");
             context.runesCompleted = true;
             completed = true;
             
-            // 30%���ʴ������ĺ˶�
+            // 30%几率触发符文核对
             if (UnityEngine.Random.value < (gameConfig?.runeVerificationTriggerChance ?? 0.3f))
             {
                 TriggerRuneVerification();
@@ -425,14 +419,14 @@ public class RuneInputManager : IContractStage
 
     private void TriggerRuneVerification()
     {
-        Debug.Log("�������ĺ˶Ի���");
-        // TODO: �������ĺ˶����ݲ���ʾUI
+        Debug.Log("触发符文核对环节");
+        // TODO: 创建符文核对数据并显示UI
         // uiManager?.ShowRuneVerification(runeGridData);
     }
 }
 
 /// <summary>
-/// �����¼�ϵͳ
+/// 特殊事件系统
 /// </summary>
 public class SpecialEventSystem : IContractStage
 {
@@ -446,7 +440,7 @@ public class SpecialEventSystem : IContractStage
     
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
-    public string StageName => "�����¼�";
+    public string StageName => "特殊事件";
 
     public void Enter(HeContractContext ctx)
     {
@@ -454,9 +448,9 @@ public class SpecialEventSystem : IContractStage
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
         
-        Debug.Log("=== ��ʼ�����¼��׶� ===");
+        Debug.Log("=== 开始特殊事件阶段 ===");
         
-        // ��������Ƿ񴥷��¼�
+        // 随机决定是否触发事件
         float triggerChance = gameConfig?.eventTriggerChance ?? 0.3f;
         if (UnityEngine.Random.value < triggerChance)
         {
@@ -464,7 +458,7 @@ public class SpecialEventSystem : IContractStage
         }
         else
         {
-            // û���¼���ֱ�����
+            // 没有事件，直接完成
             completed = true;
             context.eventHandled = true;
         }
@@ -476,13 +470,13 @@ public class SpecialEventSystem : IContractStage
         
         eventTimer -= Time.deltaTime;
         
-        // �����¼�����
+        // 处理事件输入
         HandleEventInput();
         
-        // �¼���ʱ
+        // 事件超时
         if (eventTimer <= 0)
         {
-            Debug.Log("�����¼�����ʱ");
+            Debug.Log("特殊事件处理超时");
             currentEvent.OnFail?.Invoke(context);
             failed = true;
         }
@@ -490,7 +484,7 @@ public class SpecialEventSystem : IContractStage
 
     public void Exit()
     {
-        Debug.Log("=== �����¼��׶ν��� ===");
+        Debug.Log("=== 特殊事件阶段结束 ===");
     }
 
     private void TriggerRandomEvent()
@@ -501,9 +495,9 @@ public class SpecialEventSystem : IContractStage
         currentEvent = CreateEventData(randomEventType);
         eventTimer = currentEvent.duration;
         
-        Debug.Log($"���������¼�: {currentEvent.description}");
+        Debug.Log($"触发特殊事件: {currentEvent.description}");
         
-        // �����¼�UI
+        // 特殊事件UI
         //uiManager?.ShowSpecialEvent(currentEvent);
     }
 
@@ -515,50 +509,50 @@ public class SpecialEventSystem : IContractStage
                 return new EventData
                 {
                     type = ContractEventType.Phone,
-                    description = "�绰ͻȻ������Ҫ����",
+                    description = "电话突然响起，需要接听",
                     duration = 5f,
-                    OnResolve = (ctx) => { Debug.Log("�ɹ������绰"); completed = true; ctx.eventHandled = true; },
-                    OnFail = (ctx) => { Debug.Log("δ�ܼ�ʱ�����绰"); ctx.DecreaseSatisfaction(); }
+                    OnResolve = (ctx) => { Debug.Log("成功接听电话"); completed = true; ctx.eventHandled = true; },
+                    OnFail = (ctx) => { Debug.Log("未能及时接听电话"); ctx.DecreaseSatisfaction(); }
                 };
                 
             case ContractEventType.Gun:
                 return new EventData
                 {
                     type = ContractEventType.Gun,
-                    description = "�˿�ͻȻ��ǹ����ҪѸ��Ӧ��!",
+                    description = "顾客突然拔枪，需要迅速应对!",
                     duration = 3f,
-                    OnResolve = (ctx) => { Debug.Log("�ɹ�����ǹе��в"); completed = true; ctx.eventHandled = true; ctx.IncreaseSatisfaction(); },
-                    OnFail = (ctx) => { Debug.Log("δ��Ӧ��ǹе��в"); ctx.AddFailure(); }
+                    OnResolve = (ctx) => { Debug.Log("成功化解枪械威胁"); completed = true; ctx.eventHandled = true; ctx.IncreaseSatisfaction(); },
+                    OnFail = (ctx) => { Debug.Log("未能应对枪械威胁"); ctx.AddFailure(); }
                 };
                 
             case ContractEventType.Epilepsy:
                 return new EventData
                 {
                     type = ContractEventType.Epilepsy,
-                    description = "�˿�ͻȻ��﷢������Ҫ��������",
+                    description = "顾客突然癫痫发作，需要紧急救助",
                     duration = 8f,
-                    OnResolve = (ctx) => { Debug.Log("�ɹ��������˿�"); completed = true; ctx.eventHandled = true; },
-                    OnFail = (ctx) => { Debug.Log("δ�ܼ�ʱ����"); ctx.DecreaseSatisfaction(); }
+                    OnResolve = (ctx) => { Debug.Log("成功救助癫痫顾客"); completed = true; ctx.eventHandled = true; },
+                    OnFail = (ctx) => { Debug.Log("未能及时救助"); ctx.DecreaseSatisfaction(); }
                 };
                 
             case ContractEventType.Transform:
                 return new EventData
                 {
                     type = ContractEventType.Transform,
-                    description = "�˿���¶���������������ڱ���!",
+                    description = "顾客显露非人类特征，正在变形!",
                     duration = 4f,
-                    OnResolve = (ctx) => { Debug.Log("��Ӧ�Է�����˿�"); completed = true; ctx.eventHandled = true; },
-                    OnFail = (ctx) => { Debug.Log("�������������ŵ�"); ctx.DecreaseSatisfaction(2); }
+                    OnResolve = (ctx) => { Debug.Log("镇定应对非人类顾客"); completed = true; ctx.eventHandled = true; },
+                    OnFail = (ctx) => { Debug.Log("被非人类特征吓到"); ctx.DecreaseSatisfaction(2); }
                 };
                 
             case ContractEventType.Dialogue:
                 return new EventData
                 {
                     type = ContractEventType.Dialogue,
-                    description = "�˿�ͻȻ��ʼ�Ի�����Ҫ�ʵ���Ӧ",
+                    description = "顾客突然开始对话，需要适当回应",
                     duration = 6f,
-                    OnResolve = (ctx) => { Debug.Log("ǡ����Ӧ�˿ͶԻ�"); completed = true; ctx.eventHandled = true; },
-                    OnFail = (ctx) => { Debug.Log("��Ӧ����"); ctx.DecreaseSatisfaction(); }
+                    OnResolve = (ctx) => { Debug.Log("恰当回应顾客对话"); completed = true; ctx.eventHandled = true; },
+                    OnFail = (ctx) => { Debug.Log("回应不当"); ctx.DecreaseSatisfaction(); }
                 };
                 
             default:
@@ -570,7 +564,7 @@ public class SpecialEventSystem : IContractStage
     {
         if (currentEvent == null) return;
         
-        // �����¼����ʹ���ͬ������
+        // 根据事件类型处理不同的输入
         switch (currentEvent.type)
         {
             case ContractEventType.Phone:
@@ -612,7 +606,7 @@ public class SpecialEventSystem : IContractStage
 }
 
 /// <summary>
-/// ����ϵͳ
+/// 盖章系统
 /// </summary>
 public class StampSystem : IContractStage
 {
@@ -628,7 +622,7 @@ public class StampSystem : IContractStage
     
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
-    public string StageName => "��Լ��ӡ";
+    public string StageName => "契约盖印";
 
     public void Enter(HeContractContext ctx)
     {
@@ -636,9 +630,9 @@ public class StampSystem : IContractStage
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
         
-        Debug.Log("=== ��ʼ��Լ��ӡ�׶� ===");
+        Debug.Log("=== 开始契约盖印阶段 ===");
         
-        // ��ʾӡ��ѡ��UI
+        // 显示印章选择UI
         uiManager?.ShowStampSelection(ctx.document.HeContractType);
     }
 
@@ -658,12 +652,12 @@ public class StampSystem : IContractStage
 
     public void Exit()
     {
-        Debug.Log("=== ��Լ��ӡ�׶ν��� ===");
+        Debug.Log("=== 契约盖印阶段结束 ===");
     }
 
     private void HandleStampSelection()
     {
-        // ���ּ�ѡ��ӡ��
+        // 数字键选择印章
         if (Input.GetKeyDown(KeyCode.Alpha1)) SelectStamp(HeContractType.Money);
         if (Input.GetKeyDown(KeyCode.Alpha2)) SelectStamp(HeContractType.Fame);
         if (Input.GetKeyDown(KeyCode.Alpha3)) SelectStamp(HeContractType.Skill);
@@ -674,27 +668,27 @@ public class StampSystem : IContractStage
     {
         selectedStampType = stampType;
         
-        // ���ӡ�������Ƿ���ȷ
+        // 检查印章类型是否正确
         if (stampType != context.document.HeContractType)
         {
-            Debug.Log($"ӡ�����ʹ���! ѡ����{stampType}��Ӧ����{context.document.HeContractType}");
+            Debug.Log($"印章类型错误! 选择了{stampType}，应该是{context.document.HeContractType}");
             context.AddFailure();
             failed = true;
             return;
         }
         
-        Debug.Log($"��ȷѡ����{stampType}ӡ��");
+        Debug.Log($"正确选择了{stampType}印章");
         stampSelected = true;
         StartStampCharging();
     }
 
     private void StartStampCharging()
     {
-        Debug.Log("��ʼ��ӡ��ʽ�����Ŀ�ʼ����...");
+        Debug.Log("开始盖印仪式，符文开始发光...");
         isCharging = true;
         chargeTime = 0f;
         
-        // ֪ͨUI��ʼ����
+        // 通知UI开始蓄力
         uiManager?.StartStampCharging();
     }
 
@@ -706,7 +700,7 @@ public class StampSystem : IContractStage
         
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            // �������ʱ��
+            // 检查蓄力时机
             float optimalTiming = gameConfig?.stampOptimalTiming ?? 0.8f;
             float optimalTime = maxChargeTime * optimalTiming;
             float timeDiff = Mathf.Abs(chargeTime - optimalTime);
@@ -714,7 +708,7 @@ public class StampSystem : IContractStage
             
             if (timeDiff < tolerance)
             {
-                Debug.Log("��������! �˿����������");
+                Debug.Log("完美盖章! 顾客满意度提升");
                 context.IncreaseSatisfaction();
                 completed = true;
                 context.stampApplied = true;
@@ -722,28 +716,28 @@ public class StampSystem : IContractStage
             else
             {
                 context.stampAttempts++;
-                Debug.Log($"����ʱ����׼ȷ�����Դ���: {context.stampAttempts}");
+                Debug.Log($"盖章时机不准确，尝试次数: {context.stampAttempts}");
                 
                 int maxAttempts = gameConfig?.maxStampAttempts ?? 3;
                 if (context.stampAttempts >= maxAttempts)
                 {
-                    Debug.Log("����ʧ�ܴ������࣬�˿�������½�");
+                    Debug.Log("盖章失败次数过多，顾客满意度下降");
                     context.DecreaseSatisfaction();
                     failed = true;
                 }
                 else
                 {
-                    // ���¿�ʼ����
+                    // 重新开始蓄力
                     chargeTime = 0f;
                     uiManager?.StartStampCharging();
                 }
             }
         }
         
-        // ������ʱ
+        // 蓄力超时
         if (chargeTime > maxChargeTime * 1.2f)
         {
-            Debug.Log("������ʱ����Ҫ���¿�ʼ");
+            Debug.Log("蓄力超时，需要重新开始");
             chargeTime = 0f;
             context.stampAttempts++;
         }
@@ -751,7 +745,7 @@ public class StampSystem : IContractStage
 }
 
 /// <summary>
-/// �����ȡϵͳ
+/// 灵魂收取系统
 /// </summary>
 public class SoulHarvestSystem : IContractStage
 {
@@ -767,7 +761,7 @@ public class SoulHarvestSystem : IContractStage
     
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
-    public string StageName => "�����ȡ";
+    public string StageName => "灵魂收取";
 
     public void Enter(HeContractContext ctx)
     {
@@ -775,12 +769,12 @@ public class SoulHarvestSystem : IContractStage
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
         
-        Debug.Log("=== ��ʼ�����ȡ�׶� ===");
+        Debug.Log("=== 开始灵魂收取阶段 ===");
         
         targetPercentage = context.document.soulPercentage;
-        Debug.Log($"��Ҫ��ȡ {targetPercentage * 100}% �����");
+        Debug.Log($"需要收取 {targetPercentage * 100}% 的灵魂");
         
-        // ��ʾ���ָ����
+        // 显示灵魂分割界面
         uiManager?.ShowSoulHarvest(targetPercentage);
         cutterActive = true;
     }
@@ -797,25 +791,25 @@ public class SoulHarvestSystem : IContractStage
 
     public void Exit()
     {
-        Debug.Log("=== �����ȡ�׶ν��� ===");
+        Debug.Log("=== 灵魂收取阶段结束 ===");
     }
 
     private void HandleSoulCutting()
     {
-        // �����ƶ����鵶
+        // 左右移动分灵刀
         float moveInput = Input.GetAxis("Horizontal");
         float moveSpeed = gameConfig?.soulCutterMoveSpeed ?? 0.5f;
         currentCutPosition = Mathf.Clamp01(currentCutPosition + moveInput * Time.deltaTime * moveSpeed);
         
-        // ����ֲ�����Ч��
+        // 添加手部颤抖效果
         cutterShake += Time.deltaTime;
         float shakeAmount = gameConfig?.soulCutterShake ?? 0.02f;
         float shakeOffset = Mathf.Sin(cutterShake * 10f) * shakeAmount;
         float actualPosition = currentCutPosition + shakeOffset;
         
-        // TODO: ���·��鵶λ����ʾ
+        // TODO: 更新分灵刀位置显示
         
-        // ��������и�
+        // 点击进行切割
         if (Input.GetMouseButtonDown(0))
         {
             PerformSoulCut(currentCutPosition);
@@ -824,27 +818,27 @@ public class SoulHarvestSystem : IContractStage
 
     private void PerformSoulCut(float cutPosition)
     {
-        Debug.Log($"��λ�� {cutPosition * 100}% ���и����");
+        Debug.Log($"在位置 {cutPosition * 100}% 处切割灵魂");
         
-        // �������
+        // 计算误差
         float error = Mathf.Abs(cutPosition - targetPercentage);
-        float allowedError = gameConfig?.soulHarvestAccuracy ?? 0.05f; // ���
+        float allowedError = gameConfig?.soulHarvestAccuracy ?? 0.05f; // 半成
         
         if (error <= allowedError)
         {
-            Debug.Log("�����ȡ�ɹ�!");
+            Debug.Log("灵魂收取成功!");
             completed = true;
             context.soulHarvested = true;
         }
         else if (cutPosition > targetPercentage)
         {
-            Debug.Log("��ȡ������꣬�˿͸е�����ƭ");
+            Debug.Log("收取过多灵魂，顾客感到被欺骗");
             context.DecreaseSatisfaction();
             failed = true;
         }
         else
         {
-            Debug.Log("��ȡ������꣬�˷ѹ�˾�ʲ�");
+            Debug.Log("收取过少灵魂，浪费公司资产");
             context.AddFailure();
             failed = true;
         }
@@ -858,37 +852,37 @@ public class SoulHarvestSystem : IContractStage
 #region Main Manager
 
 /// <summary>
-/// ǩԼ���̹����� - ��Ϸ��������
+/// 签约流程管理器 - 游戏主控制器
 /// </summary>
 public class SigningFlowManager : MonoBehaviour
 {
  
 
-    [Header("=== ��Ϸ���� ===")]
-    [Tooltip("��Ϸ������Դ (����ʹ��ScriptableObject)")]
+    [Header("=== 游戏配置 ===")]
+    [Tooltip("游戏配置资源 (建议使用ScriptableObject)")]
     public HeContractGameConfig gameConfig;
     
-    [Header("=== �������� ===")]
-    [Tooltip("���û��������Դ��ʹ�ô���Ƕ����")]
+    [Header("=== 备用配置 ===")]
+    [Tooltip("如果没有配置资源，使用此内嵌配置")]
     public GameConfig fallbackConfig;
     
-    [Header("=== �������� ===")]
-    [Tooltip("�����õ���Լ����")]
+    [Header("=== 测试数据 ===")]
+    [Tooltip("测试用的契约文书")]
     public ContractDocument testDocument;
-    [Tooltip("�����õĹ˿���Ϣ")]
+    [Tooltip("测试用的顾客信息")]
     public Customer testCustomer;
     
-    [Header("=== ����������� ===")]
-    [Tooltip("�Ƿ�ʹ��������ɵ���Լ����")]
+    [Header("=== 随机生成设置 ===")]
+    [Tooltip("是否使用随机生成的契约数据")]
     public bool useRandomGeneration = true;
-    [Tooltip("����˿������б�")]
-    public string[] customerNames = { "����˿", "����˹", "����", "Լ��", "��ɪ��", "����" };
-    [Tooltip("���ְҵ�б�")]
-    public string[] occupations = { "����", "����", "ѧ��", "ũ��", "����", "����" };
-    [Tooltip("�˿���Ƭ��Դ")]
+    [Tooltip("随机顾客姓名列表")]
+    public string[] customerNames = { "艾莉丝", "托马斯", "玛丽", "约翰", "凯瑟琳", "威廉" };
+    [Tooltip("随机职业列表")]
+    public string[] occupations = { "铁匠", "商人", "学者", "农夫", "工匠", "守卫" };
+    [Tooltip("顾客照片资源")]
     public Sprite[] customerPhotos;
     
-    // ˽�б���
+    // 私有变量
     private IContractStage currentStage;
     private Queue<IContractStage> stages;
     public HeContractContext ctx;
@@ -896,19 +890,19 @@ public class SigningFlowManager : MonoBehaviour
 
     void Start()
     {
-        // ��ȡUI������
+        // 获取UI管理器
         uiManager = FindFirstObjectByType<HeContractUIManager>();
         
-        // ��ʼ������
+        // 初始化配置
         InitializeConfig();
         
-        // ��ʼ����Լ
+        // 初始化契约
         InitializeContract();
         
-        // �������̽׶�
+        // 设置流程阶段
         SetupStages();
         
-        // ��ʼ��һ���׶�
+        // 开始第一个阶段
         NextStage();
     }
     
@@ -918,13 +912,13 @@ public class SigningFlowManager : MonoBehaviour
         
         currentStage.Update();
         
-        // ����UI״̬
+        // 更新UI状态
         uiManager?.UpdateContext(ctx);
        // uiManager?.UpdateCurrentStage(currentStage.StageName);
         
         if (currentStage.IsCompleted)
         {
-            // ���ʧ������
+            // 检查失败条件
             int maxFailCount = gameConfig?.maxFailCount ?? fallbackConfig?.maxFailCount ?? 3;
             int minSatisfaction = gameConfig?.minSatisfaction ?? fallbackConfig?.minSatisfaction ?? 1;
             
@@ -938,13 +932,13 @@ public class SigningFlowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ��ʼ������
+    /// 初始化配置
     /// </summary>
     private void InitializeConfig()
     {
         if (gameConfig == null)
         {
-            Debug.LogWarning("δ���� HeContractGameConfig����ʹ��Ĭ������");
+            Debug.LogWarning("未设置 HeContractGameConfig，将使用默认设置");
             
            
             gameConfig = ScriptableObject.CreateInstance<HeContractGameConfig>();
@@ -960,7 +954,7 @@ public class SigningFlowManager : MonoBehaviour
             gameConfig.ResetToDefault();
         }
         
-        Debug.Log($"��Ϸ�����ѳ�ʼ�� - ��ʼ�����: {gameConfig.initialSatisfaction}, ���ʧ�ܴ���: {gameConfig.maxFailCount}");
+        Debug.Log($"游戏配置已初始化 - 初始满意度: {gameConfig.initialSatisfaction}, 最大失败次数: {gameConfig.maxFailCount}");
     }
 
 
@@ -968,21 +962,21 @@ public class SigningFlowManager : MonoBehaviour
     {
         ctx = new HeContractContext();
         
-        // ����ʹ�ò������ݻ����������
+        // 决定使用测试数据还是随机生成
         if (!useRandomGeneration && testCustomer != null && testDocument != null)
         {
             ctx.customer = testCustomer;
             ctx.document = testDocument;
-            Debug.Log("ʹ�ò������ݳ�ʼ����Լ");
+            Debug.Log("使用测试数据初始化契约");
         }
         else
         {
             GenerateRandomContract();
-            Debug.Log("ʹ��������ݳ�ʼ����Լ");
+            Debug.Log("使用随机数据初始化契约");
         }
         
         ctx.satisfaction = gameConfig?.initialSatisfaction ?? 3;
-        Debug.Log($"��Լ��ʼ����� - �˿�: {ctx.customer.name}, ��Լ����: {ctx.document.HeContractType}");
+        Debug.Log($"契约初始化完成 - 顾客: {ctx.customer.name}, 契约类型: {ctx.document.HeContractType}");
     }
 
     private void SetupStages()
@@ -995,7 +989,7 @@ public class SigningFlowManager : MonoBehaviour
             new SoulHarvestSystem()
         });
         
-        Debug.Log($"ǩԼ���������ã���{stages.Count}���׶�");
+        Debug.Log($"签约流程已设置，共{stages.Count}个阶段");
     }
 
     void NextStage()
@@ -1008,26 +1002,26 @@ public class SigningFlowManager : MonoBehaviour
         
         currentStage?.Exit();
         currentStage = stages.Dequeue();
-        Debug.Log($"����׶�: {currentStage.StageName}");
+        Debug.Log($"进入阶段: {currentStage.StageName}");
         currentStage.Enter(ctx);
     }
 
     public void EndGame(bool success)
     {
-        Debug.Log($"=== ��Ϸ���� ===");
-        Debug.Log($"���: {(success ? "ǩԼ�ɹ�" : "ǩԼʧ��")}");
-        Debug.Log($"���������: {ctx.satisfaction}");
-        Debug.Log($"ʧ�ܴ���: {ctx.failCount}");
+        Debug.Log($"=== 游戏结束 ===");
+        Debug.Log($"结果: {(success ? "签约成功" : "签约失败")}");
+        Debug.Log($"最终满意度: {ctx.satisfaction}");
+        Debug.Log($"失败次数: {ctx.failCount}");
         
-        // ��ʾ�������
+        // 显示结果界面
         uiManager?.ShowGameResult(success, ctx);
         
-        // TODO: ������Ϸ����������ɾ͵�
+        // TODO: 保存游戏结果、解锁成就等
     }
 
     private void GenerateRandomContract()
     {
-        // ��������˿�
+        // 生成随机顾客
         ctx.customer = new Customer
         {
             name = GetRandomName(),
@@ -1036,7 +1030,7 @@ public class SigningFlowManager : MonoBehaviour
             spokenRequest = GenerateRandomSpokenRequest()
         };
         
-        // ���������Լ
+        // 生成随机契约
         HeContractType randomType = (HeContractType)UnityEngine.Random.Range(0, System.Enum.GetValues(typeof(HeContractType)).Length);
         
         ctx.document = new ContractDocument
@@ -1050,19 +1044,19 @@ public class SigningFlowManager : MonoBehaviour
             HeContractType = randomType
         };
         
-        // �������һЩ�������� (����������Ϸ�Ѷ�)
+        // 随机生成一些文书问题 (用于增加游戏难度)
         GenerateDocumentIssues();
     }
 
     private string GetRandomName()
     {
-        if (customerNames.Length == 0) return "δ֪�˿�";
+        if (customerNames.Length == 0) return "未知顾客";
         return customerNames[UnityEngine.Random.Range(0, customerNames.Length)];
     }
 
     private string GetRandomOccupation()
     {
-        if (occupations.Length == 0) return "��ҵ";
+        if (occupations.Length == 0) return "无业";
         return occupations[UnityEngine.Random.Range(0, occupations.Length)];
     }
 
@@ -1075,11 +1069,11 @@ public class SigningFlowManager : MonoBehaviour
     private string GenerateRandomSpokenRequest()
     {
         string[] requests = {
-            "��ϣ����ø���ĲƸ�",
-            "����Ҫ��ø�������",
-            "�ҿ���ѧ���µļ���",
-            "����Ҫ�ı��ҵ�����",
-            "����Ҫ�������"
+            "我希望获得更多的财富",
+            "我想要变得更有名气",
+            "我渴望学会新的技能",
+            "我需要改变我的命运",
+            "我想要获得力量"
         };
         
         return requests[UnityEngine.Random.Range(0, requests.Length)];
@@ -1089,30 +1083,30 @@ public class SigningFlowManager : MonoBehaviour
     {
         return type switch
         {
-            HeContractType.Money => "������òƸ�",
-            HeContractType.Fame => "�����������",
-            HeContractType.Skill => "����ʶ������",
-            HeContractType.Event => "ϣ���ı�����",
-            _ => "δ֪����"
+            HeContractType.Money => "渴望获得财富",
+            HeContractType.Fame => "期望获得名望",
+            HeContractType.Skill => "渴望识读文字",
+            HeContractType.Event => "希望改变命运",
+            _ => "未知需求"
         };
     }
 
     /// <summary>
-    /// ������������(���ڲ��Ժ������)
+    /// 生成文书问题(用于测试和随机化)
     /// </summary>
     private void GenerateDocumentIssues()
     {
-        // ʹ��ö�����������ع����������
+        // 使用枚举来更清晰地管理错误生成
         var errorGenerationRules = new Dictionary<DocumentError, float>
         {
-            { DocumentError.BrokenSeal, 0.1f },              // 10%���ʷ�������
-            { DocumentError.ForgeryDocument, 0.05f },        // 5%����α������
-            { DocumentError.MissingWatermark, 0.03f },       // 3%����ȱ��ˮӡ
-            { DocumentError.FakeInk, 0.03f },                // 3%���ʼ�ðīˮ
-            { DocumentError.ContentMismatch, 0.12f },        // 12%�������ݲ�ƥ��
-            { DocumentError.IncorrectDate, 0.1f },           // 10%�������ڴ���
-            { DocumentError.DisguisedCustomer, 0.05f },      // 5%����αװ�˿�
-            { DocumentError.DangerousCustomer, 0.02f }       // 2%����Σ������
+            { DocumentError.BrokenSeal, 0.1f },              // 10%几率封蜡破损
+            { DocumentError.ForgeryDocument, 0.05f },        // 5%几率伪造文书
+            { DocumentError.MissingWatermark, 0.03f },       // 3%几率缺少水印
+            { DocumentError.FakeInk, 0.03f },                // 3%几率假冒墨水
+            { DocumentError.ContentMismatch, 0.12f },        // 12%几率内容不匹配
+            { DocumentError.IncorrectDate, 0.1f },           // 10%几率日期错误
+            { DocumentError.DisguisedCustomer, 0.05f },      // 5%几率伪装顾客
+            { DocumentError.DangerousCustomer, 0.02f }       // 2%几率危险人物
         };
         
         foreach (var rule in errorGenerationRules)
@@ -1125,7 +1119,7 @@ public class SigningFlowManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Ӧ���ض����������
+    /// 应用特定的文书错误
     /// </summary>
     private void ApplyDocumentError(DocumentError error)
     {
@@ -1133,50 +1127,50 @@ public class SigningFlowManager : MonoBehaviour
         {
             case DocumentError.BrokenSeal:
                 ctx.document.isSealed = false;
-                Debug.Log($"������������: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
                 
             case DocumentError.ForgeryDocument:
                 ctx.document.isGenuine = false;
-                Debug.Log($"������������: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
                 
             case DocumentError.MissingWatermark:
                 ctx.document.hasITCWatermark = false;
-                Debug.Log($"������������: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
                 
             case DocumentError.FakeInk:
                 ctx.document.isInkGenuine = false;
-                Debug.Log($"������������: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
                 
             case DocumentError.ContentMismatch:
                 ctx.document.isContentMatched = false;
-                Debug.Log($"������������: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
                 
             case DocumentError.IncorrectDate:
                 ctx.document.isDateCorrect = false;
                 ctx.document.appointmentDate = DateTime.Today.AddDays(UnityEngine.Random.Range(-3, 4));
-                Debug.Log($"������������: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
                 
             case DocumentError.DisguisedCustomer:
                 ctx.customer.isDisguised = true;
                 ctx.document.isIdentityMatched = false;
-                Debug.Log($"������������: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
                 
             case DocumentError.DangerousCustomer:
                 ctx.customer.isClocardalMember = true;
-                Debug.Log($"������������: {DocumentVerifier.GetErrorDescription(error)}");
+                Debug.Log($"生成文书问题: {DocumentVerifier.GetErrorDescription(error)}");
                 break;
         }
     }
     
     /// <summary>
-    /// ��ȡ��ǰ��Լ�������������
+    /// 获取当前契约的所有文书错误
     /// </summary>
     public List<DocumentError> GetCurrentDocumentErrors()
     {
@@ -1185,27 +1179,27 @@ public class SigningFlowManager : MonoBehaviour
     }
     
     /// <summary>
-    /// �������������¿�ʼ��Լ
+    /// 公共方法：重新开始契约
     /// </summary>
     public void RestartContract()
     {
-        Debug.Log("���¿�ʼ��ԼǩԼ����");
+        Debug.Log("重新开始契约签约流程");
         
-        // ������Ϸ״̬
+        // 重置游戏状态
         ctx = null;
         currentStage = null;
         stages?.Clear();
         
-        // ���¿�ʼ
+        // 重新开始
         Start();
     }
 
     /// <summary>
-    /// �����������˳���Ϸ
+    /// 公共方法：退出游戏
     /// </summary>
     public void QuitGame()
     {
-        Debug.Log("�˳���Ϸ");
+        Debug.Log("退出游戏");
         
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
@@ -1215,7 +1209,7 @@ public class SigningFlowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ������������ͣ��Ϸ
+    /// 公共方法：暂停游戏
     /// </summary>
     public void PauseGame()
     {
@@ -1223,16 +1217,16 @@ public class SigningFlowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ��ȡ��ǰ��Ϸ״̬��Ϣ (�����Ի�UIʹ��)
+    /// 获取当前游戏状态信息 (供调试或UI使用)
     /// </summary>
     public string GetGameStateInfo()
     {
-        if (ctx == null) return "��Ϸδ��ʼ��";
+        if (ctx == null) return "游戏未初始化";
         
-        return $"��ǰ�׶�: {currentStage?.StageName ?? "��"}\n" +
-               $"�����: {ctx.satisfaction}\n" +
-               $"ʧ�ܴ���: {ctx.failCount}\n" +
-               $"�˿�: {ctx.customer?.name ?? "δ֪"}";
+        return $"当前阶段: {currentStage?.StageName ?? "无"}\n" +
+               $"满意度: {ctx.satisfaction}\n" +
+               $"失败次数: {ctx.failCount}\n" +
+               $"顾客: {ctx.customer?.name ?? "未知"}";
     }
 }
 

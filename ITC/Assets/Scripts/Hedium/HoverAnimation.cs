@@ -1,4 +1,4 @@
-using PrimeTween;
+ï»¿using PrimeTween;
 using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,7 +27,7 @@ public class HoverAnimation : MonoBehaviour
     // Update is called once per frame
     void OnMouseEnter()
     {
-        if (isHovering) return; // ·ÀÖ¹ÖØ¸´´¥·¢
+        if (isHovering) return; // é˜²æ­¢é‡å¤è§¦å‘
         
         isHovering = true;
         
@@ -46,7 +46,7 @@ public class HoverAnimation : MonoBehaviour
 
     void OnMouseExit()
     {
-        if (!isHovering) return; // ·ÀÖ¹ÖØ¸´´¥·¢
+        if (!isHovering) return; // é˜²æ­¢é‡å¤è§¦å‘
         
         isHovering = false;
         
