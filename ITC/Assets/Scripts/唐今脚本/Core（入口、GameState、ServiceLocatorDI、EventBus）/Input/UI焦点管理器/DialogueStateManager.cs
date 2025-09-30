@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using PixelCrushers.DialogueSystem;
 
@@ -86,24 +87,20 @@ public class DialogueStateManager : MonoBehaviour
 
     public void OnSubmitIntent()
     {
-        // 優先處理對話系統自身的 "Continue" 提示
-        if (DialogueManager.isConversationActive &&
-            DialogueManager.currentConversationState != null &&
-            DialogueManager.currentConversationState.subtitle.sequence == "Continue()")
-        {
-            var currentUI = DialogueManager.Instance.DialogueUI as StandardDialogueUI;
-            if(currentUI != null)
-            {
-                currentUI.OnContinue();
-                return;
-            }
-        }
-
-        // 如果不是Continue狀態，則將提交意圖傳遞給我們的焦點系統
         if (_focusScopeStack.Any())
         {
             _focusScopeStack.Peek()?.HandleSubmission();
+            return;
         }
+
+        if (!DialogueManager.isConversationActive)
+        {
+            return;
+        }
+
+        if (TrySubmitSelectedResponse()) return;
+        if (TrySubmitFirstAvailableResponse()) return;
+        TryContinueConversation();
     }
 
     public void OnCancelIntent()
@@ -173,5 +170,54 @@ public class DialogueStateManager : MonoBehaviour
     public void RunCoroutine(IEnumerator coroutine)
     {
         StartCoroutine(coroutine);
+    }
+
+    private bool TrySubmitSelectedResponse()
+    {
+        var eventSystem = EventSystem.current;
+        if (eventSystem == null) return false;
+
+        var selected = eventSystem.currentSelectedGameObject;
+        if (selected == null) return false;
+
+        var responseButton = selected.GetComponent<StandardUIResponseButton>();
+        if (responseButton == null || !responseButton.isActiveAndEnabled) return false;
+
+        ExecuteEvents.Execute(selected, new BaseEventData(eventSystem), ExecuteEvents.submitHandler);
+        return true;
+    }
+
+    private bool TrySubmitFirstAvailableResponse()
+    {
+        var responses = FindObjectsOfType<StandardUIResponseButton>(true)
+            .Where(r => r.isActiveAndEnabled && r.gameObject.activeInHierarchy)
+            .ToList();
+
+        if (responses.Count == 0) return false;
+
+        var eventSystem = EventSystem.current;
+        if (eventSystem == null) return false;
+
+        var target = responses[0].gameObject;
+        eventSystem.SetSelectedGameObject(target);
+        ExecuteEvents.Execute(target, new BaseEventData(eventSystem), ExecuteEvents.submitHandler);
+        return true;
+    }
+
+    private bool TryContinueConversation()
+    {
+        if (!DialogueManager.isConversationActive) return false;
+
+        var ui = DialogueManager.Instance != null ? DialogueManager.Instance.DialogueUI as StandardDialogueUI : null;
+        if (ui == null)
+        {
+            ui = _dialogueUI != null ? _dialogueUI : FindObjectOfType<StandardDialogueUI>();
+        }
+
+        if (ui == null) return false;
+
+        _dialogueUI = ui;
+        ui.OnContinue();
+        return true;
     }
 }
