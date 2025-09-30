@@ -57,18 +57,18 @@ public class DialogueStateManager : MonoBehaviour
         else if (device is Keyboard)
         {
              if (LastUsedDevice != InputDeviceType.Keyboard)
-            {
-                LastUsedDevice = InputDeviceType.Keyboard;
-                Debug.Log("[StateManager] Switched to Keyboard input.");
-            }
+             {
+                 LastUsedDevice = InputDeviceType.Keyboard;
+                 Debug.Log("[StateManager] Switched to Keyboard input.");
+             }
         }
         else if (device is Gamepad)
         {
              if (LastUsedDevice != InputDeviceType.Gamepad)
-            {
-                LastUsedDevice = InputDeviceType.Gamepad;
-                Debug.Log("[StateManager] Switched to Gamepad input.");
-            }
+             {
+                 LastUsedDevice = InputDeviceType.Gamepad;
+                 Debug.Log("[StateManager] Switched to Gamepad input.");
+             }
         }
     }
 
