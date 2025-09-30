@@ -117,10 +117,10 @@ public class DSNewInputBridge : MonoBehaviour
         }
         else if (device is Mouse mouse)
         {
-            var keyboard = Keyboard.current;
-            if (keyboard != null)
+            var inputKeyboard = Keyboard.current;
+            if (inputKeyboard != null)
             {
-                SwitchControlScheme(mouseControlScheme, new InputDevice[] { keyboard, mouse });
+                SwitchControlScheme(mouseControlScheme, new InputDevice[] { inputKeyboard, mouse });
             }
             else
             {
