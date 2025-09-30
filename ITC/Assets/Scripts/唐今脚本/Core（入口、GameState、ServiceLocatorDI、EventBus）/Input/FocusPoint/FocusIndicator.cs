@@ -24,7 +24,7 @@ public class FocusIndicator : MonoBehaviour
     [Tooltip("啟用後，將在控制台打印詳細的日誌信息")]
     [SerializeField] private bool enableDebugLogging = true;
     
-    private Image spriteRenderer;
+    private Image _spriteRenderer;
 
     private RectTransform _rectTransform;
 
@@ -32,7 +32,7 @@ public class FocusIndicator : MonoBehaviour
     {
         _rectTransform = GetComponent<RectTransform>();
 
-        spriteRenderer = this.GetComponent<Image>();
+        _spriteRenderer = this.GetComponent<Image>();
     }
 
     private void Start()
@@ -122,7 +122,7 @@ public class FocusIndicator : MonoBehaviour
             {
                 Debug.Log($"[FocusIndicator-Result] 決策: 隱藏。 原因: isMouseMode={isMouseMode}, newFocus is null?={newFocus == null}", this);
             }
-            spriteRenderer.enabled = false;
+            _spriteRenderer.enabled = false;
             return;
         }
 
@@ -131,11 +131,11 @@ public class FocusIndicator : MonoBehaviour
             Debug.Log($"[FocusIndicator-Result] 決策: 顯示。 將定位到 '{newFocusName}'。", this);
         }
 
-        spriteRenderer.enabled = true;
+        _spriteRenderer.enabled = true;
 
         var targetObject = (newFocus as MonoBehaviour)?.gameObject;
         if(targetObject == null) {
-            spriteRenderer.enabled = false;
+            _spriteRenderer.enabled = false;
             return;
         }
         
@@ -144,12 +144,12 @@ public class FocusIndicator : MonoBehaviour
         // ==================【核心修改：只设置位置，不改变其他任何东西】==================
         if (targetObject == null) 
         {
-            spriteRenderer.enabled = false;
+            _spriteRenderer.enabled = false;
             return;
         }
 
         // 1. 先显示指示器
-        spriteRenderer.enabled = true;
+        _spriteRenderer.enabled = true;
 
         // 2. 获取目标UI元素的Transform
         var targetTransform = targetObject.transform;
