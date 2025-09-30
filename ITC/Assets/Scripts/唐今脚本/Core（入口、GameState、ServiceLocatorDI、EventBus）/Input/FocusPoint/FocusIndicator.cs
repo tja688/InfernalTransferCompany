@@ -138,29 +138,23 @@ public class FocusIndicator : MonoBehaviour
             _spriteRenderer.enabled = false;
             return;
         }
-        
+
         var targetRect = targetObject.GetComponent<RectTransform>();
 
         // ==================【核心修改：只设置位置，不改变其他任何东西】==================
-        if (targetObject == null) 
-        {
-            _spriteRenderer.enabled = false;
-            return;
-        }
-
         // 1. 先显示指示器
         _spriteRenderer.enabled = true;
 
         // 2. 获取目标UI元素的Transform
         var targetTransform = targetObject.transform;
 
+        Vector3 targetCenter = targetRect != null
+            ? targetRect.TransformPoint(targetRect.rect.center)
+            : targetTransform.position;
+
         // 3. 直接将指示器的世界坐标设置为目标的世界坐标
         //    因为两者的Pivot都设置在中心(0.5, 0.5)，这会实现中心对齐
-        this.transform.position = targetTransform.position;
-
-        // 4. 在世界坐标的基础上，应用你的偏移量
-        //    注意：这里是 += 而不是 =，并且操作的是 transform.position
-        this.transform.position += positionOffset;
+        this.transform.position = targetCenter + positionOffset;
 
         // ==================【修改结束，删掉所有关于大小和父对象的代码】==================
     }
