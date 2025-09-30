@@ -16,6 +16,7 @@ public class DialogueStateManager : MonoBehaviour
 
     private readonly Stack<FocusScope> _focusScopeStack = new Stack<FocusScope>();
     public System.Action<IInteractableUI> OnFocusChanged;
+    public IInteractableUI CurrentFocus { get; private set; }
     private StandardDialogueUI _dialogueUI;
 
     // 新增：全局設備狀態屬性，默認為滑鼠
@@ -75,6 +76,7 @@ public class DialogueStateManager : MonoBehaviour
     public void NotifyFocusChanged(IInteractableUI newFocus)
     {
         // 使用 ?.Invoke() 是一个安全的操作，即使没有任何对象订阅事件，也不会报错
+        CurrentFocus = newFocus;
         OnFocusChanged?.Invoke(newFocus);
         
         // 【可选的调试日志】确认事件已从此地触发
