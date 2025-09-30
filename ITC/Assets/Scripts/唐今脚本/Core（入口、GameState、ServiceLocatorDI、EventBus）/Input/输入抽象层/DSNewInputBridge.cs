@@ -33,6 +33,18 @@ public class DSNewInputBridge : MonoBehaviour
     public InputActionReference openMenu;
     // ... 可根據你的InputActionAsset添加更多引用
 
+    [Header("PlayerInput Control Scheme Sync (Optional)")]
+    [Tooltip("如需在設備切換時驅動 PlayerInput 的控制方案變更，可在此指定。")]
+    public PlayerInput playerInput;
+    [Tooltip("是否在檢測到設備變化時自動切換 PlayerInput 的控制方案。")]
+    public bool autoSwitchControlScheme = true;
+    [Tooltip("鍵盤輸入時應切換到的控制方案名稱。通常為包含鍵盤+滑鼠的方案。")]
+    public string keyboardControlScheme = "Keyboard&Mouse";
+    [Tooltip("滑鼠輸入時應切換到的控制方案名稱。預設與鍵盤相同，以保證鍵鼠同時可用。")]
+    public string mouseControlScheme = "Keyboard&Mouse";
+    [Tooltip("手柄輸入時應切換到的控制方案名稱。")]
+    public string gamepadControlScheme = "Gamepad";
+
     #region 生命周期与输入订阅
 
     private void OnEnable()
@@ -65,15 +77,71 @@ public class DSNewInputBridge : MonoBehaviour
         actionRef.action.performed += (ctx) =>
         {
             // 在執行原始邏輯之前，先通知 StateManager 設備變更
-            if (DialogueStateManager.Instance != null && ctx.control != null)
+            if (ctx.control != null)
             {
-                DialogueStateManager.Instance.NotifyDeviceUsed(ctx.control.device);
+                NotifyDeviceUsage(ctx.control.device);
             }
             // 然後再執行原始的回調
             handler(ctx);
         };
 
         actionRef.action.Enable();
+    }
+
+    private void NotifyDeviceUsage(InputDevice device)
+    {
+        if (device == null) return;
+
+        if (DialogueStateManager.Instance != null)
+        {
+            DialogueStateManager.Instance.NotifyDeviceUsed(device);
+        }
+
+        if (!autoSwitchControlScheme || playerInput == null) return;
+
+        if (device is Gamepad)
+        {
+            SwitchControlScheme(gamepadControlScheme, new InputDevice[] { device });
+        }
+        else if (device is Keyboard keyboard)
+        {
+            var mouse = Mouse.current;
+            if (mouse != null)
+            {
+                SwitchControlScheme(keyboardControlScheme, new InputDevice[] { keyboard, mouse });
+            }
+            else
+            {
+                SwitchControlScheme(keyboardControlScheme, new InputDevice[] { keyboard });
+            }
+        }
+        else if (device is Mouse mouse)
+        {
+            var keyboard = Keyboard.current;
+            if (keyboard != null)
+            {
+                SwitchControlScheme(mouseControlScheme, new InputDevice[] { keyboard, mouse });
+            }
+            else
+            {
+                SwitchControlScheme(mouseControlScheme, new InputDevice[] { mouse });
+            }
+        }
+    }
+
+    private void SwitchControlScheme(string schemeName, InputDevice[] devices)
+    {
+        if (playerInput == null || string.IsNullOrEmpty(schemeName) || devices == null || devices.Length == 0)
+        {
+            return;
+        }
+
+        if (playerInput.currentControlScheme == schemeName)
+        {
+            return;
+        }
+
+        playerInput.SwitchCurrentControlScheme(schemeName, devices);
     }
 
     private void Unsubscribe(InputActionReference actionRef)
