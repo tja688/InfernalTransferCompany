@@ -789,7 +789,7 @@ GameObject:
   - component: {fileID: 1385796205}
   - component: {fileID: 1385796206}
   m_Layer: 0
-  m_Name: "\u9F20\u6807\u63A7\u5236\u6D4B\u8BD5"
+  m_Name: "\u9ED8\u8BA4\u5DE5\u5177\u6D4B\u8BD5\u5BF9\u8C61"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1085,7 +1085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a7aa57bdc87d4248b528c8fbe946e97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionOffset: {x: -20, y: 0, z: 0}
+  positionOffset: {x: 0, y: 0, z: 0}
   matchTargetSize: 0
   enableCursorControl: 1
   pointerDeltaAction: {fileID: -2057026664621496256, guid: 223da5f3e9640004fb90d28561bf1ac9, type: 3}
@@ -1263,6 +1263,11 @@ MonoBehaviour:
   quickSave: {fileID: 1170010654}
   quickLoad: {fileID: 1651985560}
   openMenu: {fileID: 505755081}
+  playerInput: {fileID: 0}
+  autoSwitchControlScheme: 1
+  keyboardControlScheme: Keyboard&Mouse
+  mouseControlScheme: Keyboard&Mouse
+  gamepadControlScheme: Gamepad
 --- !u!114 &2086310739
 MonoBehaviour:
   m_ObjectHideFlags: 0
