@@ -1,6 +1,7 @@
 // DSNewInputBridge.cs (最終版 - 自動追蹤設備)
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -53,12 +54,12 @@ public class DSNewInputBridge : MonoBehaviour
     private void OnEnable()
     {
         // 使用新的、能夠追蹤設備的訂閱方法
-        SubscribeAndTrackDevice(submit, ctx => DialogueStateManager.Instance.OnSubmitIntent());
-        SubscribeAndTrackDevice(cancel, ctx => DialogueStateManager.Instance.OnCancelIntent());
+        SubscribeAndTrackDevice(submit, ctx => DialogueStateManager.Instance.OnSubmitIntent(), true);
+        SubscribeAndTrackDevice(cancel, ctx => DialogueStateManager.Instance.OnCancelIntent(), true);
         SubscribeAndTrackDevice(navigate, ctx => DialogueStateManager.Instance.OnNavigateIntent(ctx.ReadValue<Vector2>()));
-        SubscribeAndTrackDevice(backlog, ctx => DialogueStateManager.Instance.OnToggleBacklogIntent());
-        SubscribeAndTrackDevice(quickSave, ctx => DialogueStateManager.Instance.OnQuickSaveIntent());
-        SubscribeAndTrackDevice(quickLoad, ctx => DialogueStateManager.Instance.OnQuickLoadIntent());
+        SubscribeAndTrackDevice(backlog, ctx => DialogueStateManager.Instance.OnToggleBacklogIntent(), true);
+        SubscribeAndTrackDevice(quickSave, ctx => DialogueStateManager.Instance.OnQuickSaveIntent(), true);
+        SubscribeAndTrackDevice(quickLoad, ctx => DialogueStateManager.Instance.OnQuickLoadIntent(), true);
     }
 
     private void OnDisable()
@@ -72,7 +73,7 @@ public class DSNewInputBridge : MonoBehaviour
     }
 
     // 【核心修改】創建一個新的訂閱方法，它會自動處理設備追蹤
-    private void SubscribeAndTrackDevice(InputActionReference actionRef, System.Action<InputAction.CallbackContext> handler)
+    private void SubscribeAndTrackDevice(InputActionReference actionRef, System.Action<InputAction.CallbackContext> handler, bool treatAsButton = false)
     {
         if (actionRef == null || actionRef.action == null) return;
 
@@ -88,6 +89,18 @@ public class DSNewInputBridge : MonoBehaviour
             if (ctx.control != null)
             {
                 NotifyDeviceUsage(ctx.control.device);
+            }
+
+            if (treatAsButton)
+            {
+                bool isPressed = ctx.control is ButtonControl
+                    ? ctx.ReadValueAsButton()
+                    : ctx.ReadValue<float>() > 0.5f;
+
+                if (!isPressed)
+                {
+                    return;
+                }
             }
             // 然後再執行原始的回調
             handler(ctx);
