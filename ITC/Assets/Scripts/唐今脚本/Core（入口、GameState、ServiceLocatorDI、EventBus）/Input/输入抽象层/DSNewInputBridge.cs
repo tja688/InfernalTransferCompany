@@ -47,6 +47,9 @@ public class DSNewInputBridge : MonoBehaviour
 
     #region 生命周期与输入订阅
 
+    private readonly Dictionary<InputActionReference, System.Action<InputAction.CallbackContext>> _performedHandlers
+        = new Dictionary<InputActionReference, System.Action<InputAction.CallbackContext>>();
+
     private void OnEnable()
     {
         // 使用新的、能夠追蹤設備的訂閱方法
@@ -73,8 +76,13 @@ public class DSNewInputBridge : MonoBehaviour
     {
         if (actionRef == null || actionRef.action == null) return;
 
-        // 訂閱一個新的 lambda 表達式
-        actionRef.action.performed += (ctx) =>
+        // 避免重複訂閱：如果已有處理器，先退訂
+        if (_performedHandlers.TryGetValue(actionRef, out var existingHandler))
+        {
+            actionRef.action.performed -= existingHandler;
+        }
+
+        System.Action<InputAction.CallbackContext> wrapper = (ctx) =>
         {
             // 在執行原始邏輯之前，先通知 StateManager 設備變更
             if (ctx.control != null)
@@ -84,6 +92,11 @@ public class DSNewInputBridge : MonoBehaviour
             // 然後再執行原始的回調
             handler(ctx);
         };
+
+        _performedHandlers[actionRef] = wrapper;
+
+        // 訂閱一個新的 lambda 表達式
+        actionRef.action.performed += wrapper;
 
         actionRef.action.Enable();
     }
@@ -147,8 +160,12 @@ public class DSNewInputBridge : MonoBehaviour
     private void Unsubscribe(InputActionReference actionRef)
     {
         if (actionRef == null || actionRef.action == null) return;
-        // 注意：因為我們在訂閱時使用了匿名(lambda)函數，舊的事件處理器無法被精確移除。
-        // 所以直接禁用Action是在OnDisable中推薦的做法，效果一致。
+        if (_performedHandlers.TryGetValue(actionRef, out var handler))
+        {
+            actionRef.action.performed -= handler;
+            _performedHandlers.Remove(actionRef);
+        }
+
         actionRef.action.Disable();
     }
 
