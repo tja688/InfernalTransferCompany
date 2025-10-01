@@ -43,6 +43,12 @@ public class FocusIndicator : MonoBehaviour
     private void OnEnable()
     {
         SubscribeToEvents();
+
+        if (enableCursorControl && pointerDeltaAction != null && pointerDeltaAction.action != null)
+        {
+            pointerDeltaAction.action.Enable();
+            pointerDeltaAction.action.performed += OnPointerMove;
+        }
     }
 
     private void OnDisable()
@@ -72,6 +78,7 @@ public class FocusIndicator : MonoBehaviour
         if (pointerDeltaAction != null && pointerDeltaAction.action != null)
         {
             pointerDeltaAction.action.performed -= OnPointerMove;
+            pointerDeltaAction.action.Disable();
         }
     }
 
