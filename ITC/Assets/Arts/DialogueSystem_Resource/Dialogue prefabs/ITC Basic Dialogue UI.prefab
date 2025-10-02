@@ -1168,7 +1168,6 @@ GameObject:
   - component: {fileID: 8792016296661830141}
   - component: {fileID: 453560069745128128}
   - component: {fileID: 2247828098648172293}
-  - component: {fileID: 7572299869086849735}
   m_Layer: 5
   m_Name: Response Menu Panel
   m_TagString: Untagged
@@ -1370,19 +1369,6 @@ MonoBehaviour:
   scrollbar: {fileID: 7723021184529798708}
   smoothScroll: 0
   smoothScrollSpeed: 5
---- !u!114 &7572299869086849735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1654841779488627874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b608425042928f479ecf8d02f4d743b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enableDebugLogging: 1
 --- !u!1 &1763714384307655267
 GameObject:
   m_ObjectHideFlags: 0
@@ -3730,7 +3716,6 @@ GameObject:
   m_Component:
   - component: {fileID: 67299434658584142}
   - component: {fileID: 1588786913498752168}
-  - component: {fileID: 5500618556384351593}
   m_Layer: 5
   m_Name: ITC Basic Dialogue UI
   m_TagString: Untagged
@@ -3803,19 +3788,6 @@ MonoBehaviour:
     - {fileID: 2556793966675454571}
   addEventSystemIfNeeded: 1
   verifyPanelAssignments: 1
---- !u!114 &5500618556384351593
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5989430744776781312}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7de6995ce01f19478e49de10d66b8aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  responseMenuScope: {fileID: 7572299869086849735}
 --- !u!1 &6121747535603403551
 GameObject:
   m_ObjectHideFlags: 0
