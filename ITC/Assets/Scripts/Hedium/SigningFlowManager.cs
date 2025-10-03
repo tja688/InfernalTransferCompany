@@ -809,7 +809,7 @@ public class StampSystem : IContractStage
     private bool isCharging = false;
     private float chargeTime = 0f;
     private HeContractType selectedStampType;
-    
+    private HeContractType neededStampType;
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
     public string StageName => "契约盖印";
@@ -819,11 +819,12 @@ public class StampSystem : IContractStage
         context = ctx;
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
-        
+        neededStampType = HeContractType.Event; // TODO: 根据契约类型设置需要的印章类型
         Debug.Log("=== 开始契约盖印阶段 ===");
-        
-        // 显示印章选择UI
-        uiManager?.ShowStampSelection(ctx.document.HeContractType);
+        InitHandleStampSelection();
+
+
+
     }
 
     public void Update()
@@ -832,29 +833,56 @@ public class StampSystem : IContractStage
         
         if (!stampSelected)
         {
-            HandleStampSelection();
+            
         }
         else if (isCharging)
         {
-            HandleStampCharging();
+        
         }
     }
+
+    private void InitHandleStampSelection()
+    {
+
+    }
+    private void DisableHandleStampSelection()
+    {
+
+
+
+    }
+
+    private void InitChargingStampSelection()
+    {
+
+    }
+    private void DisableChargingStampSelection()
+    {
+
+
+    }
+
+
+
 
     public void Exit()
     {
         Debug.Log("=== 契约盖印阶段结束 ===");
     }
-
-    private void HandleStampSelection()
+    /// <summary>
+    /// 从印章架上选取符合契约类型的印章
+    /// </summary>
+    private void OnHandleStampSelection()
     {
-        // 数字键选择印章
-        if (Input.GetKeyDown(KeyCode.Alpha1)) SelectStamp(HeContractType.Money);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) SelectStamp(HeContractType.Fame);
-        if (Input.GetKeyDown(KeyCode.Alpha3)) SelectStamp(HeContractType.Skill);
-        if (Input.GetKeyDown(KeyCode.Alpha4)) SelectStamp(HeContractType.Event);
+
+        HeContractType type = HeContractType.Event;
+        SelectStamp(type,Vector3.zero);
+
+
+        uiManager.ShowStampSelection(type);
     }
 
-    private void SelectStamp(HeContractType stampType)
+    private void SelectStamp(HeContractType stampType,Vector3 pos)
     {
         selectedStampType = stampType;
         
@@ -863,10 +891,15 @@ public class StampSystem : IContractStage
         {
             Debug.Log($"印章类型错误! 选择了{stampType}，应该是{context.document.HeContractType}");
             context.AddFailure();
-            failed = true;
+          
             return;
         }
-        
+        ///判断盖印位置是否准确
+        if (false)
+        {
+            Debug.Log("盖印位置不准确，顾客满意度下降");
+            context.DecreaseSatisfaction();
+        }
         Debug.Log($"正确选择了{stampType}印章");
         stampSelected = true;
         StartStampCharging();
@@ -878,7 +911,7 @@ public class StampSystem : IContractStage
         isCharging = true;
         chargeTime = 0f;
         
-        // 通知UI开始蓄力
+        // 通知UI
         uiManager?.StartStampCharging();
     }
 
@@ -898,6 +931,7 @@ public class StampSystem : IContractStage
             
             if (timeDiff < tolerance)
             {
+             
                 Debug.Log("完美盖章! 顾客满意度提升");
                 context.IncreaseSatisfaction();
                 completed = true;
