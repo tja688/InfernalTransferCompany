@@ -1,69 +1,16 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
-using ITC.UI.Focus;
 using PixelCrushers;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+// 如需直接引用标准类，添加命名空间；没有也不报错（可留空）
+// using PixelCrushers.DialogueSystem;
+
 public class ExternalDockPanel : UIPanel
 {
     public enum LayoutMode { Horizontal, Vertical, Grid }
-
-    [Serializable]
-    public class EdgeTransferRule
-    {
-        [Tooltip("Friendly name for the rule (purely descriptive).")]
-        public string name;
-
-        [Tooltip("Index of the button to monitor. -1 代表列表末尾。")]
-        public int itemIndex = 0;
-
-        [Tooltip("When the player moves in this direction from the indexed button, a panel transfer is requested.")]
-        public MoveDirection triggerDirection = MoveDirection.Up;
-
-        [Tooltip("Optional explicit target domain. Overrides mask if assigned.")]
-        public FocusTag explicitDomain;
-
-        [Tooltip("If explicitDomain 未指定，可用层级掩码来寻找面板。")]
-        public FocusDomainMask domainMask = new FocusDomainMask(FocusTier.Base, 0);
-
-        [Tooltip("如果提供，将作为转移后的首选选中对象。")]
-        public Selectable preferredTarget;
-
-        [Tooltip("是否允许在被高层 UI 覆盖时依然强制切换面板。")]
-        public bool forceWhenCovered = false;
-
-        internal int ResolveIndex(int count)
-        {
-            if (count <= 0) return -1;
-            if (itemIndex < 0) return Mathf.Clamp(count + itemIndex, 0, count - 1);
-            return Mathf.Clamp(itemIndex, 0, count - 1);
-        }
-    }
-
-    private class EdgeSentinel : MonoBehaviour, IMoveHandler
-    {
-        private ExternalDockPanel owner;
-        private EdgeTransferRule rule;
-
-        public void Initialize(ExternalDockPanel owner, EdgeTransferRule rule)
-        {
-            this.owner = owner;
-            this.rule = rule;
-        }
-
-        public void OnMove(AxisEventData eventData)
-        {
-            if (owner == null || rule == null) return;
-            if (eventData.moveDir != rule.triggerDirection) return;
-
-            if (owner.TryExecuteEdgeRule(rule))
-            {
-                eventData.Use();
-            }
-        }
-    }
 
     [Header("Dock Items & Layout")]
     public List<Selectable> dockItems = new List<Selectable>();
@@ -71,26 +18,22 @@ public class ExternalDockPanel : UIPanel
     [SerializeField] private int gridColumns = 3;
     [SerializeField] private bool wrap = false;
 
-    [Header("Edge Transfers")]
-    [SerializeField] private List<EdgeTransferRule> edgeTransferRules = new List<EdgeTransferRule>
-    {
-        new EdgeTransferRule { name = "First → Up", itemIndex = 0, triggerDirection = MoveDirection.Up },
-        new EdgeTransferRule { name = "Last → Down", itemIndex = -1, triggerDirection = MoveDirection.Down }
-    };
+    [Header("Auto-resolve Dialogue Menu Panel")]
+    [Tooltip("自动查找当前激活的 Dialogue 菜单面板（如 StandardUIMenuPanel）")]
+    [SerializeField] private bool autoResolveDialogueMenuPanel = true;
+
+    [Tooltip("已解析到的对话菜单 UIPanel（运行时自动填充）")]
+    public UIPanel dialogueMenuPanel;
+
+    [Header("Edge → Dialogue 切换方向")]
+    public MoveDirection startEdgeToDialogue = MoveDirection.Left;
+    public MoveDirection endEdgeToDialogue   = MoveDirection.Right;
 
     [Header("Default Focus")]
     [SerializeField] private Selectable defaultFirstSelected;
 
     [Header("Auto Open On Start")]
     [SerializeField] private bool openOnStart = true;
-
-    private FocusTag focusDomain;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        focusDomain = GetComponent<FocusTag>();
-    }
 
     protected override void OnEnable()
     {
@@ -103,29 +46,90 @@ public class ExternalDockPanel : UIPanel
     {
         base.Start();
 
-        if (openOnStart && !isOpen)
-        {
-            Open();
-        }
+        if (openOnStart && !isOpen) Open();
 
-        FocusDefaultOnStart();
+        // 初次落焦到第 0 项
+        if (dockItems != null && dockItems.Count > 0 && dockItems[0] != null)
+            SetFocus(dockItems[0].gameObject);
+        else if (defaultFirstSelected != null)
+            SetFocus(defaultFirstSelected.gameObject);
+        else
+            CheckFocus();
+
+        if (autoResolveDialogueMenuPanel)
+            StartCoroutine(AutoResolveDialogueMenuPanelRoutine());
     }
 
-    private void FocusDefaultOnStart()
+    private IEnumerator AutoResolveDialogueMenuPanelRoutine()
     {
-        var target = GetDockItem(0) ?? defaultFirstSelected;
-        if (focusDomain != null)
+        // 刚进场/对话未开始时可能找不到，循环尝试直到找到为止
+        var wait = new WaitForSeconds(0.25f);
+        while (dialogueMenuPanel == null)
         {
-            FocusHub.Instance?.Focus(focusDomain, target);
+            TryResolveDialogueMenuPanel();
+            if (dialogueMenuPanel != null) break;
+            yield return wait;
         }
-        else if (target != null)
+    }
+
+    private void TryResolveDialogueMenuPanel()
+    {
+        if (dialogueMenuPanel != null) return;
+
+        // 1) 优先：在场景里查找任何激活的 UIPanel，其类型名包含 "MenuPanel"（覆盖官方/自定义）
+#if UNITY_2023_1_OR_NEWER
+        var allPanels = Object.FindObjectsByType<UIPanel>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+#else
+        var allPanels = Resources.FindObjectsOfTypeAll<UIPanel>();
+#endif
+        UIPanel candidate = null;
+        foreach (var p in allPanels)
         {
-            SetFocus(target.gameObject);
+            if (p == null) continue;
+            // 候选条件：名字或类型包含 "MenuPanel"，且在层级中处于激活（activeInHierarchy）
+            var active = p.gameObject.activeInHierarchy;
+            var typeName = p.GetType().Name;
+            if ((typeName.Contains("MenuPanel") || p.name.Contains("MenuPanel")) && active)
+            {
+                candidate = p;
+                break;
+            }
         }
-        else
+
+        // 2) 次优：找不到激活的，就退而求其次——取第一个名字/类型匹配的（即使当前未激活）
+        if (candidate == null)
         {
-            CheckFocus();
+            foreach (var p in allPanels)
+            {
+                if (p == null) continue;
+                var typeName = p.GetType().Name;
+                if (typeName.Contains("MenuPanel") || p.name.Contains("MenuPanel"))
+                {
+                    candidate = p;
+                    break;
+                }
+            }
         }
+
+        if (candidate != null)
+        {
+            dialogueMenuPanel = candidate;
+            // 可选：如果它当前就是打开状态，顺手校验一下选中对象
+            if (dialogueMenuPanel.isOpen)
+            {
+                var fs = dialogueMenuPanel.firstSelected;
+                if (fs != null) dialogueMenuPanel.SetFocus(fs);
+                else dialogueMenuPanel.CheckFocus();
+            }
+        }
+    }
+
+    private void ApplyFirstSelected()
+    {
+        if (dockItems != null && dockItems.Count > 0 && dockItems[0] != null)
+            firstSelected = dockItems[0].gameObject;
+        else if (defaultFirstSelected != null)
+            firstSelected = defaultFirstSelected.gameObject;
     }
 
     [ContextMenu("Rebuild Navigation")]
@@ -142,116 +146,73 @@ public class ExternalDockPanel : UIPanel
             switch (layout)
             {
                 case LayoutMode.Horizontal:
-                    nav.selectOnLeft = GetSelectableForIndex(i - 1);
-                    nav.selectOnRight = GetSelectableForIndex(i + 1);
+                    nav.selectOnLeft  = GetSelectableForIndex(i - 1, i, true);
+                    nav.selectOnRight = GetSelectableForIndex(i + 1, i, false);
                     break;
                 case LayoutMode.Vertical:
-                    nav.selectOnUp = GetSelectableForIndex(i - 1);
-                    nav.selectOnDown = GetSelectableForIndex(i + 1);
+                    nav.selectOnUp    = GetSelectableForIndex(i - 1, i, true);
+                    nav.selectOnDown  = GetSelectableForIndex(i + 1, i, false);
                     break;
                 case LayoutMode.Grid:
                     int cols = Mathf.Max(1, gridColumns);
-                    nav.selectOnLeft = GetSelectableForIndex(i - 1);
-                    nav.selectOnRight = GetSelectableForIndex(i + 1);
-                    nav.selectOnUp = GetSelectableForIndex(i - cols);
-                    nav.selectOnDown = GetSelectableForIndex(i + cols);
+                    nav.selectOnLeft  = GetSelectableForIndex(i - 1,  i, true);
+                    nav.selectOnRight = GetSelectableForIndex(i + 1,  i, false);
+                    nav.selectOnUp    = GetSelectableForIndex(i - cols, i, true);
+                    nav.selectOnDown  = GetSelectableForIndex(i + cols, i, false);
                     break;
             }
-
             sel.navigation = nav;
+
+            AttachEdgeTransfer(i);
         }
 
-        AttachEdgeSentinels();
         ApplyFirstSelected();
     }
 
-    private void AttachEdgeSentinels()
+    private Selectable GetSelectableForIndex(int targetIndex, int selfIndex, bool isPrev)
     {
-        foreach (var item in dockItems)
-        {
-            if (item == null) continue;
-            var sentinels = item.GetComponents<EdgeSentinel>();
-            for (int i = 0; i < sentinels.Length; i++)
-            {
-                if (Application.isPlaying) Destroy(sentinels[i]);
-                else DestroyImmediate(sentinels[i]);
-            }
-        }
-
-        if (edgeTransferRules == null) return;
-
-        foreach (var rule in edgeTransferRules)
-        {
-            if (rule == null) continue;
-            int index = rule.ResolveIndex(dockItems.Count);
-            if (index < 0 || index >= dockItems.Count) continue;
-
-            var selectable = dockItems[index];
-            if (selectable == null) continue;
-
-            var sentinel = selectable.gameObject.AddComponent<EdgeSentinel>();
-            sentinel.Initialize(this, rule);
-        }
-    }
-
-    private Selectable GetSelectableForIndex(int index)
-    {
-        if (dockItems.Count == 0) return null;
         if (wrap)
         {
-            index = (index % dockItems.Count + dockItems.Count) % dockItems.Count;
-            return dockItems[index];
+            if (dockItems.Count == 0) return null;
+            targetIndex = (targetIndex % dockItems.Count + dockItems.Count) % dockItems.Count;
+            return dockItems[targetIndex];
         }
-
-        if (index < 0 || index >= dockItems.Count) return null;
-        return dockItems[index];
+        if (targetIndex < 0 || targetIndex >= dockItems.Count) return null;
+        return dockItems[targetIndex];
     }
 
-    private Selectable GetDockItem(int index)
+    private void AttachEdgeTransfer(int i)
     {
-        if (dockItems == null || dockItems.Count == 0) return null;
-        index = Mathf.Clamp(index, 0, dockItems.Count - 1);
-        return dockItems[index];
-    }
+        var sel = dockItems[i];
+        if (sel == null) return;
 
-    private void ApplyFirstSelected()
-    {
-        var first = GetDockItem(0) ?? defaultFirstSelected;
-        if (first != null)
+        var old = sel.GetComponent<EdgeTransferOnMove>();
+        if (old != null) DestroyImmediate(old);
+
+        if (i == 0)
         {
-            firstSelected = first.gameObject;
+            var t = sel.gameObject.AddComponent<EdgeTransferOnMove>();
+            t.mode = EdgeTransferOnMove.Mode.ToRegisteredKey;
+            t.registeredKey = FocusKey.DialogueMenu;  // 0 号 → 对话菜单
+            t.triggerDirection = startEdgeToDialogue;
         }
-    }
 
-    private bool TryExecuteEdgeRule(EdgeTransferRule rule)
-    {
-        if (FocusHub.Instance == null) return false;
-
-        var domain = rule.explicitDomain != null ? rule.explicitDomain : FocusHub.Instance.Find(rule.domainMask);
-        if (domain == null) return false;
-
-        var preferred = rule.preferredTarget != null ? rule.preferredTarget.gameObject : null;
-        var flags = rule.forceWhenCovered ? FocusHub.FocusRequestFlags.Force : FocusHub.FocusRequestFlags.None;
-        return FocusHub.Instance.Focus(domain, preferred, flags);
+        if (i == dockItems.Count - 1)
+        {
+            var t = sel.gameObject.AddComponent<EdgeTransferOnMove>();
+            t.mode = EdgeTransferOnMove.Mode.ToRegisteredKey;
+            t.registeredKey = FocusKey.DialogueMenu;  // 末位 → 对话菜单
+            t.triggerDirection = endEdgeToDialogue;
+        }
     }
 
     // 供别处调用：把 Dock 拉到栈顶并定位到某项
     public void FocusDock(int index = 0)
     {
-        var target = GetDockItem(index) ?? defaultFirstSelected;
-        if (focusDomain != null)
-        {
-            FocusHub.Instance?.Focus(focusDomain, target);
-        }
-        else if (target != null)
-        {
-            TakeFocus();
-            SetFocus(target.gameObject);
-        }
-        else
-        {
-            TakeFocus();
-            CheckFocus();
-        }
+        TakeFocus();
+        var target = (dockItems != null && dockItems.Count > 0) ? dockItems[Mathf.Clamp(index, 0, dockItems.Count - 1)] : null;
+        if (target != null) SetFocus(target.gameObject);
+        else if (firstSelected != null) SetFocus(firstSelected);
+        else CheckFocus();
     }
 }
