@@ -3,6 +3,7 @@
 /// </summary>
 public interface IContractStage
 {
+
     void Enter(HeContractContext ctx);
     void Update();
     void Exit();
