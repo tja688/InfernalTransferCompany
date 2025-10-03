@@ -1,11 +1,17 @@
 ﻿using NUnit.Framework;
+using PrimeTween;
+using QFramework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+using UnityEngine.InputSystem;
+using static Pathfinding.SimpleSmoothModifier;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 
 
@@ -146,6 +152,8 @@ public class DocumentVerifier : IContractStage
         Debug.Log("=== 文书核验阶段结束 ===");
         if (detectedErrors.Count > 0)
         {
+
+
             Debug.Log($"检测到的错误: {string.Join(", ", detectedErrors)}");
         }
     }
@@ -211,6 +219,7 @@ public class DocumentVerifier : IContractStage
         
         if (customer.isClocardalMember)
         {
+
             detectedErrors.Add(DocumentError.DangerousCustomer);
             Debug.Log($"文书错误: {GetErrorDescription(DocumentError.DangerousCustomer)}");
         }
@@ -250,10 +259,7 @@ public class DocumentVerifier : IContractStage
         };
     }
 
-    public static bool ProbabilityDetermine(float s)
-    {
-        return UnityEngine.Random.Range(1, 101) < s;
-    }
+ 
 }
 
 /// <summary>
@@ -266,56 +272,144 @@ public class RuneInputManager : IContractStage
     private HeContractGameConfig gameConfig;
     private bool completed = false;
     private bool failed = false;
-    private List<RuneType> requiredRunes;
-    private List<RuneType> inputRunes;
+    private bool detailsFillCompleted = false;
+    private List<int> requiredRunes;
+    private List<int> inputRunes;
     private float timeRemaining;
-    
+
+    private float smoothTime = 0.1f;
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
     public string StageName => "符文输入";
+    private int currentSlotIndex = 1;
+
+
+    private int invaild = 0;
+    private UnityEngine.Transform Controllertrans;
+
+    private Vector3 Slot1;
+    private Vector3 Slot2;
+    private Vector3 Slot3;
+    private Vector3 Slot4;
+
+  
+    private Tween positionTween;
+    private bool enableTimer = false;
+
+
+
 
     public void Enter(HeContractContext ctx)
     {
+        detailsFillCompleted = false;
+
         context = ctx;
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
-        
+
         Debug.Log("=== 开始符文输入阶段 ===");
-        
+
         GenerateRequiredRunes();
-        inputRunes = new List<RuneType>();
+        inputRunes = new List<int>();
         timeRemaining = gameConfig?.runeInputTimeLimit ?? 10f;
-        
-        // 符文输入UI
-        //uiManager?.ShowRuneInput(requiredRunes);
+
+        // 正确获取 CopperRuneSelectorGameObject 的 transform
+        if (uiManager != null && uiManager.CopperRuneSelectorGameObject != null)
+        {
+            InitPoistion();
+        }
+        else
+        {
+            Controllertrans = null;
+        }
+
+
+
     }
+    private void Faild()
+    {
+        invaild++;
+        if (invaild == 3)
+        {
+            Debug.Log("符文输入错误次数过多，顾客满意度下降");
+            context.AddFailure();
+            failed = true;
+        }
+        else if (invaild == 2)
+        {
+            context.DecreaseSatisfaction();
+        }
+        else if (invaild==1)
+        {
+
+
+        }
+        else
+        {
+            Assert.Fail("符文输入错误次数统计异常");
+        }
+
+
+    }
+    public void InitPoistion()
+    {
+        invaild = 0;
+        Controllertrans = uiManager.CopperRuneSelectorGameObject.transform;
+        Slot1 = uiManager.circularRunaGameObject.transform.position;
+        Slot2=  uiManager.diamondRunaGameObject.transform.position;   
+        Slot4=  uiManager.triangularRunaGameObject.transform.position;
+        Slot3 = uiManager.sphericalRunaGameObject.transform.position;
+        uiManager.moveAction.action.performed += OnHandleRuneInput;
+        uiManager. moveAction.action.canceled += OnCancelRuneInput;
+        uiManager.interactAction.action.performed +=  OnChoseRune;
+        inputRunes.Clear();
+        GenerateRequiredRunes();
+    }
+
+    public void DeletePoistion()
+    {
+        Controllertrans = null;
+        Slot1 = Vector3.zero;
+        Slot2 = Vector3.zero;
+        Slot3 = Vector3.zero;
+        Slot4 = Vector3.zero;
+        uiManager.moveAction.action.performed -= OnHandleRuneInput;
+        uiManager.moveAction.action.canceled -= OnCancelRuneInput;
+        inputRunes.Clear();
+        requiredRunes.Clear();
+    }
+
 
     public void Update()
     {
+
         if (completed || failed) return;
-        
+        if(enableTimer)
         timeRemaining -= Time.deltaTime;
         if (timeRemaining <= 0)
         {
             Debug.Log("符文输入超时");
             failed = true;
             context.AddFailure();
+            timeRemaining=gameConfig?.runeInputTimeLimit ?? 10f;
             return;
         }
         
-        // 检查输入完成
-        if (inputRunes.Count >= requiredRunes.Count)
-        {
-            CheckRuneSequence();
-        }
-        
-        // 处理输入
-        HandleRuneInput();
+
+   
+       
+
+
     }
+
+
+
 
     public void Exit()
     {
         Debug.Log("=== 符文输入阶段结束 ===");
+
+        DeletePoistion();
     }
 
     private void GenerateRequiredRunes()
@@ -323,7 +417,7 @@ public class RuneInputManager : IContractStage
         // 从配置文件获取符文序列
         if (gameConfig != null)
         {
-            requiredRunes = gameConfig.GetRuneSequenceForContract(context.document.HeContractType);
+            //requiredRunes = gameConfig.GetRuneSequenceForContract(context.document.HeContractType);
         }
         else
         {
@@ -334,95 +428,191 @@ public class RuneInputManager : IContractStage
         Debug.Log($"需要输入符文序列: {string.Join(", ", requiredRunes)}");
     }
 
-    private List<RuneType> GetDefaultRuneSequence(HeContractType HeContractType)
+    private List<int> GetDefaultRuneSequence(HeContractType HeContractType)
     {
-        switch (HeContractType)
+        return new List<int> { 2,3,4,1 };
+    }
+  
+
+    // 平滑移动到目标槽位
+    private void MoveToSlot(int slotIndex)
+    {
+     
+        if (positionTween.isAlive)
+            positionTween.Stop();
+
+        Vector3 targetPos = slotIndex switch
         {
-            case HeContractType.Money:
-                return new List<RuneType> { RuneType.Earth, RuneType.Fire, RuneType.Light };
-            case HeContractType.Fame:
-                return new List<RuneType> { RuneType.Light, RuneType.Air, RuneType.Fire };
-            case HeContractType.Skill:
-                return new List<RuneType> { RuneType.Water, RuneType.Earth, RuneType.Air };
-            case HeContractType.Event:
-                return new List<RuneType> { RuneType.Dark, RuneType.Fire, RuneType.Water };
-            default:
-                return new List<RuneType> { RuneType.Fire, RuneType.Water, RuneType.Earth };
+            1 => Slot1,
+            2 => Slot2,
+            3 => Slot3,
+            4 => Slot4,
+            _ => Controllertrans.position
+        };
+
+    
+        positionTween = Tween.Position(
+            Controllertrans,
+            targetPos,
+            smoothTime,
+            ease: Ease.OutQuad
+        );
+    }
+
+
+
+    private void OnChoseRune(InputAction.CallbackContext ctx)
+    {
+
+        inputRunes.Add(currentSlotIndex);
+  
+        ProcessRuneInput(); 
+      
+
+
+
+
+    }
+    private void OnHandleRuneInput(InputAction.CallbackContext ctx)
+    {
+       
+        Vector2 inputDir = ctx.ReadValue<Vector2>().normalized;
+        int targetSlotIndex = GetTargetSlotIndex(inputDir);
+        if (targetSlotIndex != currentSlotIndex)
+        {
+            currentSlotIndex = targetSlotIndex;
+            MoveToSlot(currentSlotIndex);
         }
     }
 
-    private void HandleRuneInput()
+    private void OnCancelRuneInput(InputAction.CallbackContext ctx)
     {
-        // WASD键输入处理
-        if (Input.GetKeyDown(KeyCode.W)) ProcessRuneInput(RuneType.Fire);
-        if (Input.GetKeyDown(KeyCode.A)) ProcessRuneInput(RuneType.Water);
-        if (Input.GetKeyDown(KeyCode.S)) ProcessRuneInput(RuneType.Earth);
-        if (Input.GetKeyDown(KeyCode.D)) ProcessRuneInput(RuneType.Air);
-        if (Input.GetKeyDown(KeyCode.Q)) ProcessRuneInput(RuneType.Light);
-        if (Input.GetKeyDown(KeyCode.E)) ProcessRuneInput(RuneType.Dark);
+       // currentMoveDir = Vector2.zero;
     }
-
-    private void ProcessRuneInput(RuneType rune)
+    // 根据输入方向计算目标槽位索引（1-4）
+    private int GetTargetSlotIndex(Vector2 inputDir)
     {
-        inputRunes.Add(rune);
-        Debug.Log($"输入符文: {rune}");
-        
-        // 检查是否错误
-        int currentIndex = inputRunes.Count - 1;
-        if (currentIndex < requiredRunes.Count && inputRunes[currentIndex] != requiredRunes[currentIndex])
+        var ans=0;
+        // 优先判断上下方向（Y轴）
+        if (Mathf.Abs(inputDir.y) > Mathf.Abs(inputDir.x))
         {
-            context.runeErrors++;
-            Debug.Log($"符文输入错误! 错误次数: {context.runeErrors}");
-            
-            if (context.runeErrors >= 2)
+            if (inputDir.y > 0) // 上（W）
             {
-                context.DecreaseSatisfaction();
+                ans=currentSlotIndex switch
+                {
+                    3 => 1, // 从3（下左）上移到1（上左）
+                    4 => 2, // 从4（下右）上移到2（上右）
+                    _ => currentSlotIndex 
+                };
             }
-            
-            if (context.runeErrors >= (gameConfig?.maxRuneErrors ?? 3))
+            else // 下（S）
             {
-                Debug.Log("符文错误次数过多，签约失败");
-                failed = true;
-                context.AddFailure();
+                ans = currentSlotIndex switch
+                {
+                    1 => 3, // 从1（上左）下移到3（下左）
+                    2 => 4, // 从2（上右）下移到4（下右）
+                    _ => currentSlotIndex 
+                };
             }
         }
-        
-        // 更新UI
-        uiManager?.UpdateRuneInputProgress(inputRunes.Count, context.runeErrors);
+        // 再判断左右方向（X轴）
+        else
+        {
+            if (inputDir.x > 0) // 右（D）
+            {
+                ans = currentSlotIndex switch
+                {
+                    1 => 2, // 从1（上左）右移到2（上右）
+                    3 => 4, // 从3（下左）右移到4（下右）
+                    _ => currentSlotIndex 
+                };
+            }
+            else // 左（A）
+            {
+                ans = currentSlotIndex switch
+                {
+                    2 => 1, // 从2（上右）左移到1（上左）
+                    4 => 3, // 从4（下右）左移到3（下左）
+                    _ => currentSlotIndex 
+                };
+            }
+        }
+        // 如果目标槽位已使用
+        if (inputRunes.Contains(ans))
+        {
+            return currentSlotIndex;
+        }
+
+        return ans;
     }
 
-    private void CheckRuneSequence()
+
+    private void ProcessRuneInput()
     {
+
+     
         bool isCorrect = true;
         for (int i = 0; i < requiredRunes.Count; i++)
         {
-            if (i >= inputRunes.Count || inputRunes[i] != requiredRunes[i])
+            if (i < inputRunes.Count || inputRunes[i] != requiredRunes[i])
             {
                 isCorrect = false;
                 break;
             }
         }
-        
+
         if (isCorrect)
         {
             Debug.Log("符文输入完成!");
-            context.runesCompleted = true;
-            completed = true;
-            
-            // 30%几率触发符文核对
-            if (UnityEngine.Random.value < (gameConfig?.runeVerificationTriggerChance ?? 0.3f))
+
+            if (inputRunes.Count == requiredRunes.Count)
             {
-                TriggerRuneVerification();
+
+
+                if (SigningFlowManager.ProbabilityDetermine(30))
+                {
+                    //TODO:突发 符文核对
+                  
+
+
+                }
+
+                completed = true;
+
+
             }
+
+
+
+
         }
+        else
+        {
+          
+            Debug.Log("符文输入错误!");
+
+
+
+
+
+            Faild();
+
+
+
+
+        }
+        
+        uiManager?.UpdateRuneInputProgress(inputRunes.Count, context.runeErrors, isCorrect);
     }
+
+
 
     private void TriggerRuneVerification()
     {
         Debug.Log("触发符文核对环节");
         // TODO: 创建符文核对数据并显示UI
         // uiManager?.ShowRuneVerification(runeGridData);
-    }
+    }   
 }
 
 /// <summary>
@@ -930,7 +1120,15 @@ public class SigningFlowManager : MonoBehaviour
             NextStage();
         }
     }
-
+    /// <summary>
+    /// 概率判定rcx=0-100
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
+    public static bool ProbabilityDetermine(float s)
+    {
+        return UnityEngine.Random.Range(1, 101) > s;
+    }
     /// <summary>
     /// 初始化配置
     /// </summary>
