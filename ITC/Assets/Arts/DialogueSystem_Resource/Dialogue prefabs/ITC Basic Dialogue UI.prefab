@@ -1168,6 +1168,7 @@ GameObject:
   - component: {fileID: 8792016296661830141}
   - component: {fileID: 453560069745128128}
   - component: {fileID: 2247828098648172293}
+  - component: {fileID: 969928560533823235}
   m_Layer: 5
   m_Name: Response Menu Panel
   m_TagString: Untagged
@@ -1369,6 +1370,19 @@ MonoBehaviour:
   scrollbar: {fileID: 7723021184529798708}
   smoothScroll: 0
   smoothScrollSpeed: 5
+--- !u!114 &969928560533823235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1654841779488627874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 130bcc2839eea964984b278a41676a6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: 1
 --- !u!1 &1763714384307655267
 GameObject:
   m_ObjectHideFlags: 0
