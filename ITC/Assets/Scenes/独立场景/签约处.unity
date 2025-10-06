@@ -1726,10 +1726,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e02260141f0fdb245b610e03eb9e1840, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphericalRunaGameObject: {fileID: 0}
-  diamondRunaGameObject: {fileID: 0}
+  moveAction: {fileID: 0}
+  interactAction: {fileID: 0}
   circularRunaGameObject: {fileID: 0}
+  diamondRunaGameObject: {fileID: 0}
   triangularRunaGameObject: {fileID: 0}
+  sphericalRunaGameObject: {fileID: 0}
   pneumaticChannelGameObject: {fileID: 0}
   leftBooklGameObject: {fileID: 0}
   rightBookGameObject: {fileID: 0}
@@ -1737,6 +1739,7 @@ MonoBehaviour:
   telephoneGameObject: {fileID: 0}
   canGameObject: {fileID: 0}
   contractDocumentsnGameObject: {fileID: 0}
+  CopperRuneSelectorGameObject: {fileID: 0}
   sphericalRunaAnimator: {fileID: 0}
   diamondRunaAnimator: {fileID: 0}
   circularRunaAnimator: {fileID: 0}
@@ -2455,7 +2458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2607392e0983a843aaf058bd6a96802, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: 261
+  key: 327
   requireCtrl: 0
   requireAlt: 0
   requireShift: 0
