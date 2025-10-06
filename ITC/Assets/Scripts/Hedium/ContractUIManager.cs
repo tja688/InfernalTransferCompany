@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static Unity.Collections.Unicode;
 
 /// <summary>
 /// 契约UI管理器 - 处理所有UI显示和交互
@@ -10,6 +12,10 @@ public class HeContractUIManager : MonoBehaviour
 {
 
 
+    [Header("输入配置")]
+    public InputActionReference moveAction;
+
+    public InputActionReference interactAction;
     public enum UIState
     {
         None,
@@ -23,11 +29,18 @@ public class HeContractUIManager : MonoBehaviour
     public event System.Action<bool> OnPlayerDecisionMade;
     [Header("=== 触发设置 ===")]
 
-
-    public GameObject sphericalRunaGameObject;
-    public GameObject diamondRunaGameObject;
     public GameObject circularRunaGameObject;
+    public GameObject diamondRunaGameObject;
     public GameObject triangularRunaGameObject;
+    public GameObject sphericalRunaGameObject;
+
+
+  
+
+
+
+
+
     public GameObject pneumaticChannelGameObject;
 
     public GameObject leftBooklGameObject;
@@ -36,6 +49,7 @@ public class HeContractUIManager : MonoBehaviour
     public GameObject telephoneGameObject;
     public GameObject canGameObject;
     public GameObject contractDocumentsnGameObject;
+    public GameObject CopperRuneSelectorGameObject;
 
     [Header("=== 动画设置 ===")]
 
@@ -278,10 +292,14 @@ public class HeContractUIManager : MonoBehaviour
 
     /// <summary>
     /// 更新符文输入进度
+    /// 
     /// </summary>
-    public void UpdateRuneInputProgress(int inputCount, int errorCount)
+    public void UpdateRuneInputProgress(int inputCount, int errorCount,bool isCorrect)
     {
-      
+        
+
+
+
     }
 
     /// <summary>
