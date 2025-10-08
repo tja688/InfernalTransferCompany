@@ -14,7 +14,13 @@ using static Pathfinding.SimpleSmoothModifier;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
 
-
+public static class HeCoroutineUtil
+{
+    public static IEnumerator Run(System.Func<IEnumerator> coroutine)
+    {
+        return coroutine();
+    }
+}
 
 
 /// <summary>
@@ -23,6 +29,8 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 /// </summary>
 public enum DocumentError
 {
+    ///<summary,>伪实现，不判断类型只判断对错</summary>
+    Stub,
     /// <summary>封蜡破损 - 文书的封蜡不完整</summary>
     BrokenSeal,
 
@@ -101,13 +109,13 @@ public class DocumentVerifier : IContractStage
                 detectedErrors.Remove(error);
                 Debug.Log($"问题{error}已处理,核验文书不通过");
                 uiManager.SwitchPanel(HeContractUIManager.UIState.None);
-                uiManager.OnDocumentClicked -= documentClickedHandler;
+                uiManager.OnJudge -= documentClickedHandler;
                 detectedErrors.Clear();
             }
             else
             {
                 Debug.Log($"问题{error}不在待处理列表中");
-                //TODO：文书判断失败逻辑
+              
 
 
 
@@ -135,7 +143,7 @@ public class DocumentVerifier : IContractStage
 
             }
         };
-        uiManager.OnDocumentClicked += documentClickedHandler;
+        uiManager.OnJudge += documentClickedHandler;
 
 
     }
@@ -228,8 +236,9 @@ public class DocumentVerifier : IContractStage
         if (detectedErrors.Count > 0)
         {
             Debug.Log($"文书核验发现 {detectedErrors.Count} 个问题，需要拒绝签约");
-            // 玩家需要选择是否拒绝，这里先标记为需要处理
-            // 实际游戏中应该等待玩家决定
+            //Stub
+            detectedErrors.Add(DocumentError.Stub);
+        
         }
         else
         {
@@ -314,7 +323,7 @@ public class RuneInputManager : IContractStage
         timeRemaining = gameConfig?.runeInputTimeLimit ?? 10f;
 
         // 正确获取 CopperRuneSelectorGameObject 的 transform
-        if (uiManager != null && uiManager.CopperRuneSelectorGameObject != null)
+        if (uiManager != null && uiManager.copperRuneSelectorGameObject != null)
         {
             InitPoistion();
         }
@@ -354,7 +363,7 @@ public class RuneInputManager : IContractStage
     public void InitPoistion()
     {
         invaild = 0;
-        Controllertrans = uiManager.CopperRuneSelectorGameObject.transform;
+        Controllertrans = uiManager.copperRuneSelectorGameObject.transform;
         Slot1 = uiManager.circularRunaGameObject.transform.position;
         Slot2=  uiManager.diamondRunaGameObject.transform.position;   
         Slot4=  uiManager.triangularRunaGameObject.transform.position;

@@ -40,7 +40,7 @@ public class HeContractUIManager : MonoBehaviour
 
 
 
-
+    
     public GameObject pneumaticChannelGameObject;
 
     public GameObject leftBooklGameObject;
@@ -49,7 +49,7 @@ public class HeContractUIManager : MonoBehaviour
     public GameObject telephoneGameObject;
     public GameObject canGameObject;
     public GameObject contractDocumentsnGameObject;
-    public GameObject CopperRuneSelectorGameObject;
+    public GameObject copperRuneSelectorGameObject;
 
     [Header("=== 动画设置 ===")]
 
@@ -70,15 +70,17 @@ public class HeContractUIManager : MonoBehaviour
     public float panelTransitionTime = 0.5f;
     public float uiElementFadeTime = 0.3f;
 
-    // 私有变量
+  
+    public event System.Action<DocumentError> OnJudge;
+    // 私有变量 
     private HeContractContext currentContext;
     private HeContractGameConfig gameConfig;
     private SigningFlowManager flowManager;
     private UIState currentActivePanel=UIState.None;
     private List<GameObject> runeGridItems = new List<GameObject>();
+    private bool pneumaticChannelAnimatorOpen=false;
 
-
-    public event System.Action<DocumentError> OnDocumentClicked;
+    private event System.Action<DocumentError> OnDocumentClicked;
     private void Awake()
     {
         
@@ -186,6 +188,11 @@ public class HeContractUIManager : MonoBehaviour
 
         yield return null;
     }
+
+
+
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -199,10 +206,13 @@ public class HeContractUIManager : MonoBehaviour
 
 
                 pneumaticChannelAnimator.SetTrigger("Open");
-                yield return new WaitForSeconds(3.0f);  
-                pneumaticChannelAnimator.SetTrigger("Close");
-          
-             
+            
+                yield return new WaitForSeconds(2.0f);
+                pneumaticChannelAnimatorOpen = true;
+                
+
+
+
 
 
 
@@ -476,5 +486,53 @@ public class HeContractUIManager : MonoBehaviour
       
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public void OnPneumaticChannelClick()
+    {
+
+        if (!pneumaticChannelAnimatorOpen) return;
+        pneumaticChannelAnimator.SetTrigger("Close");
+        pneumaticChannelAnimatorOpen = false;
+
+
+
+        contractDocumentsnGameObject?.GetComponent<EntryAnimation>().PlayEntryAnimation();
+
+      
+        //伪实现
+        StartCoroutine(HeCoroutineUtil.Run(() => {
+            return Inner();
+
+            System.Collections.IEnumerator Inner()
+            {
+              
+               yield return new WaitForSeconds(3.0f);
+               contractDocumentsnGameObject?.GetComponent<EntryAnimation>().PlayExitAnimation();
+               yield return new WaitForSeconds(1.0f);
+               OnJudge?.Invoke(DocumentError.Stub);
+
+
+
+            }
+        }));
+
+
+
+
+
+
+    }
     #endregion
 }
