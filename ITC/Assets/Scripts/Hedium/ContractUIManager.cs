@@ -33,14 +33,14 @@ public class HeContractUIManager : MonoBehaviour
     public GameObject diamondRunaGameObject;
     public GameObject triangularRunaGameObject;
     public GameObject sphericalRunaGameObject;
-
-
-  
-
+    public GameObject arrowGameObject;
 
 
 
-    
+
+
+
+
     public GameObject pneumaticChannelGameObject;
 
     public GameObject leftBooklGameObject;
@@ -534,5 +534,107 @@ public class HeContractUIManager : MonoBehaviour
 
 
     }
+
+
+    private float fadeOutDuration = 0.8f;
+    public void FadeOutArrow (GameObject spawnedArrows)
+    {
+        StartCoroutine(FadeOutArrowCoroutine(spawnedArrows));
+    }
+    public void ShakeArrow(GameObject spawnedArrows)
+    {
+        StartCoroutine(ShakeArrowCoroutine(spawnedArrows));
+    }
+    /// <summary>
+    /// 箭头碎裂淡出效果
+    /// </summary>
+    private System.Collections.IEnumerator FadeOutArrowCoroutine(GameObject arrow)
+    {
+        if (arrow == null) yield break;
+
+        // 获取渲染组件
+        Renderer renderer = arrow.GetComponent<Renderer>();
+        CanvasGroup canvasGroup = arrow.GetComponent<CanvasGroup>();
+
+        float elapsedTime = 0f;
+        Vector3 originalScale = arrow.transform.localScale;
+
+        // 碎裂效果：先稍微放大然后缩小并分裂
+        while (elapsedTime < fadeOutDuration)
+        {
+            if (arrow == null) yield break;
+
+            float progress = elapsedTime / fadeOutDuration;
+
+            // 碎裂效果：随机偏移位置和旋转
+            Vector3 randomOffset = new Vector3(
+                Random.Range(-0.1f, 0.1f) * progress,
+                Random.Range(-0.1f, 0.1f) * progress,
+                0
+            );
+
+            arrow.transform.localPosition += randomOffset;
+            arrow.transform.localEulerAngles += new Vector3(0, 0, Random.Range(-5f, 5f) * progress);
+
+            // 淡出和缩放
+            float scale = Mathf.Lerp(1f, 0f, progress);
+            arrow.transform.localScale = originalScale * scale;
+
+            // 透明度淡出
+            if (renderer != null)
+            {
+                Color color = renderer.material.color;
+                color.a = 1f - progress;
+                renderer.material.color = color;
+            }
+            else if (canvasGroup != null)
+            {
+                canvasGroup.alpha = 1f - progress;
+            }
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 最终销毁对象
+        if (arrow != null)
+        {
+            GameObject.Destroy(arrow);
+        }
+    }
+    /// <summary>
+    /// 输入错误时的箭头震动效果
+    /// </summary>
+    private System.Collections.IEnumerator ShakeArrowCoroutine(GameObject arrow)
+    {
+        if (arrow == null) yield break;
+
+        Vector3 originalPosition = arrow.transform.localPosition;
+        float shakeDuration = 0.3f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < shakeDuration)
+        {
+            if (arrow == null) yield break;
+
+            float shakeAmount = 0.1f * (1f - elapsedTime / shakeDuration);
+            Vector3 shakeOffset = new Vector3(
+                Random.Range(-shakeAmount, shakeAmount),
+                Random.Range(-shakeAmount, shakeAmount),
+                0
+            );
+
+            arrow.transform.localPosition = originalPosition + shakeOffset;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        if (arrow != null)
+        {
+            arrow.transform.localPosition = originalPosition;
+        }
+    }
+
     #endregion
 }
