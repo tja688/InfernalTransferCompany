@@ -326,7 +326,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 304332301}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -93.431}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -352, y: -1.5}
@@ -639,6 +639,7 @@ GameObject:
   - component: {fileID: 350766614}
   - component: {fileID: 350766617}
   - component: {fileID: 350766616}
+  - component: {fileID: 350766618}
   m_Layer: 5
   m_Name: "\u5C0F\u56FE\u6807"
   m_TagString: Untagged
@@ -653,17 +654,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 350766613}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.61, y: 0.61, z: 0.61}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 304332301}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 27.783}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 734, y: -446.5}
-  m_SizeDelta: {x: 190, y: 190}
+  m_AnchoredPosition: {x: 729, y: -439}
+  m_SizeDelta: {x: 327.5535, y: 327.5535}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &350766616
 MonoBehaviour:
@@ -703,6 +704,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 350766613}
   m_CullTransparentMesh: 1
+--- !u!114 &350766618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350766613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf87cd9a31932de4b9fa99df3aa7d00e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1
+  useAnimationCurve: 0
+  easeType: 15
+  customEaseCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  animateColor: 0
+  usePath: 0
+  pathControlPoint: {x: 0, y: 0}
+  startAnchoredPosition: {x: 729, y: -439}
+  targetAnchoredPosition: {x: -749.8624, y: 319.85757}
+  startSizeDelta: {x: 327.5535, y: 327.5535}
+  targetSizeDelta: {x: 514.89, y: 514.89}
+  startRotation: {x: -0, y: 0, z: 0}
+  targetRotation: {x: -0, y: -0, z: 27.782608}
+  startColor: {r: 0, g: 0, b: 0, a: 0}
+  targetColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &357651157
 GameObject:
   m_ObjectHideFlags: 0
