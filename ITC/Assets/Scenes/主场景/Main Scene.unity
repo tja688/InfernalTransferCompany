@@ -655,15 +655,15 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 350766613}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 1512.3318}
   m_LocalScale: {x: 0.61, y: 0.61, z: 0.61}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 304332301}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 27.783}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 37.706}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 729, y: -439}
+  m_AnchoredPosition: {x: 701, y: -377.72}
   m_SizeDelta: {x: 327.5535, y: 327.5535}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &350766616
@@ -717,16 +717,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duration: 1
-  useAnimationCurve: 0
-  easeType: 15
-  customEaseCurve:
+  easeType: 6
+  useCustomCurve: 0
+  customCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
       inSlope: 0
-      outSlope: 1
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -734,7 +734,7 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 1
+      inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
@@ -743,17 +743,25 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  animateColor: 0
-  usePath: 0
-  pathControlPoint: {x: 0, y: 0}
-  startAnchoredPosition: {x: 729, y: -439}
-  targetAnchoredPosition: {x: -749.8624, y: 319.85757}
+  useBezierPath: 1
+  showPathGizmos: 1
+  colorMode: 0
+  tweenAnchorAndPivot: 1
+  startAnchoredPosition: {x: 701, y: -377.72}
   startSizeDelta: {x: 327.5535, y: 327.5535}
-  targetSizeDelta: {x: 514.89, y: 514.89}
+  startAnchorMin: {x: 0.5, y: 0.5}
+  startAnchorMax: {x: 0.5, y: 0.5}
+  startPivot: {x: 0.5, y: 0.5}
   startRotation: {x: -0, y: 0, z: 0}
-  targetRotation: {x: -0, y: -0, z: 27.782608}
-  startColor: {r: 0, g: 0, b: 0, a: 0}
-  targetColor: {r: 0, g: 0, b: 0, a: 0}
+  startColor: {r: 1, g: 1, b: 1, a: 1}
+  targetAnchoredPosition: {x: -793, y: 412}
+  targetSizeDelta: {x: 327.5535, y: 327.5535}
+  targetAnchorMin: {x: 0.5, y: 0.5}
+  targetAnchorMax: {x: 0.5, y: 0.5}
+  targetPivot: {x: 0.5, y: 0.5}
+  targetRotation: {x: -0, y: 0, z: 0}
+  targetColor: {r: 1, g: 1, b: 1, a: 1}
+  pathControlPoint: {x: 385.7063, y: 419.21948}
 --- !u!1 &357651157
 GameObject:
   m_ObjectHideFlags: 0
