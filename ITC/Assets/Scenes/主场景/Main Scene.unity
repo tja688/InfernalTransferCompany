@@ -537,7 +537,6 @@ GameObject:
   - component: {fileID: 331982938}
   - component: {fileID: 331982937}
   - component: {fileID: 331982936}
-  - component: {fileID: 331982939}
   m_Layer: 0
   m_Name: Game Canvas
   m_TagString: Untagged
@@ -628,26 +627,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_TargetDisplay: 0
---- !u!114 &331982939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 331982934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ab30c49b156e554daacc7e1678d533c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  psdPrefabAsset: {fileID: -8653719598885068355, guid: 9b8c6a710be950944939972d9452d10e, type: 3}
-  referencePixelsPerUnit: 100
-  flipYForTopLeftLayout: 1
-  anchorPreset: 0
-  autoUseSlicedIfHasBorder: 1
-  inheritRootScale: 0
-  keepEmptyGroups: 1
-  destroyTempPsdInstance: 1
 --- !u!1 &357651157
 GameObject:
   m_ObjectHideFlags: 0
@@ -1327,6 +1306,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1385796204}
   - component: {fileID: 1385796206}
+  - component: {fileID: 1385796207}
   m_Layer: 0
   m_Name: "\u9ED8\u8BA4\u5DE5\u5177\u6D4B\u8BD5\u5BF9\u8C61"
   m_TagString: Untagged
@@ -1361,6 +1341,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d94a4e6603e433d8a3f184842e597af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1385796207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385796203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c19f39663a545c096310c0688c16fd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clipGroup: {fileID: 0}
+  triggerKey: 112
 --- !u!1 &1547583153
 GameObject:
   m_ObjectHideFlags: 0
