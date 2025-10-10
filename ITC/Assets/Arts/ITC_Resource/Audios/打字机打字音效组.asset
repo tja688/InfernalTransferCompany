@@ -9,15 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 913838e2db8fa6847b0caa45017e4dfb, type: 3}
+  m_Script: {fileID: 11500000, guid: 9147afdb5fbfd12458fcb691fc49c0c9, type: 3}
   m_Name: "\u6253\u5B57\u673A\u6253\u5B57\u97F3\u6548\u7EC4"
   m_EditorClassIdentifier: 
-  Clips:
-  - {fileID: 8300000, guid: 32e97fc9f4b8c034ea176cedbff1842c, type: 3}
-  - {fileID: 8300000, guid: 91f2148c448f6d94cb53e2ada5ccdbcc, type: 3}
-  - {fileID: 8300000, guid: 8c1eabe96957f2c46b6d693c7332593f, type: 3}
-  - {fileID: 8300000, guid: 5d63b4e6f1308864f9e34da81d622bcd, type: 3}
-  - {fileID: 8300000, guid: 17da70b679e50354aad4764c4e6ccf0e, type: 3}
-  - {fileID: 8300000, guid: 2809bf96eba6a3942ae1d15a1c86ce51, type: 3}
-  - {fileID: 8300000, guid: ca84089420ae118409dda8d83fce83da, type: 3}
-  - {fileID: 8300000, guid: 53eb9a0f1a93e0e48b311acf6faf225b, type: 3}
+  GroupName: "\u6253\u5B57\u673A\u6253\u5B57\u97F3\u6548"
+  SFXObjects:
+  - {fileID: 11400000, guid: 6aaff8253593c3940b1f8e51daf7f36e, type: 2}
+  - {fileID: 11400000, guid: 15e08d2b0389ccc4fb7e8805bc5e0420, type: 2}
+  - {fileID: 11400000, guid: acf204d583b97b042b6e55089dc413e9, type: 2}
+  - {fileID: 11400000, guid: 928716a66cc343147a1b348769771522, type: 2}
+  - {fileID: 11400000, guid: 7b7bc3781db1ea7498dcb626ece9ea2d, type: 2}
+  - {fileID: 11400000, guid: d4f9f8a38d1ae6c4b962aa85021824f0, type: 2}
+  - {fileID: 11400000, guid: f92e2ff36aa1a854b90c04ec1a0e6ba4, type: 2}
+  - {fileID: 11400000, guid: 137bcec05fcab91418dfbb3413ee457b, type: 2}
+  Randomization: 0
