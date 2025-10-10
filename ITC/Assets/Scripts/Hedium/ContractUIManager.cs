@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,9 +14,10 @@ public class HeContractUIManager : MonoBehaviour
 
 
     [Header("输入配置")]
-    public InputActionReference moveAction;
-
-    public InputActionReference interactAction;
+    [SerializeField]
+    private InputActionReference moveAction;
+    [SerializeField]
+    private InputActionReference interactAction;
     public enum UIState
     {
         None,
@@ -80,10 +82,12 @@ public class HeContractUIManager : MonoBehaviour
     private List<GameObject> runeGridItems = new List<GameObject>();
     private bool pneumaticChannelAnimatorOpen=false;
 
-    private event System.Action<DocumentError> OnDocumentClicked;
+    public event System.Action<DocumentError> OnDocumentClicked;
+    public event System.Action<int> OnMoveAction;
+    public event System.Action OnInteractAction;
     private void Awake()
     {
-        
+       
     }
     void Start()
     {
@@ -109,6 +113,8 @@ public class HeContractUIManager : MonoBehaviour
         OnDocumentClicked?.Invoke(DocumentError.DangerousCustomer);
 
     }
+   
+ 
     /// <summary>
     /// 初始化UI
     /// </summary>
@@ -537,9 +543,10 @@ public class HeContractUIManager : MonoBehaviour
 
 
     private float fadeOutDuration = 0.8f;
-    public void FadeOutArrow (GameObject spawnedArrows)
+    public void FadeOutArrow (GameObject spawnedArrows,float waitTime)
     {
-        StartCoroutine(FadeOutArrowCoroutine(spawnedArrows));
+        
+        StartCoroutine(FadeOutArrowCoroutine(spawnedArrows, waitTime));
     }
     public void ShakeArrow(GameObject spawnedArrows)
     {
@@ -548,8 +555,9 @@ public class HeContractUIManager : MonoBehaviour
     /// <summary>
     /// 箭头碎裂淡出效果
     /// </summary>
-    private System.Collections.IEnumerator FadeOutArrowCoroutine(GameObject arrow)
+    private System.Collections.IEnumerator FadeOutArrowCoroutine(GameObject arrow,float waitTime)
     {
+        yield return new WaitForSeconds(waitTime); // 等待一段时间后开始淡出
         if (arrow == null) yield break;
 
         // 获取渲染组件
@@ -568,13 +576,13 @@ public class HeContractUIManager : MonoBehaviour
 
             // 碎裂效果：随机偏移位置和旋转
             Vector3 randomOffset = new Vector3(
-                Random.Range(-0.1f, 0.1f) * progress,
-                Random.Range(-0.1f, 0.1f) * progress,
+                UnityEngine.Random.Range(-0.1f, 0.1f) * progress,
+                UnityEngine.Random.Range(-0.1f, 0.1f) * progress,
                 0
             );
 
             arrow.transform.localPosition += randomOffset;
-            arrow.transform.localEulerAngles += new Vector3(0, 0, Random.Range(-5f, 5f) * progress);
+            arrow.transform.localEulerAngles += new Vector3(0, 0, UnityEngine. Random.Range(-5f, 5f) * progress);
 
             // 淡出和缩放
             float scale = Mathf.Lerp(1f, 0f, progress);
@@ -619,8 +627,8 @@ public class HeContractUIManager : MonoBehaviour
 
             float shakeAmount = 0.1f * (1f - elapsedTime / shakeDuration);
             Vector3 shakeOffset = new Vector3(
-                Random.Range(-shakeAmount, shakeAmount),
-                Random.Range(-shakeAmount, shakeAmount),
+               UnityEngine.Random.Range(-shakeAmount, shakeAmount),
+               UnityEngine. Random.Range(-shakeAmount, shakeAmount),
                 0
             );
 
@@ -635,6 +643,56 @@ public class HeContractUIManager : MonoBehaviour
             arrow.transform.localPosition = originalPosition;
         }
     }
+    public void EnableMoveAction()
+    {
+      
+        moveAction.action.performed += OnMovePerformed;
+        moveAction?.action.Enable();
+    }
+    public void DisableMoveAction()
+    {
+        moveAction.action.performed -= OnMovePerformed;
+        moveAction.action.Disable();
+    }
 
+    public void EnableInteractAction()
+    {
+        interactAction.action.canceled += OnInteractPerformed;
+        interactAction?.action.Enable();
+}
+
+    public void DisableInteractAction()
+    {
+
+        interactAction.action.canceled -= OnInteractPerformed;
+        interactAction?.action.Disable();
+    }
+    private void OnMovePerformed(InputAction.CallbackContext context)
+    {
+        Vector2 moveInput = context.ReadValue<Vector2>(); 
+        string keyName = context.control.name.ToLower();
+
+        // 映射为索引（W=0, A=1, S=2, D=3）
+        var currentKeyIndex = keyName switch
+        {
+            "w" => 0,
+            "s" => 1,
+            "a" => 2,
+            "d" => 3,
+            _ => -1, // 其他按键不改变当前索引（如同时按多个键时保持优先）
+        };
+
+
+        Debug.Log($"移动输入（回调）：X={moveInput.x}, Y={moveInput.y},keyName={keyName},directIndex={currentKeyIndex}");
+        OnMoveAction?.Invoke(currentKeyIndex);
+
+    }
+
+    private void OnInteractPerformed(InputAction.CallbackContext context)
+    {
+        Debug.Log("交互按键按下（回调）");
+
+        OnInteractAction?.Invoke();
+    }
     #endregion
 }

@@ -557,12 +557,12 @@
                 },
                 {
                     "name": "MoveItem",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "509540be-2b35-4e34-b59a-612c7fefa0ce",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -633,48 +633,59 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "59cfd2c9-9463-4f77-a403-b7d2abd18cb7",
+                    "name": "2D Vector",
+                    "id": "4c50b468-a82a-4465-9028-a17182cd919d",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveItem",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "8917d427-65af-4a20-9c3c-a7197811d760",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": "New control scheme",
+                    "groups": "",
                     "action": "MoveItem",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "a8294630-3e7d-4dfb-a760-133e75ace288",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "New control scheme",
-                    "action": "MoveItem",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "36d59a6d-f7c5-4edb-b994-ba693073e54d",
+                    "name": "down",
+                    "id": "40b913ee-e8fb-4722-9785-f97e946e5ac2",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
-                    "groups": "New control scheme",
+                    "groups": "",
                     "action": "MoveItem",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "2e85a2f9-b63f-4196-9b86-76c52c520c01",
+                    "name": "left",
+                    "id": "031ac2a4-a254-4086-9b55-0102292318cb",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveItem",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "e403e118-a660-4255-8e97-5fca46b7e820",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": "New control scheme",
+                    "groups": "",
                     "action": "MoveItem",
                     "isComposite": false,
-                    "isPartOfComposite": false
+                    "isPartOfComposite": true
                 }
             ]
         }
