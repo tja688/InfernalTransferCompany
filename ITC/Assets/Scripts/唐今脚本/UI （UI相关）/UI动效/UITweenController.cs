@@ -3,179 +3,271 @@ using DG.Tweening;
 using UnityEngine.UI;
 
 /// <summary>
-/// (最終完整版) 一個強大的UI動效控制器，支持在編輯器中設置初始/目標狀態，並提供實時預覽。
-/// 支持RectTransform、旋轉、顏色/透明度的動畫，並允許使用自訂的AnimationCurve和二次貝茲曲線路徑。
+/// UI 动效控制器（Bezier/直线两用）
+/// - 可记录“初始/目标状态”，支持预览、路径可视化；
+/// - 修复：记录终点时不再意外覆盖“起点”；
+/// - 可选将 Anchor/Pivot 也纳入补间；
+/// - 颜色支持 CanvasGroup Alpha / Graphic Color / Both；
+/// - 路径：二次 Bézier（单控制点），Scene 视图可视化与拖动；
+/// - 可选择关闭曲线，按直线补间；
 /// </summary>
 [RequireComponent(typeof(RectTransform))]
-[AddComponentMenu("UI/Tween Controller (Path Master)")]
+[AddComponentMenu("UI/Tween Controller (Advanced V3)")]
 public class UITweenController : MonoBehaviour
 {
-    // --- 动画设定 ---
+    // ---------- 基本动画设置 ----------
     [Header("Animation Settings")]
-    [Tooltip("動畫持續時間（秒）")]
+    [Tooltip("动画总时长（秒）。建议 0.15~0.6 做 UI 微交互，页级大进出 0.6~1.2。")]
     public float duration = 1f;
-    
-    [Tooltip("勾選後，將使用下方的自訂曲線，而非預設的Ease類型。")]
-    public bool useAnimationCurve = false;
 
-    [Tooltip("動畫使用的緩動曲線")]
+    [Tooltip("缓动类型（曲线的快慢感）。可配合下方自定义曲线开关使用。")]
     public Ease easeType = Ease.OutQuad;
 
-    [Tooltip("自訂的動畫曲線")]
-    public AnimationCurve customEaseCurve = AnimationCurve.Linear(0, 0, 1, 1);
-    
-    [Tooltip("啟用後，才會對顏色或透明度進行動畫")]
-    public bool animateColor = false; 
+    [Tooltip("启用后优先使用自定义 AnimationCurve（覆盖上面的 Ease）。")]
+    public bool useCustomCurve = false;
 
-    // --- 路徑設定 ---
-    [Header("Path Settings")]
-    [Tooltip("啟用後，將沿著貝茲曲線運動，而非直線運動")]
-    public bool usePath = false;
-    
-    // 儲存烘焙後的控制點位置（相對於Canvas的局部空間）
-    [SerializeField] private Vector2 pathControlPoint;
+    [Tooltip("自定义 AnimationCurve（横轴 0..1 时间，纵轴 0..1 进度）。")]
+    public AnimationCurve customCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
-    // --- 状态数据 ---
-    [Header("State Data")]
+    [Tooltip("是否沿二次 Bézier 曲线运动（A→C→B）。关闭则按直线 DOAnchorPos 到目标点。")]
+    public bool useBezierPath = true;
+
+    [Tooltip("记录/预览时，在 Scene 视图显示路径与控制点。")]
+    public bool showPathGizmos = true;
+
+    // ---------- 颜色/透明度 ----------
+    public enum ColorMode { None, AlphaOnly, GraphicColor, Both }
+
+    [Header("Color / Opacity")]
+    [Tooltip("None 不做颜色；AlphaOnly 仅改 CanvasGroup.alpha；GraphicColor 改 UI Graphic 颜色；Both 两者都改。")]
+    public ColorMode colorMode = ColorMode.None;
+
+    // ---------- Anchor / Pivot 可选补间 ----------
+    [Header("Anchor & Pivot (Optional)")]
+    [Tooltip("启用后，将 AnchorMin/AnchorMax/Pivot 也纳入补间（不建议频繁改，除非明确需求）。")]
+    public bool tweenAnchorAndPivot = false;
+
+    // ---------- 状态数据（由编辑器按钮管理） ----------
+    [Header("State Data (Managed by Editor Buttons)")]
+    // RectTransform 主属性
     [SerializeField] private Vector2 startAnchoredPosition;
-    [SerializeField] private Vector2 targetAnchoredPosition;
     [SerializeField] private Vector2 startSizeDelta;
-    [SerializeField] private Vector2 targetSizeDelta;
+    [SerializeField] private Vector2 startAnchorMin;
+    [SerializeField] private Vector2 startAnchorMax;
+    [SerializeField] private Vector2 startPivot;
     [SerializeField] private Vector3 startRotation;
+    [SerializeField] private Color  startColor = Color.white;
+
+    [SerializeField] private Vector2 targetAnchoredPosition;
+    [SerializeField] private Vector2 targetSizeDelta;
+    [SerializeField] private Vector2 targetAnchorMin;
+    [SerializeField] private Vector2 targetAnchorMax;
+    [SerializeField] private Vector2 targetPivot;
     [SerializeField] private Vector3 targetRotation;
-    [SerializeField] private Color startColor;
-    [SerializeField] private Color targetColor;
-    
-    // --- 组件缓存 ---
-    private RectTransform _rectTransform;
+    [SerializeField] private Color  targetColor = Color.white;
+
+    // Bézier 控制点（父本地坐标）
+    [Header("Bezier Path")]
+    [Tooltip("二次 Bézier 的单一控制点（父本地坐标）。可在 Scene 视图拖动。")]
+    public Vector2 pathControlPoint;
+
+    // ---------- 组件缓存 ----------
+    private RectTransform _rt;
     private Graphic _graphic;
     private CanvasGroup _canvasGroup;
-    public RectTransform RectTransform => _rectTransform ?? (_rectTransform = GetComponent<RectTransform>());
+
+    public RectTransform RectTransform => _rt ??= GetComponent<RectTransform>();
 
     private void Awake()
     {
-        _rectTransform = GetComponent<RectTransform>();
+        _rt = GetComponent<RectTransform>();
         _canvasGroup = GetComponent<CanvasGroup>();
-        if (_canvasGroup == null)
-        {
-            _graphic = GetComponent<Graphic>();
-        }
+        if (_canvasGroup == null) _graphic = GetComponent<Graphic>();
     }
 
-    #region Public Methods for Editor
-    
-    public Vector2 GetStartPos() => startAnchoredPosition;
-    public Vector2 GetTargetPos() => targetAnchoredPosition;
-    public Vector2 GetControlPoint() => pathControlPoint;
+    // ----------------- 公共方法（编辑器按钮会调用） -----------------
 
-    public void SetControlPoint(Vector2 newPoint)
-    {
-        pathControlPoint = newPoint;
-    }
-
-    public void ResetControlPoint()
-    {
-        pathControlPoint = (startAnchoredPosition + targetAnchoredPosition) * 0.5f;
-    }
-
+    /// <summary>记录当前为“初始状态”。</summary>
     public void RecordInitialState()
     {
+        EnsureReferences();
+
         startAnchoredPosition = RectTransform.anchoredPosition;
-        startSizeDelta = RectTransform.sizeDelta;
-        startRotation = RectTransform.eulerAngles;
+        startSizeDelta        = RectTransform.sizeDelta;
+        startAnchorMin        = RectTransform.anchorMin;
+        startAnchorMax        = RectTransform.anchorMax;
+        startPivot            = RectTransform.pivot;
+        startRotation         = RectTransform.eulerAngles;
 
         if (_canvasGroup != null) startColor = new Color(1, 1, 1, _canvasGroup.alpha);
         else if (_graphic != null) startColor = _graphic.color;
-        
-        // 每次記錄初始點時，都先重置路徑為直線，確保從一個乾淨的狀態開始
-        ResetControlPoint();
+
+        // 仅在记录“起点”时允许用当前刷新起点，再重算控制点为 AB 中点
+        ResetControlPoint(refreshStartFromCurrent: true);
     }
-    
+
+    /// <summary>记录当前为“目标状态”。</summary>
     public void RecordTargetState()
     {
+        EnsureReferences();
+
         targetAnchoredPosition = RectTransform.anchoredPosition;
-        targetSizeDelta = RectTransform.sizeDelta;
-        targetRotation = RectTransform.eulerAngles;
-        
+        targetSizeDelta        = RectTransform.sizeDelta;
+        targetAnchorMin        = RectTransform.anchorMin;
+        targetAnchorMax        = RectTransform.anchorMax;
+        targetPivot            = RectTransform.pivot;
+        targetRotation         = RectTransform.eulerAngles;
+
         if (_canvasGroup != null) targetColor = new Color(1, 1, 1, _canvasGroup.alpha);
         else if (_graphic != null) targetColor = _graphic.color;
+
+        // 只重算控制点，不触碰 start（避免“起点被覆盖”的老问题）
+        ResetControlPoint(refreshStartFromCurrent: false);
     }
 
+    /// <summary>回到“初始状态”。</summary>
     public void RevertToInitialState()
     {
-        RectTransform.anchoredPosition = startAnchoredPosition;
-        RectTransform.sizeDelta = startSizeDelta;
-        RectTransform.eulerAngles = startRotation;
+        RectTransform.anchorMin       = startAnchorMin;
+        RectTransform.anchorMax       = startAnchorMax;
+        RectTransform.pivot           = startPivot;
+        RectTransform.sizeDelta       = startSizeDelta;
+        RectTransform.anchoredPosition= startAnchoredPosition;
+        RectTransform.eulerAngles     = startRotation;
 
-        if(animateColor) 
+        if (colorMode == ColorMode.AlphaOnly || colorMode == ColorMode.Both)
         {
             if (_canvasGroup != null) _canvasGroup.alpha = startColor.a;
-            else if (_graphic != null) _graphic.color = startColor;
+        }
+        if (colorMode == ColorMode.GraphicColor || colorMode == ColorMode.Both)
+        {
+            if (_graphic != null) _graphic.color = new Color(startColor.r, startColor.g, startColor.b,
+                                                              (colorMode == ColorMode.GraphicColor && _canvasGroup == null) ? startColor.a : _graphic.color.a);
         }
     }
-    
-    #endregion
 
-    #region Animation Playback
+    /// <summary>
+    /// 重置 Bézier 控制点到 AB 中点。可选：是否用当前物体位置“刷新起点”。
+    /// </summary>
+    public void ResetControlPoint(bool refreshStartFromCurrent = false)
+    {
+        if (refreshStartFromCurrent)
+            startAnchoredPosition = RectTransform.anchoredPosition; // 只在“记录起点”时允许
 
+        pathControlPoint = (startAnchoredPosition + targetAnchoredPosition) * 0.5f;
+    }
+
+    // ----------------- 动画播放 -----------------
+
+    /// <summary>创建补间序列（暂停状态，等待 Play）。</summary>
     public Sequence CreateAnimationSequence()
     {
-        Sequence seq = DOTween.Sequence();
-        
-        // 位置動畫邏輯
-        if (usePath)
+        EnsureReferences();
+
+        var seq = DOTween.Sequence();
+
+        // 位置：曲线或直线
+        if (useBezierPath)
         {
-            Tween pathTween = DOTween.To(
-                () => 0f, 
-                t => {
-                    Vector2 newPos = GetPointOnQuadraticBezierCurve(startAnchoredPosition, pathControlPoint, targetAnchoredPosition, t);
-                    RectTransform.anchoredPosition = newPos;
-                },
-                1f,
-                duration
-            );
-            seq.Join(pathTween);
+            // 用参数化推进，统一走 easing/自定义曲线
+            seq.Join(DOTween.To(() => 0f, t =>
+            {
+                float eased = ApplyEasing(t);
+                Vector2 p = QuadBezier(startAnchoredPosition, pathControlPoint, targetAnchoredPosition, eased);
+                RectTransform.anchoredPosition = p;
+            }, 1f, duration));
         }
         else
         {
-            seq.Join(RectTransform.DOAnchorPos(targetAnchoredPosition, duration));
+            var tween = RectTransform.DOAnchorPos(targetAnchoredPosition, duration);
+            if (useCustomCurve) tween.SetEase(customCurve);
+            else tween.SetEase(easeType);
+            seq.Join(tween);
         }
 
-        // 其他動畫屬性
-        seq.Join(RectTransform.DOSizeDelta(targetSizeDelta, duration));
-        seq.Join(RectTransform.DORotate(targetRotation, duration, RotateMode.Fast));
-
-        if (animateColor)
+        // 尺寸
         {
-            if (_canvasGroup != null) seq.Join(_canvasGroup.DOFade(targetColor.a, duration));
-            else if (_graphic != null) seq.Join(_graphic.DOColor(targetColor, duration));
+            var tween = RectTransform.DOSizeDelta(targetSizeDelta, duration);
+            ApplyEaseTo(tween);
+            seq.Join(tween);
         }
 
-        // Ease 設定
-        if (useAnimationCurve)
+        // 旋转
         {
-            seq.SetEase(customEaseCurve);
+            var tween = RectTransform.DORotate(targetRotation, duration, RotateMode.Fast);
+            ApplyEaseTo(tween);
+            seq.Join(tween);
         }
-        else
+
+        // Anchor/Pivot（可选）
+        if (tweenAnchorAndPivot)
         {
-            seq.SetEase(easeType);
+            var t1 = RectTransform.DOAnchorMin(targetAnchorMin, duration);
+            var t2 = RectTransform.DOAnchorMax(targetAnchorMax, duration);
+            var t3 = RectTransform.DOPivot(targetPivot, duration);
+            ApplyEaseTo(t1); ApplyEaseTo(t2); ApplyEaseTo(t3);
+            seq.Join(t1).Join(t2).Join(t3);
         }
-        
-        seq.Pause();
-        seq.SetTarget(this);
+
+        // 颜色/透明度
+        if (colorMode != ColorMode.None)
+        {
+            if ((colorMode == ColorMode.AlphaOnly || colorMode == ColorMode.Both) && _canvasGroup != null)
+            {
+                var t = _canvasGroup.DOFade(targetColor.a, duration);
+                ApplyEaseTo(t);
+                seq.Join(t);
+            }
+            if ((colorMode == ColorMode.GraphicColor || colorMode == ColorMode.Both) && _graphic != null)
+            {
+                var t = _graphic.DOColor(targetColor, duration);
+                ApplyEaseTo(t);
+                seq.Join(t);
+            }
+        }
+
+        // 序列总体设置
+        if (!useCustomCurve) seq.SetEase(easeType);
+        // 不在这里 Pause/Play，由外部决定
+        seq.SetTarget(this).Pause();
         return seq;
     }
 
+    /// <summary>在运行时直接播放一次动画。</summary>
     public void Play()
     {
         CreateAnimationSequence().Play();
     }
-    #endregion
 
-    private static Vector2 GetPointOnQuadraticBezierCurve(Vector2 p0, Vector2 p1, Vector2 p2, float t)
+    // ----------------- 工具/数学 -----------------
+    private void EnsureReferences()
     {
-        t = Mathf.Clamp01(t);
-        float oneMinusT = 1f - t;
-        return (oneMinusT * oneMinusT * p0) + (2f * oneMinusT * t * p1) + (t * t * p2);
+        if (_rt == null) _rt = GetComponent<RectTransform>();
+        if (_canvasGroup == null) _canvasGroup = GetComponent<CanvasGroup>();
+        if (_canvasGroup == null && _graphic == null) _graphic = GetComponent<Graphic>();
     }
+
+    /// <summary>二次 Bézier 取点</summary>
+    public static Vector2 QuadBezier(in Vector2 A, in Vector2 P, in Vector2 B, float t)
+    {
+        float u = 1f - t;
+        return u * u * A + 2f * u * t * P + t * t * B;
+    }
+
+    /// <summary>统一应用自定义/标准缓动到数值 t。</summary>
+    private float ApplyEasing(float t)
+    {
+        if (!useCustomCurve) return DOVirtual.EasedValue(0f, 1f, t, easeType);
+        return Mathf.Clamp01(customCurve.Evaluate(Mathf.Clamp01(t)));
+    }
+
+    private void ApplyEaseTo(Tween t)
+    {
+        if (useCustomCurve) t.SetEase(customCurve);
+        else t.SetEase(easeType);
+    }
+
+    // 供编辑器访问的只读属性（用于 SceneGUI 显示）
+    public Vector2 StartPos => startAnchoredPosition;
+    public Vector2 EndPos   => targetAnchoredPosition;
 }
