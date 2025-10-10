@@ -33,9 +33,9 @@ public class HeContractUIManager : MonoBehaviour
     public GameObject diamondRunaGameObject;
     public GameObject triangularRunaGameObject;
     public GameObject sphericalRunaGameObject;
+    public GameObject arrowGameObject;
 
 
-  
 
 
 
@@ -49,7 +49,7 @@ public class HeContractUIManager : MonoBehaviour
     public GameObject telephoneGameObject;
     public GameObject canGameObject;
     public GameObject contractDocumentsnGameObject;
-    public GameObject CopperRuneSelectorGameObject;
+    public GameObject copperRuneSelectorGameObject;
 
     [Header("=== 动画设置 ===")]
 
@@ -70,15 +70,17 @@ public class HeContractUIManager : MonoBehaviour
     public float panelTransitionTime = 0.5f;
     public float uiElementFadeTime = 0.3f;
 
-    // 私有变量
+  
+    public event System.Action<DocumentError> OnJudge;
+    // 私有变量 
     private HeContractContext currentContext;
     private HeContractGameConfig gameConfig;
     private SigningFlowManager flowManager;
     private UIState currentActivePanel=UIState.None;
     private List<GameObject> runeGridItems = new List<GameObject>();
+    private bool pneumaticChannelAnimatorOpen=false;
 
-
-    public event System.Action<DocumentError> OnDocumentClicked;
+    private event System.Action<DocumentError> OnDocumentClicked;
     private void Awake()
     {
         
@@ -186,6 +188,11 @@ public class HeContractUIManager : MonoBehaviour
 
         yield return null;
     }
+
+
+
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -199,10 +206,13 @@ public class HeContractUIManager : MonoBehaviour
 
 
                 pneumaticChannelAnimator.SetTrigger("Open");
-                yield return new WaitForSeconds(3.0f);  
-                pneumaticChannelAnimator.SetTrigger("Close");
-          
-             
+            
+                yield return new WaitForSeconds(2.0f);
+                pneumaticChannelAnimatorOpen = true;
+                
+
+
+
 
 
 
@@ -474,6 +484,156 @@ public class HeContractUIManager : MonoBehaviour
     public void PlayUISound(AudioClip clip)
     {
       
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public void OnPneumaticChannelClick()
+    {
+
+        if (!pneumaticChannelAnimatorOpen) return;
+        pneumaticChannelAnimator.SetTrigger("Close");
+        pneumaticChannelAnimatorOpen = false;
+
+
+
+        contractDocumentsnGameObject?.GetComponent<EntryAnimation>().PlayEntryAnimation();
+
+      
+        //伪实现
+        StartCoroutine(HeCoroutineUtil.Run(() => {
+            return Inner();
+
+            System.Collections.IEnumerator Inner()
+            {
+              
+               yield return new WaitForSeconds(3.0f);
+               contractDocumentsnGameObject?.GetComponent<EntryAnimation>().PlayExitAnimation();
+               yield return new WaitForSeconds(1.0f);
+               OnJudge?.Invoke(DocumentError.Stub);
+
+
+
+            }
+        }));
+
+
+
+
+
+
+    }
+
+
+    private float fadeOutDuration = 0.8f;
+    public void FadeOutArrow (GameObject spawnedArrows)
+    {
+        StartCoroutine(FadeOutArrowCoroutine(spawnedArrows));
+    }
+    public void ShakeArrow(GameObject spawnedArrows)
+    {
+        StartCoroutine(ShakeArrowCoroutine(spawnedArrows));
+    }
+    /// <summary>
+    /// 箭头碎裂淡出效果
+    /// </summary>
+    private System.Collections.IEnumerator FadeOutArrowCoroutine(GameObject arrow)
+    {
+        if (arrow == null) yield break;
+
+        // 获取渲染组件
+        Renderer renderer = arrow.GetComponent<Renderer>();
+        CanvasGroup canvasGroup = arrow.GetComponent<CanvasGroup>();
+
+        float elapsedTime = 0f;
+        Vector3 originalScale = arrow.transform.localScale;
+
+        // 碎裂效果：先稍微放大然后缩小并分裂
+        while (elapsedTime < fadeOutDuration)
+        {
+            if (arrow == null) yield break;
+
+            float progress = elapsedTime / fadeOutDuration;
+
+            // 碎裂效果：随机偏移位置和旋转
+            Vector3 randomOffset = new Vector3(
+                Random.Range(-0.1f, 0.1f) * progress,
+                Random.Range(-0.1f, 0.1f) * progress,
+                0
+            );
+
+            arrow.transform.localPosition += randomOffset;
+            arrow.transform.localEulerAngles += new Vector3(0, 0, Random.Range(-5f, 5f) * progress);
+
+            // 淡出和缩放
+            float scale = Mathf.Lerp(1f, 0f, progress);
+            arrow.transform.localScale = originalScale * scale;
+
+            // 透明度淡出
+            if (renderer != null)
+            {
+                Color color = renderer.material.color;
+                color.a = 1f - progress;
+                renderer.material.color = color;
+            }
+            else if (canvasGroup != null)
+            {
+                canvasGroup.alpha = 1f - progress;
+            }
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 最终销毁对象
+        if (arrow != null)
+        {
+            GameObject.Destroy(arrow);
+        }
+    }
+    /// <summary>
+    /// 输入错误时的箭头震动效果
+    /// </summary>
+    private System.Collections.IEnumerator ShakeArrowCoroutine(GameObject arrow)
+    {
+        if (arrow == null) yield break;
+
+        Vector3 originalPosition = arrow.transform.localPosition;
+        float shakeDuration = 0.3f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < shakeDuration)
+        {
+            if (arrow == null) yield break;
+
+            float shakeAmount = 0.1f * (1f - elapsedTime / shakeDuration);
+            Vector3 shakeOffset = new Vector3(
+                Random.Range(-shakeAmount, shakeAmount),
+                Random.Range(-shakeAmount, shakeAmount),
+                0
+            );
+
+            arrow.transform.localPosition = originalPosition + shakeOffset;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        if (arrow != null)
+        {
+            arrow.transform.localPosition = originalPosition;
+        }
     }
 
     #endregion

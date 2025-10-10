@@ -14,7 +14,13 @@ using static Pathfinding.SimpleSmoothModifier;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
 
-
+public static class HeCoroutineUtil
+{
+    public static IEnumerator Run(System.Func<IEnumerator> coroutine)
+    {
+        return coroutine();
+    }
+}
 
 
 /// <summary>
@@ -23,6 +29,8 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 /// </summary>
 public enum DocumentError
 {
+    ///<summary,>伪实现，不判断类型只判断对错</summary>
+    Stub,
     /// <summary>封蜡破损 - 文书的封蜡不完整</summary>
     BrokenSeal,
 
@@ -101,13 +109,13 @@ public class DocumentVerifier : IContractStage
                 detectedErrors.Remove(error);
                 Debug.Log($"问题{error}已处理,核验文书不通过");
                 uiManager.SwitchPanel(HeContractUIManager.UIState.None);
-                uiManager.OnDocumentClicked -= documentClickedHandler;
+                uiManager.OnJudge -= documentClickedHandler;
                 detectedErrors.Clear();
             }
             else
             {
                 Debug.Log($"问题{error}不在待处理列表中");
-                //TODO：文书判断失败逻辑
+              
 
 
 
@@ -135,7 +143,7 @@ public class DocumentVerifier : IContractStage
 
             }
         };
-        uiManager.OnDocumentClicked += documentClickedHandler;
+        uiManager.OnJudge += documentClickedHandler;
 
 
     }
@@ -228,8 +236,9 @@ public class DocumentVerifier : IContractStage
         if (detectedErrors.Count > 0)
         {
             Debug.Log($"文书核验发现 {detectedErrors.Count} 个问题，需要拒绝签约");
-            // 玩家需要选择是否拒绝，这里先标记为需要处理
-            // 实际游戏中应该等待玩家决定
+            //Stub
+            detectedErrors.Add(DocumentError.Stub);
+        
         }
         else
         {
@@ -282,19 +291,26 @@ public class RuneInputManager : IContractStage
     public bool HasFailed => failed;
     public string StageName => "符文输入";
     private int currentSlotIndex = 1;
-
-
-    private int invaild = 0;
-    private UnityEngine.Transform Controllertrans;
-
-    private Vector3 Slot1;
-    private Vector3 Slot2;
-    private Vector3 Slot3;
-    private Vector3 Slot4;
-
-  
-    private Tween positionTween;
+    private bool inputEnabled = true;
     private bool enableTimer = false;
+    public GameObject ArrowObject;
+    private List<GameObject> spawnedArrows = new List<GameObject>();
+    private int invaild = 0;
+
+
+    private Vector3[] Slot;
+    private Vector3  SlotCenter=new Vector3(0,(float)-1.1800,0);
+
+
+
+    private Tween positionTween;
+    private Dictionary<int, KeyCode> runeKeyMap = new Dictionary<int, KeyCode>()
+    {
+        {0, KeyCode.W}, // 上
+        {1, KeyCode.S}, // 下
+        {2, KeyCode.A}, // 左
+        {3, KeyCode.D}  // 右
+    };
 
 
 
@@ -314,14 +330,49 @@ public class RuneInputManager : IContractStage
         timeRemaining = gameConfig?.runeInputTimeLimit ?? 10f;
 
         // 正确获取 CopperRuneSelectorGameObject 的 transform
-        if (uiManager != null && uiManager.CopperRuneSelectorGameObject != null)
+        if (uiManager != null )
         {
             InitPoistion();
+            SpawnRuneArrows();
         }
         else
         {
-            Controllertrans = null;
+         
         }
+
+
+
+    }
+    private void SpawnRuneArrows()
+    {
+        // 清理之前的箭头
+        foreach (var arrow in spawnedArrows)
+        {
+            if (arrow != null)
+                GameObject.Destroy(arrow);
+        }
+        spawnedArrows.Clear();
+         
+        // 生成新的箭头
+        for (int i = 0; i < requiredRunes.Count; i++)
+        {
+            if (ArrowObject != null)
+            {
+                GameObject arrow = GameObject.Instantiate(ArrowObject);
+                arrow.transform.localPosition = Slot[i];
+                Debug.Log($"生成箭头 {i} 在位置 {Slot[i]}");
+                // 根据符文类型设置箭头旋转
+                SetArrowRotation(arrow, requiredRunes[i]);
+
+                // 设置层级，当前箭头高亮显示
+                SetArrowVisualState(arrow, true);
+
+                spawnedArrows.Add(arrow);
+            }
+        }
+
+
+        
 
 
 
@@ -351,31 +402,89 @@ public class RuneInputManager : IContractStage
 
 
     }
+    private void SetArrowRotation(GameObject arrow, int runeType)
+    {
+        Vector3 rotation = Vector3.zero;
+
+        switch (runeType)
+        {
+            case 0: // 上
+                rotation = new Vector3(0, 0, 0);
+                break;
+            case 1: // 下
+                rotation = new Vector3(0, 0, 180);
+                break;
+            case 2: // 左
+                rotation = new Vector3(0, 0, 90);
+                break;
+            case 3: // 右
+                rotation = new Vector3(0, 0, -90);
+                break;
+        }
+
+        arrow.transform.localEulerAngles = rotation;
+    }
+
+    // 设置透明度或颜色来表示当前激活状态
+    private void SetArrowVisualState(GameObject arrow, bool isActive)
+    {
+        var renderer = arrow.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            Color color = renderer.material.color;
+            color.a = isActive ? 1.0f : 0.5f;
+            renderer.material.color = color;
+        }
+
+    
+        var canvasGroup = arrow.GetComponent<CanvasGroup>();
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = isActive ? 1.0f : 0.5f;
+        }
+    }
     public void InitPoistion()
     {
         invaild = 0;
-        Controllertrans = uiManager.CopperRuneSelectorGameObject.transform;
-        Slot1 = uiManager.circularRunaGameObject.transform.position;
-        Slot2=  uiManager.diamondRunaGameObject.transform.position;   
-        Slot4=  uiManager.triangularRunaGameObject.transform.position;
-        Slot3 = uiManager.sphericalRunaGameObject.transform.position;
+        
+  
         uiManager.moveAction.action.performed += OnHandleRuneInput;
-        uiManager. moveAction.action.canceled += OnCancelRuneInput;
+        uiManager.moveAction.action.canceled += OnCancelRuneInput;
         uiManager.interactAction.action.performed +=  OnChoseRune;
         inputRunes.Clear();
+        ArrowObject = uiManager.arrowGameObject;
         GenerateRequiredRunes();
+
+
+
+        int arrowCount = requiredRunes.Count;
+        Slot = new Vector3[arrowCount];
+
+        float intvalX = 1.2f;
+        float intvalY = 0.2f;
+
+        for (int i = 0; i < arrowCount; i++)
+        {
+            float mid=(arrowCount-1) / 2;
+            float idx = Mathf.Abs(mid-i);
+
+            Slot[i] = new Vector3(SlotCenter.x + (i - mid) * intvalX, SlotCenter.y - idx*idx * intvalY, 0);
+
+
+
+
+
+        }
     }
 
     public void DeletePoistion()
     {
-        Controllertrans = null;
-        Slot1 = Vector3.zero;
-        Slot2 = Vector3.zero;
-        Slot3 = Vector3.zero;
-        Slot4 = Vector3.zero;
+      
+ 
         uiManager.moveAction.action.performed -= OnHandleRuneInput;
         uiManager.moveAction.action.canceled -= OnCancelRuneInput;
         inputRunes.Clear();
+        ArrowObject = null;
         requiredRunes.Clear();
     }
 
@@ -418,6 +527,10 @@ public class RuneInputManager : IContractStage
         if (gameConfig != null)
         {
             //requiredRunes = gameConfig.GetRuneSequenceForContract(context.document.HeContractType);
+
+
+            //stub
+            requiredRunes = GetDefaultRuneSequence(context.document.HeContractType);
         }
         else
         {
@@ -430,7 +543,7 @@ public class RuneInputManager : IContractStage
 
     private List<int> GetDefaultRuneSequence(HeContractType HeContractType)
     {
-        return new List<int> { 2,3,4,1 };
+        return new List<int> { 2,3,0,1,0};
     }
   
 
@@ -441,22 +554,7 @@ public class RuneInputManager : IContractStage
         if (positionTween.isAlive)
             positionTween.Stop();
 
-        Vector3 targetPos = slotIndex switch
-        {
-            1 => Slot1,
-            2 => Slot2,
-            3 => Slot3,
-            4 => Slot4,
-            _ => Controllertrans.position
-        };
 
-    
-        positionTween = Tween.Position(
-            Controllertrans,
-            targetPos,
-            smoothTime,
-            ease: Ease.OutQuad
-        );
     }
 
 
@@ -1214,7 +1312,7 @@ public class SigningFlowManager : MonoBehaviour
     private void SetupStages()
     {
         stages = new Queue<IContractStage>(new IContractStage[] {
-            new DocumentVerifier(),
+            //new DocumentVerifier(),
             new RuneInputManager(),
             new SpecialEventSystem(),
             new StampSystem(),
