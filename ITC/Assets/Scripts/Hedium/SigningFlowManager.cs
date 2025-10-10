@@ -334,10 +334,13 @@ public class RuneInputManager : IContractStage
         {
             InitPoistion();
             SpawnRuneArrows();
+           
+           
+
         }
         else
         {
-         
+            Debug.LogError("HeContractUIManager 未找到，无法初始化符文输入界面");
         }
 
 
@@ -371,8 +374,11 @@ public class RuneInputManager : IContractStage
             }
         }
 
+        for(int i = 0; i < spawnedArrows.Count; i++)
+        {
+            uiManager.FadeOutArrow(spawnedArrows[i],3);
+        }
 
-        
 
 
 
@@ -446,15 +452,18 @@ public class RuneInputManager : IContractStage
     public void InitPoistion()
     {
         invaild = 0;
-        
-  
-        uiManager.moveAction.action.performed += OnHandleRuneInput;
-        uiManager.moveAction.action.canceled += OnCancelRuneInput;
-        uiManager.interactAction.action.performed +=  OnChoseRune;
+
+
+        uiManager.OnMoveAction += OnChoseRune;
+
+
+        //uiManager.interactAction.action.performed +=  OnChoseRune;
+
+
         inputRunes.Clear();
         ArrowObject = uiManager.arrowGameObject;
         GenerateRequiredRunes();
-
+        uiManager.EnableMoveAction();
 
 
         int arrowCount = requiredRunes.Count;
@@ -481,11 +490,12 @@ public class RuneInputManager : IContractStage
     {
       
  
-        uiManager.moveAction.action.performed -= OnHandleRuneInput;
-        uiManager.moveAction.action.canceled -= OnCancelRuneInput;
+        uiManager.OnMoveAction -= OnChoseRune;
+       
         inputRunes.Clear();
         ArrowObject = null;
         requiredRunes.Clear();
+        uiManager.DisableMoveAction();
     }
 
 
@@ -559,10 +569,10 @@ public class RuneInputManager : IContractStage
 
 
 
-    private void OnChoseRune(InputAction.CallbackContext ctx)
+    private void OnChoseRune(int directIndex)
     {
 
-        inputRunes.Add(currentSlotIndex);
+        inputRunes.Add(directIndex);
   
         ProcessRuneInput(); 
       
@@ -571,94 +581,50 @@ public class RuneInputManager : IContractStage
 
 
     }
-    private void OnHandleRuneInput(InputAction.CallbackContext ctx)
-    {
-       
-        Vector2 inputDir = ctx.ReadValue<Vector2>().normalized;
-        int targetSlotIndex = GetTargetSlotIndex(inputDir);
-        if (targetSlotIndex != currentSlotIndex)
-        {
-            currentSlotIndex = targetSlotIndex;
-            MoveToSlot(currentSlotIndex);
-        }
-    }
+  
 
-    private void OnCancelRuneInput(InputAction.CallbackContext ctx)
-    {
-       // currentMoveDir = Vector2.zero;
-    }
-    // 根据输入方向计算目标槽位索引（1-4）
-    private int GetTargetSlotIndex(Vector2 inputDir)
-    {
-        var ans=0;
-        // 优先判断上下方向（Y轴）
-        if (Mathf.Abs(inputDir.y) > Mathf.Abs(inputDir.x))
-        {
-            if (inputDir.y > 0) // 上（W）
-            {
-                ans=currentSlotIndex switch
-                {
-                    3 => 1, // 从3（下左）上移到1（上左）
-                    4 => 2, // 从4（下右）上移到2（上右）
-                    _ => currentSlotIndex 
-                };
-            }
-            else // 下（S）
-            {
-                ans = currentSlotIndex switch
-                {
-                    1 => 3, // 从1（上左）下移到3（下左）
-                    2 => 4, // 从2（上右）下移到4（下右）
-                    _ => currentSlotIndex 
-                };
-            }
-        }
-        // 再判断左右方向（X轴）
-        else
-        {
-            if (inputDir.x > 0) // 右（D）
-            {
-                ans = currentSlotIndex switch
-                {
-                    1 => 2, // 从1（上左）右移到2（上右）
-                    3 => 4, // 从3（下左）右移到4（下右）
-                    _ => currentSlotIndex 
-                };
-            }
-            else // 左（A）
-            {
-                ans = currentSlotIndex switch
-                {
-                    2 => 1, // 从2（上右）左移到1（上左）
-                    4 => 3, // 从4（下右）左移到3（下左）
-                    _ => currentSlotIndex 
-                };
-            }
-        }
-        // 如果目标槽位已使用
-        if (inputRunes.Contains(ans))
-        {
-            return currentSlotIndex;
-        }
 
-        return ans;
-    }
 
 
     private void ProcessRuneInput()
     {
 
      
-        bool isCorrect = true;
-        for (int i = 0; i < requiredRunes.Count; i++)
+        bool isCorrect =false;
+        bool isWrong = false;
+        if (requiredRunes.Count == inputRunes.Count)
         {
-            if (i < inputRunes.Count || inputRunes[i] != requiredRunes[i])
+            var n = requiredRunes.Count-1;
+
+            if (inputRunes[n] == requiredRunes[n])
+                isCorrect = true;
+            else
             {
-                isCorrect = false;
-                break;
+                isWrong = true;
             }
         }
+        else
+        {
+            isCorrect = false;
+        
 
+
+
+            for (int i = 0; i < requiredRunes.Count; i++)
+            {
+
+                if (inputRunes[i] != requiredRunes[i])
+                {
+
+
+                    if (inputRunes[i] != requiredRunes[i])
+                    {
+                        isWrong = true;
+                    }
+                    break;
+                }
+            }
+        }
         if (isCorrect)
         {
             Debug.Log("符文输入完成!");
@@ -684,7 +650,7 @@ public class RuneInputManager : IContractStage
 
 
         }
-        else
+        else if (isWrong==true)
         {
           
             Debug.Log("符文输入错误!");
