@@ -11,10 +11,14 @@ using DG.Tweening;
 public class UITweenController : MonoBehaviour
 {
     [Header("Preset Binding")]
-    [Tooltip("绑定一个 ScriptableObject 作为保存载体。")]
     public UITweenPreset boundPreset;
-    [Tooltip("勾选后，每次参数改动都会自动写入 boundPreset（若已绑定）。")]
     public bool autoSaveToPreset = false;
+    
+    [Header("Mode")]
+    [Tooltip("勾選後，位置、尺寸、旋轉將作為基於初始狀態的【偏移量】，而非絕對目標值。此模式下為直線運動。")]
+    public bool useRelativeMode = false;
+    [Tooltip("僅在【絕對模式】下生效。勾選後，將啟用二次貝塞爾曲線路徑，可通過“途中必經點”進行調節。")]
+    public bool useBezierPath = false;
 
     [Header("Playback")]
     public float duration = 0.6f;
@@ -28,7 +32,7 @@ public class UITweenController : MonoBehaviour
     public AnimationCurve customCurve = AnimationCurve.EaseInOut(0,0,1,1);
     public Ease easeType = Ease.OutCubic;
 
-    [Header("Target B（最终目标状态）")]
+    [Header("Target B（最終目標狀態）")]
     public Vector2 targetAnchoredPosition;
     public Vector2 targetSizeDelta;
     public Vector2 targetPivot = new Vector2(0.5f, 0.5f);
@@ -36,13 +40,13 @@ public class UITweenController : MonoBehaviour
     [Range(0f,1f)] public float targetAlpha = 1f;
     public Color targetColor = Color.white;
 
-    [Header("Pass-Through C（途中必经点）")]
+    [Header("Pass-Through C（途中必經點）")]
     public Vector2 passThroughPointC;
     [Range(0.05f, 0.95f)] public float passTStar = 0.5f;
 
     [Header("What to Animate")]
     public bool animatePosition = true;
-    public bool animateSize = false;
+    public bool animateSize = true;
     public bool animateRotationZ = false;
     public bool animateAlpha = false;
     public bool animateColor = false;
@@ -50,29 +54,23 @@ public class UITweenController : MonoBehaviour
     [Header("Gizmos & Preview (Editor Only)")]
     public bool showPathGizmos = true;
 
-    // caches
     RectTransform _rt;
     CanvasGroup _canvasGroup;
     Graphic _graphic;
 
+    
     void Reset()
     {
         _rt = GetComponent<RectTransform>();
-        var parent = _rt && _rt.parent ? _rt.parent as RectTransform : null;
         targetAnchoredPosition = _rt ? _rt.anchoredPosition : Vector2.zero;
-        targetSizeDelta = _rt ? _rt.sizeDelta : Vector2.zero;
+        targetSizeDelta = _rt ? _rt.sizeDelta : new Vector2(100, 100);
         targetPivot = _rt ? _rt.pivot : new Vector2(0.5f, 0.5f);
-        targetEulerZ = _rt ? _rt.eulerAngles.z : 0f;
-
-        _canvasGroup = GetComponent<CanvasGroup>();
-        _graphic = GetComponent<Graphic>();
-        if (_canvasGroup != null) targetAlpha = _canvasGroup.alpha;
-        else if (_graphic != null) targetAlpha = _graphic.color.a;
-
-        if (_graphic != null) targetColor = _graphic.color;
-
-        passThroughPointC = parent ? 0.5f * ((Vector2)_rt.anchoredPosition + targetAnchoredPosition) : Vector2.zero;
-        passTStar = 0.5f;
+        
+        animatePosition = true;
+        animateSize = true;
+        animateRotationZ = false;
+        animateAlpha = false;
+        animateColor = false;
     }
 
     void Awake()
@@ -85,7 +83,6 @@ public class UITweenController : MonoBehaviour
 #if UNITY_EDITOR
     void OnValidate()
     {
-        // 自动保存到 SO（仅编辑器）
         if (autoSaveToPreset && boundPreset != null)
         {
             SaveToPreset(boundPreset, keepPresetName:true);
@@ -93,44 +90,46 @@ public class UITweenController : MonoBehaviour
     }
 #endif
 
-    // ---------------------- Public API ----------------------
+    public Tween Play() => CreateAnimationSequence(false)?.Play();
+    public Tween PlayReversed() => CreateAnimationSequence(true)?.Play();
 
-    public Tween Play()
-    {
-        var seq = CreateAnimationSequence();
-        seq.Play();
-        return seq;
-    }
-
-    public Sequence CreateAnimationSequence()
+    public Sequence CreateAnimationSequence(bool reversed = false)
     {
         if (_rt == null) _rt = GetComponent<RectTransform>();
         if (_canvasGroup == null) _canvasGroup = GetComponent<CanvasGroup>();
         if (_canvasGroup == null && _graphic == null) _graphic = GetComponent<Graphic>();
 
         var seq = DOTween.Sequence().SetDelay(delay).SetUpdate(unscaledTime);
-        ApplyEaseTo(seq);
-
-        Vector2 A_pos = _rt.anchoredPosition;
-        Vector2 B_pos = targetAnchoredPosition;
-        Vector2 C_pos = passThroughPointC;
-        float tStar = Mathf.Clamp(passTStar, 0.05f, 0.95f);
-
-        Vector2 P = SolveQuadraticControlPoint(A_pos, B_pos, C_pos, tStar);
-
+        // 注意：這裡的ApplyEaseTo是對整個序列設置，而單個tween的ease會在下面單獨設置
+        // preset.ApplyEaseTo(seq) 的邏輯是正確的，因為它包含了 loops/delay
+        
         if (animatePosition)
         {
-            Tween posTween = DOVirtual.Float(0f, 1f, duration, (t) =>
+            Tweener posTween;
+            if (!useRelativeMode && useBezierPath)
             {
-                _rt.anchoredPosition = QuadBezier(A_pos, P, B_pos, t);
-            });
+                Vector2 A_pos = _rt.anchoredPosition;
+                Vector2 B_pos = targetAnchoredPosition;
+                Vector2 C_pos = passThroughPointC;
+                float tStar = Mathf.Clamp(passTStar, 0.05f, 0.95f);
+                Vector2 P = SolveQuadraticControlPoint(A_pos, B_pos, C_pos, tStar);
+                posTween = DOVirtual.Float(0f, 1f, duration, (t) => { _rt.anchoredPosition = QuadBezier(A_pos, P, B_pos, t); });
+            }
+            else
+            {
+                Vector2 finalPos = useRelativeMode ? _rt.anchoredPosition + targetAnchoredPosition : targetAnchoredPosition;
+                posTween = _rt.DOAnchorPos(finalPos, duration);
+            }
+            if (reversed) posTween.From();
             ApplyEaseTo(posTween);
             seq.Join(posTween);
         }
-
+        
         if (animateSize)
         {
-            Tween sizeTween = _rt.DOSizeDelta(targetSizeDelta, duration);
+            Vector2 finalSize = useRelativeMode ? _rt.sizeDelta + targetSizeDelta : targetSizeDelta;
+            var sizeTween = _rt.DOSizeDelta(finalSize, duration);
+            if (reversed) sizeTween.From();
             ApplyEaseTo(sizeTween);
             seq.Join(sizeTween);
         }
@@ -138,46 +137,40 @@ public class UITweenController : MonoBehaviour
         if (animateRotationZ)
         {
             Vector3 e = _rt.eulerAngles;
-            Vector3 targetEuler = new Vector3(e.x, e.y, targetEulerZ);
-            Tween rotTween = _rt.DORotate(targetEuler, duration, RotateMode.FastBeyond360);
+            float finalEulerZ = useRelativeMode ? e.z + targetEulerZ : targetEulerZ;
+            var rotTween = _rt.DORotate(new Vector3(e.x, e.y, finalEulerZ), duration, RotateMode.FastBeyond360);
+            if (reversed) rotTween.From();
             ApplyEaseTo(rotTween);
             seq.Join(rotTween);
         }
 
         if (animateAlpha)
         {
-            if (_canvasGroup != null)
+            // ==================== 同步修正 ====================
+            Tweener alphaTween = null;
+            if (_canvasGroup != null) alphaTween = _canvasGroup.DOFade(targetAlpha, duration);
+            else if (_graphic != null) alphaTween = _graphic.DOFade(targetAlpha, duration);
+            
+            if(alphaTween != null)
             {
-                Tween a = _canvasGroup.DOFade(targetAlpha, duration);
-                ApplyEaseTo(a);
-                seq.Join(a);
-            }
-            else if (_graphic != null)
-            {
-                Color c = _graphic.color;
-                Tween a = DOTween.To(() => c.a, v =>
-                {
-                    c.a = v;
-                    _graphic.color = c;
-                }, targetAlpha, duration);
-                ApplyEaseTo(a);
-                seq.Join(a);
+                if(reversed) alphaTween.From();
+                ApplyEaseTo(alphaTween);
+                seq.Join(alphaTween);
             }
         }
-
         if (animateColor && _graphic != null)
         {
-            Tween col = _graphic.DOColor(targetColor, duration);
-            ApplyEaseTo(col);
-            seq.Join(col);
+            var colTween = _graphic.DOColor(targetColor, duration);
+            if(reversed) colTween.From();
+            ApplyEaseTo(colTween);
+            seq.Join(colTween);
         }
 
         if (loops != 0) seq.SetLoops(loops, loopType);
         return seq;
     }
 
-    // ---------------------- Authoring Helpers ----------------------
-
+    // ==================== 修正區域：將缺失的輔助方法加回來 ====================
     public void CaptureTargetFromCurrent()
     {
         if (_rt == null) _rt = GetComponent<RectTransform>();
@@ -206,40 +199,21 @@ public class UITweenController : MonoBehaviour
         if (_rt == null) _rt = GetComponent<RectTransform>();
         passThroughPointC = 0.5f * (_rt.anchoredPosition + targetAnchoredPosition);
     }
+    // ========================================================================
 
-    // —— Preset I/O —— //
     public void SaveToPreset(UITweenPreset p, bool keepPresetName = false)
     {
         if (p == null) return;
-        // Identity
-        if (!keepPresetName && string.IsNullOrEmpty(p.presetName))
-            p.presetName = name + "_Preset";
+        if (!keepPresetName && string.IsNullOrEmpty(p.presetName)) p.presetName = name + "_Preset";
 
-        // Playback
-        p.duration = duration; p.delay = delay;
-        p.loops = loops; p.loopType = loopType; p.unscaledTime = unscaledTime;
-
-        // Easing
+        p.useRelativeMode = useRelativeMode;
+        p.useBezierPath = useBezierPath;
+        
+        p.duration = duration; p.delay = delay; p.loops = loops; p.loopType = loopType; p.unscaledTime = unscaledTime;
         p.useCustomCurve = useCustomCurve; p.customCurve = customCurve; p.easeType = easeType;
-
-        // Target
-        p.targetAnchoredPosition = targetAnchoredPosition;
-        p.targetSizeDelta = targetSizeDelta;
-        p.targetPivot = targetPivot;
-        p.targetEulerZ = targetEulerZ;
-        p.targetAlpha = targetAlpha;
-        p.targetColor = targetColor;
-
-        // Pass-through
-        p.passThroughPointC = passThroughPointC;
-        p.passTStar = passTStar;
-
-        // Channels
-        p.animatePosition = animatePosition;
-        p.animateSize = animateSize;
-        p.animateRotationZ = animateRotationZ;
-        p.animateAlpha = animateAlpha;
-        p.animateColor = animateColor;
+        p.targetAnchoredPosition = targetAnchoredPosition; p.targetSizeDelta = targetSizeDelta; p.targetPivot = targetPivot; p.targetEulerZ = targetEulerZ; p.targetAlpha = targetAlpha; p.targetColor = targetColor;
+        p.passThroughPointC = passThroughPointC; p.passTStar = passTStar;
+        p.animatePosition = animatePosition; p.animateSize = animateSize; p.animateRotationZ = animateRotationZ; p.animateAlpha = animateAlpha; p.animateColor = animateColor;
 
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(p);
@@ -250,36 +224,22 @@ public class UITweenController : MonoBehaviour
     {
         if (p == null) return;
 
-        duration = p.duration; delay = p.delay; loops = p.loops;
-        loopType = p.loopType; unscaledTime = p.unscaledTime;
+        useRelativeMode = p.useRelativeMode;
+        useBezierPath = p.useBezierPath;
 
+        duration = p.duration; delay = p.delay; loops = p.loops; loopType = p.loopType; unscaledTime = p.unscaledTime;
         useCustomCurve = p.useCustomCurve; customCurve = p.customCurve; easeType = p.easeType;
-
-        targetAnchoredPosition = p.targetAnchoredPosition;
-        targetSizeDelta = p.targetSizeDelta;
-        targetPivot = p.targetPivot;
-        targetEulerZ = p.targetEulerZ;
-        targetAlpha = p.targetAlpha;
-        targetColor = p.targetColor;
-
-        passThroughPointC = p.passThroughPointC;
-        passTStar = p.passTStar;
-
-        animatePosition = p.animatePosition;
-        animateSize = p.animateSize;
-        animateRotationZ = p.animateRotationZ;
-        animateAlpha = p.animateAlpha;
-        animateColor = p.animateColor;
+        targetAnchoredPosition = p.targetAnchoredPosition; targetSizeDelta = p.targetSizeDelta; targetPivot = p.targetPivot; targetEulerZ = p.targetEulerZ; targetAlpha = p.targetAlpha; targetColor = p.targetColor;
+        passThroughPointC = p.passThroughPointC; passTStar = p.passTStar;
+        animatePosition = p.animatePosition; animateSize = p.animateSize; animateRotationZ = p.animateRotationZ; animateAlpha = p.animateAlpha; animateColor = p.animateColor;
     }
-
-    // ---------------------- Math & Ease Utils ----------------------
 
     private void ApplyEaseTo(Tween t)
     {
         if (useCustomCurve) t.SetEase(customCurve);
         else t.SetEase(easeType);
     }
-
+    
     public static Vector2 QuadBezier(in Vector2 A, in Vector2 P, in Vector2 B, float t)
     {
         float u = 1f - t;
@@ -294,8 +254,9 @@ public class UITweenController : MonoBehaviour
         return (C - (u*u)*A - (tStar*tStar)*B) / denom;
     }
 
-    // 给 Editor 可读
     public Vector2 TargetPos => targetAnchoredPosition;
     public Vector2 PassPointC => passThroughPointC;
     public float PassTStar => passTStar;
+    public bool UseRelativeMode => useRelativeMode;
+    public bool UseBezierPath => useBezierPath;
 }
