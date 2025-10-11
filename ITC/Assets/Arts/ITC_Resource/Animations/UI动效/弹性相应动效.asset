@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: "\u5F39\u6027\u76F8\u5E94\u52A8\u6548"
   m_EditorClassIdentifier: 
   presetName: MyTween
+  useRelativeMode: 1
+  useBezierPath: 0
   duration: 0.6
   delay: 0
   loops: 0
@@ -43,9 +45,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  easeType: 9
-  targetAnchoredPosition: {x: 0, y: 0}
-  targetSizeDelta: {x: 0, y: 0}
+  easeType: 27
+  targetAnchoredPosition: {x: -120, y: 0}
+  targetSizeDelta: {x: 100, y: 100}
   targetPivot: {x: 0.5, y: 0.5}
   targetEulerZ: 0
   targetAlpha: 1
@@ -53,7 +55,7 @@ MonoBehaviour:
   passThroughPointC: {x: 0, y: 0}
   passTStar: 0.5
   animatePosition: 1
-  animateSize: 0
+  animateSize: 1
   animateRotationZ: 0
   animateAlpha: 0
   animateColor: 0
