@@ -21,7 +21,7 @@ public class UITweenController : MonoBehaviour
     public bool useBezierPath = false;
 
     [Header("Playback")]
-    public float duration = 0.6f;
+    public float duration = 1f;
     public float delay = 0f;
     public int loops = 0;
     public LoopType loopType = LoopType.Restart;
