@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 /// <summary>
@@ -118,7 +119,12 @@ public class UITweenTrack : MonoBehaviour
         {
             if (item == null || item.player == null) continue;
 
-            item.player.PlayMasterByName(item.presetName);
+            var tween = item.player.PlayMasterByName(item.presetName);
+
+            if (tween != null)
+            {
+                yield return tween.WaitForCompletion();
+            }
 
             float waitDuration = Mathf.Max(0f, item.delayAfterPlay);
             if (waitDuration > 0f)
