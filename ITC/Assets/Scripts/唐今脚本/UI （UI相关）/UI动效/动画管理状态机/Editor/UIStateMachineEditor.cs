@@ -8,11 +8,17 @@ public class UIStateMachineEditor : Editor
 {
     SerializedProperty _stateAnimationsProp;
     SerializedProperty _startingStateProp;
+    SerializedProperty _defaultProfileIdProp;
+    SerializedProperty _additionalProfilesProp;
+    SerializedProperty _layerProfilesProp;
 
     void OnEnable()
     {
         _stateAnimationsProp = serializedObject.FindProperty("stateAnimations");
         _startingStateProp = serializedObject.FindProperty("startingState");
+        _defaultProfileIdProp = serializedObject.FindProperty("defaultProfileId");
+        _additionalProfilesProp = serializedObject.FindProperty("additionalProfiles");
+        _layerProfilesProp = serializedObject.FindProperty("layerProfiles");
     }
 
     public override void OnInspectorGUI()
@@ -25,10 +31,15 @@ public class UIStateMachineEditor : Editor
 
         serializedObject.Update();
 
-        EditorGUILayout.PropertyField(_startingStateProp, new GUIContent("初始状态"));
+        EditorGUILayout.PropertyField(_defaultProfileIdProp, new GUIContent("默认 Profile Id"));
+        EditorGUILayout.PropertyField(_startingStateProp, new GUIContent("默认 Profile 初始状态"));
         EditorGUILayout.Space();
 
         DrawStateBindings();
+
+        EditorGUILayout.Space();
+        EditorGUILayout.PropertyField(_additionalProfilesProp, new GUIContent("额外 Profiles"), true);
+        EditorGUILayout.PropertyField(_layerProfilesProp, new GUIContent("层级 Profile 映射"), true);
 
         serializedObject.ApplyModifiedProperties();
     }
@@ -48,7 +59,7 @@ public class UIStateMachineEditor : Editor
             EditorGUILayout.HelpBox("当前 UITweenPlayer 未关联任何预设或库，暂无可选项。", MessageType.Info);
         }
 
-        EditorGUILayout.LabelField("状态动画绑定", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("默认 Profile 状态动画绑定", EditorStyles.boldLabel);
 
         if (_stateAnimationsProp == null)
         {
