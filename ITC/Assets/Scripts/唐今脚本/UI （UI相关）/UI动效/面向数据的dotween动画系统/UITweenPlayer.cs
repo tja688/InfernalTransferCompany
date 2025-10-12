@@ -73,6 +73,27 @@ public class UITweenPlayer : MonoBehaviour
     /// This will interrupt any active animation and prevent UI state machine events (e.g., hover).
     /// The player is automatically unlocked upon completion.
     /// </summary>
+    ///
+    /// // --- UnityEvent-friendly wrappers (void return) ---
+
+// 1) 传 SO
+    public void PlayMaster_Event(UITweenPreset preset)
+    {
+        PlayMaster(preset);
+    }
+
+// 2) 传名字
+    public void PlayMasterByName_Event(string presetName)
+    {
+        PlayMasterByName(presetName);
+    }
+
+// 3) 传索引
+    public void PlayMasterByIndex_Event(int index)
+    {
+        PlayMasterByIndex(index);
+    }
+
     public Tween PlayMaster(UITweenPreset preset)
     {
         return PlayMasterCore(preset, false);
