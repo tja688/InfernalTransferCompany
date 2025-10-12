@@ -278,8 +278,11 @@ public class UIRouter : MonoBehaviour
 
     private UIHierarchyLevel NextLevel(UIHierarchyLevel level)
     {
-        return level.TryGetNext(out var next) ? next : UIHierarchyLevelUtility.Highest;
+        return UIHierarchyLevelUtility.TryGetNext(level, out var next)
+            ? next
+            : UIHierarchyLevelUtility.Highest;
     }
+
 
     private Stack<UIRouteNode> GetOrCreateStack(Dictionary<UIHierarchyLevel, Stack<UIRouteNode>> stacks, UIHierarchyLevel level)
     {
