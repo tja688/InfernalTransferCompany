@@ -12,7 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8ad049090ec554eb1570780b8bd9a5, type: 3}
   m_Name: "\u4E00\u7EA7\u83DC\u5355-\u4E00\u7EA7\u83DC\u5355\u56FE\u6807\u5165\u573A"
   m_EditorClassIdentifier: 
-  presetName: MyTween
+  presetName: PrimaryMenu_Menu icon
+  useRelativeMode: 0
+  relativeBaselineMode: 0
+  useBezierPath: 0
+  passThroughPointC: {x: 91.73547, y: -349.86334}
+  passTStar: 0.5
+  bezierInterruptPolicy: 0
+  animatePosition: 1
+  targetAnchoredPosition: {x: -352, y: 0}
+  animateSize: 1
+  targetSizeDelta: {x: 660, y: 660}
+  animateRotationZ: 1
+  targetEulerZ: 0
+  targetPivot: {x: 0.5, y: 0.5}
+  animatePivot: 0
+  animateAlpha: 0
+  targetAlpha: 1
+  animateColor: 0
+  targetColor: {r: 1, g: 1, b: 1, a: 1}
   duration: 1
   delay: 0
   loops: 0
@@ -44,16 +62,4 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   easeType: 6
-  targetAnchoredPosition: {x: -352, y: 0}
-  targetSizeDelta: {x: 660, y: 660}
-  targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
-  targetAlpha: 1
-  targetColor: {r: 1, g: 1, b: 1, a: 1}
-  passThroughPointC: {x: 91.73547, y: -349.86334}
-  passTStar: 0.5
-  animatePosition: 1
-  animateSize: 1
-  animateRotationZ: 1
-  animateAlpha: 0
-  animateColor: 0
+  scaleDurationByDistance: 0
