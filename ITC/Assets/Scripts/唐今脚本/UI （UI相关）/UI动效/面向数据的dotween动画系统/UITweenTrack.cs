@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
+
 /// <summary>
 /// 轻量化的轨道播放器，用于顺序触发多个 <see cref="UITweenPlayer"/>。
 /// </summary>
 [DisallowMultipleComponent]
 public class UITweenTrack : MonoBehaviour
 {
+    public enum PlayFlow { SequentialWait, StaggeredStart }
+    public PlayFlow playFlow = PlayFlow.StaggeredStart; // 推荐默认用错峰
+    
     [System.Serializable]
     public class TrackItem
     {
@@ -121,27 +125,26 @@ public class UITweenTrack : MonoBehaviour
 
             var tween = item.player.PlayMasterByName(item.presetName);
 
-            if (tween != null)
+            if (playFlow == PlayFlow.SequentialWait)
             {
-                yield return tween.WaitForCompletion();
-            }
+                // 老模式：整段播完再到下一条
+                if (tween != null) yield return tween.WaitForCompletion();
 
-            float waitDuration = Mathf.Max(0f, item.delayAfterPlay);
-            if (waitDuration > 0f)
+                float wait = Mathf.Max(0f, item.delayAfterPlay);
+                if (wait > 0f)
+                    yield return useUnscaledIntervals ? new WaitForSecondsRealtime(wait) : new WaitForSeconds(wait);
+            }
+            else // PlayFlow.StaggeredStart
             {
-                if (useUnscaledIntervals)
-                {
-                    yield return new WaitForSecondsRealtime(waitDuration);
-                }
-                else
-                {
-                    yield return new WaitForSeconds(waitDuration);
-                }
+                // 新模式：只等“开播间隔”，不等动画播完 -> 形成错峰/叠播
+                float wait = Mathf.Max(0f, item.delayAfterPlay);
+                if (wait > 0f)
+                    yield return useUnscaledIntervals ? new WaitForSecondsRealtime(wait) : new WaitForSeconds(wait);
             }
         }
-
         _runningTracks.Remove(trackIndex);
     }
+
 
     void OnDisable()
     {
