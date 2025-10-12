@@ -4,6 +4,7 @@
 // - Features Master API (PlayMaster*) to lock and play high-priority tweens.
 // - Standard Play API now respects the lock, preventing animation snatching.
 // - Core logic remains: baseline caching, no .From(), stable relative reversed playback.
+// [MODIFIED] Changed calls to use ApplyTweenSettings and ApplySequenceSettings to fix double delay issue.
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -42,20 +43,8 @@ public class UITweenPlayer : MonoBehaviour
     // ==================== NEW: Animation Lock System ====================
     private bool _isLocked = false;
 
-    /// <summary>
-    /// Checks if the player is currently locked by a high-priority (Master) animation.
-    /// If true, low-priority Play calls will be ignored.
-    /// </summary>
     public bool IsLocked => _isLocked;
-
-    /// <summary>
-    /// Manually locks the player, preventing low-priority animations from playing.
-    /// </summary>
     public void Lock() => _isLocked = true;
-
-    /// <summary>
-    /// Manually unlocks the player, allowing low-priority animations to play again.
-    /// </summary>
     public void Unlock() => _isLocked = false;
     // ====================================================================
 
@@ -67,43 +56,11 @@ public class UITweenPlayer : MonoBehaviour
     }
 
     // ----------------- Public API: Master (High-Priority) -----------------
-
-    /// <summary>
-    /// Plays a preset with high priority, locking the player during playback.
-    /// This will interrupt any active animation and prevent UI state machine events (e.g., hover).
-    /// The player is automatically unlocked upon completion.
-    /// </summary>
-    ///
-    /// // --- UnityEvent-friendly wrappers (void return) ---
-
-// 1) 传 SO
-    public void PlayMaster_Event(UITweenPreset preset)
-    {
-        PlayMaster(preset);
-    }
-
-// 2) 传名字
-    public void PlayMasterByName_Event(string presetName)
-    {
-        PlayMasterByName(presetName);
-    }
-
-// 3) 传索引
-    public void PlayMasterByIndex_Event(int index)
-    {
-        PlayMasterByIndex(index);
-    }
-
-    public Tween PlayMaster(UITweenPreset preset)
-    {
-        return PlayMasterCore(preset, false);
-    }
-
-    public Tween PlayMasterByName(string presetName)
-    {
-        return PlayMasterCore(FindPreset(presetName), false);
-    }
-
+    public void PlayMaster_Event(UITweenPreset preset) { PlayMaster(preset); }
+    public void PlayMasterByName_Event(string presetName) { PlayMasterByName(presetName); }
+    public void PlayMasterByIndex_Event(int index) { PlayMasterByIndex(index); }
+    public Tween PlayMaster(UITweenPreset preset) { return PlayMasterCore(preset, false); }
+    public Tween PlayMasterByName(string presetName) { return PlayMasterCore(FindPreset(presetName), false); }
     public Tween PlayMasterByIndex(int index)
     {
         if (index < 0 || index >= presets.Count) return null;
@@ -111,7 +68,6 @@ public class UITweenPlayer : MonoBehaviour
     }
 
     // ----------------- Public API: Standard (Low-Priority) -----------------
-
     public void Kill(bool complete = false)
     {
         if (_active != null && _active.IsActive())
@@ -121,68 +77,43 @@ public class UITweenPlayer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Plays a preset if the player is not locked.
-    /// </summary>
     public void Play(int index)
     {
         if (index < 0 || index >= presets.Count) return;
         PlayCore(presets[index], false);
     }
-
-    public void PlayByName(string presetName)
-    {
-        PlayCore(FindPreset(presetName), false);
-    }
-
-    public void Play(UITweenPreset preset)
-    {
-        PlayCore(preset, false);
-    }
-
+    public void PlayByName(string presetName) { PlayCore(FindPreset(presetName), false); }
+    public void Play(UITweenPreset preset) { PlayCore(preset, false); }
     public void PlayReversed(int index)
     {
         if (index < 0 || index >= presets.Count) return;
         PlayCore(presets[index], true);
     }
-
-
-    public void PlayReversedByName(string presetName)
-    {
-        PlayCore(FindPreset(presetName), true);
-    }
-
-    public void PlayReversed(UITweenPreset preset)
-    {
-        PlayCore(preset, true);
-    }
+    public void PlayReversedByName(string presetName) { PlayCore(FindPreset(presetName), true); }
+    public void PlayReversed(UITweenPreset preset) { PlayCore(preset, true); }
     
     // ----------------- Internal Core Logic -----------------
     
     private Tween PlayMasterCore(UITweenPreset preset, bool reversed)
     {
-        Kill(false); // Master calls always interrupt.
-        Lock();      // Lock against low-priority calls.
+        Kill(false);
+        Lock();
 
         var seq = CreateAnimationSequence(preset, reversed);
         if (seq != null)
         {
-            // Automatically unlock when the master animation is complete.
             seq.OnComplete(Unlock); 
             _active = seq.Play();
             return _active;
         }
         
-        // If sequence creation failed, ensure we unlock.
         Unlock();
         return null;
     }
 
     private void PlayCore(UITweenPreset preset, bool reversed)
     {
-        // Low-priority calls must respect the lock.
         if (IsLocked) return;
-
         Kill(false);
 
         var seq = CreateAnimationSequence(preset, reversed);
@@ -192,10 +123,6 @@ public class UITweenPlayer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Creates the animation sequence based on the preset, but does not play it.
-    /// This is the core logic refactored from the original PlayCore.
-    /// </summary>
     private Sequence CreateAnimationSequence(UITweenPreset preset, bool reversed)
     {
         if (preset == null || _rt == null) return null;
@@ -207,7 +134,6 @@ public class UITweenPlayer : MonoBehaviour
         // Position
         if (preset.animatePosition)
         {
-            // (The rest of this method's logic is identical to your original PlayCore)
             if (!preset.useRelativeMode && preset.useBezierPath)
             {
                 Vector2 A_design = baseL.pos;
@@ -220,7 +146,7 @@ public class UITweenPlayer : MonoBehaviour
                     Vector2 APrime = _rt.anchoredPosition;
                     Vector2 P = SolveQuadraticControlPoint(APrime, B_design, M, tStar);
                     var posTween = DOVirtual.Float(0f, 1f, dur, t => _rt.anchoredPosition = QuadBezier(APrime, P, B_design, t));
-                    preset.ApplyEaseTo(posTween);
+                    preset.ApplyTweenSettings(posTween); // [MODIFIED]
                     seq.Join(posTween);
                 }
                 else
@@ -228,7 +154,7 @@ public class UITweenPlayer : MonoBehaviour
                     Vector2 CPrime = _rt.anchoredPosition;
                     Vector2 P = SolveQuadraticControlPoint(CPrime, A_design, M, 1f - tStar);
                     var posTween = DOVirtual.Float(0f, 1f, dur, t => _rt.anchoredPosition = QuadBezier(CPrime, P, A_design, t));
-                    preset.ApplyEaseTo(posTween);
+                    preset.ApplyTweenSettings(posTween); // [MODIFIED]
                     seq.Join(posTween);
                 }
             }
@@ -238,7 +164,7 @@ public class UITweenPlayer : MonoBehaviour
                     ? (reversed ? baseL.pos : baseL.pos + preset.targetAnchoredPosition)
                     : (reversed ? baseL.pos : preset.targetAnchoredPosition);
                 var posTween = _rt.DOAnchorPos(target, dur);
-                preset.ApplyEaseTo(posTween);
+                preset.ApplyTweenSettings(posTween); // [MODIFIED]
                 seq.Join(posTween);
             }
         }
@@ -250,7 +176,7 @@ public class UITweenPlayer : MonoBehaviour
                 ? (reversed ? baseL.size : baseL.size + preset.targetSizeDelta)
                 : (reversed ? baseL.size : preset.targetSizeDelta);
             var s = _rt.DOSizeDelta(target, dur);
-            preset.ApplyEaseTo(s);
+            preset.ApplyTweenSettings(s); // [MODIFIED]
             seq.Join(s);
         }
 
@@ -262,7 +188,7 @@ public class UITweenPlayer : MonoBehaviour
                 : (reversed ? baseL.eulerZ : preset.targetEulerZ);
             var e = _rt.eulerAngles;
             var r = _rt.DORotate(new Vector3(e.x, e.y, targetZ), dur, RotateMode.Fast);
-            preset.ApplyEaseTo(r);
+            preset.ApplyTweenSettings(r); // [MODIFIED]
             seq.Join(r);
         }
 
@@ -284,7 +210,7 @@ public class UITweenPlayer : MonoBehaviour
             }
             if (alphaTween != null)
             {
-                preset.ApplyEaseTo(alphaTween);
+                preset.ApplyTweenSettings(alphaTween); // [MODIFIED]
                 seq.Join(alphaTween);
             }
         }
@@ -295,12 +221,12 @@ public class UITweenPlayer : MonoBehaviour
             Color baseC = baseL.color ?? _gfx.color;
             Color targetC = reversed ? baseC : preset.targetColor;
             var col = _gfx.DOColor(targetC, dur);
-            preset.ApplyEaseTo(col);
+            preset.ApplyTweenSettings(col); // [MODIFIED]
             seq.Join(col);
         }
 
-        // Apply global sequence settings from preset if your preset has them
-        preset.ApplyEaseTo(seq);
+        // [MODIFIED] Apply sequence-level settings at the end
+        preset.ApplySequenceSettings(seq);
         
         seq.OnStart(() => onPlay?.Invoke()).OnComplete(() => onComplete?.Invoke());
 
@@ -308,7 +234,6 @@ public class UITweenPlayer : MonoBehaviour
     }
 
     // ----------------- Helpers (Unchanged) -----------------
-
     private UITweenPreset FindPreset(string presetName)
     {
         if (string.IsNullOrEmpty(presetName)) return null;
@@ -319,7 +244,6 @@ public class UITweenPlayer : MonoBehaviour
         Debug.LogWarning($"[UITweenPlayer] Preset not found: {presetName}", this);
         return null;
     }
-
     private Baseline GetOrCaptureBaseline(UITweenPreset p)
     {
         if (_baselines.TryGetValue(p, out var b)) return b;
@@ -338,13 +262,11 @@ public class UITweenPlayer : MonoBehaviour
         _baselines[p] = b;
         return b;
     }
-
     static Vector2 QuadBezier(in Vector2 A, in Vector2 P, in Vector2 B, float t)
     {
         float u = 1f - t;
         return u * u * A + 2f * u * t * P + t * t * B;
     }
-
     static Vector2 SolveQuadraticControlPoint(in Vector2 A, in Vector2 B, in Vector2 C, float tStar)
     {
         float u = 1f - tStar;

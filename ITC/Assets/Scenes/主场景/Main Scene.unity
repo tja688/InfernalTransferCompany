@@ -234,6 +234,7 @@ GameObject:
   - component: {fileID: 195974312}
   - component: {fileID: 195974310}
   - component: {fileID: 195974309}
+  - component: {fileID: 195974313}
   m_Layer: 5
   m_Name: "\u672A\u9009\u4E2D"
   m_TagString: Untagged
@@ -257,7 +258,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1012.28}
+  m_AnchoredPosition: {x: 0, y: 1170.5}
   m_SizeDelta: {x: 187, y: 91}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &195974307
@@ -310,7 +311,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateAnimations: []
+  stateAnimations:
+  - state: 2
+    onEnterPreset: {fileID: 11400000, guid: bfc76945515fbdb41ad61ad8cc9b450d, type: 2}
+    onExitPreset: {fileID: 0}
+    reverseOnExit: 1
   startingState: 1
 --- !u!114 &195974310
 MonoBehaviour:
@@ -377,6 +382,35 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &195974313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195974305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1547583158}
+          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
+          m_MethodName: PlayByName
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Pointer to role
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &210919015
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,9 +677,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateAnimations:
   - state: 2
-    onEnterPreset: {fileID: 0}
+    onEnterPreset: {fileID: 11400000, guid: bfc76945515fbdb41ad61ad8cc9b450d, type: 2}
     onExitPreset: {fileID: 0}
-    reverseOnExit: 0
+    reverseOnExit: 1
   startingState: 1
 --- !u!114 &293818458
 MonoBehaviour:
@@ -805,18 +839,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abef3c196b634641a240cb1806424b65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playFlow: 1
   tracks:
   - trackName: "\u4E00\u7EA7\u83DC\u5355\u5165\u573A"
     uniformInterval: 0.1
     items:
     - player: {fileID: 210919022}
       presetName: PrimaryMenu_Menu icon
-      delayAfterPlay: 0.1
+      delayAfterPlay: 0
     - player: {fileID: 583028974}
       presetName: PrimaryMenu_Menu BG
-      delayAfterPlay: 0.1
-    - player: {fileID: 293818458}
-      presetName: PrimaryMenu_Select notion
       delayAfterPlay: 0.1
     - player: {fileID: 1691546866}
       presetName: PrimaryMenu_Back menu button
@@ -841,6 +873,9 @@ MonoBehaviour:
       delayAfterPlay: 0.1
     - player: {fileID: 1547583158}
       presetName: PrimaryMenu_Select pointer
+      delayAfterPlay: 0.1
+    - player: {fileID: 293818458}
+      presetName: PrimaryMenu_Select notion
       delayAfterPlay: 0.1
   useUnscaledIntervals: 1
 --- !u!1 &331982934
@@ -1031,6 +1066,7 @@ GameObject:
   - component: {fileID: 388834737}
   - component: {fileID: 388834735}
   - component: {fileID: 388834734}
+  - component: {fileID: 388834738}
   m_Layer: 5
   m_Name: "\u672A\u9009\u4E2D"
   m_TagString: Untagged
@@ -1054,7 +1090,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1012.28}
+  m_AnchoredPosition: {x: 0, y: 1170.5}
   m_SizeDelta: {x: 143, y: 88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &388834732
@@ -1107,7 +1143,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateAnimations: []
+  stateAnimations:
+  - state: 2
+    onEnterPreset: {fileID: 11400000, guid: bfc76945515fbdb41ad61ad8cc9b450d, type: 2}
+    onExitPreset: {fileID: 0}
+    reverseOnExit: 1
   startingState: 1
 --- !u!114 &388834735
 MonoBehaviour:
@@ -1174,6 +1214,35 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &388834738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388834730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1547583158}
+          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
+          m_MethodName: PlayByName
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Pointer to store
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &522418218
 GameObject:
   m_ObjectHideFlags: 0
@@ -1243,7 +1312,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 148, y: 1082.59}
+  m_AnchoredPosition: {x: 148, y: 1170.5}
   m_SizeDelta: {x: 816, y: 1083}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &583028971
@@ -1604,6 +1673,7 @@ GameObject:
   - component: {fileID: 986504114}
   - component: {fileID: 986504112}
   - component: {fileID: 986504111}
+  - component: {fileID: 986504115}
   m_Layer: 5
   m_Name: "\u672A\u9009\u4E2D"
   m_TagString: Untagged
@@ -1627,7 +1697,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1012.28}
+  m_AnchoredPosition: {x: 0, y: 1170.5}
   m_SizeDelta: {x: 143, y: 88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &986504109
@@ -1680,7 +1750,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateAnimations: []
+  stateAnimations:
+  - state: 2
+    onEnterPreset: {fileID: 11400000, guid: bfc76945515fbdb41ad61ad8cc9b450d, type: 2}
+    onExitPreset: {fileID: 0}
+    reverseOnExit: 1
   startingState: 1
 --- !u!114 &986504112
 MonoBehaviour:
@@ -1747,6 +1821,35 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &986504115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986504107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1547583158}
+          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
+          m_MethodName: PlayByName
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Pointer to setting
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1093408115 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8568148058401762819, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
@@ -1802,6 +1905,7 @@ GameObject:
   - component: {fileID: 1232613350}
   - component: {fileID: 1232613348}
   - component: {fileID: 1232613347}
+  - component: {fileID: 1232613351}
   m_Layer: 5
   m_Name: "\u672A\u9009\u4E2D"
   m_TagString: Untagged
@@ -1825,7 +1929,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1012.28}
+  m_AnchoredPosition: {x: 0, y: 1170.5}
   m_SizeDelta: {x: 143, y: 88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1232613345
@@ -1878,7 +1982,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateAnimations: []
+  stateAnimations:
+  - state: 2
+    onEnterPreset: {fileID: 11400000, guid: bfc76945515fbdb41ad61ad8cc9b450d, type: 2}
+    onExitPreset: {fileID: 0}
+    reverseOnExit: 1
   startingState: 1
 --- !u!114 &1232613348
 MonoBehaviour:
@@ -1945,6 +2053,35 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1232613351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1232613343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1547583158}
+          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
+          m_MethodName: PlayByName
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Pointer to read
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1349222773
 GameObject:
   m_ObjectHideFlags: 0
@@ -2298,7 +2435,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -331.5, y: 593.32}
+  m_AnchoredPosition: {x: -331.5, y: 1170.5}
   m_SizeDelta: {x: 103, y: 96}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1679115681
@@ -2351,7 +2488,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateAnimations: []
+  stateAnimations:
+  - state: 2
+    onEnterPreset: {fileID: 11400000, guid: bfc76945515fbdb41ad61ad8cc9b450d, type: 2}
+    onExitPreset: {fileID: 0}
+    reverseOnExit: 1
   startingState: 1
 --- !u!114 &1679115684
 MonoBehaviour:
@@ -2432,6 +2573,7 @@ GameObject:
   - component: {fileID: 1691546868}
   - component: {fileID: 1691546866}
   - component: {fileID: 1691546865}
+  - component: {fileID: 1691546869}
   m_Layer: 5
   m_Name: "\u672A\u9009\u4E2D"
   m_TagString: Untagged
@@ -2455,7 +2597,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1012.28}
+  m_AnchoredPosition: {x: 0, y: 1170.5}
   m_SizeDelta: {x: 443, y: 88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1691546863
@@ -2508,7 +2650,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateAnimations: []
+  stateAnimations:
+  - state: 2
+    onEnterPreset: {fileID: 11400000, guid: bfc76945515fbdb41ad61ad8cc9b450d, type: 2}
+    onExitPreset: {fileID: 0}
+    reverseOnExit: 1
   startingState: 1
 --- !u!114 &1691546866
 MonoBehaviour:
@@ -2575,6 +2721,35 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1691546869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691546861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1547583158}
+          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
+          m_MethodName: PlayByName
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Pointer to back to menu
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1725409550
 GameObject:
   m_ObjectHideFlags: 0
@@ -2589,6 +2764,7 @@ GameObject:
   - component: {fileID: 1725409557}
   - component: {fileID: 1725409555}
   - component: {fileID: 1725409554}
+  - component: {fileID: 1725409558}
   m_Layer: 5
   m_Name: "\u672A\u9009\u4E2D"
   m_TagString: Untagged
@@ -2612,7 +2788,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1012.28}
+  m_AnchoredPosition: {x: 0, y: 1170.5}
   m_SizeDelta: {x: 143, y: 88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1725409552
@@ -2665,7 +2841,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateAnimations: []
+  stateAnimations:
+  - state: 2
+    onEnterPreset: {fileID: 11400000, guid: bfc76945515fbdb41ad61ad8cc9b450d, type: 2}
+    onExitPreset: {fileID: 0}
+    reverseOnExit: 1
   startingState: 1
 --- !u!114 &1725409555
 MonoBehaviour:
@@ -2732,6 +2912,35 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1725409558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1725409550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1547583158}
+          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
+          m_MethodName: PlayByName
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Pointer to word
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!4 &1820217281 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7064438181301213952, guid: aaa50cfbf6bc6564bb8f913524c11fab, type: 3}

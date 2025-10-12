@@ -3,6 +3,7 @@
 // - 保留旧字段名：presetName / delay / loops / loopType / unscaledTime / useCustomCurve / customCurve / easeType / targetPivot
 // - 新增打断策略枚举与字段（相对/贝塞尔）
 // - 统一提供 ApplyEaseTo(Tween) 供 Player/Controller 复用
+// [MODIFIED] Split ApplyEaseTo into ApplyTweenSettings and ApplySequenceSettings to fix double delay issue.
 
 using UnityEngine;
 using DG.Tweening;
@@ -93,14 +94,38 @@ public class UITweenPreset : ScriptableObject
     [Tooltip("距离越近是否按比例缩短时长（可由调用方覆盖时长）。")]
     public bool scaleDurationByDistance = false;
 
-    // 统一将 preset 的缓动/循环/延迟/时间缩放等应用到 Tween
-    public void ApplyEaseTo(Tween t)
-    {
-        if (useCustomCurve && customCurve != null) t.SetEase(customCurve);
-        else t.SetEase(easeType);
+    // ===== MODIFICATION START =====
+    // 原有的 ApplyEaseTo 方法已被拆分为以下两个方法，以避免双重延遲问题
 
-        t.SetUpdate(unscaledTime);
-        if (loops != 0) t.SetLoops(loops, loopType);
-        if (delay > 0f) t.SetDelay(delay);
+    /// <summary>
+    /// 僅將缓動曲線（Ease/AnimationCurve）應用到 Tween。
+    /// </summary>
+    public void ApplyTweenSettings(Tween t)
+    {
+        if (useCustomCurve && customCurve != null)
+        {
+            t.SetEase(customCurve);
+        }
+        else
+        {
+            t.SetEase(easeType);
+        }
     }
+
+    /// <summary>
+    /// 將序列級別的設定（延遲、循環、時間縮放等）應用到 Sequence。
+    /// </summary>
+    public void ApplySequenceSettings(Sequence seq)
+    {
+        seq.SetUpdate(unscaledTime);
+        if (loops != 0)
+        {
+            seq.SetLoops(loops, loopType);
+        }
+        if (delay > 0f)
+        {
+            seq.SetDelay(delay);
+        }
+    }
+    // ===== MODIFICATION END =====
 }

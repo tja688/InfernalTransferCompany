@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b8ad049090ec554eb1570780b8bd9a5, type: 3}
-  m_Name: "\u4E00\u7EA7\u83DC\u5355-\u89D2\u8272\u6309\u94AE\u5165\u573A"
+  m_Name: "\u4E00\u7EA7\u83DC\u5355-\u6307\u9488\u6307\u5411\u5B58\u50A8"
   m_EditorClassIdentifier: 
-  presetName: PrimaryMenu_Role button
+  presetName: Pointer to store
   useRelativeMode: 0
   relativeBaselineMode: 0
   useBezierPath: 0
@@ -20,9 +20,9 @@ MonoBehaviour:
   passTStar: 0.5
   bezierInterruptPolicy: 0
   animatePosition: 1
-  targetAnchoredPosition: {x: 0, y: 0}
+  targetAnchoredPosition: {x: 181, y: 349.6}
   animateSize: 1
-  targetSizeDelta: {x: 187, y: 91}
+  targetSizeDelta: {x: 652, y: 32}
   animateRotationZ: 0
   targetEulerZ: 0
   targetPivot: {x: 0.5, y: 0.5}
@@ -31,7 +31,7 @@ MonoBehaviour:
   targetAlpha: 1
   animateColor: 0
   targetColor: {r: 1, g: 1, b: 1, a: 1}
-  duration: 1
+  duration: 0.6
   delay: 0
   loops: 0
   loopType: 0
@@ -61,5 +61,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  easeType: 25
+  easeType: 30
   scaleDurationByDistance: 0
