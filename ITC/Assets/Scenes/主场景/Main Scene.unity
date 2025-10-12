@@ -232,10 +232,8 @@ GameObject:
   - component: {fileID: 195974308}
   - component: {fileID: 195974307}
   - component: {fileID: 195974312}
-  - component: {fileID: 195974311}
   - component: {fileID: 195974310}
   - component: {fileID: 195974309}
-  - component: {fileID: 195974313}
   m_Layer: 5
   m_Name: "\u672A\u9009\u4E2D"
   m_TagString: Untagged
@@ -326,76 +324,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f314a76c289312b479a52c144d916227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  presets:
-  - {fileID: 11400000, guid: abf2ddfd805068e468fbbb5356efb679, type: 2}
-  libraries: []
+  presets: []
+  libraries:
+  - {fileID: 11400000, guid: 3edc84659a28cb34993b0c6ae3787072, type: 2}
   onPlay:
     m_PersistentCalls:
       m_Calls: []
   onComplete:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &195974311
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 195974305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf87cd9a31932de4b9fa99df3aa7d00e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boundPreset: {fileID: 11400000, guid: abf2ddfd805068e468fbbb5356efb679, type: 2}
-  autoSaveToPreset: 0
-  useRelativeMode: 0
-  useBezierPath: 0
-  duration: 1
-  delay: 0
-  loops: 0
-  loopType: 0
-  unscaledTime: 1
-  useCustomCurve: 0
-  customCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  easeType: 25
-  targetAnchoredPosition: {x: 0, y: 0}
-  targetSizeDelta: {x: 187, y: 91}
-  targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
-  targetAlpha: 1
-  targetColor: {r: 1, g: 1, b: 1, a: 1}
-  passThroughPointC: {x: 0, y: 0}
-  passTStar: 0.5
-  animatePosition: 1
-  animateSize: 1
-  animateRotationZ: 0
-  animateAlpha: 0
-  animateColor: 0
-  showPathGizmos: 1
 --- !u!114 &195974312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -440,36 +377,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &195974313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 195974305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: 512ac01313be59347be858f9e4aaa15a, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 195974310}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: Play
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &210919015
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,10 +499,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 971637117}
-        m_TargetAssemblyTypeName: UnityEngine.Playables.PlayableDirector, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
+      - m_Target: {fileID: 304332302}
+        m_TargetAssemblyTypeName: UITweenTrack, Assembly-CSharp
+        m_MethodName: PlayTrack
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -617,9 +524,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   presets:
-  - {fileID: 11400000, guid: a44f39ee7a92baa4fac60fb35b1612bc, type: 2}
   - {fileID: 11400000, guid: 253b48b040afefe41a3658fd862bc532, type: 2}
-  libraries: []
+  libraries:
+  - {fileID: 11400000, guid: 3edc84659a28cb34993b0c6ae3787072, type: 2}
   onPlay:
     m_PersistentCalls:
       m_Calls: []
@@ -643,10 +550,6 @@ MonoBehaviour:
     onEnterPreset: {fileID: 11400000, guid: 253b48b040afefe41a3658fd862bc532, type: 2}
     onExitPreset: {fileID: 0}
     reverseOnExit: 1
-  - state: 3
-    onEnterPreset: {fileID: 11400000, guid: a44f39ee7a92baa4fac60fb35b1612bc, type: 2}
-    onExitPreset: {fileID: 0}
-    reverseOnExit: 0
   startingState: 1
 --- !u!1 &293818453
 GameObject:
@@ -660,10 +563,8 @@ GameObject:
   - component: {fileID: 293818456}
   - component: {fileID: 293818455}
   - component: {fileID: 293818460}
-  - component: {fileID: 293818459}
   - component: {fileID: 293818458}
   - component: {fileID: 293818457}
-  - component: {fileID: 293818461}
   m_Layer: 5
   m_Name: SELECT ONE
   m_TagString: Untagged
@@ -740,7 +641,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateAnimations: []
+  stateAnimations:
+  - state: 2
+    onEnterPreset: {fileID: 0}
+    onExitPreset: {fileID: 0}
+    reverseOnExit: 0
   startingState: 1
 --- !u!114 &293818458
 MonoBehaviour:
@@ -754,76 +659,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f314a76c289312b479a52c144d916227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  presets:
-  - {fileID: 11400000, guid: b0e8b509d2ae45346bc167caf6458b04, type: 2}
-  libraries: []
+  presets: []
+  libraries:
+  - {fileID: 11400000, guid: 3edc84659a28cb34993b0c6ae3787072, type: 2}
   onPlay:
     m_PersistentCalls:
       m_Calls: []
   onComplete:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &293818459
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 293818453}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf87cd9a31932de4b9fa99df3aa7d00e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boundPreset: {fileID: 11400000, guid: b0e8b509d2ae45346bc167caf6458b04, type: 2}
-  autoSaveToPreset: 0
-  useRelativeMode: 0
-  useBezierPath: 1
-  duration: 1
-  delay: 0
-  loops: 0
-  loopType: 0
-  unscaledTime: 1
-  useCustomCurve: 0
-  customCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  easeType: 15
-  targetAnchoredPosition: {x: 521, y: 472.5}
-  targetSizeDelta: {x: 322, y: 112}
-  targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
-  targetAlpha: 1
-  targetColor: {r: 1, g: 1, b: 1, a: 1}
-  passThroughPointC: {x: 922.45044, y: 369.81116}
-  passTStar: 0.5
-  animatePosition: 1
-  animateSize: 1
-  animateRotationZ: 0
-  animateAlpha: 0
-  animateColor: 0
-  showPathGizmos: 1
 --- !u!114 &293818460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -868,36 +712,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &293818461
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 293818453}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: 7f9a2be0a76ee284a9a5f27bb6c3ddc0, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 293818458}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: Play
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &302503980
 GameObject:
   m_ObjectHideFlags: 0
@@ -941,6 +755,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 304332301}
+  - component: {fileID: 304332302}
   m_Layer: 5
   m_Name: "\u753B\u677F 1"
   m_TagString: Untagged
@@ -978,6 +793,56 @@ RectTransform:
   m_AnchoredPosition: {x: 128, y: 1.5}
   m_SizeDelta: {x: 1364, y: 1083}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &304332302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304332300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abef3c196b634641a240cb1806424b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tracks:
+  - trackName: "\u4E00\u7EA7\u83DC\u5355\u5165\u573A"
+    uniformInterval: 0.1
+    items:
+    - player: {fileID: 210919022}
+      presetName: PrimaryMenu_Menu icon
+      delayAfterPlay: 0.1
+    - player: {fileID: 583028974}
+      presetName: PrimaryMenu_Menu BG
+      delayAfterPlay: 0.1
+    - player: {fileID: 293818458}
+      presetName: PrimaryMenu_Select notion
+      delayAfterPlay: 0.1
+    - player: {fileID: 1691546866}
+      presetName: PrimaryMenu_Back menu button
+      delayAfterPlay: 0.1
+    - player: {fileID: 195974310}
+      presetName: PrimaryMenu_Role button
+      delayAfterPlay: 0.1
+    - player: {fileID: 1725409555}
+      presetName: PrimaryMenu_Word button
+      delayAfterPlay: 0.1
+    - player: {fileID: 986504112}
+      presetName: PrimaryMenu_Setting button
+      delayAfterPlay: 0.1
+    - player: {fileID: 1232613348}
+      presetName: PrimaryMenu_Read button
+      delayAfterPlay: 0.1
+    - player: {fileID: 388834735}
+      presetName: PrimaryMenu_Store button
+      delayAfterPlay: 0.1
+    - player: {fileID: 1679115684}
+      presetName: PrimaryMenu_Close button
+      delayAfterPlay: 0.1
+    - player: {fileID: 1547583158}
+      presetName: PrimaryMenu_Select pointer
+      delayAfterPlay: 0.1
+  useUnscaledIntervals: 1
 --- !u!1 &331982934
 GameObject:
   m_ObjectHideFlags: 0
@@ -1164,10 +1029,8 @@ GameObject:
   - component: {fileID: 388834733}
   - component: {fileID: 388834732}
   - component: {fileID: 388834737}
-  - component: {fileID: 388834736}
   - component: {fileID: 388834735}
   - component: {fileID: 388834734}
-  - component: {fileID: 388834738}
   m_Layer: 5
   m_Name: "\u672A\u9009\u4E2D"
   m_TagString: Untagged
@@ -1258,76 +1121,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f314a76c289312b479a52c144d916227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  presets:
-  - {fileID: 11400000, guid: fd43437680310774da44f7b8709bb43d, type: 2}
-  libraries: []
+  presets: []
+  libraries:
+  - {fileID: 11400000, guid: 3edc84659a28cb34993b0c6ae3787072, type: 2}
   onPlay:
     m_PersistentCalls:
       m_Calls: []
   onComplete:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &388834736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 388834730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf87cd9a31932de4b9fa99df3aa7d00e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boundPreset: {fileID: 11400000, guid: fd43437680310774da44f7b8709bb43d, type: 2}
-  autoSaveToPreset: 0
-  useRelativeMode: 0
-  useBezierPath: 0
-  duration: 1
-  delay: 0
-  loops: 0
-  loopType: 0
-  unscaledTime: 1
-  useCustomCurve: 0
-  customCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  easeType: 25
-  targetAnchoredPosition: {x: 0, y: 0}
-  targetSizeDelta: {x: 143, y: 88}
-  targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
-  targetAlpha: 1
-  targetColor: {r: 1, g: 1, b: 1, a: 1}
-  passThroughPointC: {x: 0, y: 0}
-  passTStar: 0.5
-  animatePosition: 1
-  animateSize: 1
-  animateRotationZ: 0
-  animateAlpha: 0
-  animateColor: 0
-  showPathGizmos: 1
 --- !u!114 &388834737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1372,36 +1174,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &388834738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 388834730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: 60cff5ce8548d934a9d9b6e2acd93f5f, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 388834735}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: Play
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &522418218
 GameObject:
   m_ObjectHideFlags: 0
@@ -1446,10 +1218,8 @@ GameObject:
   - component: {fileID: 583028972}
   - component: {fileID: 583028971}
   - component: {fileID: 583028976}
-  - component: {fileID: 583028975}
   - component: {fileID: 583028974}
   - component: {fileID: 583028973}
-  - component: {fileID: 583028977}
   m_Layer: 5
   m_Name: "\u80CC\u666F"
   m_TagString: Untagged
@@ -1540,76 +1310,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f314a76c289312b479a52c144d916227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  presets:
-  - {fileID: 11400000, guid: ecc92caa9c71e6e4cbbdd72b4d61aac1, type: 2}
-  libraries: []
+  presets: []
+  libraries:
+  - {fileID: 11400000, guid: 3edc84659a28cb34993b0c6ae3787072, type: 2}
   onPlay:
     m_PersistentCalls:
       m_Calls: []
   onComplete:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &583028975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 583028969}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf87cd9a31932de4b9fa99df3aa7d00e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boundPreset: {fileID: 11400000, guid: ecc92caa9c71e6e4cbbdd72b4d61aac1, type: 2}
-  autoSaveToPreset: 0
-  useRelativeMode: 0
-  useBezierPath: 0
-  duration: 1
-  delay: 0
-  loops: 0
-  loopType: 0
-  unscaledTime: 1
-  useCustomCurve: 0
-  customCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  easeType: 12
-  targetAnchoredPosition: {x: 148, y: 0}
-  targetSizeDelta: {x: 816, y: 1083}
-  targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
-  targetAlpha: 1
-  targetColor: {r: 1, g: 1, b: 1, a: 1}
-  passThroughPointC: {x: 0, y: 0}
-  passTStar: 0.5
-  animatePosition: 1
-  animateSize: 1
-  animateRotationZ: 0
-  animateAlpha: 0
-  animateColor: 0
-  showPathGizmos: 1
 --- !u!114 &583028976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1654,36 +1363,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &583028977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 583028969}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: b80665e17f9e8b848b8d218a8a129346, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 583028974}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: Play
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &622129629
 GameObject:
   m_ObjectHideFlags: 0
@@ -1868,32 +1547,32 @@ PlayableDirector:
   m_GameObject: {fileID: 971637116}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 6a79ffca48416cf45804e1e250ba8689, type: 2}
+  m_PlayableAsset: {fileID: 0}
   m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 2
   m_InitialTime: 0
   m_SceneBindings:
   - key: {fileID: -2544082585626072696, guid: 6a79ffca48416cf45804e1e250ba8689, type: 2}
-    value: {fileID: 583028977}
+    value: {fileID: 0}
   - key: {fileID: 7348380652948582755, guid: 6a79ffca48416cf45804e1e250ba8689, type: 2}
-    value: {fileID: 1691546869}
+    value: {fileID: 0}
   - key: {fileID: 5558537273383077845, guid: 6a79ffca48416cf45804e1e250ba8689, type: 2}
-    value: {fileID: 195974313}
+    value: {fileID: 0}
   - key: {fileID: -5449732318740238651, guid: 6a79ffca48416cf45804e1e250ba8689, type: 2}
-    value: {fileID: 1725409558}
+    value: {fileID: 0}
   - key: {fileID: -8459488215309236698, guid: 6a79ffca48416cf45804e1e250ba8689, type: 2}
-    value: {fileID: 986504115}
+    value: {fileID: 0}
   - key: {fileID: -4344793156280511004, guid: 6a79ffca48416cf45804e1e250ba8689, type: 2}
-    value: {fileID: 1232613351}
+    value: {fileID: 0}
   - key: {fileID: -1425448934647878854, guid: 6a79ffca48416cf45804e1e250ba8689, type: 2}
-    value: {fileID: 388834738}
+    value: {fileID: 0}
   - key: {fileID: 3417803010238494462, guid: 6a79ffca48416cf45804e1e250ba8689, type: 2}
-    value: {fileID: 1679115687}
+    value: {fileID: 0}
   - key: {fileID: 5957772936587485652, guid: 6a79ffca48416cf45804e1e250ba8689, type: 2}
-    value: {fileID: 293818461}
+    value: {fileID: 0}
   - key: {fileID: -4828070307508485467, guid: 6a79ffca48416cf45804e1e250ba8689, type: 2}
-    value: {fileID: 1547583161}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References: []
 --- !u!4 &971637118
@@ -1923,10 +1602,8 @@ GameObject:
   - component: {fileID: 986504110}
   - component: {fileID: 986504109}
   - component: {fileID: 986504114}
-  - component: {fileID: 986504113}
   - component: {fileID: 986504112}
   - component: {fileID: 986504111}
-  - component: {fileID: 986504115}
   m_Layer: 5
   m_Name: "\u672A\u9009\u4E2D"
   m_TagString: Untagged
@@ -2017,76 +1694,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f314a76c289312b479a52c144d916227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  presets:
-  - {fileID: 11400000, guid: 9116e404af9045e48aeff776131a7677, type: 2}
-  libraries: []
+  presets: []
+  libraries:
+  - {fileID: 11400000, guid: 3edc84659a28cb34993b0c6ae3787072, type: 2}
   onPlay:
     m_PersistentCalls:
       m_Calls: []
   onComplete:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &986504113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 986504107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf87cd9a31932de4b9fa99df3aa7d00e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boundPreset: {fileID: 11400000, guid: 9116e404af9045e48aeff776131a7677, type: 2}
-  autoSaveToPreset: 0
-  useRelativeMode: 0
-  useBezierPath: 0
-  duration: 1
-  delay: 0
-  loops: 0
-  loopType: 0
-  unscaledTime: 1
-  useCustomCurve: 0
-  customCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  easeType: 25
-  targetAnchoredPosition: {x: 0, y: 0}
-  targetSizeDelta: {x: 143, y: 88}
-  targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
-  targetAlpha: 1
-  targetColor: {r: 1, g: 1, b: 1, a: 1}
-  passThroughPointC: {x: 0, y: 0}
-  passTStar: 0.5
-  animatePosition: 1
-  animateSize: 1
-  animateRotationZ: 0
-  animateAlpha: 0
-  animateColor: 0
-  showPathGizmos: 1
 --- !u!114 &986504114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2131,36 +1747,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &986504115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 986504107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: 64740584ac373244ebb2e5ff42c903ee, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 986504112}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: Play
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &1093408115 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8568148058401762819, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
@@ -2214,10 +1800,8 @@ GameObject:
   - component: {fileID: 1232613346}
   - component: {fileID: 1232613345}
   - component: {fileID: 1232613350}
-  - component: {fileID: 1232613349}
   - component: {fileID: 1232613348}
   - component: {fileID: 1232613347}
-  - component: {fileID: 1232613351}
   m_Layer: 5
   m_Name: "\u672A\u9009\u4E2D"
   m_TagString: Untagged
@@ -2308,76 +1892,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f314a76c289312b479a52c144d916227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  presets:
-  - {fileID: 11400000, guid: d77894cc18f206949ae1f86498e3d7ad, type: 2}
-  libraries: []
+  presets: []
+  libraries:
+  - {fileID: 11400000, guid: 3edc84659a28cb34993b0c6ae3787072, type: 2}
   onPlay:
     m_PersistentCalls:
       m_Calls: []
   onComplete:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1232613349
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1232613343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf87cd9a31932de4b9fa99df3aa7d00e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boundPreset: {fileID: 11400000, guid: d77894cc18f206949ae1f86498e3d7ad, type: 2}
-  autoSaveToPreset: 0
-  useRelativeMode: 0
-  useBezierPath: 0
-  duration: 1
-  delay: 0
-  loops: 0
-  loopType: 0
-  unscaledTime: 1
-  useCustomCurve: 0
-  customCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  easeType: 25
-  targetAnchoredPosition: {x: 0, y: 0}
-  targetSizeDelta: {x: 143, y: 88}
-  targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
-  targetAlpha: 1
-  targetColor: {r: 1, g: 1, b: 1, a: 1}
-  passThroughPointC: {x: 0, y: 0}
-  passTStar: 0.5
-  animatePosition: 1
-  animateSize: 1
-  animateRotationZ: 0
-  animateAlpha: 0
-  animateColor: 0
-  showPathGizmos: 1
 --- !u!114 &1232613350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2422,36 +1945,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1232613351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1232613343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: a280a09c9782e7d4e88da701580208a9, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1232613348}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: Play
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &1349222773
 GameObject:
   m_ObjectHideFlags: 0
@@ -2590,10 +2083,8 @@ GameObject:
   - component: {fileID: 1547583156}
   - component: {fileID: 1547583155}
   - component: {fileID: 1547583160}
-  - component: {fileID: 1547583159}
   - component: {fileID: 1547583158}
   - component: {fileID: 1547583157}
-  - component: {fileID: 1547583161}
   m_Layer: 5
   m_Name: "\u9009\u62E9\u6307\u9488"
   m_TagString: Untagged
@@ -2684,76 +2175,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f314a76c289312b479a52c144d916227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  presets:
-  - {fileID: 11400000, guid: 708e3c253ede18549b73ed6f02c09391, type: 2}
-  libraries: []
+  presets: []
+  libraries:
+  - {fileID: 11400000, guid: 3edc84659a28cb34993b0c6ae3787072, type: 2}
   onPlay:
     m_PersistentCalls:
       m_Calls: []
   onComplete:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1547583159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1547583153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf87cd9a31932de4b9fa99df3aa7d00e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boundPreset: {fileID: 11400000, guid: 708e3c253ede18549b73ed6f02c09391, type: 2}
-  autoSaveToPreset: 0
-  useRelativeMode: 0
-  useBezierPath: 0
-  duration: 1
-  delay: 0
-  loops: 0
-  loopType: 0
-  unscaledTime: 1
-  useCustomCurve: 0
-  customCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  easeType: 15
-  targetAnchoredPosition: {x: 181, y: 52.5}
-  targetSizeDelta: {x: 652, y: 32}
-  targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
-  targetAlpha: 1
-  targetColor: {r: 1, g: 1, b: 1, a: 1}
-  passThroughPointC: {x: 0, y: 0}
-  passTStar: 0.5
-  animatePosition: 1
-  animateSize: 1
-  animateRotationZ: 0
-  animateAlpha: 1
-  animateColor: 0
-  showPathGizmos: 1
 --- !u!114 &1547583160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2798,36 +2228,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1547583161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1547583153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: 2be1edd8d3427f34a9413cfe38a5152d, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1547583158}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: Play
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &1655434176
 GameObject:
   m_ObjectHideFlags: 0
@@ -2873,10 +2273,8 @@ GameObject:
   - component: {fileID: 1679115682}
   - component: {fileID: 1679115681}
   - component: {fileID: 1679115686}
-  - component: {fileID: 1679115685}
   - component: {fileID: 1679115684}
   - component: {fileID: 1679115683}
-  - component: {fileID: 1679115687}
   m_Layer: 5
   m_Name: "\u5173\u95ED"
   m_TagString: Untagged
@@ -2967,76 +2365,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f314a76c289312b479a52c144d916227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  presets:
-  - {fileID: 11400000, guid: fd6ebca8793f9c640a5a1415e6a6245e, type: 2}
-  libraries: []
+  presets: []
+  libraries:
+  - {fileID: 11400000, guid: 3edc84659a28cb34993b0c6ae3787072, type: 2}
   onPlay:
     m_PersistentCalls:
       m_Calls: []
   onComplete:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1679115685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1679115679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf87cd9a31932de4b9fa99df3aa7d00e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boundPreset: {fileID: 11400000, guid: fd6ebca8793f9c640a5a1415e6a6245e, type: 2}
-  autoSaveToPreset: 0
-  useRelativeMode: 0
-  useBezierPath: 0
-  duration: 1
-  delay: 0
-  loops: 0
-  loopType: 0
-  unscaledTime: 1
-  useCustomCurve: 0
-  customCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  easeType: 25
-  targetAnchoredPosition: {x: -331.5, y: 474.5}
-  targetSizeDelta: {x: 103, y: 96}
-  targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
-  targetAlpha: 1
-  targetColor: {r: 1, g: 1, b: 1, a: 1}
-  passThroughPointC: {x: 0, y: 0}
-  passTStar: 0.5
-  animatePosition: 1
-  animateSize: 1
-  animateRotationZ: 0
-  animateAlpha: 0
-  animateColor: 0
-  showPathGizmos: 1
 --- !u!114 &1679115686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3081,36 +2418,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1679115687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1679115679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: 0a68cd97bf9b4ee44bb763907f1f7b3d, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1679115684}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: Play
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &1691546861
 GameObject:
   m_ObjectHideFlags: 0
@@ -3123,10 +2430,8 @@ GameObject:
   - component: {fileID: 1691546864}
   - component: {fileID: 1691546863}
   - component: {fileID: 1691546868}
-  - component: {fileID: 1691546867}
   - component: {fileID: 1691546866}
   - component: {fileID: 1691546865}
-  - component: {fileID: 1691546869}
   m_Layer: 5
   m_Name: "\u672A\u9009\u4E2D"
   m_TagString: Untagged
@@ -3217,76 +2522,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f314a76c289312b479a52c144d916227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  presets:
-  - {fileID: 11400000, guid: ac4a1bfd7f5b53e47afc63e389c42e7e, type: 2}
-  libraries: []
+  presets: []
+  libraries:
+  - {fileID: 11400000, guid: 3edc84659a28cb34993b0c6ae3787072, type: 2}
   onPlay:
     m_PersistentCalls:
       m_Calls: []
   onComplete:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1691546867
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1691546861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf87cd9a31932de4b9fa99df3aa7d00e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boundPreset: {fileID: 11400000, guid: ac4a1bfd7f5b53e47afc63e389c42e7e, type: 2}
-  autoSaveToPreset: 0
-  useRelativeMode: 0
-  useBezierPath: 0
-  duration: 1
-  delay: 0
-  loops: 0
-  loopType: 0
-  unscaledTime: 1
-  useCustomCurve: 0
-  customCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  easeType: 25
-  targetAnchoredPosition: {x: 0, y: 0.000015258789}
-  targetSizeDelta: {x: 443, y: 88}
-  targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
-  targetAlpha: 1
-  targetColor: {r: 1, g: 1, b: 1, a: 1}
-  passThroughPointC: {x: 0, y: 0}
-  passTStar: 0.5
-  animatePosition: 1
-  animateSize: 1
-  animateRotationZ: 0
-  animateAlpha: 0
-  animateColor: 0
-  showPathGizmos: 1
 --- !u!114 &1691546868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3331,36 +2575,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1691546869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1691546861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: da5d1c6356eba004dbebf3f82e24e4bd, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1691546866}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: Play
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &1725409550
 GameObject:
   m_ObjectHideFlags: 0
@@ -3373,10 +2587,8 @@ GameObject:
   - component: {fileID: 1725409553}
   - component: {fileID: 1725409552}
   - component: {fileID: 1725409557}
-  - component: {fileID: 1725409556}
   - component: {fileID: 1725409555}
   - component: {fileID: 1725409554}
-  - component: {fileID: 1725409558}
   m_Layer: 5
   m_Name: "\u672A\u9009\u4E2D"
   m_TagString: Untagged
@@ -3467,76 +2679,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f314a76c289312b479a52c144d916227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  presets:
-  - {fileID: 11400000, guid: 81b9f0ad10b50fd4aa221c0fe77edff6, type: 2}
-  libraries: []
+  presets: []
+  libraries:
+  - {fileID: 11400000, guid: 3edc84659a28cb34993b0c6ae3787072, type: 2}
   onPlay:
     m_PersistentCalls:
       m_Calls: []
   onComplete:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1725409556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1725409550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf87cd9a31932de4b9fa99df3aa7d00e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boundPreset: {fileID: 11400000, guid: 81b9f0ad10b50fd4aa221c0fe77edff6, type: 2}
-  autoSaveToPreset: 0
-  useRelativeMode: 0
-  useBezierPath: 0
-  duration: 1
-  delay: 0
-  loops: 0
-  loopType: 0
-  unscaledTime: 1
-  useCustomCurve: 0
-  customCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  easeType: 25
-  targetAnchoredPosition: {x: 0, y: 0}
-  targetSizeDelta: {x: 143, y: 88}
-  targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
-  targetAlpha: 1
-  targetColor: {r: 1, g: 1, b: 1, a: 1}
-  passThroughPointC: {x: 0, y: 0}
-  passTStar: 0.5
-  animatePosition: 1
-  animateSize: 1
-  animateRotationZ: 0
-  animateAlpha: 0
-  animateColor: 0
-  showPathGizmos: 1
 --- !u!114 &1725409557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3581,36 +2732,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1725409558
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1725409550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: da92d8412716cfa4db32e586f6c8baa7, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1725409555}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: Play
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!4 &1820217281 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7064438181301213952, guid: aaa50cfbf6bc6564bb8f913524c11fab, type: 3}
