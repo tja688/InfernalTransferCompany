@@ -313,7 +313,7 @@ public enum UIRouteCommand
     Pop
 }
 
-internal class UIRouteRequest
+public class UIRouteRequest
 {
     public UIRouteCommand Command;
     public string Path;
