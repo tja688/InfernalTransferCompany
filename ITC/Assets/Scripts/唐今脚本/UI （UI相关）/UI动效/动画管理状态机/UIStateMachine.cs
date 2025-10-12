@@ -1,42 +1,118 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
-using System.Linq;
 
 [RequireComponent(typeof(UITweenPlayer))]
 public class UIStateMachine : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-    // 在 Inspector 中配置所有状态的动画
-    public List<StateAnimationBinding> stateAnimations = new List<StateAnimationBinding>();
+    [Header("默认 Profile")]
+    [SerializeField] private List<StateAnimationBinding> stateAnimations = new();
+    [SerializeField] private UIState startingState = UIState.Normal;
+    [SerializeField] private string defaultProfileId = "default";
 
-    // 初始状态
-    public UIState startingState = UIState.Normal;
-    
+    [Header("额外 Profile")]
+    public List<UIStateMachineProfile> additionalProfiles = new();
+
+    [Header("层级映射")]
+    public List<UIStateMachineLayerProfile> layerProfiles = new();
+
     private UIState _currentState;
     private UITweenPlayer _tweenPlayer;
-    private Dictionary<UIState, StateAnimationBinding> _bindingMap;
+    private readonly Dictionary<string, ProfileRuntimeData> _profiles = new();
+    private ProfileRuntimeData _activeProfile;
+    private string _activeProfileId;
 
-    void Awake()
+    private void Awake()
     {
         _tweenPlayer = GetComponent<UITweenPlayer>();
-        
-        // 将 List 转换为字典，方便快速查找
-        _bindingMap = stateAnimations.ToDictionary(b => b.state, b => b);
+        BuildProfiles();
     }
 
-    void Start()
+    private void Start()
     {
-        // 初始化到起始状态，但不播放动画
-        _currentState = startingState;
+        EnsureActiveProfile();
+        if (_activeProfile != null)
+        {
+            _currentState = _activeProfile.startingState;
+        }
     }
 
-    // ---- 核心：状态转换方法 ----
+    private void BuildProfiles()
+    {
+        _profiles.Clear();
+
+        if (string.IsNullOrEmpty(defaultProfileId))
+        {
+            defaultProfileId = "default";
+        }
+
+        var defaultRuntime = BuildRuntimeData(stateAnimations, startingState);
+        _profiles[defaultProfileId] = defaultRuntime;
+
+        foreach (var profile in additionalProfiles)
+        {
+            if (profile == null) continue;
+            if (string.IsNullOrEmpty(profile.profileId)) continue;
+            _profiles[profile.profileId] = BuildRuntimeData(profile.stateAnimations, profile.startingState);
+        }
+
+        if (!_profiles.TryGetValue(defaultProfileId, out _activeProfile))
+        {
+            foreach (var pair in _profiles)
+            {
+                _activeProfileId = pair.Key;
+                _activeProfile = pair.Value;
+                break;
+            }
+        }
+        else
+        {
+            _activeProfileId = defaultProfileId;
+        }
+    }
+
+    private static ProfileRuntimeData BuildRuntimeData(List<StateAnimationBinding> bindings, UIState startState)
+    {
+        var dict = new Dictionary<UIState, StateAnimationBinding>();
+        if (bindings != null)
+        {
+            foreach (var binding in bindings)
+            {
+                if (binding == null) continue;
+                dict[binding.state] = binding;
+            }
+        }
+
+        return new ProfileRuntimeData
+        {
+            startingState = startState,
+            bindings = dict
+        };
+    }
+
+    private void EnsureActiveProfile()
+    {
+        if (_activeProfile == null)
+        {
+            BuildProfiles();
+            if (!_profiles.TryGetValue(defaultProfileId, out _activeProfile))
+            {
+                _activeProfile = BuildRuntimeData(stateAnimations, startingState);
+                _profiles[defaultProfileId] = _activeProfile;
+                _activeProfileId = defaultProfileId;
+            }
+        }
+    }
+
     private void TransitionTo(UIState newState)
     {
+        EnsureActiveProfile();
         if (_currentState == newState) return;
 
-        // 1. 播放“退出旧状态”的动画
-        if (_bindingMap.TryGetValue(_currentState, out var oldBinding))
+        var bindings = _activeProfile.bindings;
+        if (bindings == null) return;
+
+        if (bindings.TryGetValue(_currentState, out var oldBinding) && oldBinding != null)
         {
             if (oldBinding.reverseOnExit && oldBinding.onEnterPreset != null)
             {
@@ -47,9 +123,8 @@ public class UIStateMachine : MonoBehaviour, IPointerEnterHandler, IPointerExitH
                 _tweenPlayer.Play(oldBinding.onExitPreset);
             }
         }
-        
-        // 2. 播放“进入新状态”的动画
-        if (_bindingMap.TryGetValue(newState, out var newBinding))
+
+        if (bindings.TryGetValue(newState, out var newBinding) && newBinding != null)
         {
             if (newBinding.onEnterPreset != null)
             {
@@ -57,11 +132,9 @@ public class UIStateMachine : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             }
         }
 
-        // 3. 更新当前状态
         _currentState = newState;
     }
 
-    // ---- UI 事件监听与状态决策 ----
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (_currentState == UIState.Pressed || _currentState == UIState.Disabled) return;
@@ -82,7 +155,6 @@ public class UIStateMachine : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        // 当鼠标抬起时，要判断指针是否还在对象上
         if (_currentState == UIState.Pressed)
         {
             if (eventData.pointerCurrentRaycast.gameObject == gameObject)
@@ -95,14 +167,11 @@ public class UIStateMachine : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             }
         }
     }
-    
-    // ---- 外部控制接口 (例如：用于Toggle) ----
+
     public void SetSelected(bool isSelected)
     {
         if (isSelected)
         {
-            // 这里可以处理更复杂的状态组合，例如进入 "Selected" 状态
-            // 暂时简化处理
             if (_currentState != UIState.Selected) TransitionTo(UIState.Selected);
         }
         else
@@ -110,4 +179,68 @@ public class UIStateMachine : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             if (_currentState == UIState.Selected) TransitionTo(UIState.Normal);
         }
     }
+
+    public bool ApplyProfile(string profileId, bool resetState = true)
+    {
+        EnsureActiveProfile();
+        if (string.IsNullOrEmpty(profileId)) return false;
+        if (!_profiles.TryGetValue(profileId, out var profile)) return false;
+        _activeProfile = profile;
+        _activeProfileId = profileId;
+        if (resetState)
+        {
+            _currentState = profile.startingState;
+        }
+        return true;
+    }
+
+    public bool ApplyLevelProfile(UIHierarchyLevel level, bool resetState = true)
+    {
+        foreach (var mapping in layerProfiles)
+        {
+            if (mapping == null) continue;
+            if (mapping.level == level && !string.IsNullOrEmpty(mapping.profileId))
+            {
+                return ApplyProfile(mapping.profileId, resetState);
+            }
+        }
+
+        return false;
+    }
+
+    public void ResetToDefaultProfile(bool resetState = true)
+    {
+        ApplyProfile(defaultProfileId, resetState);
+    }
+
+    public void KillActiveTween()
+    {
+        if (_tweenPlayer != null)
+        {
+            _tweenPlayer.Kill(false);
+        }
+    }
+
+    public string ActiveProfileId => _activeProfileId;
+
+    private class ProfileRuntimeData
+    {
+        public UIState startingState;
+        public Dictionary<UIState, StateAnimationBinding> bindings;
+    }
+}
+
+[System.Serializable]
+public class UIStateMachineProfile
+{
+    public string profileId = "profile";
+    public UIState startingState = UIState.Normal;
+    public List<StateAnimationBinding> stateAnimations = new();
+}
+
+[System.Serializable]
+public class UIStateMachineLayerProfile
+{
+    public UIHierarchyLevel level = UIHierarchyLevel.GameUI;
+    public string profileId;
 }
