@@ -14,8 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   presetName: MyTween
   useRelativeMode: 1
+  relativeBaselineMode: 0
   useBezierPath: 0
-  duration: 0.6
+  passThroughPointC: {x: 0, y: 0}
+  passTStar: 0.5
+  bezierInterruptPolicy: 0
+  animatePosition: 1
+  targetAnchoredPosition: {x: -120, y: 0}
+  animateSize: 1
+  targetSizeDelta: {x: 100, y: 100}
+  animateRotationZ: 0
+  targetEulerZ: 0
+  targetPivot: {x: 0.5, y: 0.5}
+  animatePivot: 0
+  animateAlpha: 0
+  targetAlpha: 1
+  animateColor: 0
+  targetColor: {r: 1, g: 1, b: 1, a: 1}
+  duration: 0.3
   delay: 0
   loops: 0
   loopType: 0
@@ -46,16 +62,4 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   easeType: 27
-  targetAnchoredPosition: {x: -120, y: 0}
-  targetSizeDelta: {x: 100, y: 100}
-  targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
-  targetAlpha: 1
-  targetColor: {r: 1, g: 1, b: 1, a: 1}
-  passThroughPointC: {x: 0, y: 0}
-  passTStar: 0.5
-  animatePosition: 1
-  animateSize: 1
-  animateRotationZ: 0
-  animateAlpha: 0
-  animateColor: 0
+  scaleDurationByDistance: 0
