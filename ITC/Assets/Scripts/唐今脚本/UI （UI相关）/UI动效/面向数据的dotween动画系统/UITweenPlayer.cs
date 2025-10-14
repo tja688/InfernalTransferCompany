@@ -123,15 +123,35 @@ public class UITweenPlayer : MonoBehaviour
             _active = seq.Play();
         }
     }
+    
+    private Baseline CaptureBaselineNow()
+    {
+        float? baseAlpha = null; Color? baseColor = null;
+        if (_cg != null) baseAlpha = _cg.alpha;
+        else if (_gfx != null) { baseAlpha = _gfx.color.a; baseColor = _gfx.color; }
+        return new Baseline {
+            pos = _rt.anchoredPosition,
+            size = _rt.sizeDelta,
+            eulerZ = _rt.eulerAngles.z,
+            alpha = baseAlpha,
+            color = baseColor,
+            pivot = _rt.pivot
+        };
+    }
 
     private Sequence CreateAnimationSequence(UITweenPreset preset, bool reversed)
     {
         if (preset == null || _rt == null) return null;
 
-        var baseL = GetOrCaptureBaseline(preset);
+        // ★ 核心：根据相对基线策略选择基线
+        Baseline baseL = preset.useRelativeMode
+            ? (preset.relativeBaselineMode == RelativeBaselineMode.RebaseAtInterrupt
+                ? CaptureBaselineNow()
+                : GetOrCaptureBaseline(preset))
+            : GetOrCaptureBaseline(preset);
+
         var seq = DOTween.Sequence();
         float dur = Mathf.Max(0.0001f, preset.duration);
-
         // Position
         if (preset.animatePosition)
         {
