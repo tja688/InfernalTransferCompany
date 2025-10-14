@@ -10,10 +10,15 @@ public class UITweenTrackEditor : Editor
     SerializedProperty _tracksProp;
     SerializedProperty _useUnscaledProp;
 
+    // —— Editor-only: 测试区状态 —— //
+    int _testTrackIndex = 0;
+    GUIContent[] _trackNameOptions = Array.Empty<GUIContent>();
+
     void OnEnable()
     {
         _tracksProp = serializedObject.FindProperty("tracks");
         _useUnscaledProp = serializedObject.FindProperty("useUnscaledIntervals");
+        RefreshTrackNameOptions();
     }
 
     public override void OnInspectorGUI()
@@ -29,9 +34,68 @@ public class UITweenTrackEditor : Editor
         EditorGUILayout.PropertyField(_useUnscaledProp);
         EditorGUILayout.Space();
 
+        // —— 运行测试（Play 模式） —— //
+        DrawTestRunner();
+
+        EditorGUILayout.Space(8);
         DrawTracks();
 
         serializedObject.ApplyModifiedProperties();
+
+        // 便于编辑时动态刷新选项
+        if (Event.current.type == EventType.Layout)
+            RefreshTrackNameOptions();
+    }
+
+    void DrawTestRunner()
+    {
+        using (new EditorGUILayout.VerticalScope("box"))
+        {
+            EditorGUILayout.LabelField("运行测试（Play 模式）", EditorStyles.boldLabel);
+
+            var track = (UITweenTrack)target;
+            int trackCount = _tracksProp != null ? _tracksProp.arraySize : 0;
+
+            using (new EditorGUI.DisabledScope(trackCount == 0))
+            {
+                _testTrackIndex = EditorGUILayout.Popup(
+                    new GUIContent("测试轨道"),
+                    Mathf.Clamp(_testTrackIndex, 0, Mathf.Max(0, trackCount - 1)),
+                    _trackNameOptions);
+
+                if (trackCount == 0)
+                {
+                    EditorGUILayout.HelpBox("尚未添加任何轨道。", MessageType.Info);
+                }
+            }
+
+            if (!EditorApplication.isPlaying)
+            {
+                EditorGUILayout.HelpBox("进入 Play 模式后才能运行测试。", MessageType.None);
+            }
+
+            using (new EditorGUI.DisabledScope(!EditorApplication.isPlaying || trackCount == 0))
+            {
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    if (GUILayout.Button("▶ 运行测试", GUILayout.Height(24)))
+                    {
+                        Undo.RecordObject(track, "Run Test Track");
+                        track.PlayTrack(_testTrackIndex);
+                    }
+
+                    if (GUILayout.Button("⏹ 停止该轨道", GUILayout.Height(24)))
+                    {
+                        track.StopTrack(_testTrackIndex);
+                    }
+
+                    if (GUILayout.Button("⏹ 全部停止", GUILayout.Height(24)))
+                    {
+                        track.StopAllTracks();
+                    }
+                }
+            }
+        }
     }
 
     void DrawTracks()
@@ -51,6 +115,18 @@ public class UITweenTrackEditor : Editor
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     EditorGUILayout.PropertyField(trackProp.FindPropertyRelative("trackName"), new GUIContent("轨道名称"));
+
+                    // 便捷测试按钮（Play 模式单轨）
+                    using (new EditorGUI.DisabledScope(!EditorApplication.isPlaying))
+                    {
+                        if (GUILayout.Button("▶ 测这个", GUILayout.Width(70)))
+                        {
+                            var track = (UITweenTrack)target;
+                            _testTrackIndex = i;
+                            track.PlayTrack(i);
+                        }
+                    }
+
                     if (GUILayout.Button("删除", GUILayout.Width(50f)))
                     {
                         _tracksProp.DeleteArrayElementAtIndex(i);
@@ -142,10 +218,7 @@ public class UITweenTrackEditor : Editor
 
     void DrawPresetNameSelector(SerializedProperty presetProp, IReadOnlyList<UITweenPresetOption> options)
     {
-        if (presetProp == null)
-        {
-            return;
-        }
+        if (presetProp == null) return;
 
         using (new EditorGUILayout.HorizontalScope())
         {
@@ -213,6 +286,27 @@ public class UITweenTrackEditor : Editor
                 EditorUtility.SetDirty(track);
             }
         }
+    }
+
+    void RefreshTrackNameOptions()
+    {
+        var track = target as UITweenTrack;
+        if (track == null || track.tracks == null || track.tracks.Count == 0)
+        {
+            _trackNameOptions = new[] { new GUIContent("(无轨道)") };
+            _testTrackIndex = 0;
+            return;
+        }
+
+        var list = new List<GUIContent>();
+        for (int i = 0; i < track.tracks.Count; i++)
+        {
+            var t = track.tracks[i];
+            var name = string.IsNullOrEmpty(t?.trackName) ? $"Track {i}" : t.trackName;
+            list.Add(new GUIContent($"{i}. {name}"));
+        }
+        _trackNameOptions = list.ToArray();
+        _testTrackIndex = Mathf.Clamp(_testTrackIndex, 0, _trackNameOptions.Length - 1);
     }
 }
 #endif
