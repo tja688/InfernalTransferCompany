@@ -146,7 +146,7 @@ public class UITweenPlayer : MonoBehaviour
                     Vector2 APrime = _rt.anchoredPosition;
                     Vector2 P = SolveQuadraticControlPoint(APrime, B_design, M, tStar);
                     var posTween = DOVirtual.Float(0f, 1f, dur, t => _rt.anchoredPosition = QuadBezier(APrime, P, B_design, t));
-                    preset.ApplyTweenSettings(posTween); // [MODIFIED]
+                    preset.ApplyTweenSettings(posTween);
                     seq.Join(posTween);
                 }
                 else
@@ -154,7 +154,7 @@ public class UITweenPlayer : MonoBehaviour
                     Vector2 CPrime = _rt.anchoredPosition;
                     Vector2 P = SolveQuadraticControlPoint(CPrime, A_design, M, 1f - tStar);
                     var posTween = DOVirtual.Float(0f, 1f, dur, t => _rt.anchoredPosition = QuadBezier(CPrime, P, A_design, t));
-                    preset.ApplyTweenSettings(posTween); // [MODIFIED]
+                    preset.ApplyTweenSettings(posTween);
                     seq.Join(posTween);
                 }
             }
@@ -164,7 +164,7 @@ public class UITweenPlayer : MonoBehaviour
                     ? (reversed ? baseL.pos : baseL.pos + preset.targetAnchoredPosition)
                     : (reversed ? baseL.pos : preset.targetAnchoredPosition);
                 var posTween = _rt.DOAnchorPos(target, dur);
-                preset.ApplyTweenSettings(posTween); // [MODIFIED]
+                preset.ApplyTweenSettings(posTween); 
                 seq.Join(posTween);
             }
         }
