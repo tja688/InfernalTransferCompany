@@ -20,22 +20,22 @@ MonoBehaviour:
   passTStar: 0.5
   bezierInterruptPolicy: 0
   animatePosition: 1
-  targetAnchoredPosition: {x: 0, y: 0}
-  animateSize: 0
-  targetSizeDelta: {x: 0, y: 0}
+  targetAnchoredPosition: {x: -221, y: 0}
+  animateSize: 1
+  targetSizeDelta: {x: 1522, y: 1092}
   animateRotationZ: 0
   targetEulerZ: 0
   targetPivot: {x: 0.5, y: 0.5}
   animatePivot: 0
-  animateAlpha: 0
+  animateAlpha: 1
   targetAlpha: 1
   animateColor: 0
   targetColor: {r: 1, g: 1, b: 1, a: 1}
-  duration: 0.25
+  duration: 1
   delay: 0
   loops: 0
   loopType: 0
-  unscaledTime: 0
+  unscaledTime: 1
   useCustomCurve: 0
   customCurve:
     serializedVersion: 2
@@ -44,7 +44,7 @@ MonoBehaviour:
       time: 0
       value: 0
       inSlope: 0
-      outSlope: 1
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -52,7 +52,7 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 1
+      inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
@@ -61,5 +61,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  easeType: 6
+  easeType: 16
   scaleDurationByDistance: 0
