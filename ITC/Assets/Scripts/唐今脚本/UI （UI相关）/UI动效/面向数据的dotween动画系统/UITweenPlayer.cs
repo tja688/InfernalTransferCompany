@@ -5,10 +5,11 @@
 // - Standard Play API now respects the lock, preventing animation snatching.
 // - Core logic remains: baseline caching, no .From(), stable relative reversed playback.
 
+using System;
+using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
-using DG.Tweening;
-using System.Collections.Generic;
 using UnityEngine.UI;
 
 [DisallowMultipleComponent]
@@ -27,6 +28,12 @@ public class UITweenPlayer : MonoBehaviour
     CanvasGroup _cg;
     Graphic _gfx;
     Tween _active;
+
+    public event Action<UITweenPreset, bool, Sequence> SequencePrepared;
+
+    public UITweenPreset LastPreparedPreset { get; private set; }
+    public bool LastPreparedReversed { get; private set; }
+    public Sequence LastPreparedSequence { get; private set; }
 
     struct Baseline {
         public Vector2 pos;
@@ -69,6 +76,7 @@ public class UITweenPlayer : MonoBehaviour
             _active.Kill(complete);
             _active = null;
         }
+        LastPreparedSequence = null;
     }
 
     public void Play(int index)
@@ -219,7 +227,12 @@ public class UITweenPlayer : MonoBehaviour
         }
 
         preset.ApplySequenceSettings(seq);
-        
+
+        LastPreparedPreset = preset;
+        LastPreparedReversed = reversed;
+        LastPreparedSequence = seq;
+        SequencePrepared?.Invoke(preset, reversed, seq);
+
         seq.OnStart(() => onPlay?.Invoke()).OnComplete(() => onComplete?.Invoke());
 
         return seq;
@@ -234,6 +247,25 @@ public class UITweenPlayer : MonoBehaviour
             if (lib != null && lib.TryGet(presetName, out var p)) return p;
         Debug.LogWarning($"[UITweenPlayer] Preset not found: {presetName}", this);
         return null;
+    }
+    public bool TryGetBaseline(UITweenPreset p, out Vector2 pos, out Vector2 size, out float eulerZ, out float? alpha, out Color? color, out Vector2 pivot)
+    {
+        pos = Vector2.zero;
+        size = Vector2.zero;
+        eulerZ = 0f;
+        alpha = null;
+        color = null;
+        pivot = Vector2.zero;
+        if (p == null) return false;
+
+        var baseLine = GetOrCaptureBaseline(p);
+        pos = baseLine.pos;
+        size = baseLine.size;
+        eulerZ = baseLine.eulerZ;
+        alpha = baseLine.alpha;
+        color = baseLine.color;
+        pivot = baseLine.pivot;
+        return true;
     }
     private Baseline GetOrCaptureBaseline(UITweenPreset p)
     {
