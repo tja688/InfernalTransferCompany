@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -29,6 +30,11 @@ public static class HeCoroutineUtil
 /// </summary>
 public enum DocumentError
 {
+    /// <summary>
+    /// 无错误 
+    /// </summary>
+    Pass,
+    
     ///<summary,>伪实现，不判断类型只判断对错</summary>
     Stub,
     /// <summary>封蜡破损 - 文书的封蜡不完整</summary>
@@ -77,6 +83,10 @@ public class DocumentVerifier : IContractStage
     public string StageName => "文书核验";
     public List<DocumentError> DetectedErrors => detectedErrors;
 
+
+
+
+  
     public void Enter(HeContractContext ctx)
     {
         context = ctx;
@@ -86,65 +96,16 @@ public class DocumentVerifier : IContractStage
         
         // 显示文书核验UI
         uiManager?.ShowDocumentVerification(ctx);
-        
+       
         // 执行核验逻辑
         PerformDocumentVerification();
-        Debug.Assert(detectedErrors.Count>0);
+        //Debug.Assert(detectedErrors.Count>0);
     
        
          Debug.Log($"检测到{detectedErrors.Count}个问题，等待玩家决策...");
 
-
-       
-        Action<DocumentError> documentClickedHandler = null;
-
-      
-        documentClickedHandler = (error) =>
-        {
-            
-
-            Debug.Log($"玩家发现了文书错误: {error}");
-            if (detectedErrors.Contains(error))
-            {
-                detectedErrors.Remove(error);
-                Debug.Log($"问题{error}已处理,核验文书不通过");
-                uiManager.SwitchPanel(HeContractUIManager.UIState.None);
-                uiManager.OnJudge -= documentClickedHandler;
-                detectedErrors.Clear();
-            }
-            else
-            {
-                Debug.Log($"问题{error}不在待处理列表中");
-              
-
-
-
-
-
-            }
-        };
-        Action<DocumentError> nextStageClickedHandler = null;
-
-
-        nextStageClickedHandler = (error) =>
-        {
-
-            if (detectedErrors.Count()>0)
-            {
-                Debug.Log($"存在{error}错误，文书检验失败,记一次错误");
-                ctx.AddFailure();
-
-            }
-            else
-            {
-
-                Debug.Log($"没有任何错误，文书检验通过");
-
-
-            }
-        };
-        uiManager.OnJudge += documentClickedHandler;
-
+         SlotCenter.Instance.add_listener<DocumentError>("DocumentErrorChosen", DocumentJudgeProsses);
+         
 
     }
 
@@ -242,9 +203,7 @@ public class DocumentVerifier : IContractStage
         }
         else
         {
-            Debug.Log("文书核验通过，所有检查项目正常");
-            context.documentVerified = true;
-            completed = true;
+          
         }
     }
     
@@ -267,9 +226,73 @@ public class DocumentVerifier : IContractStage
             _ => "未知错误"
         };
     }
+    private void JudgeFaild()
+    {
+      
+       
+      
+    }
+    private void JudgeSuccess()
+    {
 
- 
+    }
+    private void DocumentJudgeProsses(DocumentError error)
+    {
+        if (error == DocumentError.Stub)
+        {
+            Debug.Log("强制下一阶段");
+
+       
+            context.documentVerified = true;
+            completed = true;
+            JudgeSuccess();
+        }
+        else
+        if (detectedErrors.Count > 0)
+        {
+            if (error == DocumentError.Pass)
+            {
+                Debug.Log("玩家选择文书无误，但仍有待处理错误，核验文书不通过");
+
+                JudgeFaild();
+            }
+            else if (detectedErrors.Contains(error))
+            {
+                Debug.Log($"问题{error}已处理,核验文书不通过");
+                JudgeSuccess();
+            }
+            else
+            {
+                Debug.Log($"玩家问题选择错误");
+                JudgeFaild();
+            }
+
+
+        }
+        else
+        {
+            if (error == DocumentError.Pass)
+            {
+                Debug.Log("玩家选择文书无误，通过到下一阶段");
+                context.documentVerified = true;
+                completed = true;
+                JudgeSuccess();
+            }
+            else
+            {
+                Debug.Log($"玩家选择了错误的文书问题，文书并没有错误，核验文书不通过");
+                JudgeFaild();
+            }
+
+        }
+        
+        SlotCenter.Instance.remove_listener<DocumentError>("DocumentErrorChosen", DocumentJudgeProsses);
+        detectedErrors.Clear();
+
+    }
+
 }
+
 
 /// <summary>
 /// 符文输入管理器
@@ -461,7 +484,7 @@ public class RuneInputManager : IContractStage
 
 
         inputRunes.Clear();
-        ArrowObject = uiManager.arrowGameObject;
+        ArrowObject =null;
         GenerateRequiredRunes();
         uiManager.EnableMoveAction();
 
@@ -1278,7 +1301,7 @@ public class SigningFlowManager : MonoBehaviour
     private void SetupStages()
     {
         stages = new Queue<IContractStage>(new IContractStage[] {
-            //new DocumentVerifier(),
+            new DocumentVerifier(),
             new RuneInputManager(),
             new SpecialEventSystem(),
             new StampSystem(),

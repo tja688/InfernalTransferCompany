@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static Unity.Collections.Unicode;
-
+using Spine.Unity;
 /// <summary>
 /// 契约UI管理器 - 处理所有UI显示和交互
 /// </summary>
@@ -18,6 +17,9 @@ public class HeContractUIManager : MonoBehaviour
     private InputActionReference moveAction;
     [SerializeField]
     private InputActionReference interactAction;
+
+
+
     public enum UIState
     {
         None,
@@ -31,122 +33,103 @@ public class HeContractUIManager : MonoBehaviour
     public event System.Action<bool> OnPlayerDecisionMade;
     [Header("=== 触发设置 ===")]
 
-    public GameObject circularRunaGameObject;
-    public GameObject diamondRunaGameObject;
-    public GameObject triangularRunaGameObject;
-    public GameObject sphericalRunaGameObject;
-    public GameObject arrowGameObject;
+    public SkeletonGraphic circularRunaSkeleton;       // 圆形符文（骨骼UI）
+    public SkeletonGraphic diamondRunaSkeleton;        // 菱形符文
+    public SkeletonGraphic triangularRunaSkeleton;     // 三角形符文
+    public SkeletonGraphic sphericalRunaSkeleton;      // 球形符文
 
 
+    public SkeletonGraphic pneumaticChannelSkeleton;   // 气动通道
+    public SkeletonGraphic copperRuneSelectorSkeleton; // 符文选择器
 
+    // 可交互的骨骼UI（需绑定点击事件，结合Button组件）
+    public SkeletonGraphic leftBookSkeleton;           // 左书
+    public SkeletonGraphic rightBookSkeleton;          // 右书
+    public SkeletonGraphic typewriterSkeleton;         // 打字机
+    public SkeletonGraphic telephoneSkeleton;          // 电话
+    public SkeletonGraphic canSkeleton;                // 罐子
+    public Image contractDocumentsImage;  // 合同文档
+    public Image arrowImage;              // 箭头提示
 
+  
 
-
-
-    public GameObject pneumaticChannelGameObject;
-
-    public GameObject leftBooklGameObject;
-    public GameObject rightBookGameObject;
-    public GameObject typewriterGameObject;
-    public GameObject telephoneGameObject;
-    public GameObject canGameObject;
-    public GameObject contractDocumentsnGameObject;
-    public GameObject copperRuneSelectorGameObject;
-
-    [Header("=== 动画设置 ===")]
-
-
-    public Animator sphericalRunaAnimator;
-    public Animator diamondRunaAnimator;
-    public Animator circularRunaAnimator;
-    public Animator triangularRunaAnimator;
-    public Animator pneumaticChannelAnimator;
-
-    public Animator leftBooklAnimator;
-    public Animator rightBookAnimator;
-    public Animator typewriterAnimator;
-    public Animator telephoneAnimator;
-    public Animator canAnimator;
 
     [Header("=== 动画设置 ===")]
     public float panelTransitionTime = 0.5f;
     public float uiElementFadeTime = 0.3f;
 
-  
+    [Header("Spine 控制设置")]
+    [Tooltip("是否使用 SkeletonGraphic 的 AnimationState 控制气动通道动画（否则使用 Unity Animator）")]
+    public bool useSkeletonGraphicForPneumatic = true;
+    [Tooltip("当使用 Spine 动画时，估算的打开动画持续时间（秒）")]
+    public float pneumaticOpenDuration = 2.0f;
+
+
     public event System.Action<DocumentError> OnJudge;
     // 私有变量 
     private HeContractContext currentContext;
     private HeContractGameConfig gameConfig;
     private SigningFlowManager flowManager;
-    private UIState currentActivePanel=UIState.None;
+    private UIState currentActivePanel = UIState.None;
     private List<GameObject> runeGridItems = new List<GameObject>();
-    private bool pneumaticChannelAnimatorOpen=false;
+    private bool pneumaticChannelAnimatorOpen = false;
 
-    public event System.Action<DocumentError> OnDocumentClicked;
+    public event System.Action<DocumentError> OnDocumentChoose;
     public event System.Action<int> OnMoveAction;
     public event System.Action OnInteractAction;
     private void Awake()
     {
-       
+
     }
     void Start()
     {
         flowManager = FindFirstObjectByType<SigningFlowManager>();
         gameConfig = flowManager?.gameConfig;
-        
+
         InitializeUI();
+        RegisterAllEvent();
 
     }
 
-
+    private void RegisterAllEvent()
+    {
+        //SlotCenter.Instance.add_listener<DocumentError>("DocumentErrorChosen", ChooseDocumentError);
+    }
 
     /// <summary>
     /// 文书判断判定，这个最后绑定到签约书的点击事件上
     /// </summary>
 
-    void determineError()
-    {
+    //public void ChooseDocumentError(DocumentError err)
+    //{
+    //    OnJudge?.Invoke(err);
+    //}
 
 
-
-
-        OnDocumentClicked?.Invoke(DocumentError.DangerousCustomer);
-
-    }
-   
- 
     /// <summary>
     /// 初始化UI
     /// </summary>
     private void InitializeUI()
     {
-
-        
-  
-      
-        
-   
-       
-        
         Debug.Log("Contract UI Manager initialized");
     }
 
-  
+
     /// <summary>
     /// 切换面板
     /// </summary>
     public void SwitchPanel(UIState targetPanel)
     {
         if (currentActivePanel == targetPanel) return;
-        
+
         // 隐藏当前面板
         if (currentActivePanel != UIState.None)
         {
             StartCoroutine(HidePanelCoroutine(currentActivePanel));
         }
-        
+
         // 显示目标面板
-        if (targetPanel!=UIState.None)
+        if (targetPanel != UIState.None)
         {
             currentActivePanel = targetPanel;
             StartCoroutine(ShowPanelCoroutine(targetPanel));
@@ -159,17 +142,7 @@ public class HeContractUIManager : MonoBehaviour
         switch (panel)
         {
             case UIState.DocumentVerification:
-
-
-             
-
-
-
-
-
-
                 // TODO: 取消文书验证面板显示逻辑
-                
                 break;
             case UIState.RuneInput:
                 // TODO:  取消符文输入面板显示逻辑
@@ -188,16 +161,8 @@ public class HeContractUIManager : MonoBehaviour
                 break;
         }
 
-
-
-      
-
         yield return null;
     }
-
-
-
-
 
     /// <summary>
     /// 
@@ -211,20 +176,16 @@ public class HeContractUIManager : MonoBehaviour
             case UIState.DocumentVerification:
 
 
-                pneumaticChannelAnimator.SetTrigger("Open");
-            
-                yield return new WaitForSeconds(2.0f);
+                pneumaticChannelSkeleton.AnimationState.SetAnimation(0, "open", false);
+
+
+
+                yield return new WaitForSeconds(3.0f);
+                pneumaticChannelSkeleton.AnimationState.SetAnimation(0, "close1", false);
+                yield return new WaitForSeconds(3.0f);
+                pneumaticChannelSkeleton.AnimationState.SetAnimation(0, "close", false);
+
                 pneumaticChannelAnimatorOpen = true;
-                
-
-
-
-
-
-
-
-
-
                 // TODO: 添加文书验证面板显示逻辑
                 break;
             case UIState.RuneInput:
@@ -243,9 +204,6 @@ public class HeContractUIManager : MonoBehaviour
             default:
                 break;
         }
-
-
-
         yield return null;
     }
 
@@ -258,7 +216,7 @@ public class HeContractUIManager : MonoBehaviour
         //UpdateStatusDisplay();
     }
 
-   
+
     private void SetRuneAppearance(Image runeImage, RuneType runeType)
     {
         if (gameConfig && gameConfig.runeConfigs.Count > 0)
@@ -271,7 +229,7 @@ public class HeContractUIManager : MonoBehaviour
                 return;
             }
         }
-        
+
         // 默认颜色
         Color color = runeType switch
         {
@@ -283,22 +241,41 @@ public class HeContractUIManager : MonoBehaviour
             RuneType.Dark => new Color(0.3f, 0.3f, 0.3f),
             _ => Color.white
         };
-        
+
         runeImage.color = color;
     }
     #region 文书UI
     public void ShowDocumentVerification(HeContractContext ctx)
     {
-
-
-
         SwitchPanel(UIState.DocumentVerification);
+    }
+
+    public void ClosePneumaticChannelClick()
+    {
+        if (!pneumaticChannelAnimatorOpen) return;
+
+
+
+        pneumaticChannelSkeleton.AnimationState.SetAnimation(0, "close", false);
+
+
+        pneumaticChannelAnimatorOpen = false;
 
 
     }
+    public void OpenPneumaticChannelClick()
+    {
+        if (pneumaticChannelAnimatorOpen) return;
 
 
 
+        pneumaticChannelSkeleton.AnimationState.SetAnimation(0, "open", false);
+
+
+        pneumaticChannelAnimatorOpen = true;
+
+
+    }
 
     #endregion
     #region 印章UI
@@ -310,12 +287,8 @@ public class HeContractUIManager : MonoBehaviour
     /// 更新符文输入进度
     /// 
     /// </summary>
-    public void UpdateRuneInputProgress(int inputCount, int errorCount,bool isCorrect)
+    public void UpdateRuneInputProgress(int inputCount, int errorCount, bool isCorrect)
     {
-        
-
-
-
     }
 
     /// <summary>
@@ -323,8 +296,6 @@ public class HeContractUIManager : MonoBehaviour
     /// </summary>
     public void ShowRuneVerification(List<RuneData> runeGrid)
     {
-        
-      
     }
 
     /// <summary>
@@ -333,25 +304,13 @@ public class HeContractUIManager : MonoBehaviour
 
     private void GenerateRuneGrid(List<RuneData> runeData)
     {
-       
     }
 
     private void OnRuneGridItemClicked(int index)
     {
         Debug.Log($"点击符文网格项 {index}");
-     
+
     }
-
-    /// <summary>
-    /// 符文核对计时器
-    /// </summary>
-    /// <returns></returns>
-    //private IEnumerator RuneVerificationTimer()
-    //{
-
-
-    //}
-
 
     #endregion
     #region 特殊事件UI
@@ -368,23 +327,16 @@ public class HeContractUIManager : MonoBehaviour
     public void ShowStampSelection(HeContractType requiredType)
     {
         SwitchPanel(UIState.StampSelection);
-        
-
-     
     }
-
-  
 
     private void HighlightCorrectStamp(HeContractType correctType)
     {
-     
     }
-
 
     private void OnStampSelected(int stampIndex)
     {
         Debug.Log($"选择了印章 {stampIndex}");
-        
+
         // 开始蓄力阶段
         StartStampCharging();
     }
@@ -394,13 +346,7 @@ public class HeContractUIManager : MonoBehaviour
     /// </summary>
     public void StartStampCharging()
     {
-       
     }
-
-    //private IEnumerator UpdateStampCharging()
-    //{
-     
-    //}
 
     #endregion
 
@@ -412,23 +358,17 @@ public class HeContractUIManager : MonoBehaviour
     public void ShowSoulHarvest(float targetPercentage)
     {
         SwitchPanel(UIState.SoulHarvest);
-        
-       
         // 开始分灵刀移动
         StartCoroutine(UpdateSoulCutter());
     }
 
     private IEnumerator UpdateSoulCutter()
     {
-     
-            
-            yield return null;
-        
+        yield return null;
     }
-  
+
     private void OnCutSoul()
     {
-     
     }
 
     #endregion
@@ -441,15 +381,12 @@ public class HeContractUIManager : MonoBehaviour
     public void ShowGameResult(bool success, HeContractContext finalContext)
     {
         SwitchPanel(UIState.RuneInput);
-      
-        
         // 生成结果总结
         GenerateResultSummary(success, finalContext);
     }
 
     private void GenerateResultSummary(bool success, HeContractContext context)
     {
-    
     }
 
     private void OnRestart()
@@ -489,63 +426,13 @@ public class HeContractUIManager : MonoBehaviour
     /// </summary>
     public void PlayUISound(AudioClip clip)
     {
-      
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public void OnPneumaticChannelClick()
-    {
-
-        if (!pneumaticChannelAnimatorOpen) return;
-        pneumaticChannelAnimator.SetTrigger("Close");
-        pneumaticChannelAnimatorOpen = false;
-
-
-
-        contractDocumentsnGameObject?.GetComponent<EntryAnimation>().PlayEntryAnimation();
-
-      
-        //伪实现
-        StartCoroutine(HeCoroutineUtil.Run(() => {
-            return Inner();
-
-            System.Collections.IEnumerator Inner()
-            {
-              
-               yield return new WaitForSeconds(3.0f);
-               contractDocumentsnGameObject?.GetComponent<EntryAnimation>().PlayExitAnimation();
-               yield return new WaitForSeconds(1.0f);
-               OnJudge?.Invoke(DocumentError.Stub);
-
-
-
-            }
-        }));
-
-
-
-
-
-
-    }
 
 
     private float fadeOutDuration = 0.8f;
-    public void FadeOutArrow (GameObject spawnedArrows,float waitTime)
+    public void FadeOutArrow(GameObject spawnedArrows, float waitTime)
     {
-        
         StartCoroutine(FadeOutArrowCoroutine(spawnedArrows, waitTime));
     }
     public void ShakeArrow(GameObject spawnedArrows)
@@ -555,7 +442,7 @@ public class HeContractUIManager : MonoBehaviour
     /// <summary>
     /// 箭头碎裂淡出效果
     /// </summary>
-    private System.Collections.IEnumerator FadeOutArrowCoroutine(GameObject arrow,float waitTime)
+    private System.Collections.IEnumerator FadeOutArrowCoroutine(GameObject arrow, float waitTime)
     {
         yield return new WaitForSeconds(waitTime); // 等待一段时间后开始淡出
         if (arrow == null) yield break;
@@ -582,7 +469,7 @@ public class HeContractUIManager : MonoBehaviour
             );
 
             arrow.transform.localPosition += randomOffset;
-            arrow.transform.localEulerAngles += new Vector3(0, 0, UnityEngine. Random.Range(-5f, 5f) * progress);
+            arrow.transform.localEulerAngles += new Vector3(0, 0, UnityEngine.Random.Range(-5f, 5f) * progress);
 
             // 淡出和缩放
             float scale = Mathf.Lerp(1f, 0f, progress);
@@ -628,7 +515,7 @@ public class HeContractUIManager : MonoBehaviour
             float shakeAmount = 0.1f * (1f - elapsedTime / shakeDuration);
             Vector3 shakeOffset = new Vector3(
                UnityEngine.Random.Range(-shakeAmount, shakeAmount),
-               UnityEngine. Random.Range(-shakeAmount, shakeAmount),
+               UnityEngine.Random.Range(-shakeAmount, shakeAmount),
                 0
             );
 
@@ -645,7 +532,6 @@ public class HeContractUIManager : MonoBehaviour
     }
     public void EnableMoveAction()
     {
-      
         moveAction.action.performed += OnMovePerformed;
         moveAction?.action.Enable();
     }
@@ -659,17 +545,16 @@ public class HeContractUIManager : MonoBehaviour
     {
         interactAction.action.canceled += OnInteractPerformed;
         interactAction?.action.Enable();
-}
+    }
 
     public void DisableInteractAction()
     {
-
         interactAction.action.canceled -= OnInteractPerformed;
         interactAction?.action.Disable();
     }
     private void OnMovePerformed(InputAction.CallbackContext context)
     {
-        Vector2 moveInput = context.ReadValue<Vector2>(); 
+        Vector2 moveInput = context.ReadValue<Vector2>();
         string keyName = context.control.name.ToLower();
 
         // 映射为索引（W=0, A=1, S=2, D=3）
@@ -682,10 +567,8 @@ public class HeContractUIManager : MonoBehaviour
             _ => -1, // 其他按键不改变当前索引（如同时按多个键时保持优先）
         };
 
-
         Debug.Log($"移动输入（回调）：X={moveInput.x}, Y={moveInput.y},keyName={keyName},directIndex={currentKeyIndex}");
         OnMoveAction?.Invoke(currentKeyIndex);
-
     }
 
     private void OnInteractPerformed(InputAction.CallbackContext context)
@@ -694,5 +577,6 @@ public class HeContractUIManager : MonoBehaviour
 
         OnInteractAction?.Invoke();
     }
+
     #endregion
 }
