@@ -5,13 +5,13 @@ using UnityEngine;
 
 
 /// <summary>
-/// 轻量化的轨道播放器，用于顺序触发多个 <see cref="UITweenPlayer"/>。
+/// 轻量化的轨道播放器。
 /// </summary>
 [DisallowMultipleComponent]
 public class UITweenTrack : MonoBehaviour
 {
     public enum PlayFlow { SequentialWait, StaggeredStart }
-    public PlayFlow playFlow = PlayFlow.StaggeredStart; // 推荐默认用错峰
+    public PlayFlow playFlow = PlayFlow.StaggeredStart; 
     
     [System.Serializable]
     public class TrackItem
@@ -49,10 +49,10 @@ public class UITweenTrack : MonoBehaviour
         }
     }
 
-    [Tooltip("轨道集合，可自由增删。")]
+    [Tooltip("轨道集合")]
     public List<Track> tracks = new List<Track>();
 
-    [Tooltip("播放间隔是否使用真实时间（忽略 TimeScale）。")]
+    [Tooltip("播放间隔是否使用真实时间")]
     public bool useUnscaledIntervals = true;
 
     readonly Dictionary<int, Coroutine> _runningTracks = new();
@@ -85,8 +85,15 @@ public class UITweenTrack : MonoBehaviour
         var track = tracks[trackIndex];
         if (track == null) return;
 
-        var routine = StartCoroutine(RunTrack(trackIndex, track));
+        var routine = StartCoroutine(RunTrackInitializer(trackIndex, track));
         _runningTracks[trackIndex] = routine;
+    }
+
+    private IEnumerator RunTrackInitializer(int trackIndex, Track track)
+    {
+        yield return new WaitForEndOfFrame(); 
+    
+        yield return RunTrack(trackIndex, track);
     }
 
     public void StopTrack(int trackIndex)
@@ -127,7 +134,6 @@ public class UITweenTrack : MonoBehaviour
 
             if (playFlow == PlayFlow.SequentialWait)
             {
-                // 老模式：整段播完再到下一条
                 if (tween != null) yield return tween.WaitForCompletion();
 
                 float wait = Mathf.Max(0f, item.delayAfterPlay);
@@ -136,7 +142,6 @@ public class UITweenTrack : MonoBehaviour
             }
             else // PlayFlow.StaggeredStart
             {
-                // 新模式：只等“开播间隔”，不等动画播完 -> 形成错峰/叠播
                 float wait = Mathf.Max(0f, item.delayAfterPlay);
                 if (wait > 0f)
                     yield return useUnscaledIntervals ? new WaitForSecondsRealtime(wait) : new WaitForSeconds(wait);

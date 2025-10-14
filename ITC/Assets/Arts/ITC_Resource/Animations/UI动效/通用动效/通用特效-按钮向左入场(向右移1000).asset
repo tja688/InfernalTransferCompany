@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b8ad049090ec554eb1570780b8bd9a5, type: 3}
-  m_Name: "\u901A\u7528\u52A8\u6548-\u5411\u5DE6\u504F\u79FB+\u7565\u5FAE\u5F39\u6027\u653E\u5927"
+  m_Name: "\u901A\u7528\u7279\u6548-\u6309\u94AE\u5411\u5DE6\u5165\u573A(\u5411\u53F3\u79FB1000)"
   m_EditorClassIdentifier: 
-  presetName: MyTween
+  presetName: Button left
   useRelativeMode: 1
   relativeBaselineMode: 0
   useBezierPath: 0
@@ -20,9 +20,9 @@ MonoBehaviour:
   passTStar: 0.5
   bezierInterruptPolicy: 0
   animatePosition: 1
-  targetAnchoredPosition: {x: -120, y: 0}
+  targetAnchoredPosition: {x: -1000, y: 0}
   animateSize: 1
-  targetSizeDelta: {x: 100, y: 100}
+  targetSizeDelta: {x: 0, y: 0}
   animateRotationZ: 0
   targetEulerZ: 0
   targetPivot: {x: 0.5, y: 0.5}
@@ -31,7 +31,7 @@ MonoBehaviour:
   targetAlpha: 1
   animateColor: 0
   targetColor: {r: 1, g: 1, b: 1, a: 1}
-  duration: 0.3
+  duration: 0.6
   delay: 0
   loops: 0
   loopType: 0
@@ -61,5 +61,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  easeType: 27
+  easeType: 25
   scaleDurationByDistance: 0

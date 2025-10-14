@@ -4,7 +4,6 @@
 // - Features Master API (PlayMaster*) to lock and play high-priority tweens.
 // - Standard Play API now respects the lock, preventing animation snatching.
 // - Core logic remains: baseline caching, no .From(), stable relative reversed playback.
-// [MODIFIED] Changed calls to use ApplyTweenSettings and ApplySequenceSettings to fix double delay issue.
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -29,7 +28,6 @@ public class UITweenPlayer : MonoBehaviour
     Graphic _gfx;
     Tween _active;
 
-    // ===== Baseline per (preset, this RectTransform) =====
     struct Baseline {
         public Vector2 pos;
         public Vector2 size;
@@ -40,13 +38,11 @@ public class UITweenPlayer : MonoBehaviour
     }
     readonly Dictionary<UITweenPreset, Baseline> _baselines = new();
     
-    // ==================== NEW: Animation Lock System ====================
     private bool _isLocked = false;
 
     public bool IsLocked => _isLocked;
     public void Lock() => _isLocked = true;
     public void Unlock() => _isLocked = false;
-    // ====================================================================
 
     void Awake()
     {
@@ -55,7 +51,6 @@ public class UITweenPlayer : MonoBehaviour
         if (_cg == null) _gfx = GetComponent<Graphic>();
     }
 
-    // ----------------- Public API: Master (High-Priority) -----------------
     public void PlayMaster_Event(UITweenPreset preset) { PlayMaster(preset); }
     public void PlayMasterByName_Event(string presetName) { PlayMasterByName(presetName); }
     public void PlayMasterByIndex_Event(int index) { PlayMasterByIndex(index); }
@@ -67,7 +62,6 @@ public class UITweenPlayer : MonoBehaviour
         return PlayMasterCore(presets[index], false);
     }
 
-    // ----------------- Public API: Standard (Low-Priority) -----------------
     public void Kill(bool complete = false)
     {
         if (_active != null && _active.IsActive())
@@ -92,7 +86,6 @@ public class UITweenPlayer : MonoBehaviour
     public void PlayReversedByName(string presetName) { PlayCore(FindPreset(presetName), true); }
     public void PlayReversed(UITweenPreset preset) { PlayCore(preset, true); }
     
-    // ----------------- Internal Core Logic -----------------
     
     private Tween PlayMasterCore(UITweenPreset preset, bool reversed)
     {
@@ -225,7 +218,6 @@ public class UITweenPlayer : MonoBehaviour
             seq.Join(col);
         }
 
-        // [MODIFIED] Apply sequence-level settings at the end
         preset.ApplySequenceSettings(seq);
         
         seq.OnStart(() => onPlay?.Invoke()).OnComplete(() => onComplete?.Invoke());
@@ -233,7 +225,6 @@ public class UITweenPlayer : MonoBehaviour
         return seq;
     }
 
-    // ----------------- Helpers (Unchanged) -----------------
     private UITweenPreset FindPreset(string presetName)
     {
         if (string.IsNullOrEmpty(presetName)) return null;
