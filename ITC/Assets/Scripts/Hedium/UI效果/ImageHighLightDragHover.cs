@@ -7,33 +7,35 @@ using UnityEngine.UI;
 /// <summary>
 /// 仅在拖拽时，且类型匹配才显示高亮的组件（挂载到目标对象，如打字机）
 /// </summary>
-[RequireComponent(typeof(SkeletonGraphic), typeof(RectTransform))]
-public class DragOnlyHighlight : MonoBehaviour,
-    IPointerEnterHandler, 
-    IPointerExitHandler 
-      
+[RequireComponent(typeof(Image), typeof(RectTransform))]
+public class ImageHighLightDragHover : MonoBehaviour,
+    IPointerEnterHandler,
+    IPointerExitHandler
 {
-    private SkeletonGraphic skeleton;
+    public string eventName = "EndDragUpThePneumaticChannelSkeleton";
+  
+    public DocumentError error = DocumentError.Stub;
+    private Image image;
     private Color originalColor;
 
     [Header("高亮配置")]
     public Color highlightColor = new Color(1.2f, 1.2f, 0.8f, 1);
-    public string targetType = "Typewriter";
+    public string targetType = "DocumentJudge";
 
     // 标记当前是否有匹配的拖拽对象在目标上
     private bool isMatchedDraggingOver = false;
 
     private void Awake()
     {
-
-        skeleton = GetComponent<SkeletonGraphic>();
-        originalColor = skeleton.color;
+        image = GetComponent<Image>();
+        originalColor = image.color;
     }
+
     void Start()
     {
-        // 使用 lambda 包装方法，确保类型匹配 System.Action<object>
-        SlotCenter.Instance.add_listener("EndDragEvent", OnRemotgeEndDrag);
+        SlotCenter.Instance.add_listener(HeEventNames.EndDragEvent, OnRemotgeEndDrag);
     }
+
     /// <summary>
     /// 拖拽对象进入目标区域时触发（仅拖拽状态下）
     /// </summary>
@@ -42,20 +44,22 @@ public class DragOnlyHighlight : MonoBehaviour,
         if (eventData.pointerDrag == null)
             return;
 
-    
         DraggableUI draggable = eventData.pointerDrag.GetComponent<DraggableUI>();
         if (draggable == null) return;
 
-        // 3. 校验类型是否匹配
+        // 校验类型是否匹配
         if (draggable.targetType == targetType)
         {
             isMatchedDraggingOver = true;
-            skeleton.color = highlightColor; // 显示高亮
+            image.color = highlightColor; // 显示高亮
         }
         else
         {
             return;
         }
+
+
+
     }
 
     /// <summary>
@@ -63,11 +67,10 @@ public class DragOnlyHighlight : MonoBehaviour,
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
-      
         if (isMatchedDraggingOver)
         {
             isMatchedDraggingOver = false;
-            skeleton.color = originalColor; 
+            image.color = originalColor;
         }
         else
         {
@@ -83,11 +86,9 @@ public class DragOnlyHighlight : MonoBehaviour,
         // 拖拽结束，强制取消高亮
         if (isMatchedDraggingOver)
         {
-
             isMatchedDraggingOver = false;
-            skeleton.color = originalColor;
-            SlotCenter.Instance.trigger_event<DocumentError>("DocumentErrorChosen", DocumentError.Stub);
-
+            image.color = originalColor;
+            SlotCenter.Instance.trigger_event<DocumentError>(HeEventNames.DocumentErrorChosen, DocumentError.NoPass);
         }
-    }
+    }   
 }
