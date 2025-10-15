@@ -126,11 +126,17 @@ public class UITweenTrack : MonoBehaviour
 
     IEnumerator RunTrack(int trackIndex, Track track)
     {
-        foreach (var item in track.items)
+        for (int itemIndex = 0; itemIndex < track.items.Count; itemIndex++)
         {
+            var item = track.items[itemIndex];
             if (item == null || item.player == null) continue;
 
-            var tween = item.player.PlayMasterByName(item.presetName);
+            Tween tween;
+            string sourceName = string.IsNullOrEmpty(track.trackName) ? gameObject.name : track.trackName;
+            using (UITweenCallContext.BeginScope(this, "Track", sourceName, BuildTrackDetail(itemIndex, item)))
+            {
+                tween = item.player.PlayMasterByName(item.presetName);
+            }
 
             if (playFlow == PlayFlow.SequentialWait)
             {
@@ -148,6 +154,13 @@ public class UITweenTrack : MonoBehaviour
             }
         }
         _runningTracks.Remove(trackIndex);
+    }
+
+    private string BuildTrackDetail(int itemIndex, TrackItem item)
+    {
+        string preset = item != null && !string.IsNullOrEmpty(item.presetName) ? item.presetName : "<none>";
+        string playerName = item != null && item.player != null ? item.player.name : "<missing player>";
+        return $"Item #{itemIndex + 1} · {playerName} · {preset}";
     }
 
 
