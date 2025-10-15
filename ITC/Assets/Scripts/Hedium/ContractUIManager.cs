@@ -60,7 +60,7 @@ public class HeContractUIManager : MonoBehaviour
     public Image contractDocumentsImage;  // 合同文档
     public Image arrowImage;              // 箭头提示
     public Image roleImage;
-  
+    public GameObject ArrowGroupGameObject;
 
 
     [Header("=== 动画设置 ===")]
@@ -245,6 +245,7 @@ public class HeContractUIManager : MonoBehaviour
 
         runeImage.color = color;
     }
+
     #region 文书UI
     public void ShowDocumentVerification(HeContractContext ctx)
     {
@@ -492,11 +493,12 @@ public class HeContractUIManager : MonoBehaviour
     }
 
 
-
+    private Dictionary<GameObject, Coroutine> fadeCoroutines = new Dictionary<GameObject, Coroutine>();
     private float fadeOutDuration = 0.8f;
     public void FadeOutArrow(GameObject spawnedArrows, float waitTime)
     {
         StartCoroutine(FadeOutArrowCoroutine(spawnedArrows, waitTime));
+        
     }
     public void ShakeArrow(GameObject spawnedArrows)
     {
@@ -508,7 +510,11 @@ public class HeContractUIManager : MonoBehaviour
     private System.Collections.IEnumerator FadeOutArrowCoroutine(GameObject arrow, float waitTime)
     {
         yield return new WaitForSeconds(waitTime); // 等待一段时间后开始淡出
-        if (arrow == null) yield break;
+
+        if (arrow == null) {
+            Debug.Log("FadeOutArrowCoroutine接收参数为null");
+            yield break; 
+        }
 
         // 获取渲染组件
         Renderer renderer = arrow.GetComponent<Renderer>();
@@ -567,7 +573,20 @@ public class HeContractUIManager : MonoBehaviour
     {
         if (arrow == null) yield break;
 
-        Vector3 originalPosition = arrow.transform.localPosition;
+        RectTransform rt = arrow.GetComponent<RectTransform>();
+        if (rt == null) yield break;
+
+ 
+        Image arrowImage = arrow.GetComponent<Image>();
+        Color originalColor = Color.white; 
+        if (arrowImage != null)
+        {
+            originalColor = arrowImage.color;
+        
+            arrowImage.color = Color.red;
+        }
+
+        Vector2 originalAnchoredPosition = rt.anchoredPosition;
         float shakeDuration = 0.3f;
         float elapsedTime = 0f;
 
@@ -575,23 +594,30 @@ public class HeContractUIManager : MonoBehaviour
         {
             if (arrow == null) yield break;
 
-            float shakeAmount = 0.1f * (1f - elapsedTime / shakeDuration);
-            Vector3 shakeOffset = new Vector3(
+            float shakeAmount = 10f * (1f - elapsedTime / shakeDuration);
+            Vector2 shakeOffset = new Vector2(
                UnityEngine.Random.Range(-shakeAmount, shakeAmount),
-               UnityEngine.Random.Range(-shakeAmount, shakeAmount),
-                0
+               UnityEngine.Random.Range(-shakeAmount, shakeAmount)
             );
 
-            arrow.transform.localPosition = originalPosition + shakeOffset;
+            rt.anchoredPosition = originalAnchoredPosition + shakeOffset;
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        if (arrow != null)
+        if (arrow != null && rt != null)
         {
-            arrow.transform.localPosition = originalPosition;
+            rt.anchoredPosition = originalAnchoredPosition;
         }
+
+        // 恢复原色
+        if (arrowImage != null)
+        {
+            arrowImage.color = originalColor;
+        }
+        yield return new WaitForSeconds(0.5f);
+        yield return StartCoroutine( FadeOutArrowCoroutine(arrow,0));
     }
     public void EnableMoveAction()
     {
