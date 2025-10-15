@@ -46,10 +46,26 @@ public class UITweenPlayer : MonoBehaviour
     readonly Dictionary<UITweenPreset, Baseline> _baselines = new();
     
     private bool _isLocked = false;
+    private string _pendingMonitorKillReason;
 
     public bool IsLocked => _isLocked;
     public void Lock() => _isLocked = true;
     public void Unlock() => _isLocked = false;
+
+    private void PrepareMonitorKillReason(string reason)
+    {
+        _pendingMonitorKillReason = reason;
+    }
+
+    private static string DescribePlayRequest(UITweenPreset preset, bool reversed, bool master)
+    {
+        string name = preset != null ? preset.presetName : "<null>";
+        if (master)
+        {
+            return reversed ? $"MasterReversed({name})" : $"MasterPlay({name})";
+        }
+        return reversed ? $"PlayReversed({name})" : $"Play({name})";
+    }
 
     void Awake()
     {
@@ -73,8 +89,16 @@ public class UITweenPlayer : MonoBehaviour
     {
         if (_active != null && _active.IsActive())
         {
+            if (string.IsNullOrEmpty(_pendingMonitorKillReason))
+            {
+                _pendingMonitorKillReason = complete ? "Kill (complete)" : "Kill (manual)";
+            }
             _active.Kill(complete);
             _active = null;
+        }
+        else
+        {
+            _pendingMonitorKillReason = null;
         }
         LastPreparedSequence = null;
     }
@@ -97,17 +121,17 @@ public class UITweenPlayer : MonoBehaviour
     
     private Tween PlayMasterCore(UITweenPreset preset, bool reversed)
     {
+        PrepareMonitorKillReason($"Superseded by {DescribePlayRequest(preset, reversed, true)}");
         Kill(false);
         Lock();
 
-        var seq = CreateAnimationSequence(preset, reversed);
+        var seq = CreateAnimationSequence(preset, reversed, true);
         if (seq != null)
         {
-            seq.OnComplete(Unlock); 
             _active = seq.Play();
             return _active;
         }
-        
+
         Unlock();
         return null;
     }
@@ -115,9 +139,10 @@ public class UITweenPlayer : MonoBehaviour
     private void PlayCore(UITweenPreset preset, bool reversed)
     {
         if (IsLocked) return;
+        PrepareMonitorKillReason($"Superseded by {DescribePlayRequest(preset, reversed, false)}");
         Kill(false);
 
-        var seq = CreateAnimationSequence(preset, reversed);
+        var seq = CreateAnimationSequence(preset, reversed, false);
         if (seq != null)
         {
             _active = seq.Play();
@@ -139,7 +164,7 @@ public class UITweenPlayer : MonoBehaviour
         };
     }
 
-    private Sequence CreateAnimationSequence(UITweenPreset preset, bool reversed)
+    private Sequence CreateAnimationSequence(UITweenPreset preset, bool reversed, bool master)
     {
         if (preset == null || _rt == null) return null;
 
@@ -253,7 +278,41 @@ public class UITweenPlayer : MonoBehaviour
         LastPreparedSequence = seq;
         SequencePrepared?.Invoke(preset, reversed, seq);
 
-        seq.OnStart(() => onPlay?.Invoke()).OnComplete(() => onComplete?.Invoke());
+        var context = UITweenCallContext.CaptureOrDefault(this, "UITweenPlayer", gameObject != null ? gameObject.name : null);
+        context = context.WithDetails(DescribePlayRequest(preset, reversed, master), append: true);
+        var monitor = UITweenMonitor.Instance;
+        var requestId = monitor.Register(this, preset, reversed, seq, context);
+
+        seq.OnStart(() =>
+        {
+            monitor.MarkStarted(requestId);
+            onPlay?.Invoke();
+        });
+
+        seq.OnComplete(() =>
+        {
+            monitor.MarkCompleted(requestId);
+            _pendingMonitorKillReason = null;
+            if (master)
+            {
+                Unlock();
+            }
+            onComplete?.Invoke();
+        });
+
+        seq.OnKill(() =>
+        {
+            if (!seq.IsComplete())
+            {
+                var reason = string.IsNullOrEmpty(_pendingMonitorKillReason) ? "Killed" : _pendingMonitorKillReason;
+                monitor.MarkInterrupted(requestId, reason);
+                if (master)
+                {
+                    Unlock();
+                }
+            }
+            _pendingMonitorKillReason = null;
+        });
 
         return seq;
     }
