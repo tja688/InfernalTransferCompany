@@ -13,7 +13,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using static Pathfinding.SimpleSmoothModifier;
 using static UnityEngine.RuleTile.TilingRuleOutput;
-
+using UnityEngine.UI;   
 
 public static class HeCoroutineUtil
 {
@@ -23,13 +23,22 @@ public static class HeCoroutineUtil
     }
 }
 
-
+[SerializeField]
 /// <summary>
 /// 文书错误类型枚举
 /// 用于标识在文书核验过程中可能出现的各种问题
 /// </summary>
 public enum DocumentError
 {
+
+
+    /// <summary>
+    /// 
+    /// 有错误
+    /// 
+    /// </summary>
+    NoPass,
+
     /// <summary>
     /// 无错误 
     /// </summary>
@@ -96,7 +105,7 @@ public class DocumentVerifier : IContractStage
         
         // 显示文书核验UI
         uiManager?.ShowDocumentVerification(ctx);
-       
+        initRes();
         // 执行核验逻辑
         PerformDocumentVerification();
         //Debug.Assert(detectedErrors.Count>0);
@@ -104,20 +113,38 @@ public class DocumentVerifier : IContractStage
        
          Debug.Log($"检测到{detectedErrors.Count}个问题，等待玩家决策...");
 
-         SlotCenter.Instance.add_listener<DocumentError>("DocumentErrorChosen", DocumentJudgeProsses);
-         
-
     }
 
     public void Update()
     {
-    
+
 
 
     }
 
+    public void initRes()
+    {
+        Button button = uiManager.pneumaticChannelSkeleton.GetComponent<Button>();
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(uiManager.OnOpenPneumaticChannelClick);
+
+        button.interactable = true;
+        SlotCenter.Instance.add_listener<DocumentError>(HeEventNames.DocumentErrorChosen, DocumentJudgeProsses);
+        var Hover = uiManager.pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>();
+
+        Hover.SetHighLight();
+       
+    }
     public void Exit()
     {
+
+        Button button = uiManager.pneumaticChannelSkeleton.GetComponent<Button>();
+        button.onClick.RemoveAllListeners();
+        button.interactable = false;
+        SlotCenter.Instance.remove_listener<DocumentError>(HeEventNames.DocumentErrorChosen, DocumentJudgeProsses);
+        detectedErrors.Clear();
+        var Hover = uiManager?.pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>();
+        Hover.enableHighLightOnHover = false;
         Debug.Log("=== 文书核验阶段结束 ===");
         if (detectedErrors.Count > 0)
         {
@@ -256,6 +283,11 @@ public class DocumentVerifier : IContractStage
 
                 JudgeFaild();
             }
+            else if (error==DocumentError.NoPass)
+            {
+                Debug.Log("存在问题，判断正确");
+                JudgeSuccess();
+            }
             else if (detectedErrors.Contains(error))
             {
                 Debug.Log($"问题{error}已处理,核验文书不通过");
@@ -286,8 +318,7 @@ public class DocumentVerifier : IContractStage
 
         }
         
-        SlotCenter.Instance.remove_listener<DocumentError>("DocumentErrorChosen", DocumentJudgeProsses);
-        detectedErrors.Clear();
+
 
     }
 
