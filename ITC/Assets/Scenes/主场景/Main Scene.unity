@@ -1737,6 +1737,7 @@ GameObject:
   - component: {fileID: 293818455}
   - component: {fileID: 293818460}
   - component: {fileID: 293818458}
+  - component: {fileID: 293818461}
   m_Layer: 5
   m_Name: SELECT ONE
   m_TagString: Untagged
@@ -1866,6 +1867,23 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &293818461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293818453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a9f567c02a81439e85f31168f7aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateAnimations:
+  - state: 3
+    onEnterPresetName: left bigger
+    reverseOnExit: 1
+    onExitPresetName: 
 --- !u!1 &302503980
 GameObject:
   m_ObjectHideFlags: 0
