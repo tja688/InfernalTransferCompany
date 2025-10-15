@@ -844,7 +844,7 @@ GameObject:
   - component: {fileID: 195974307}
   - component: {fileID: 195974312}
   - component: {fileID: 195974310}
-  - component: {fileID: 195974309}
+  - component: {fileID: 195974314}
   - component: {fileID: 195974313}
   m_Layer: 5
   m_Name: "\u89D2\u8272"
@@ -910,18 +910,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 195974305}
   m_CullTransparentMesh: 1
---- !u!114 &195974309
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 195974305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &195974310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1016,6 +1004,23 @@ MonoBehaviour:
             m_StringArgument: Pointer to role
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &195974314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195974305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a9f567c02a81439e85f31168f7aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateAnimations:
+  - state: 1
+    onEnterPresetName: General_Blow up
+    reverseOnExit: 1
+    onExitPresetName: 
 --- !u!1 &205077536
 GameObject:
   m_ObjectHideFlags: 0
@@ -1799,8 +1804,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateAnimations:
-  - state: 3
-    onEnterPresetName: left bigger
+  - state: 1
+    onEnterPresetName: General_Blow up
     reverseOnExit: 1
     onExitPresetName: 
 --- !u!1 &302503980
@@ -2222,7 +2227,7 @@ GameObject:
   - component: {fileID: 388834732}
   - component: {fileID: 388834737}
   - component: {fileID: 388834735}
-  - component: {fileID: 388834734}
+  - component: {fileID: 388834739}
   - component: {fileID: 388834738}
   m_Layer: 5
   m_Name: "\u5B58\u50A8"
@@ -2288,18 +2293,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 388834730}
   m_CullTransparentMesh: 1
---- !u!114 &388834734
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 388834730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &388834735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2394,6 +2387,23 @@ MonoBehaviour:
             m_StringArgument: Pointer to store
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &388834739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388834730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a9f567c02a81439e85f31168f7aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateAnimations:
+  - state: 1
+    onEnterPresetName: General_Blow up
+    reverseOnExit: 1
+    onExitPresetName: 
 --- !u!21 &429977149
 Material:
   serializedVersion: 8
@@ -4971,7 +4981,7 @@ GameObject:
   - component: {fileID: 986504109}
   - component: {fileID: 986504114}
   - component: {fileID: 986504112}
-  - component: {fileID: 986504111}
+  - component: {fileID: 986504116}
   - component: {fileID: 986504115}
   m_Layer: 5
   m_Name: "\u8BBE\u7F6E"
@@ -5037,18 +5047,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 986504107}
   m_CullTransparentMesh: 1
---- !u!114 &986504111
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 986504107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &986504112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5143,6 +5141,23 @@ MonoBehaviour:
             m_StringArgument: Pointer to setting
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &986504116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986504107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a9f567c02a81439e85f31168f7aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateAnimations:
+  - state: 1
+    onEnterPresetName: General_Blow up
+    reverseOnExit: 1
+    onExitPresetName: 
 --- !u!1 &998398611
 GameObject:
   m_ObjectHideFlags: 0
@@ -5922,7 +5937,7 @@ GameObject:
   - component: {fileID: 1232613345}
   - component: {fileID: 1232613350}
   - component: {fileID: 1232613348}
-  - component: {fileID: 1232613347}
+  - component: {fileID: 1232613352}
   - component: {fileID: 1232613351}
   m_Layer: 5
   m_Name: "\u8BFB\u53D6"
@@ -5988,18 +6003,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1232613343}
   m_CullTransparentMesh: 1
---- !u!114 &1232613347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1232613343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1232613348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6094,6 +6097,23 @@ MonoBehaviour:
             m_StringArgument: Pointer to read
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &1232613352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1232613343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a9f567c02a81439e85f31168f7aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateAnimations:
+  - state: 1
+    onEnterPresetName: General_Blow up
+    reverseOnExit: 1
+    onExitPresetName: 
 --- !u!28 &1261198207
 Texture2D:
   m_ObjectHideFlags: 0
@@ -7467,7 +7487,7 @@ GameObject:
   - component: {fileID: 1679115681}
   - component: {fileID: 1679115686}
   - component: {fileID: 1679115684}
-  - component: {fileID: 1679115683}
+  - component: {fileID: 1679115687}
   m_Layer: 5
   m_Name: "\u5173\u95ED"
   m_TagString: Untagged
@@ -7532,18 +7552,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1679115679}
   m_CullTransparentMesh: 1
---- !u!114 &1679115683
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1679115679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1679115684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7609,6 +7617,23 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1679115687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1679115679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a9f567c02a81439e85f31168f7aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateAnimations:
+  - state: 1
+    onEnterPresetName: General_Blow up
+    reverseOnExit: 1
+    onExitPresetName: 
 --- !u!128 &1691004763
 Font:
   m_ObjectHideFlags: 0
@@ -7652,7 +7677,7 @@ GameObject:
   - component: {fileID: 1691546863}
   - component: {fileID: 1691546868}
   - component: {fileID: 1691546866}
-  - component: {fileID: 1691546865}
+  - component: {fileID: 1691546870}
   - component: {fileID: 1691546869}
   m_Layer: 5
   m_Name: "\u8FD4\u56DE\u521D\u59CB\u754C\u9762"
@@ -7718,18 +7743,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1691546861}
   m_CullTransparentMesh: 1
---- !u!114 &1691546865
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1691546861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1691546866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7824,6 +7837,23 @@ MonoBehaviour:
             m_StringArgument: Pointer to back to menu
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &1691546870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691546861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a9f567c02a81439e85f31168f7aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateAnimations:
+  - state: 1
+    onEnterPresetName: General_Blow up
+    reverseOnExit: 1
+    onExitPresetName: 
 --- !u!1 &1725409550
 GameObject:
   m_ObjectHideFlags: 0
@@ -7837,7 +7867,7 @@ GameObject:
   - component: {fileID: 1725409552}
   - component: {fileID: 1725409557}
   - component: {fileID: 1725409555}
-  - component: {fileID: 1725409554}
+  - component: {fileID: 1725409559}
   - component: {fileID: 1725409558}
   m_Layer: 5
   m_Name: "\u8BCD\u5E93"
@@ -7903,18 +7933,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1725409550}
   m_CullTransparentMesh: 1
---- !u!114 &1725409554
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1725409550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1725409555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8009,6 +8027,23 @@ MonoBehaviour:
             m_StringArgument: Pointer to word
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &1725409559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1725409550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a9f567c02a81439e85f31168f7aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateAnimations:
+  - state: 1
+    onEnterPresetName: General_Blow up
+    reverseOnExit: 1
+    onExitPresetName: 
 --- !u!1 &1746130186
 GameObject:
   m_ObjectHideFlags: 0
