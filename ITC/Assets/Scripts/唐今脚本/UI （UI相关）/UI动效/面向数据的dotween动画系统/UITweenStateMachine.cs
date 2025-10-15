@@ -67,23 +67,20 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
         var oldBinding = FindBinding(_currentState);
         if (oldBinding != null)
         {
-            // 檢查是否應倒播進入動畫
             if (oldBinding.reverseOnExit && !string.IsNullOrEmpty(oldBinding.onEnterPresetName))
             {
-                _player.PlayReversedByName(oldBinding.onEnterPresetName);
+                PlayStateAnimation("Exit", oldBinding.onEnterPresetName, true, _currentState, newState);
             }
-            // 否則，播放指定的退出動畫
             else if (!string.IsNullOrEmpty(oldBinding.onExitPresetName))
             {
-                _player.PlayByName(oldBinding.onExitPresetName);
+                PlayStateAnimation("Exit", oldBinding.onExitPresetName, false, _currentState, newState);
             }
         }
-        
-        // 查找新狀態的綁定，播放進入動畫（此部分邏輯不變）
+
         var newBinding = FindBinding(newState);
-        if (newBinding != null && !string.IsNullOrEmpty(newBinding.onEnterPresetName))
+        if (newBinding != null)
         {
-            _player.PlayByName(newBinding.onEnterPresetName);
+            PlayStateAnimation("Enter", newBinding.onEnterPresetName, false, _currentState, newState);
         }
 
         _currentState = newState;
@@ -163,6 +160,24 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
         else
         {
             if (_currentState == UIState.Disabled) TransitionTo(UIState.Normal);
+        }
+    }
+
+    private void PlayStateAnimation(string phase, string presetName, bool reversed, UIState fromState, UIState toState)
+    {
+        if (string.IsNullOrEmpty(presetName)) return;
+        string transitionLabel = fromState + "→" + toState;
+        string detail = phase + " " + transitionLabel + " · " + presetName + (reversed ? " (Reversed)" : string.Empty);
+        using (UITweenCallContext.BeginScope(this, "StateMachine", gameObject != null ? gameObject.name : name, detail))
+        {
+            if (reversed)
+            {
+                _player.PlayReversedByName(presetName);
+            }
+            else
+            {
+                _player.PlayByName(presetName);
+            }
         }
     }
 }
