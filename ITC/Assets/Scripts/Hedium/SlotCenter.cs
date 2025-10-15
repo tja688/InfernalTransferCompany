@@ -1,4 +1,4 @@
-
+ï»¿
     using System.Collections.Generic;
     using System.Diagnostics.Tracing;
     using Unity.VisualScripting;
@@ -6,12 +6,18 @@
     using UnityEngine.Events;
     using System;
 
+public static class HeEventNames
+{
+    public const string DeliverDocumentEvent = "DeliverDocumentEvent";
+    public const string EndDragEvent = "EndDragEvent";
+    public const string DocumentErrorChosen = "DocumentErrorChosen";//DocumentError
+}
 public class SlotCenter : MonoBehaviour
 {
-    // ±£ÁôÔ­ÓĞµÄ pending ¼¯ºÏ£¨µÈ´ı²¹×¢²áÊ±¼ÇÂ¼£©
+    // ä¿ç•™åŸæœ‰çš„ pending é›†åˆï¼ˆç­‰å¾…è¡¥æ³¨å†Œæ—¶è®°å½•ï¼‰
     private HashSet<string> slot_table_reverse = new();
 
-    // ´æ´¢ÊÂ¼şÎ¯ÍĞ£¨¿ÉÒÔÊÇ²»Í¬ Action<T> ÀàĞÍµÄÎ¯ÍĞ£©
+    // å­˜å‚¨äº‹ä»¶å§”æ‰˜ï¼ˆå¯ä»¥æ˜¯ä¸åŒ Action<T> ç±»å‹çš„å§”æ‰˜ï¼‰
     private Dictionary<string, Delegate> slot_table = new();
 
     public static SlotCenter Instance { get; private set; }
@@ -36,7 +42,7 @@ public class SlotCenter : MonoBehaviour
             slot_table[name] = ev;
             if (slot_table_reverse.Contains(name))
             {
-                Debug.Log($"²¹×¢²á{name}ÊÂ¼ş");
+                Debug.Log($"è¡¥æ³¨å†Œ{name}äº‹ä»¶");
                 slot_table_reverse.Remove(name);
             }
         }
@@ -46,15 +52,16 @@ public class SlotCenter : MonoBehaviour
         }
     }
 
-    // ·ºĞÍ×¢²á£ºÍÆ¼öÊ¹ÓÃ´Ë·½·¨
+    // æ³›å‹æ³¨å†Œï¼šæ¨èä½¿ç”¨æ­¤æ–¹æ³•
     public void add_listener<T>(string name, Action<T> ev)
     {
         if (!slot_table.ContainsKey(name))
         {
+            Debug.Log($"æ³¨å†Œ{name}äº‹ä»¶");
             slot_table[name] = ev;
             if (slot_table_reverse.Contains(name))
             {
-                Debug.Log($"²¹×¢²á{name}ÊÂ¼ş");
+                Debug.Log($"è¡¥æ³¨å†Œ{name}äº‹ä»¶");
                 slot_table_reverse.Remove(name);
             }
         }
@@ -64,7 +71,7 @@ public class SlotCenter : MonoBehaviour
         }
     }
 
-    // ·ºĞÍÒÆ³ı
+    // æ³›å‹ç§»é™¤
     public void remove_listener<T>(string name, Action<T> ev)
     {
         if (slot_table.TryGetValue(name, out var d))
@@ -89,34 +96,22 @@ public class SlotCenter : MonoBehaviour
         }
     }
 
-    // ÍêÈ«×¢ÏúÄ³¸öÊÂ¼şÃû¶ÔÓ¦µÄËùÓĞ¼àÌıÆ÷
+    // å®Œå…¨æ³¨é”€æŸä¸ªäº‹ä»¶åå¯¹åº”çš„æ‰€æœ‰ç›‘å¬å™¨
     public void unregister_listener(string name)
     {
         slot_table.Remove(name);
     }
 
-    // ¼Æ»®£¨Î±´úÂë£©£º
-    // - Ìæ»»Ô­À´Ê¹ÓÃ DynamicInvoke µÄÊµÏÖ£¬¸ÄÎªÓÅÏÈÊ¹ÓÃÇ¿ÀàĞÍµÄ Invoke¡£
-    // - ¶ÔÓÚ·ºĞÍ´¥·¢ trigger_event<T>£º
-    //   1. Èô´æ´¢µÄÎ¯ÍĞ±¾Éí¿ÉÖ±½Ó×ª»»Îª Action<T>£¬Ö±½Óµ÷ÓÃ Invoke(param)¡£
-    //   2. ÈôÊÇ¶à²¥Î¯ÍĞ£¬Ã¶¾ÙÆä InvocationList£º
-    //      a. Èç¹û×ÓÎ¯ÍĞ¿É×ª»»Îª Action<T> ÔòÖ±½Óµ÷ÓÃ Invoke(param)¡£
-    //      b. ·ñÔò³¢ÊÔÓÃ Delegate.CreateDelegate ½«¸Ã×ÓÎ¯ÍĞµÄ·½·¨/Ä¿±ê´´½¨Îª Action<T>£¬Èô³É¹¦Ôòµ÷ÓÃ Invoke(param)¡£
-    //      c. Èô´´½¨Ê§°Ü»òµ÷ÓÃÅ×Òì³££¬¼ÇÂ¼¾¯¸æ£¬²»Å×³öÒì³£Ó°ÏìÆäËû¶©ÔÄÕß¡£
-    //   3. Èô´æ´¢µÄÎ¯ÍĞ¼È²»ÊÇ Action<T] Ò²²»ÊÇ MulticastDelegate£¬³¢ÊÔÓÃ CreateDelegate ×ª»»²¢µ÷ÓÃ¡£
-    // - ¶ÔÓÚÎŞ²Î´¥·¢ trigger_event(string)£º
-    //   Í¬ÉÏ£¬µ«Ê¹ÓÃ Action ÀàĞÍºÍÎŞ²Î Invoke()¡£
-    // - È«²¿±ÜÃâÊ¹ÓÃ DynamicInvoke()£¬¸ÄÓÃ Delegate ÀàĞÍµÄÇ¿ÀàĞÍ Invoke »ò Delegate.CreateDelegate + Invoke¡£
-    // - ËùÓĞ¿ÉÄÜÅ×³öµÄÒì³£¶¼Ê¹ÓÃ Debug.LogWarning ²¶»ñ²¢¼ÇÂ¼¡£
+ 
 
-    // ·ºĞÍ´¥·¢£ºÍÆ¼öÊ¹ÓÃ´Ë·½·¨£¨²»Ê¹ÓÃ DynamicInvoke£©
+    // æ³›å‹è§¦å‘ï¼šæ¨èä½¿ç”¨æ­¤æ–¹æ³•
     public bool trigger_event<T>(string name, T param = default)
     {
         if (slot_table.TryGetValue(name, out var d))
         {
-            Debug.Log($"{name}ÊÂ¼ş´¥·¢");
+            Debug.Log($"{name}äº‹ä»¶è§¦å‘");
 
-            // Èç¹ûÕûÌåÎ¯ÍĞ±¾Éí¾ÍÊÇ Action<T>
+            // å¦‚æœæ•´ä½“å§”æ‰˜æœ¬èº«å°±æ˜¯ Action<T>
             if (d is Action<T> directAction)
             {
                 try
@@ -125,12 +120,12 @@ public class SlotCenter : MonoBehaviour
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogWarning($"ÊÂ¼ş{name}µÄ´¦ÀíÆ÷Å×³öÒì³£: {ex.Message}");
+                    Debug.LogWarning($"äº‹ä»¶{name}çš„å¤„ç†å™¨æŠ›å‡ºå¼‚å¸¸: {ex.Message}");
                 }
                 return true;
             }
 
-            // Èç¹ûÊÇ¶à²¥Î¯ÍĞ£¬Öğ¸ö´¦Àí
+            // å¦‚æœæ˜¯å¤šæ’­å§”æ‰˜ï¼Œé€ä¸ªå¤„ç†
             if (d is MulticastDelegate md)
             {
                 foreach (var sub in md.GetInvocationList())
@@ -143,7 +138,7 @@ public class SlotCenter : MonoBehaviour
                         }
                         else
                         {
-                            // ³¢ÊÔ½«×ÓÎ¯ÍĞµÄ·½·¨/Ä¿±ê°ó¶¨Îª Action<T>
+                            // å°è¯•å°†å­å§”æ‰˜çš„æ–¹æ³•/ç›®æ ‡ç»‘å®šä¸º Action<T>
                             try
                             {
                                 var action = (Action<T>)Delegate.CreateDelegate(typeof(Action<T>), sub.Target, sub.Method);
@@ -151,19 +146,19 @@ public class SlotCenter : MonoBehaviour
                             }
                             catch (Exception exCreate)
                             {
-                                Debug.LogWarning($"ÊÂ¼ş{name}µÄ´¦ÀíÆ÷Ç©Ãû²»Æ¥Åä»òµ÷ÓÃÊ§°Ü: {exCreate.Message}");
+                                Debug.LogWarning($"äº‹ä»¶{name}çš„å¤„ç†å™¨ç­¾åä¸åŒ¹é…æˆ–è°ƒç”¨å¤±è´¥: {exCreate.Message}");
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Debug.LogWarning($"ÊÂ¼ş{name}µÄ´¦ÀíÆ÷Å×³öÒì³£: {ex.Message}");
+                        Debug.LogWarning($"äº‹ä»¶{name}çš„å¤„ç†å™¨æŠ›å‡ºå¼‚å¸¸: {ex.Message}");
                     }
                 }
                 return true;
             }
 
-            // ÆäËûµ¥Ò»Î¯ÍĞ£¬³¢ÊÔ×ª»»²¢µ÷ÓÃ
+            // å…¶ä»–å•ä¸€å§”æ‰˜ï¼Œå°è¯•è½¬æ¢å¹¶è°ƒç”¨
             try
             {
                 var action = (Action<T>)Delegate.CreateDelegate(typeof(Action<T>), d.Target, d.Method);
@@ -171,7 +166,7 @@ public class SlotCenter : MonoBehaviour
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"ÊÂ¼ş{name}µÄ´¦ÀíÆ÷Ç©Ãû²»Æ¥Åä»òµ÷ÓÃÊ§°Ü: {ex.Message}");
+                Debug.LogWarning($"äº‹ä»¶{name}çš„å¤„ç†å™¨ç­¾åä¸åŒ¹é…æˆ–è°ƒç”¨å¤±è´¥: {ex.Message}");
             }
 
             return true;
@@ -179,19 +174,19 @@ public class SlotCenter : MonoBehaviour
         else
         {
             slot_table_reverse.Add(name);
-            Debug.Log($"ÎŞ¶ÔÓ¦{name}ÊÂ¼ş");
+            Debug.Log($"æ— å¯¹åº”{name}äº‹ä»¶");
             return false;
         }
     }
 
-    // ÎŞ²Î´¥·¢£ºÍÆ¼öÊ¹ÓÃ´Ë·½·¨£¨²»Ê¹ÓÃ DynamicInvoke£©
+    // æ— å‚è§¦å‘ï¼šæ¨èä½¿ç”¨æ­¤æ–¹æ³•ï¼ˆä¸ä½¿ç”¨ DynamicInvokeï¼‰
     public bool trigger_event(string name)
     {
         if (slot_table.TryGetValue(name, out var d))
         {
-            Debug.Log($"{name}ÊÂ¼ş´¥·¢");
+            Debug.Log($"{name}äº‹ä»¶è§¦å‘");
 
-            // Èç¹ûÕûÌåÎ¯ÍĞ±¾Éí¾ÍÊÇ Action
+            // å¦‚æœæ•´ä½“å§”æ‰˜æœ¬èº«å°±æ˜¯ Action
             if (d is Action directAction)
             {
                 try
@@ -200,12 +195,12 @@ public class SlotCenter : MonoBehaviour
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogWarning($"ÊÂ¼ş{name}µÄ´¦ÀíÆ÷Å×³öÒì³£: {ex.Message}");
+                    Debug.LogWarning($"äº‹ä»¶{name}çš„å¤„ç†å™¨æŠ›å‡ºå¼‚å¸¸: {ex.Message}");
                 }
                 return true;
             }
 
-            // Èç¹ûÊÇ¶à²¥Î¯ÍĞ£¬Öğ¸ö´¦Àí
+            // å¦‚æœæ˜¯å¤šæ’­å§”æ‰˜ï¼Œé€ä¸ªå¤„ç†
             if (d is MulticastDelegate md)
             {
                 foreach (var sub in md.GetInvocationList())
@@ -218,7 +213,7 @@ public class SlotCenter : MonoBehaviour
                         }
                         else
                         {
-                            // ³¢ÊÔ½«×ÓÎ¯ÍĞµÄ·½·¨/Ä¿±ê°ó¶¨Îª Action
+                            // å°è¯•å°†å­å§”æ‰˜çš„æ–¹æ³•/ç›®æ ‡ç»‘å®šä¸º Action
                             try
                             {
                                 var action = (Action)Delegate.CreateDelegate(typeof(Action), sub.Target, sub.Method);
@@ -226,19 +221,19 @@ public class SlotCenter : MonoBehaviour
                             }
                             catch (Exception exCreate)
                             {
-                                Debug.LogWarning($"ÊÂ¼ş{name}µÄ´¦ÀíÆ÷Ç©Ãû²»Æ¥Åä»òµ÷ÓÃÊ§°Ü: {exCreate.Message}");
+                                Debug.LogWarning($"äº‹ä»¶{name}çš„å¤„ç†å™¨ç­¾åä¸åŒ¹é…æˆ–è°ƒç”¨å¤±è´¥: {exCreate.Message}");
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Debug.LogWarning($"ÊÂ¼ş{name}µÄ´¦ÀíÆ÷Å×³öÒì³£: {ex.Message}");
+                        Debug.LogWarning($"äº‹ä»¶{name}çš„å¤„ç†å™¨æŠ›å‡ºå¼‚å¸¸: {ex.Message}");
                     }
                 }
                 return true;
             }
 
-            // ÆäËûµ¥Ò»Î¯ÍĞ£¬³¢ÊÔ×ª»»²¢µ÷ÓÃ
+            // å…¶ä»–å•ä¸€å§”æ‰˜ï¼Œå°è¯•è½¬æ¢å¹¶è°ƒç”¨
             try
             {
                 var action = (Action)Delegate.CreateDelegate(typeof(Action), d.Target, d.Method);
@@ -246,7 +241,7 @@ public class SlotCenter : MonoBehaviour
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"ÊÂ¼ş{name}µÄ´¦ÀíÆ÷Ç©Ãû²»Æ¥Åä»òµ÷ÓÃÊ§°Ü: {ex.Message}");
+                Debug.LogWarning($"äº‹ä»¶{name}çš„å¤„ç†å™¨ç­¾åä¸åŒ¹é…æˆ–è°ƒç”¨å¤±è´¥: {ex.Message}");
             }
 
             return true;                
@@ -254,7 +249,7 @@ public class SlotCenter : MonoBehaviour
         else
         {
             slot_table_reverse.Add(name);
-            Debug.Log($"ÎŞ¶ÔÓ¦{name}ÊÂ¼ş");
+            Debug.Log($"æ— å¯¹åº”{name}äº‹ä»¶");
             return false;
         }
     }

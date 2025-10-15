@@ -1,4 +1,5 @@
 ﻿using Spine.Unity;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -7,16 +8,17 @@ using UnityEngine.UI;
 [RequireComponent(typeof(RectTransform))] 
 public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    [Tooltip("拖动时显示的临时预览（可选，优化视觉效果）")]
+    [Tooltip("拖动时显示的临时预览")]
     public GameObject dragPreviewPrefab;
-
+    [NonSerialized]
+    public bool isDraggable=false;
     private RectTransform _rectTransform; 
     private Canvas canvas;
     private GameObject dragPreview; // 拖动时的临时显示对象
     private bool isDragging = false;
-   
+    
 
-    public string targetType = "Typewriter";
+    public string targetType = "DocumentJudge";
     
 
     private RectTransform rectTransform;
@@ -33,6 +35,8 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     // 开始拖动
     public void OnBeginDrag(PointerEventData eventData)
     {
+
+        if (isDraggable == false) return;
         isDragging = true;
 
         GetComponent<Image>().enabled = false;
@@ -57,12 +61,12 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
     }
 
-    // 拖动中（更新位置）
+   
     public void OnDrag(PointerEventData eventData)
     {
         if (!isDragging) return;
 
-        // 将鼠标位置转换为Canvas内的UI位置
+      
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvas.GetComponent<RectTransform>(),
             eventData.position,
@@ -81,15 +85,15 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         }
     }
 
-    // 结束拖动
+   
     public void OnEndDrag(PointerEventData eventData)
     {
 
-
+        if (isDraggable != true) return;
 
 
         isDragging = false;
-        // 恢复原对象显示
+     
         GetComponent<Image>().enabled = true;
        
 
@@ -97,7 +101,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             Destroy(dragPreview);
         }
-        SlotCenter.Instance.trigger_event("EndDragEvent");
+        SlotCenter.Instance.trigger_event(HeEventNames.EndDragEvent);
 
     }
 }

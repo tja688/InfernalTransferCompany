@@ -1,10 +1,19 @@
-﻿using System;
+﻿using QFramework;
+using Spine.Unity;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using Spine.Unity;
+
+
+//public interface IUIHeEventMetadata<T>
+//{
+//    string EventName { get; }
+//    void TriggerEvent(T param);
+//}
+
 /// <summary>
 /// 契约UI管理器 - 处理所有UI显示和交互
 /// </summary>
@@ -50,7 +59,7 @@ public class HeContractUIManager : MonoBehaviour
     public SkeletonGraphic canSkeleton;                // 罐子
     public Image contractDocumentsImage;  // 合同文档
     public Image arrowImage;              // 箭头提示
-
+    public Image roleImage;
   
 
 
@@ -65,7 +74,6 @@ public class HeContractUIManager : MonoBehaviour
     public float pneumaticOpenDuration = 2.0f;
 
 
-    public event System.Action<DocumentError> OnJudge;
     // 私有变量 
     private HeContractContext currentContext;
     private HeContractGameConfig gameConfig;
@@ -74,7 +82,7 @@ public class HeContractUIManager : MonoBehaviour
     private List<GameObject> runeGridItems = new List<GameObject>();
     private bool pneumaticChannelAnimatorOpen = false;
 
-    public event System.Action<DocumentError> OnDocumentChoose;
+  
     public event System.Action<int> OnMoveAction;
     public event System.Action OnInteractAction;
     private void Awake()
@@ -93,7 +101,7 @@ public class HeContractUIManager : MonoBehaviour
 
     private void RegisterAllEvent()
     {
-        //SlotCenter.Instance.add_listener<DocumentError>("DocumentErrorChosen", ChooseDocumentError);
+        //SlotCenter.Instance.add_listener<DocumentError>(HeEventNames.DocumentErrorChosen, OnDocumentErrorChosen);
     }
 
     /// <summary>
@@ -174,18 +182,11 @@ public class HeContractUIManager : MonoBehaviour
         switch (panel)
         {
             case UIState.DocumentVerification:
+                
 
+               
 
-                pneumaticChannelSkeleton.AnimationState.SetAnimation(0, "open", false);
-
-
-
-                yield return new WaitForSeconds(3.0f);
-                pneumaticChannelSkeleton.AnimationState.SetAnimation(0, "close1", false);
-                yield return new WaitForSeconds(3.0f);
-                pneumaticChannelSkeleton.AnimationState.SetAnimation(0, "close", false);
-
-                pneumaticChannelAnimatorOpen = true;
+                //pneumaticChannelAnimatorOpen = true;
                 // TODO: 添加文书验证面板显示逻辑
                 break;
             case UIState.RuneInput:
@@ -250,32 +251,94 @@ public class HeContractUIManager : MonoBehaviour
         SwitchPanel(UIState.DocumentVerification);
     }
 
-    public void ClosePneumaticChannelClick()
+
+    public void OnOpenPneumaticChannelClick()
+    {
+
+        if (pneumaticChannelAnimatorOpen) return;
+
+        var trackEntry = pneumaticChannelSkeleton.AnimationState.SetAnimation(0, "A开门", false);
+        trackEntry.Complete += OnOpenAnimationComplete;
+        pneumaticChannelAnimatorOpen = true;
+
+        //关闭悬浮高亮与按钮与高亮
+        var Hover = pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>();
+        Hover.enableHighLightOnHover = false;
+        Hover.UnSetHighLight(); 
+    
+
+        var button = pneumaticChannelSkeleton.GetComponent<Button>();
+        button.interactable = false;
+    }
+    private void OnOpenAnimationComplete(Spine.TrackEntry trackEntry)
+    {
+        //打开按钮与悬浮高亮
+        var button = pneumaticChannelSkeleton.GetComponent<Button>();
+        button.interactable = true;
+        var Hover = pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>();
+        Hover.enableHighLightOnHover = true;
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(OnClosePneumaticChannel);
+    }
+
+
+    public void OnClosePneumaticChannel()
     {
         if (!pneumaticChannelAnimatorOpen) return;
 
+        var trackEntry = pneumaticChannelSkeleton.AnimationState.SetAnimation(0, "B关门", false);
 
+       
+        trackEntry.Complete += OnCloseAnimationComplete;
+        //关闭按钮与悬浮高亮
+        var button = pneumaticChannelSkeleton.GetComponent<Button>();
+        button.interactable = false;
 
-        pneumaticChannelSkeleton.AnimationState.SetAnimation(0, "close", false);
-
-
-        pneumaticChannelAnimatorOpen = false;
-
+        var Hover = pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>();
+        Hover.enableHighLightOnHover = false;
+        Hover.UnSetHighLight();
 
     }
-    public void OpenPneumaticChannelClick()
+    private void OnCloseAnimationComplete(Spine.TrackEntry trackEntry)
     {
-        if (pneumaticChannelAnimatorOpen) return;
 
-
-
-        pneumaticChannelSkeleton.AnimationState.SetAnimation(0, "open", false);
-
-
-        pneumaticChannelAnimatorOpen = true;
+        var entryAnimation = contractDocumentsImage.GetComponent<EntryAnimation>();
+        var track =  entryAnimation.PlayEntryAnimation();
+        track.OnComplete(OncontractDocumentsImagePlayEntryAnimationEnd);
+        
+        
 
 
     }
+    private void OncontractDocumentsImagePlayEntryAnimationEnd()
+    {
+        //打开可拖拽
+        var draggable = contractDocumentsImage.GetComponent<DraggableUI>();
+        draggable.isDraggable = true;
+
+
+
+        var typewriter = typewriterSkeleton.GetComponent<SkeletonGraphicHighLightDragHover>();
+        var role  = roleImage.GetComponent<ImageHighLightDragHover>();
+        // 监听事件,可拖拽才能触发事件
+        SlotCenter.Instance.add_listener<DocumentError>(typewriter.eventName, OnDragEndToChooseDocumentAction);
+        SlotCenter.Instance.add_listener<DocumentError>(role.eventName, OnDragEndToChooseDocumentAction);
+    }
+    private void OnDragEndToChooseDocumentAction(DocumentError err)
+    {
+
+
+
+        var Hover = pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>();
+        var entryAnimation = contractDocumentsImage.GetComponent<EntryAnimation>();
+        entryAnimation.PlayExitAnimation();
+        SlotCenter.Instance.trigger_event<DocumentError>(HeEventNames.DocumentErrorChosen, err);
+
+    }
+
+
+
+
 
     #endregion
     #region 印章UI
