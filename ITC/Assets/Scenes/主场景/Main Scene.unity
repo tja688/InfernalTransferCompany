@@ -383,7 +383,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &76213785
 RectTransform:
   m_ObjectHideFlags: 0
@@ -672,7 +672,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 148400496}
-  - component: {fileID: 148400497}
   m_Layer: 0
   m_Name: UIStateSystem
   m_TagString: Untagged
@@ -695,18 +694,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1360210875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &148400497
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 148400495}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc42e949684f46fc8d41d38243b3847a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!28 &182872107
 Texture2D:
   m_ObjectHideFlags: 0
@@ -1591,7 +1578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &272004040
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1979,11 +1966,11 @@ MonoBehaviour:
     - player: {fileID: 1679115684}
       presetName: PrimaryMenu_Close button
       delayAfterPlay: 0.1
-    - player: {fileID: 1547583158}
-      presetName: PrimaryMenu_Select pointer
-      delayAfterPlay: 0.1
     - player: {fileID: 293818458}
       presetName: PrimaryMenu_Select notion
+      delayAfterPlay: 0.1
+    - player: {fileID: 1547583158}
+      presetName: PrimaryMenu_Select pointer
       delayAfterPlay: 0.1
   useUnscaledIntervals: 1
 --- !u!1 &331982934
@@ -4650,6 +4637,7 @@ GameObject:
   - component: {fileID: 956931277}
   - component: {fileID: 956931276}
   - component: {fileID: 956931275}
+  - component: {fileID: 956931278}
   m_Layer: 0
   m_Name: Root Canvas
   m_TagString: Untagged
@@ -4741,6 +4729,19 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_TargetDisplay: 0
+--- !u!114 &956931278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 956931273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 882ff73b6d09452fb67b8864c8ad1ea7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggleKey: 282
 --- !u!1 &966798835
 GameObject:
   m_ObjectHideFlags: 0
