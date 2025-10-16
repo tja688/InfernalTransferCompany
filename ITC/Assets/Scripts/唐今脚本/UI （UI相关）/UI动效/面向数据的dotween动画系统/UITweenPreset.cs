@@ -5,8 +5,87 @@
 // - 统一提供 ApplyEaseTo(Tween) 供 Player/Controller 复用
 // [MODIFIED] Split ApplyEaseTo into ApplyTweenSettings and ApplySequenceSettings to fix double delay issue.
 
-using UnityEngine;
+using System.Collections.Generic;
 using DG.Tweening;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
+
+public enum SecondaryTweenType
+{
+    Rotation,
+    Scale,
+    AnchoredPosition,
+    Alpha,
+    Color
+}
+
+[System.Serializable]
+public class SecondaryTween
+{
+    [Tooltip("此轨道名称，仅用于在编辑器中识别")]
+    public string name = "Secondary Animation";
+
+    [Tooltip("此动画控制的属性")]
+    public SecondaryTweenType propertyType = SecondaryTweenType.Rotation;
+
+    [Tooltip("在主时间轴上的开始时间（秒）")]
+    public float startTime = 0f;
+
+    [Tooltip("此动画自身的持续时间（秒）")]
+    public float duration = 0.5f;
+
+    [Tooltip("动画的目标值。对于旋转是欧拉角Z，对于缩放是(x,y,z)，对于位置是(x,y)")]
+    public Vector3 targetValue = Vector3.zero;
+
+    [Tooltip("缓动类型")]
+    public Ease easeType = Ease.Linear;
+
+    [Tooltip("是否使用相对值。勾选后，targetValue 将作为在动画开始瞬间的当前值基础上的增量。")]
+    public bool isRelative = true;
+
+    [Tooltip("颜色动画的目标颜色（仅在 propertyType = Color 时使用)")]
+    public Color targetColor = Color.white;
+}
+
+public enum TimelineEventType
+{
+    CustomCallback,
+    PlayAudio,
+    ChangeSprite,
+    BroadcastMessage
+}
+
+[System.Serializable]
+public class TimelineEvent
+{
+    [Tooltip("事件名称，用于识别")]
+    public string name = "New Event";
+
+    [Tooltip("事件在主时间轴上的触发时间点")]
+    public float fireTime = 0f;
+
+    [Tooltip("事件类型")]
+    public TimelineEventType eventType = TimelineEventType.CustomCallback;
+
+    [Tooltip("【PlayAudio】需要播放的音效片段")]
+    public AudioClip audioClip;
+
+    [Tooltip("【ChangeSprite】需要更换到的新 Sprite")]
+    public Sprite newSprite;
+
+    [Tooltip("【ChangeSprite】需要操作的目标 Image 组件")]
+    public Image targetImage;
+
+    [Tooltip("【BroadcastMessage】要广播的消息名称")]
+    public string messageName;
+
+    [Tooltip("【BroadcastMessage】消息的参数（可选）")]
+    public string messageParameter;
+
+    [Tooltip("【CustomCallback】自定义回调，可在此挂载任何脚本的公开方法")]
+    public UnityEvent customCallback = new UnityEvent();
+}
 
 public enum RelativeBaselineMode
 {
@@ -93,6 +172,14 @@ public class UITweenPreset : ScriptableObject
     [Header("Runtime Options")]
     [Tooltip("距离越近是否按比例缩短时长（可由调用方覆盖时长）。")]
     public bool scaleDurationByDistance = false;
+
+    [Header("Secondary Animations")]
+    [Tooltip("在主动画播放期间叠加的次级动画轨道")]
+    public List<SecondaryTween> secondaryTweens = new List<SecondaryTween>();
+
+    [Header("Timeline Events")]
+    [Tooltip("在时间轴特定时间点触发的模块化事件")]
+    public List<TimelineEvent> timelineEvents = new List<TimelineEvent>();
 
     // ===== MODIFICATION START =====
     // 原有的 ApplyEaseTo 方法已被拆分为以下两个方法，以避免双重延遲问题
