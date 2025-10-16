@@ -1,7 +1,10 @@
 #if UNITY_EDITOR
+using System;
+using System.Collections.Generic;
+using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
-using DG.Tweening;
+using UnityEngine.UI;
 
 [CustomEditor(typeof(UITweenController))]
 public class UITweenControllerEditor : Editor
@@ -19,6 +22,7 @@ public class UITweenControllerEditor : Editor
     Snap _snap;
     bool _hasSnap = false; // 核心状态标志：是否已经捕获快照并进入预览模式
     Tween _previewTween;
+    readonly List<Action> _restoreActions = new List<Action>();
 
     void OnEnable()
     {
@@ -192,11 +196,28 @@ public class UITweenControllerEditor : Editor
 
         EditorGUILayout.Space();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("showPathGizmos"));
-        
+
+        EditorGUILayout.Space();
+        using (new EditorGUILayout.VerticalScope("box"))
+        {
+            EditorGUILayout.LabelField("Secondary Animations", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("secondaryTweens"), true);
+        }
+
+        EditorGUILayout.Space();
+        using (new EditorGUILayout.VerticalScope("box"))
+        {
+            EditorGUILayout.LabelField("Timeline Events", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("timelineEvents"), true);
+        }
+
         // ==============================================================================
         // ==================== 核心修改区域 (Core Modification Area) ====================
         // ==============================================================================
-        
+
+        EditorGUILayout.Space();
+        DrawTimelineEditor();
+
         EditorGUILayout.Space();
         using (new EditorGUILayout.VerticalScope("box"))
         {
@@ -224,11 +245,216 @@ public class UITweenControllerEditor : Editor
 
         serializedObject.ApplyModifiedProperties();
     }
-    
+
+    private void DrawTimelineEditor()
+    {
+        EditorGUILayout.Space();
+        using (new EditorGUILayout.VerticalScope("box"))
+        {
+            EditorGUILayout.LabelField("Visual Timeline Editor", EditorStyles.boldLabel);
+
+            float totalDuration = Mathf.Max(0f, C.duration);
+            if (totalDuration <= 0f)
+            {
+                EditorGUILayout.HelpBox("Duration must be greater than 0 to display the timeline.", MessageType.Info);
+                return;
+            }
+
+            Rect timelineRect = EditorGUILayout.GetControlRect(false, 160f);
+            EditorGUI.DrawRect(timelineRect, new Color(0.12f, 0.12f, 0.12f));
+
+            Handles.BeginGUI();
+            DrawTimelineGrid(timelineRect, totalDuration);
+
+            int curveIndex = 0;
+            if (C.animatePosition)
+            {
+                DrawPropertyCurve(timelineRect, totalDuration, "Position", Color.cyan, curveIndex++, GetValueAtTime);
+            }
+            if (C.animateSize)
+            {
+                DrawPropertyCurve(timelineRect, totalDuration, "Size", Color.yellow, curveIndex++, GetValueAtTime);
+            }
+            if (C.animateRotationZ)
+            {
+                DrawPropertyCurve(timelineRect, totalDuration, "Rotation", Color.magenta, curveIndex++, GetValueAtTime);
+            }
+            if (C.animateAlpha)
+            {
+                DrawPropertyCurve(timelineRect, totalDuration, "Alpha", Color.green, curveIndex++, GetValueAtTime);
+            }
+            if (C.animateColor)
+            {
+                DrawPropertyCurve(timelineRect, totalDuration, "Color", Color.white, curveIndex++, GetValueAtTime);
+            }
+
+            var secondaryProp = serializedObject.FindProperty("secondaryTweens");
+            if (secondaryProp != null && secondaryProp.isArray)
+            {
+                for (int i = 0; i < secondaryProp.arraySize; i++)
+                {
+                    Color curveColor = Color.HSVToRGB(Mathf.Repeat(i * 0.2f, 1f), 0.8f, 1f);
+                    DrawSecondaryCurve(timelineRect, totalDuration, secondaryProp.GetArrayElementAtIndex(i), curveColor);
+                }
+                DrawSecondaryMarkers(timelineRect, totalDuration, secondaryProp, new Color(1f, 0.8f, 0f, 0.9f));
+            }
+
+            var eventProp = serializedObject.FindProperty("timelineEvents");
+            DrawTimelineEventMarkers(timelineRect, totalDuration, eventProp, new Color(0.2f, 1f, 0.4f, 0.9f));
+
+            Handles.EndGUI();
+        }
+    }
+
+    private void DrawTimelineGrid(Rect rect, float duration)
+    {
+        Handles.color = new Color(1f, 1f, 1f, 0.1f);
+        Handles.DrawSolidRectangleWithOutline(rect, new Color(1f, 1f, 1f, 0.05f), new Color(1f, 1f, 1f, 0.15f));
+
+        int gridLines = 10;
+        for (int i = 0; i <= gridLines; i++)
+        {
+            float normalized = i / (float)gridLines;
+            float x = Mathf.Lerp(rect.x, rect.xMax, normalized);
+            Handles.color = new Color(1f, 1f, 1f, 0.08f);
+            Handles.DrawLine(new Vector3(x, rect.y), new Vector3(x, rect.yMax));
+
+            GUI.Label(new Rect(x - 20f, rect.y - 18f, 50f, 16f), (duration * normalized).ToString("F2"), EditorStyles.whiteMiniLabel);
+        }
+        Handles.color = Color.white;
+    }
+
+    private void DrawPropertyCurve(Rect rect, float duration, string label, Color color, int index, Func<float, float> evaluate)
+    {
+        const int steps = 60;
+        Vector3[] points = new Vector3[steps + 1];
+        for (int i = 0; i <= steps; i++)
+        {
+            float normalizedTime = i / (float)steps;
+            float value = Mathf.Clamp01(evaluate(normalizedTime));
+            float x = Mathf.Lerp(rect.x, rect.xMax, normalizedTime);
+            float y = Mathf.Lerp(rect.yMax - 8f, rect.y + 24f, value);
+            points[i] = new Vector3(x, y);
+        }
+
+        Handles.color = color;
+        Handles.DrawAAPolyLine(2f, points);
+
+        var originalColor = GUI.color;
+        GUI.color = color;
+        GUI.Label(new Rect(rect.x + 6f, rect.y + 6f + index * 16f, 120f, 16f), label, EditorStyles.whiteMiniLabel);
+        GUI.color = originalColor;
+    }
+
+    private void DrawSecondaryCurve(Rect rect, float totalDuration, SerializedProperty secondaryTweenProp, Color color)
+    {
+        if (secondaryTweenProp == null) return;
+
+        float startTime = Mathf.Max(0f, secondaryTweenProp.FindPropertyRelative("startTime")?.floatValue ?? 0f);
+        float duration = Mathf.Max(0f, secondaryTweenProp.FindPropertyRelative("duration")?.floatValue ?? 0f);
+        if (duration <= 0f) return;
+
+        Ease easeType = (Ease)(secondaryTweenProp.FindPropertyRelative("easeType")?.enumValueIndex ?? (int)Ease.Linear);
+        string name = secondaryTweenProp.FindPropertyRelative("name")?.stringValue ?? "Secondary";
+
+        const int steps = 50;
+        Vector3[] points = new Vector3[steps + 1];
+        float minValue = 0f;
+        float maxValue = 1f;
+
+        for (int i = 0; i <= steps; i++)
+        {
+            float normalizedTime = i / (float)steps;
+            float easedValue = DOVirtual.EasedValue(0f, 1f, normalizedTime, easeType);
+            if (easedValue < minValue) minValue = easedValue;
+            if (easedValue > maxValue) maxValue = easedValue;
+        }
+
+        float valueRange = Mathf.Max(0.0001f, maxValue - minValue);
+
+        for (int i = 0; i <= steps; i++)
+        {
+            float normalizedTime = i / (float)steps;
+            float easedValue = DOVirtual.EasedValue(0f, 1f, normalizedTime, easeType);
+            float yValueNormalized = (easedValue - minValue) / valueRange;
+
+            float absoluteTime = startTime + duration * normalizedTime;
+            float x = TimeToPixel(rect, totalDuration, absoluteTime);
+            float y = Mathf.Lerp(rect.yMax - 8f, rect.y + 24f, yValueNormalized);
+            points[i] = new Vector3(x, y);
+        }
+
+        Handles.color = color;
+        Handles.DrawAAPolyLine(2f, points);
+
+        var originalColor = GUI.color;
+        GUI.color = color;
+        GUI.Label(new Rect(points[0].x + 5f, points[0].y - 15f, 160f, 16f), name, EditorStyles.whiteMiniLabel);
+        GUI.color = originalColor;
+        Handles.color = Color.white;
+    }
+
+    private void DrawSecondaryMarkers(Rect rect, float duration, SerializedProperty listProp, Color color)
+    {
+        if (listProp == null || !listProp.isArray) return;
+
+        for (int i = 0; i < listProp.arraySize; i++)
+        {
+            var element = listProp.GetArrayElementAtIndex(i);
+            float start = Mathf.Max(0f, element.FindPropertyRelative("startTime")?.floatValue ?? 0f);
+            float span = Mathf.Max(0f, element.FindPropertyRelative("duration")?.floatValue ?? 0f);
+
+            float xStart = TimeToPixel(rect, duration, start);
+            float xEnd = TimeToPixel(rect, duration, start + span);
+            float width = Mathf.Max(2f, xEnd - xStart);
+
+            float laneOffset = (i % 3) * 14f;
+            Rect markerRect = new Rect(xStart, rect.yMax - 24f - laneOffset, width, 10f);
+            Handles.DrawSolidRectangleWithOutline(markerRect, new Color(color.r, color.g, color.b, 0.35f), color);
+
+            GUI.Label(new Rect(markerRect.x, markerRect.y - 14f, 180f, 14f), element.FindPropertyRelative("name")?.stringValue ?? "Secondary", EditorStyles.whiteMiniLabel);
+        }
+        Handles.color = Color.white;
+    }
+
+    private void DrawTimelineEventMarkers(Rect rect, float duration, SerializedProperty listProp, Color color)
+    {
+        if (listProp == null || !listProp.isArray) return;
+
+        Handles.color = color;
+        for (int i = 0; i < listProp.arraySize; i++)
+        {
+            var element = listProp.GetArrayElementAtIndex(i);
+            float fireTime = Mathf.Max(0f, element.FindPropertyRelative("fireTime")?.floatValue ?? 0f);
+            float x = TimeToPixel(rect, duration, fireTime);
+            Handles.DrawLine(new Vector3(x, rect.y), new Vector3(x, rect.yMax));
+
+            GUI.Label(new Rect(x + 4f, rect.y + 6f + (i % 3) * 16f, 180f, 16f), element.FindPropertyRelative("name")?.stringValue ?? "Event", EditorStyles.whiteMiniLabel);
+        }
+        Handles.color = Color.white;
+    }
+
+    private float GetValueAtTime(float normalizedTime)
+    {
+        normalizedTime = Mathf.Clamp01(normalizedTime);
+        if (C.useCustomCurve && C.customCurve != null)
+        {
+            return Mathf.Clamp01(C.customCurve.Evaluate(normalizedTime));
+        }
+        return Mathf.Clamp01(DOVirtual.EasedValue(0f, 1f, normalizedTime, C.easeType));
+    }
+
+    private float TimeToPixel(Rect rect, float duration, float time)
+    {
+        if (duration <= 0f) return rect.x;
+        float normalized = Mathf.Clamp01(time / duration);
+        return Mathf.Lerp(rect.x, rect.xMax, normalized);
+    }
+
     void SafePlayPreview()
     {
         // 播放前先确保停止了任何旧的预览，这是一个好习惯
-        SafeStopPreview(); 
+        SafeStopPreview();
         
         var rt = C.GetComponent<RectTransform>();
         if (rt == null) return;
@@ -240,6 +466,52 @@ public class UITweenControllerEditor : Editor
         _snap.alpha = cg ? cg.alpha : (g ? g.color.a : 1f);
         _snap.color = g ? g.color : Color.white;
         _hasSnap = true;
+
+        _restoreActions.Clear();
+
+        if (C.timelineEvents != null)
+        {
+            foreach (var timelineEvent in C.timelineEvents)
+            {
+                if (timelineEvent == null) continue;
+                if (timelineEvent.eventType == TimelineEventType.ChangeSprite && timelineEvent.targetImage != null)
+                {
+                    var targetImage = timelineEvent.targetImage;
+                    var originalSprite = targetImage.sprite;
+                    _restoreActions.Add(() =>
+                    {
+                        if (targetImage != null)
+                        {
+                            Undo.RecordObject(targetImage, "Restore Timeline Sprite");
+                            targetImage.sprite = originalSprite;
+                        }
+                    });
+                }
+            }
+        }
+
+        bool scaleHandled = C.animateSize;
+        if (C.secondaryTweens != null)
+        {
+            foreach (var secTween in C.secondaryTweens)
+            {
+                if (secTween == null) continue;
+                if (secTween.propertyType == SecondaryTweenType.Scale && !scaleHandled)
+                {
+                    Vector3 originalScale = rt.localScale;
+                    var targetTransform = rt;
+                    _restoreActions.Add(() =>
+                    {
+                        if (targetTransform != null)
+                        {
+                            Undo.RecordObject(targetTransform, "Restore Secondary Scale");
+                            targetTransform.localScale = originalScale;
+                        }
+                    });
+                    scaleHandled = true;
+                }
+            }
+        }
 
         // 【修改点 2】: 移除了 .OnComplete(SafeStopPreview)
         // 这样动画播放一次后就会自然停止在目标状态，而不会自动回调恢复方法
@@ -275,6 +547,15 @@ public class UITweenControllerEditor : Editor
         
         var g = C.GetComponent<UnityEngine.UI.Graphic>();
         if (g != null) { Undo.RecordObject(g, "Restore Snapshot"); g.color = _snap.color; }
+
+        if (_restoreActions.Count > 0)
+        {
+            foreach (var action in _restoreActions)
+            {
+                action?.Invoke();
+            }
+            _restoreActions.Clear();
+        }
 
         // 重置状态标志，为下一次预览做准备
         // inEditorDisable 是为了防止组件在禁用时重置标志，导致状态丢失
