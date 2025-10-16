@@ -61,14 +61,6 @@ public class UITweenController : MonoBehaviour
     [Tooltip("在时间轴特定时间点触发的模块化事件")]
     public List<TimelineEvent> timelineEvents = new List<TimelineEvent>();
 
-    [Header("Secondary Animations")]
-    [Tooltip("在主动画播放期间叠加的次级动画轨道")]
-    public List<SecondaryTween> secondaryTweens = new List<SecondaryTween>();
-
-    [Header("Timeline Events")]
-    [Tooltip("在时间轴特定时间点触发的模块化事件")]
-    public List<TimelineEvent> timelineEvents = new List<TimelineEvent>();
-
     [Header("Gizmos & Preview (Editor Only)")]
     public bool showPathGizmos = true;
 
