@@ -93,7 +93,7 @@ namespace ITC.UI.Choreography
             UIEventBus.PublishSchedule(schedule);
         }
 
-        private static YieldInstruction Wait(float duration, bool unscaled)
+        private static object  Wait(float duration, bool unscaled)
         {
             if (duration <= 0f)
             {
