@@ -2,9 +2,11 @@
 // Jin Tang – Goal-Driven UI Tween (Bézier via pass-through point)
 // + Preset binding & autosave
 
-using UnityEngine;
-using UnityEngine.UI;
+using System.Collections.Generic;
 using DG.Tweening;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(RectTransform))]
@@ -47,9 +49,17 @@ public class UITweenController : MonoBehaviour
     [Header("What to Animate")]
     public bool animatePosition = true;
     public bool animateSize = true;
-    public bool animateRotationZ = false;
-    public bool animateAlpha = false;
-    public bool animateColor = false;
+    public bool animateRotationZ = true;
+    public bool animateAlpha = true;
+    public bool animateColor = true;
+
+    [Header("Secondary Animations")]
+    [Tooltip("在主动画播放期间叠加的次级动画轨道")]
+    public List<SecondaryTween> secondaryTweens = new List<SecondaryTween>();
+
+    [Header("Timeline Events")]
+    [Tooltip("在时间轴特定时间点触发的模块化事件")]
+    public List<TimelineEvent> timelineEvents = new List<TimelineEvent>();
 
     [Header("Gizmos & Preview (Editor Only)")]
     public bool showPathGizmos = true;
@@ -166,6 +176,27 @@ public class UITweenController : MonoBehaviour
             seq.Join(colTween);
         }
 
+        if (secondaryTweens != null)
+        {
+            foreach (var secondary in secondaryTweens)
+            {
+                var subTween = BuildSecondaryTweener(secondary);
+                if (subTween == null) continue;
+
+                float insertTime = ResolveInsertTime(secondary.startTime, duration, reversed, secondary.duration);
+                seq.Insert(insertTime, subTween);
+            }
+        }
+
+        if (timelineEvents != null)
+        {
+            foreach (var timelineEvent in timelineEvents)
+            {
+                float insertTime = ResolveInsertTime(timelineEvent.fireTime, duration, reversed, 0f);
+                seq.InsertCallback(insertTime, () => ExecuteTimelineEvent(timelineEvent));
+            }
+        }
+
         if (loops != 0) seq.SetLoops(loops, loopType);
         return seq;
     }
@@ -214,6 +245,8 @@ public class UITweenController : MonoBehaviour
         p.targetAnchoredPosition = targetAnchoredPosition; p.targetSizeDelta = targetSizeDelta; p.targetPivot = targetPivot; p.targetEulerZ = targetEulerZ; p.targetAlpha = targetAlpha; p.targetColor = targetColor;
         p.passThroughPointC = passThroughPointC; p.passTStar = passTStar;
         p.animatePosition = animatePosition; p.animateSize = animateSize; p.animateRotationZ = animateRotationZ; p.animateAlpha = animateAlpha; p.animateColor = animateColor;
+        p.secondaryTweens = CloneSecondaryTweens(secondaryTweens);
+        p.timelineEvents = CloneTimelineEvents(timelineEvents);
 
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(p);
@@ -232,6 +265,8 @@ public class UITweenController : MonoBehaviour
         targetAnchoredPosition = p.targetAnchoredPosition; targetSizeDelta = p.targetSizeDelta; targetPivot = p.targetPivot; targetEulerZ = p.targetEulerZ; targetAlpha = p.targetAlpha; targetColor = p.targetColor;
         passThroughPointC = p.passThroughPointC; passTStar = p.passTStar;
         animatePosition = p.animatePosition; animateSize = p.animateSize; animateRotationZ = p.animateRotationZ; animateAlpha = p.animateAlpha; animateColor = p.animateColor;
+        secondaryTweens = CloneSecondaryTweens(p.secondaryTweens);
+        timelineEvents = CloneTimelineEvents(p.timelineEvents);
     }
 
     private void ApplyEaseTo(Tween t)
@@ -259,4 +294,184 @@ public class UITweenController : MonoBehaviour
     public float PassTStar => passTStar;
     public bool UseRelativeMode => useRelativeMode;
     public bool UseBezierPath => useBezierPath;
+
+    private float ResolveInsertTime(float requestedTime, float totalDuration, bool reversed, float span)
+    {
+        if (!reversed) return Mathf.Max(0f, requestedTime);
+        float mirrored = totalDuration - requestedTime - span;
+        if (float.IsNaN(mirrored) || float.IsInfinity(mirrored)) return 0f;
+        return Mathf.Clamp(mirrored, 0f, Mathf.Max(totalDuration, 0f));
+    }
+
+    private Tweener BuildSecondaryTweener(SecondaryTween secondary)
+    {
+        if (secondary == null || secondary.duration <= 0f || _rt == null) return null;
+
+        Tweener tween = null;
+        switch (secondary.propertyType)
+        {
+            case SecondaryTweenType.Rotation:
+            {
+                Vector3 target = secondary.isRelative
+                    ? secondary.targetValue
+                    : new Vector3(_rt.localEulerAngles.x, _rt.localEulerAngles.y, secondary.targetValue.z);
+                var mode = secondary.isRelative ? RotateMode.FastBeyond360 : RotateMode.Fast;
+                tween = _rt.DORotate(target, secondary.duration, mode);
+                if (secondary.isRelative) tween.SetRelative();
+                break;
+            }
+            case SecondaryTweenType.Scale:
+            {
+                Vector3 target = secondary.targetValue;
+                if (!secondary.isRelative && Mathf.Approximately(target.z, 0f))
+                {
+                    target.z = _rt.localScale.z;
+                }
+                tween = _rt.DOScale(target, secondary.duration);
+                if (secondary.isRelative) tween.SetRelative();
+                break;
+            }
+            case SecondaryTweenType.AnchoredPosition:
+            {
+                var target = new Vector2(secondary.targetValue.x, secondary.targetValue.y);
+                tween = _rt.DOAnchorPos(target, secondary.duration);
+                if (secondary.isRelative) tween.SetRelative();
+                break;
+            }
+            case SecondaryTweenType.Alpha:
+            {
+                float value = secondary.targetValue.x;
+                if (_canvasGroup != null)
+                {
+                    float baseAlpha = _canvasGroup.alpha;
+                    float finalAlpha = Mathf.Clamp01(secondary.isRelative ? baseAlpha + value : value);
+                    tween = _canvasGroup.DOFade(finalAlpha, secondary.duration);
+                }
+                else if (_graphic != null)
+                {
+                    float baseAlpha = _graphic.color.a;
+                    float finalAlpha = Mathf.Clamp01(secondary.isRelative ? baseAlpha + value : value);
+                    tween = _graphic.DOFade(finalAlpha, secondary.duration);
+                }
+                break;
+            }
+            case SecondaryTweenType.Color:
+            {
+                if (_graphic != null)
+                {
+                    Color baseColor = _graphic.color;
+                    Color delta = secondary.targetColor;
+                    Color finalColor = secondary.isRelative ? baseColor + delta : delta;
+                    finalColor.r = Mathf.Clamp01(finalColor.r);
+                    finalColor.g = Mathf.Clamp01(finalColor.g);
+                    finalColor.b = Mathf.Clamp01(finalColor.b);
+                    finalColor.a = Mathf.Clamp01(finalColor.a);
+                    tween = _graphic.DOColor(finalColor, secondary.duration);
+                }
+                break;
+            }
+        }
+
+        if (tween != null)
+        {
+            tween.SetEase(secondary.easeType);
+        }
+        return tween;
+    }
+
+    private void ExecuteTimelineEvent(TimelineEvent timelineEvent)
+    {
+        if (timelineEvent == null) return;
+
+        switch (timelineEvent.eventType)
+        {
+            case TimelineEventType.CustomCallback:
+                timelineEvent.customCallback?.Invoke();
+                break;
+            case TimelineEventType.PlayAudio:
+                if (timelineEvent.audioClip != null)
+                {
+                    var source = GetComponent<AudioSource>();
+                    if (source != null)
+                    {
+                        source.PlayOneShot(timelineEvent.audioClip);
+                    }
+                    else
+                    {
+                        AudioSource.PlayClipAtPoint(timelineEvent.audioClip, transform.position);
+                    }
+                }
+                break;
+            case TimelineEventType.ChangeSprite:
+            {
+                var image = timelineEvent.targetImage;
+                if (image == null) image = _graphic as Image;
+                if (image != null && timelineEvent.newSprite != null)
+                {
+                    image.sprite = timelineEvent.newSprite;
+                }
+                break;
+            }
+            case TimelineEventType.BroadcastMessage:
+                if (!string.IsNullOrEmpty(timelineEvent.messageName))
+                {
+                    if (!string.IsNullOrEmpty(timelineEvent.messageParameter))
+                    {
+                        BroadcastMessage(timelineEvent.messageName, timelineEvent.messageParameter, SendMessageOptions.DontRequireReceiver);
+                    }
+                    else
+                    {
+                        BroadcastMessage(timelineEvent.messageName, SendMessageOptions.DontRequireReceiver);
+                    }
+                }
+                break;
+        }
+    }
+
+    private List<SecondaryTween> CloneSecondaryTweens(List<SecondaryTween> source)
+    {
+        var list = new List<SecondaryTween>();
+        if (source == null) return list;
+        foreach (var item in source)
+        {
+            if (item == null) continue;
+            var clone = new SecondaryTween
+            {
+                name = item.name,
+                propertyType = item.propertyType,
+                startTime = item.startTime,
+                duration = item.duration,
+                targetValue = item.targetValue,
+                easeType = item.easeType,
+                isRelative = item.isRelative,
+                targetColor = item.targetColor
+            };
+            list.Add(clone);
+        }
+        return list;
+    }
+
+    private List<TimelineEvent> CloneTimelineEvents(List<TimelineEvent> source)
+    {
+        var list = new List<TimelineEvent>();
+        if (source == null) return list;
+        foreach (var item in source)
+        {
+            if (item == null) continue;
+            var clone = new TimelineEvent
+            {
+                name = item.name,
+                fireTime = item.fireTime,
+                eventType = item.eventType,
+                audioClip = item.audioClip,
+                newSprite = item.newSprite,
+                targetImage = item.targetImage,
+                messageName = item.messageName,
+                messageParameter = item.messageParameter,
+                customCallback = item.customCallback
+            };
+            list.Add(clone);
+        }
+        return list;
+    }
 }

@@ -61,5 +61,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  easeType: 6
+  easeType: 15
   scaleDurationByDistance: 0
+  secondaryTweens:
+  - name: "\u65CB\u8F6C"
+    propertyType: 0
+    startTime: 0
+    duration: 1
+    targetValue: {x: 0, y: 360, z: 0}
+    easeType: 27
+    isRelative: 1
+    targetColor: {r: 0, g: 0, b: 0, a: 0}
+  timelineEvents: []
