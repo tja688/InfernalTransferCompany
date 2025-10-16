@@ -49,9 +49,9 @@ public class UITweenController : MonoBehaviour
     [Header("What to Animate")]
     public bool animatePosition = true;
     public bool animateSize = true;
-    public bool animateRotationZ = false;
-    public bool animateAlpha = false;
-    public bool animateColor = false;
+    public bool animateRotationZ = true;
+    public bool animateAlpha = true;
+    public bool animateColor = true;
 
     [Header("Secondary Animations")]
     [Tooltip("在主动画播放期间叠加的次级动画轨道")]
