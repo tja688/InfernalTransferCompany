@@ -168,7 +168,7 @@ public class UITweenPlayer : MonoBehaviour
     {
         if (preset == null || _rt == null) return null;
 
-        // ★ 核心：根据相对基线策略选择基线
+        // ★ 根据相对基线策略选择基线
         Baseline baseL = preset.useRelativeMode
             ? (preset.relativeBaselineMode == RelativeBaselineMode.RebaseAtInterrupt
                 ? CaptureBaselineNow()
@@ -177,6 +177,7 @@ public class UITweenPlayer : MonoBehaviour
 
         var seq = DOTween.Sequence();
         float dur = Mathf.Max(0.0001f, preset.duration);
+
         // Position
         if (preset.animatePosition)
         {
@@ -210,7 +211,7 @@ public class UITweenPlayer : MonoBehaviour
                     ? (reversed ? baseL.pos : baseL.pos + preset.targetAnchoredPosition)
                     : (reversed ? baseL.pos : preset.targetAnchoredPosition);
                 var posTween = _rt.DOAnchorPos(target, dur);
-                preset.ApplyTweenSettings(posTween); 
+                preset.ApplyTweenSettings(posTween);
                 seq.Join(posTween);
             }
         }
@@ -222,7 +223,7 @@ public class UITweenPlayer : MonoBehaviour
                 ? (reversed ? baseL.size : baseL.size + preset.targetSizeDelta)
                 : (reversed ? baseL.size : preset.targetSizeDelta);
             var s = _rt.DOSizeDelta(target, dur);
-            preset.ApplyTweenSettings(s); // [MODIFIED]
+            preset.ApplyTweenSettings(s);
             seq.Join(s);
         }
 
@@ -234,7 +235,7 @@ public class UITweenPlayer : MonoBehaviour
                 : (reversed ? baseL.eulerZ : preset.targetEulerZ);
             var e = _rt.eulerAngles;
             var r = _rt.DORotate(new Vector3(e.x, e.y, targetZ), dur, RotateMode.Fast);
-            preset.ApplyTweenSettings(r); // [MODIFIED]
+            preset.ApplyTweenSettings(r);
             seq.Join(r);
         }
 
@@ -256,7 +257,7 @@ public class UITweenPlayer : MonoBehaviour
             }
             if (alphaTween != null)
             {
-                preset.ApplyTweenSettings(alphaTween); // [MODIFIED]
+                preset.ApplyTweenSettings(alphaTween);
                 seq.Join(alphaTween);
             }
         }
@@ -267,8 +268,29 @@ public class UITweenPlayer : MonoBehaviour
             Color baseC = baseL.color ?? _gfx.color;
             Color targetC = reversed ? baseC : preset.targetColor;
             var col = _gfx.DOColor(targetC, dur);
-            preset.ApplyTweenSettings(col); // [MODIFIED]
+            preset.ApplyTweenSettings(col);
             seq.Join(col);
+        }
+
+        if (preset.secondaryTweens != null)
+        {
+            foreach (var secondary in preset.secondaryTweens)
+            {
+                var subTween = BuildSecondaryTweener(secondary);
+                if (subTween == null) continue;
+
+                float insertTime = ResolveInsertTime(secondary.startTime, dur, reversed, secondary.duration);
+                seq.Insert(insertTime, subTween);
+            }
+        }
+
+        if (preset.timelineEvents != null)
+        {
+            foreach (var timelineEvent in preset.timelineEvents)
+            {
+                float insertTime = ResolveInsertTime(timelineEvent.fireTime, dur, reversed, 0f);
+                seq.InsertCallback(insertTime, () => ExecuteTimelineEvent(timelineEvent));
+            }
         }
 
         preset.ApplySequenceSettings(seq);
@@ -283,6 +305,8 @@ public class UITweenPlayer : MonoBehaviour
         var monitor = UITweenMonitor.Instance;
         var requestId = monitor.Register(this, preset, reversed, seq, context);
 
+        bool completed = false; // ← 新增：用本地标志记录完成状态
+
         seq.OnStart(() =>
         {
             monitor.MarkStarted(requestId);
@@ -291,6 +315,7 @@ public class UITweenPlayer : MonoBehaviour
 
         seq.OnComplete(() =>
         {
+            completed = true; // ← 新增：在完成时置位
             monitor.MarkCompleted(requestId);
             _pendingMonitorKillReason = null;
             if (master)
@@ -302,7 +327,8 @@ public class UITweenPlayer : MonoBehaviour
 
         seq.OnKill(() =>
         {
-            if (!seq.IsComplete())
+            // ← 修复点：不再调用 seq.IsComplete()，避免 DOTween 的“invalid tween”警告
+            if (!completed)
             {
                 var reason = string.IsNullOrEmpty(_pendingMonitorKillReason) ? "Killed" : _pendingMonitorKillReason;
                 monitor.MarkInterrupted(requestId, reason);
@@ -317,6 +343,144 @@ public class UITweenPlayer : MonoBehaviour
         return seq;
     }
 
+    private float ResolveInsertTime(float requestedTime, float totalDuration, bool reversed, float span)
+    {
+        if (!reversed) return Mathf.Max(0f, requestedTime);
+
+        float mirrored = totalDuration - requestedTime - span;
+        if (float.IsNaN(mirrored) || float.IsInfinity(mirrored)) return 0f;
+        return Mathf.Clamp(mirrored, 0f, Mathf.Max(totalDuration, 0f));
+    }
+
+    private Tweener BuildSecondaryTweener(SecondaryTween secondary)
+    {
+        if (secondary == null || secondary.duration <= 0f) return null;
+
+        Tweener tween = null;
+        switch (secondary.propertyType)
+        {
+            case SecondaryTweenType.Rotation:
+            {
+                Vector3 target = secondary.isRelative
+                    ? secondary.targetValue
+                    : new Vector3(_rt.localEulerAngles.x, _rt.localEulerAngles.y, secondary.targetValue.z);
+                var mode = secondary.isRelative ? RotateMode.FastBeyond360 : RotateMode.Fast;
+                tween = _rt.DORotate(target, secondary.duration, mode);
+                if (secondary.isRelative) tween.SetRelative();
+                break;
+            }
+            case SecondaryTweenType.Scale:
+            {
+                Vector3 target = secondary.targetValue;
+                if (!secondary.isRelative && Mathf.Approximately(target.z, 0f))
+                {
+                    target.z = _rt.localScale.z;
+                }
+                tween = _rt.DOScale(target, secondary.duration);
+                if (secondary.isRelative) tween.SetRelative();
+                break;
+            }
+            case SecondaryTweenType.AnchoredPosition:
+            {
+                var target = new Vector2(secondary.targetValue.x, secondary.targetValue.y);
+                tween = _rt.DOAnchorPos(target, secondary.duration);
+                if (secondary.isRelative) tween.SetRelative();
+                break;
+            }
+            case SecondaryTweenType.Alpha:
+            {
+                float value = secondary.targetValue.x;
+                if (_cg != null)
+                {
+                    float baseAlpha = _cg.alpha;
+                    float finalAlpha = Mathf.Clamp01(secondary.isRelative ? baseAlpha + value : value);
+                    tween = _cg.DOFade(finalAlpha, secondary.duration);
+                }
+                else if (_gfx != null)
+                {
+                    float baseAlpha = _gfx.color.a;
+                    float finalAlpha = Mathf.Clamp01(secondary.isRelative ? baseAlpha + value : value);
+                    tween = _gfx.DOFade(finalAlpha, secondary.duration);
+                }
+                break;
+            }
+            case SecondaryTweenType.Color:
+            {
+                if (_gfx != null)
+                {
+                    Color baseColor = _gfx.color;
+                    Color delta = secondary.targetColor;
+                    Color finalColor = secondary.isRelative ? baseColor + delta : delta;
+                    finalColor.r = Mathf.Clamp01(finalColor.r);
+                    finalColor.g = Mathf.Clamp01(finalColor.g);
+                    finalColor.b = Mathf.Clamp01(finalColor.b);
+                    finalColor.a = Mathf.Clamp01(finalColor.a);
+                    tween = _gfx.DOColor(finalColor, secondary.duration);
+                }
+                break;
+            }
+        }
+
+        if (tween != null)
+        {
+            tween.SetEase(secondary.easeType);
+        }
+        return tween;
+    }
+
+    private void ExecuteTimelineEvent(TimelineEvent timelineEvent)
+    {
+        if (timelineEvent == null) return;
+
+        string sourceName = gameObject != null ? gameObject.name : name;
+        using (UITweenCallContext.BeginScope(this, "TimelineEvent", sourceName, timelineEvent.name))
+        {
+            switch (timelineEvent.eventType)
+            {
+                case TimelineEventType.CustomCallback:
+                    timelineEvent.customCallback?.Invoke();
+                    break;
+                case TimelineEventType.PlayAudio:
+                    if (timelineEvent.audioClip != null)
+                    {
+                        var source = GetComponent<AudioSource>();
+                        if (source != null)
+                        {
+                            source.PlayOneShot(timelineEvent.audioClip);
+                        }
+                        else
+                        {
+                            AudioSource.PlayClipAtPoint(timelineEvent.audioClip, transform.position);
+                        }
+                    }
+                    break;
+                case TimelineEventType.ChangeSprite:
+                {
+                    var image = timelineEvent.targetImage;
+                    if (image == null) image = _gfx as Image;
+                    if (image != null && timelineEvent.newSprite != null)
+                    {
+                        image.sprite = timelineEvent.newSprite;
+                    }
+                    break;
+                }
+                case TimelineEventType.BroadcastMessage:
+                    if (!string.IsNullOrEmpty(timelineEvent.messageName))
+                    {
+                        if (!string.IsNullOrEmpty(timelineEvent.messageParameter))
+                        {
+                            BroadcastMessage(timelineEvent.messageName, timelineEvent.messageParameter, SendMessageOptions.DontRequireReceiver);
+                        }
+                        else
+                        {
+                            BroadcastMessage(timelineEvent.messageName, SendMessageOptions.DontRequireReceiver);
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
     private UITweenPreset FindPreset(string presetName)
     {
         if (string.IsNullOrEmpty(presetName)) return null;
@@ -324,7 +488,7 @@ public class UITweenPlayer : MonoBehaviour
             if (p != null && p.presetName == presetName) return p;
         foreach (var lib in libraries)
             if (lib != null && lib.TryGet(presetName, out var p)) return p;
-        Debug.LogWarning($"[UITweenPlayer] Preset not found: {presetName}", this);
+        // Debug.LogWarning($"[UITweenPlayer] Preset not found: {presetName}", this);
         return null;
     }
     public bool TryGetBaseline(UITweenPreset p, out Vector2 pos, out Vector2 size, out float eulerZ, out float? alpha, out Color? color, out Vector2 pivot)
