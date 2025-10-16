@@ -168,7 +168,7 @@ public class UITweenPlayer : MonoBehaviour
     {
         if (preset == null || _rt == null) return null;
 
-        // ★ 核心：根据相对基线策略选择基线
+        // ★ 根据相对基线策略选择基线
         Baseline baseL = preset.useRelativeMode
             ? (preset.relativeBaselineMode == RelativeBaselineMode.RebaseAtInterrupt
                 ? CaptureBaselineNow()
@@ -177,6 +177,7 @@ public class UITweenPlayer : MonoBehaviour
 
         var seq = DOTween.Sequence();
         float dur = Mathf.Max(0.0001f, preset.duration);
+
         // Position
         if (preset.animatePosition)
         {
@@ -210,7 +211,7 @@ public class UITweenPlayer : MonoBehaviour
                     ? (reversed ? baseL.pos : baseL.pos + preset.targetAnchoredPosition)
                     : (reversed ? baseL.pos : preset.targetAnchoredPosition);
                 var posTween = _rt.DOAnchorPos(target, dur);
-                preset.ApplyTweenSettings(posTween); 
+                preset.ApplyTweenSettings(posTween);
                 seq.Join(posTween);
             }
         }
@@ -222,7 +223,7 @@ public class UITweenPlayer : MonoBehaviour
                 ? (reversed ? baseL.size : baseL.size + preset.targetSizeDelta)
                 : (reversed ? baseL.size : preset.targetSizeDelta);
             var s = _rt.DOSizeDelta(target, dur);
-            preset.ApplyTweenSettings(s); // [MODIFIED]
+            preset.ApplyTweenSettings(s);
             seq.Join(s);
         }
 
@@ -234,7 +235,7 @@ public class UITweenPlayer : MonoBehaviour
                 : (reversed ? baseL.eulerZ : preset.targetEulerZ);
             var e = _rt.eulerAngles;
             var r = _rt.DORotate(new Vector3(e.x, e.y, targetZ), dur, RotateMode.Fast);
-            preset.ApplyTweenSettings(r); // [MODIFIED]
+            preset.ApplyTweenSettings(r);
             seq.Join(r);
         }
 
@@ -256,7 +257,7 @@ public class UITweenPlayer : MonoBehaviour
             }
             if (alphaTween != null)
             {
-                preset.ApplyTweenSettings(alphaTween); // [MODIFIED]
+                preset.ApplyTweenSettings(alphaTween);
                 seq.Join(alphaTween);
             }
         }
@@ -267,7 +268,7 @@ public class UITweenPlayer : MonoBehaviour
             Color baseC = baseL.color ?? _gfx.color;
             Color targetC = reversed ? baseC : preset.targetColor;
             var col = _gfx.DOColor(targetC, dur);
-            preset.ApplyTweenSettings(col); // [MODIFIED]
+            preset.ApplyTweenSettings(col);
             seq.Join(col);
         }
 
@@ -283,6 +284,8 @@ public class UITweenPlayer : MonoBehaviour
         var monitor = UITweenMonitor.Instance;
         var requestId = monitor.Register(this, preset, reversed, seq, context);
 
+        bool completed = false; // ← 新增：用本地标志记录完成状态
+
         seq.OnStart(() =>
         {
             monitor.MarkStarted(requestId);
@@ -291,6 +294,7 @@ public class UITweenPlayer : MonoBehaviour
 
         seq.OnComplete(() =>
         {
+            completed = true; // ← 新增：在完成时置位
             monitor.MarkCompleted(requestId);
             _pendingMonitorKillReason = null;
             if (master)
@@ -302,7 +306,8 @@ public class UITweenPlayer : MonoBehaviour
 
         seq.OnKill(() =>
         {
-            if (!seq.IsComplete())
+            // ← 修复点：不再调用 seq.IsComplete()，避免 DOTween 的“invalid tween”警告
+            if (!completed)
             {
                 var reason = string.IsNullOrEmpty(_pendingMonitorKillReason) ? "Killed" : _pendingMonitorKillReason;
                 monitor.MarkInterrupted(requestId, reason);
@@ -324,7 +329,7 @@ public class UITweenPlayer : MonoBehaviour
             if (p != null && p.presetName == presetName) return p;
         foreach (var lib in libraries)
             if (lib != null && lib.TryGet(presetName, out var p)) return p;
-        Debug.LogWarning($"[UITweenPlayer] Preset not found: {presetName}", this);
+        // Debug.LogWarning($"[UITweenPlayer] Preset not found: {presetName}", this);
         return null;
     }
     public bool TryGetBaseline(UITweenPreset p, out Vector2 pos, out Vector2 size, out float eulerZ, out float? alpha, out Color? color, out Vector2 pivot)
