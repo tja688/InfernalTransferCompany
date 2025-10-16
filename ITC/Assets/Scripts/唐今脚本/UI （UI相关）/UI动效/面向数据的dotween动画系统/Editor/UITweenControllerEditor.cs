@@ -1,10 +1,8 @@
 #if UNITY_EDITOR
 using System;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 [CustomEditor(typeof(UITweenController))]
 public class UITweenControllerEditor : Editor
@@ -22,7 +20,6 @@ public class UITweenControllerEditor : Editor
     Snap _snap;
     bool _hasSnap = false; // 核心状态标志：是否已经捕获快照并进入预览模式
     Tween _previewTween;
-    readonly List<Action> _restoreActions = new List<Action>();
 
     void OnEnable()
     {
@@ -289,15 +286,7 @@ public class UITweenControllerEditor : Editor
             }
 
             var secondaryProp = serializedObject.FindProperty("secondaryTweens");
-            if (secondaryProp != null && secondaryProp.isArray)
-            {
-                for (int i = 0; i < secondaryProp.arraySize; i++)
-                {
-                    Color curveColor = Color.HSVToRGB(Mathf.Repeat(i * 0.2f, 1f), 0.8f, 1f);
-                    DrawSecondaryCurve(timelineRect, totalDuration, secondaryProp.GetArrayElementAtIndex(i), curveColor);
-                }
-                DrawSecondaryMarkers(timelineRect, totalDuration, secondaryProp, new Color(1f, 0.8f, 0f, 0.9f));
-            }
+            DrawSecondaryMarkers(timelineRect, totalDuration, secondaryProp, new Color(1f, 0.8f, 0f, 0.9f));
 
             var eventProp = serializedObject.FindProperty("timelineEvents");
             DrawTimelineEventMarkers(timelineRect, totalDuration, eventProp, new Color(0.2f, 1f, 0.4f, 0.9f));
@@ -344,54 +333,6 @@ public class UITweenControllerEditor : Editor
         GUI.color = color;
         GUI.Label(new Rect(rect.x + 6f, rect.y + 6f + index * 16f, 120f, 16f), label, EditorStyles.whiteMiniLabel);
         GUI.color = originalColor;
-    }
-
-    private void DrawSecondaryCurve(Rect rect, float totalDuration, SerializedProperty secondaryTweenProp, Color color)
-    {
-        if (secondaryTweenProp == null) return;
-
-        float startTime = Mathf.Max(0f, secondaryTweenProp.FindPropertyRelative("startTime")?.floatValue ?? 0f);
-        float duration = Mathf.Max(0f, secondaryTweenProp.FindPropertyRelative("duration")?.floatValue ?? 0f);
-        if (duration <= 0f) return;
-
-        Ease easeType = (Ease)(secondaryTweenProp.FindPropertyRelative("easeType")?.enumValueIndex ?? (int)Ease.Linear);
-        string name = secondaryTweenProp.FindPropertyRelative("name")?.stringValue ?? "Secondary";
-
-        const int steps = 50;
-        Vector3[] points = new Vector3[steps + 1];
-        float minValue = 0f;
-        float maxValue = 1f;
-
-        for (int i = 0; i <= steps; i++)
-        {
-            float normalizedTime = i / (float)steps;
-            float easedValue = DOVirtual.EasedValue(0f, 1f, normalizedTime, easeType);
-            if (easedValue < minValue) minValue = easedValue;
-            if (easedValue > maxValue) maxValue = easedValue;
-        }
-
-        float valueRange = Mathf.Max(0.0001f, maxValue - minValue);
-
-        for (int i = 0; i <= steps; i++)
-        {
-            float normalizedTime = i / (float)steps;
-            float easedValue = DOVirtual.EasedValue(0f, 1f, normalizedTime, easeType);
-            float yValueNormalized = (easedValue - minValue) / valueRange;
-
-            float absoluteTime = startTime + duration * normalizedTime;
-            float x = TimeToPixel(rect, totalDuration, absoluteTime);
-            float y = Mathf.Lerp(rect.yMax - 8f, rect.y + 24f, yValueNormalized);
-            points[i] = new Vector3(x, y);
-        }
-
-        Handles.color = color;
-        Handles.DrawAAPolyLine(2f, points);
-
-        var originalColor = GUI.color;
-        GUI.color = color;
-        GUI.Label(new Rect(points[0].x + 5f, points[0].y - 15f, 160f, 16f), name, EditorStyles.whiteMiniLabel);
-        GUI.color = originalColor;
-        Handles.color = Color.white;
     }
 
     private void DrawSecondaryMarkers(Rect rect, float duration, SerializedProperty listProp, Color color)
@@ -467,52 +408,6 @@ public class UITweenControllerEditor : Editor
         _snap.color = g ? g.color : Color.white;
         _hasSnap = true;
 
-        _restoreActions.Clear();
-
-        if (C.timelineEvents != null)
-        {
-            foreach (var timelineEvent in C.timelineEvents)
-            {
-                if (timelineEvent == null) continue;
-                if (timelineEvent.eventType == TimelineEventType.ChangeSprite && timelineEvent.targetImage != null)
-                {
-                    var targetImage = timelineEvent.targetImage;
-                    var originalSprite = targetImage.sprite;
-                    _restoreActions.Add(() =>
-                    {
-                        if (targetImage != null)
-                        {
-                            Undo.RecordObject(targetImage, "Restore Timeline Sprite");
-                            targetImage.sprite = originalSprite;
-                        }
-                    });
-                }
-            }
-        }
-
-        bool scaleHandled = C.animateSize;
-        if (C.secondaryTweens != null)
-        {
-            foreach (var secTween in C.secondaryTweens)
-            {
-                if (secTween == null) continue;
-                if (secTween.propertyType == SecondaryTweenType.Scale && !scaleHandled)
-                {
-                    Vector3 originalScale = rt.localScale;
-                    var targetTransform = rt;
-                    _restoreActions.Add(() =>
-                    {
-                        if (targetTransform != null)
-                        {
-                            Undo.RecordObject(targetTransform, "Restore Secondary Scale");
-                            targetTransform.localScale = originalScale;
-                        }
-                    });
-                    scaleHandled = true;
-                }
-            }
-        }
-
         // 【修改点 2】: 移除了 .OnComplete(SafeStopPreview)
         // 这样动画播放一次后就会自然停止在目标状态，而不会自动回调恢复方法
         _previewTween = C.CreateAnimationSequence()
@@ -547,15 +442,6 @@ public class UITweenControllerEditor : Editor
         
         var g = C.GetComponent<UnityEngine.UI.Graphic>();
         if (g != null) { Undo.RecordObject(g, "Restore Snapshot"); g.color = _snap.color; }
-
-        if (_restoreActions.Count > 0)
-        {
-            foreach (var action in _restoreActions)
-            {
-                action?.Invoke();
-            }
-            _restoreActions.Clear();
-        }
 
         // 重置状态标志，为下一次预览做准备
         // inEditorDisable 是为了防止组件在禁用时重置标志，导致状态丢失
