@@ -1,20 +1,11 @@
 ﻿using NUnit.Framework;
 using PrimeTween;
-using QFramework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
-using System.Linq;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;   
-using static Pathfinding.SimpleSmoothModifier;
-using static UnityEngine.RuleTile.TilingRuleOutput;
+
 
 public static class HeCoroutineUtil
 {
@@ -365,7 +356,8 @@ public class RuneInputManager : IContractStage
     private bool enableChose = false;
     private int ArrowMaxCount;
     private int ArrowMinCount;
-
+    int deleteArrowCount = 0;
+    bool enableProcessedKey = false;
     public void Enter(HeContractContext ctx)
     {
         detailsFillCompleted = false;
@@ -378,7 +370,7 @@ public class RuneInputManager : IContractStage
         ArrowMaxCount = gameConfig.runeInputCountMaxLimit;
         ArrowMinCount = gameConfig.runeInputCountMinLimit;
         Debug.Log("=== 开始符文输入阶段 ===");
-
+       
   
         timeRemaining = gameConfig?.runeInputTimeLimit ?? 10f;
 
@@ -408,8 +400,9 @@ public class RuneInputManager : IContractStage
         Debug.Log($"生成箭头，剩余轮数:{tuneCount}");
         enableChose = false;
         inputRunes.Clear();
-       
-         var arrowGroup = uiManager.ArrowGroupGameObject.GetComponent<ArrowArrangeInArc>();
+        deleteArrowCount = 0;
+        enableProcessedKey = true;
+          var arrowGroup = uiManager.ArrowGroupGameObject.GetComponent<ArrowArrangeInArc>();
       
 
 
@@ -464,11 +457,19 @@ public class RuneInputManager : IContractStage
         Debug.Log($"符文成功一轮，剩余轮数{tuneCount}");
       
     }
-
+    private void OnArrowFadeOutDelete()
+    {
+        deleteArrowCount += 1;
+        if (deleteArrowCount == requiredRunes.Count)
+        {
+            if(tuneCount!=0)
+            SpawnRuneArrows(1f);
+        }
+    }
     public void InitPoistion()
     {
         invaild = 0;
-      
+        SlotCenter.Instance.add_listener(HeEventNames.ArrowFadeOutDelete, OnArrowFadeOutDelete);
         inputRunes = new List<int>();
 
         uiManager.OnMoveAction += OnChoseRune;
@@ -590,7 +591,10 @@ public class RuneInputManager : IContractStage
     private void ProcessRuneInput()
     {
 
-
+        if (!enableProcessedKey)
+        {
+            return;
+        }
         bool isCorrect = false;
         bool isWrong = false;
         var n = inputRunes.Count - 1;
@@ -618,7 +622,7 @@ public class RuneInputManager : IContractStage
        
         double elapsedSeconds = stopWatch.Elapsed.TotalSeconds;
         Debug.Log($"第一次点击时距离箭头出现的秒数 {elapsedSeconds}");
-        bool isAutoDisappear = elapsedSeconds >= runeShowDuration - 0.3;
+        bool isAutoDisappear = elapsedSeconds >= runeShowDuration + 3;
         if( isAutoDisappear==false) 
         if (isWrong != true)
         {
@@ -638,39 +642,39 @@ public class RuneInputManager : IContractStage
 
          if (isWrong == true)
         {
-            Debug.Log($"符文输入错误!,index:{n}");
+        
             var lastIndex = inputRunes.Count - 1;
             var arrowGroup = uiManager.ArrowGroupGameObject.GetComponent<ArrowArrangeInArc>();
 
 
             var obj = arrowGroup.spawnedItems[lastIndex];
+            Debug.Log($"符文输入错误!,index:{n},lastIndex:{lastIndex},objIsNull:{obj==null}");
+
             if (obj != null)
             {
                 arrowGroup.spawnedItems[lastIndex] = null;
+                //Debug.Log($"elapsedSeconds:{elapsedSeconds},isAutoDisappear:{isAutoDisappear}");
                 if (isAutoDisappear == false)
                    {
                     uiManager.ShakeArrow(obj);
                     for (int i = 0; i < requiredRunes.Count; i++)
                     {
                         if (i == lastIndex)
-                            return;
+                            continue;
                         var arrowObject = arrowGroup.spawnedItems[i];
-
+                         //Debug.Log($"符文输入错误!,index:{i},is_null{arrowGroup.spawnedItems[i]==null}");
                         uiManager.FadeOutArrow(arrowObject, 0);
-                        //uiManager.ShakeArrow(obj);
+                     
                     }
                 }
 
             }
                 RuneInputFaild();
-                /**************Loop_Entry****************/
+            /**************Loop_Entry****************/
+
+            enableProcessedKey = false;
 
 
-
-                if (tuneCount != 0)
-                {
-                    SpawnRuneArrows(2f);
-                }
 
                 /**************Loop_Entry_End****************/
             }
@@ -690,18 +694,15 @@ public class RuneInputManager : IContractStage
             /**************Loop_Entry****************/
 
 
-            if (tuneCount != 0)
-            {
-                SpawnRuneArrows(1f);
+            enableProcessedKey = false;
 
-            }
 
 
 
             /**************Loop_Entry_End****************/
-         
+
         }
-            uiManager?.UpdateRuneInputProgress(inputRunes.Count, context.runeErrors, isCorrect);
+        uiManager?.UpdateRuneInputProgress(inputRunes.Count, context.runeErrors, isCorrect);
     }
 
 }
@@ -733,7 +734,7 @@ public class SpecialEventSystem : IContractStage
         
         // 随机决定是否触发事件
         float triggerChance = gameConfig?.eventTriggerChance ?? 0.3f;
-        if (UnityEngine.Random.value < triggerChance)
+        if (UnityEngine.Random.value < triggerChance&&false)//直接跳过特殊事件
         {
             TriggerRandomEvent();
         }
@@ -886,9 +887,24 @@ public class SpecialEventSystem : IContractStage
     }
 }
 #endregion
+
+#region StampSystem Stages
+
+
+[Serializable]
+enum StampType
+{
+    Circular,
+    Diamond,
+    Triangular,
+    Spherical,
+    None
+}
+
 /// <summary>
 /// 盖章系统
 /// </summary>
+/// 
 public class StampSystem : IContractStage
 {
     private HeContractContext context;
@@ -904,7 +920,7 @@ public class StampSystem : IContractStage
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
     public string StageName => "契约盖印";
-
+    private StampType stampType = StampType.None; 
     public void Enter(HeContractContext ctx)
     {
         context = ctx;
@@ -917,7 +933,7 @@ public class StampSystem : IContractStage
 
 
     }
-
+    
     public void Update()
     {
         if (completed || failed) return;
@@ -934,18 +950,29 @@ public class StampSystem : IContractStage
 
     private void InitHandleStampSelection()
     {
+        uiManager.EnableAllStamp();
+        SlotCenter.Instance.add_listener<StampType>(HeEventNames.ChosenStampType, OnHandleStampSelection);
+
 
     }
     private void DisableHandleStampSelection()
     {
 
+        uiManager.DisableAllStamp();
 
+        SlotCenter.Instance.remove_listener<StampType>(HeEventNames.ChosenStampType, OnHandleStampSelection);
 
     }
-
+    private void OnHandleStampSelection(StampType type)
+    {
+       Debug.Log($"选择了印章类型: {type}");
+        stampType = type;
+        InitChargingStampSelection();
+        StartStampCharging();
+    }
     private void InitChargingStampSelection()
     {
-
+        
     }
     private void DisableChargingStampSelection()
     {
@@ -959,42 +986,10 @@ public class StampSystem : IContractStage
     public void Exit()
     {
         Debug.Log("=== 契约盖印阶段结束 ===");
-    }
-    /// <summary>
-    /// 从印章架上选取符合契约类型的印章
-    /// </summary>
-    private void OnHandleStampSelection()
-    {
-
-        HeContractType type = HeContractType.Event;
-        SelectStamp(type,Vector3.zero);
-
-
-        uiManager.ShowStampSelection(type);
+        DisableHandleStampSelection();
     }
 
-    private void SelectStamp(HeContractType stampType,Vector3 pos)
-    {
-        selectedStampType = stampType;
-        
-        // 检查印章类型是否正确
-        if (stampType != context.document.HeContractType)
-        {
-            Debug.Log($"印章类型错误! 选择了{stampType}，应该是{context.document.HeContractType}");
-            context.AddFailure();
-          
-            return;
-        }
-        ///判断盖印位置是否准确
-        if (false)
-        {
-            Debug.Log("盖印位置不准确，顾客满意度下降");
-            context.DecreaseSatisfaction();
-        }
-        Debug.Log($"正确选择了{stampType}印章");
-        stampSelected = true;
-        StartStampCharging();
-    }
+ 
 
     private void StartStampCharging()
     {
@@ -1003,10 +998,10 @@ public class StampSystem : IContractStage
         chargeTime = 0f;
         
         // 通知UI
-        uiManager?.StartStampCharging();
+        //uiManager?.StartStampCharging(GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig);
     }
 
-    private void HandleStampCharging()
+    private void OnHandleStampCharging()
     {
         chargeTime += Time.deltaTime;
         
@@ -1044,7 +1039,7 @@ public class StampSystem : IContractStage
                 {
                     // 重新开始蓄力
                     chargeTime = 0f;
-                    uiManager?.StartStampCharging();
+                    uiManager?.StartStampCharging(GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig);
                 }
             }
         }
@@ -1306,8 +1301,8 @@ public class SigningFlowManager : MonoBehaviour
     {
         stages = new Queue<IContractStage>(new IContractStage[] {
             //new DocumentVerifier(),
-            new RuneInputManager(),
-            new SpecialEventSystem(),
+            //new RuneInputManager(),
+            //new SpecialEventSystem(),
             new StampSystem(),
             new SoulHarvestSystem()
         });
@@ -1552,5 +1547,5 @@ public class SigningFlowManager : MonoBehaviour
                $"顾客: {ctx.customer?.name ?? "未知"}";
     }
 }
-
+#endregion
 #endregion
