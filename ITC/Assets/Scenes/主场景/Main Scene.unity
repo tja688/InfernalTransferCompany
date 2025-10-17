@@ -1099,19 +1099,27 @@ MonoBehaviour:
   targetAnchoredPosition: {x: -254, y: 528.5}
   targetSizeDelta: {x: 1047, y: 790}
   targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
+  targetEulerAngles: {x: 0, y: 0, z: 0}
   targetAlpha: 1
   targetColor: {r: 1, g: 1, b: 1, a: 1}
   passThroughPointC: {x: 0, y: 0}
   passTStar: 0.5
   animatePosition: 1
   animateSize: 1
-  animateRotationZ: 0
+  animateRotation: 1
   animateAlpha: 1
   animateColor: 0
   secondaryTweens: []
   timelineEvents: []
   showPathGizmos: 1
+  detectAlpha: 1
+  invisAlphaThreshold: 0.01
+  detectScaleOrSize: 1
+  invisScaleThreshold: 0.02
+  invisSizeThreshold: 1
+  detectRotationY: 1
+  invisAngleToleranceDeg: 1
+  detectionSamples: 240
 --- !u!114 &205077539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1438,14 +1446,14 @@ MonoBehaviour:
   targetAnchoredPosition: {x: -352, y: 0}
   targetSizeDelta: {x: 660, y: 660}
   targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
+  targetEulerAngles: {x: 0, y: 0, z: 0}
   targetAlpha: 1
   targetColor: {r: 1, g: 1, b: 1, a: 1}
   passThroughPointC: {x: 91.73547, y: -349.86334}
   passTStar: 0.5
   animatePosition: 1
   animateSize: 1
-  animateRotationZ: 1
+  animateRotation: 1
   animateAlpha: 0
   animateColor: 0
   secondaryTweens:
@@ -1459,6 +1467,14 @@ MonoBehaviour:
     targetColor: {r: 0, g: 0, b: 0, a: 0}
   timelineEvents: []
   showPathGizmos: 1
+  detectAlpha: 1
+  invisAlphaThreshold: 0.01
+  detectScaleOrSize: 1
+  invisScaleThreshold: 0.02
+  invisSizeThreshold: 1
+  detectRotationY: 1
+  invisAngleToleranceDeg: 1
+  detectionSamples: 240
 --- !u!21 &228270012
 Material:
   serializedVersion: 8
@@ -1746,7 +1762,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1298, y: 630}
+  m_AnchoredPosition: {x: 1074, y: 498}
   m_SizeDelta: {x: 322, y: 112}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &293818455
@@ -2908,7 +2924,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _orchestrator: {fileID: 0}
 --- !u!114 &583028974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3218,19 +3233,27 @@ MonoBehaviour:
   targetAnchoredPosition: {x: -690.5, y: 383.5}
   targetSizeDelta: {x: 1920, y: 1082}
   targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
+  targetEulerAngles: {x: 0, y: 0, z: 0}
   targetAlpha: 1
   targetColor: {r: 1, g: 1, b: 1, a: 1}
   passThroughPointC: {x: 0, y: 0}
   passTStar: 0.5
   animatePosition: 1
   animateSize: 1
-  animateRotationZ: 0
+  animateRotation: 1
   animateAlpha: 1
   animateColor: 0
   secondaryTweens: []
   timelineEvents: []
   showPathGizmos: 1
+  detectAlpha: 1
+  invisAlphaThreshold: 0.01
+  detectScaleOrSize: 1
+  invisScaleThreshold: 0.02
+  invisSizeThreshold: 1
+  detectRotationY: 1
+  invisAngleToleranceDeg: 1
+  detectionSamples: 240
 --- !u!114 &684949081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3707,19 +3730,27 @@ MonoBehaviour:
   targetAnchoredPosition: {x: 0, y: 0}
   targetSizeDelta: {x: 539, y: 181}
   targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
+  targetEulerAngles: {x: 0, y: 0, z: 0}
   targetAlpha: 1
   targetColor: {r: 1, g: 1, b: 1, a: 1}
   passThroughPointC: {x: 0, y: 0}
   passTStar: 0.5
   animatePosition: 1
   animateSize: 1
-  animateRotationZ: 0
+  animateRotation: 1
   animateAlpha: 0
   animateColor: 0
   secondaryTweens: []
   timelineEvents: []
   showPathGizmos: 1
+  detectAlpha: 1
+  invisAlphaThreshold: 0.01
+  detectScaleOrSize: 1
+  invisScaleThreshold: 0.02
+  invisSizeThreshold: 1
+  detectRotationY: 1
+  invisAngleToleranceDeg: 1
+  detectionSamples: 240
 --- !u!114 &781666289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5448,19 +5479,27 @@ MonoBehaviour:
   targetAnchoredPosition: {x: 0, y: -500}
   targetSizeDelta: {x: 0, y: 0}
   targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
+  targetEulerAngles: {x: 0, y: 0, z: 0}
   targetAlpha: 1
   targetColor: {r: 1, g: 1, b: 1, a: 1}
   passThroughPointC: {x: 0, y: 0}
   passTStar: 0.5
   animatePosition: 1
   animateSize: 1
-  animateRotationZ: 0
+  animateRotation: 1
   animateAlpha: 0
   animateColor: 0
   secondaryTweens: []
   timelineEvents: []
   showPathGizmos: 1
+  detectAlpha: 1
+  invisAlphaThreshold: 0.01
+  detectScaleOrSize: 1
+  invisScaleThreshold: 0.02
+  invisSizeThreshold: 1
+  detectRotationY: 1
+  invisAngleToleranceDeg: 1
+  detectionSamples: 240
 --- !u!114 &1049642235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7160,7 +7199,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _orchestrator: {fileID: 0}
 --- !u!114 &1547583158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9628,19 +9666,27 @@ MonoBehaviour:
   targetAnchoredPosition: {x: -221, y: 0}
   targetSizeDelta: {x: 1522, y: 1092}
   targetPivot: {x: 0.5, y: 0.5}
-  targetEulerZ: 0
+  targetEulerAngles: {x: 0, y: 0, z: 0}
   targetAlpha: 1
   targetColor: {r: 1, g: 1, b: 1, a: 1}
   passThroughPointC: {x: 0, y: 0}
   passTStar: 0.5
   animatePosition: 1
   animateSize: 1
-  animateRotationZ: 0
+  animateRotation: 1
   animateAlpha: 1
   animateColor: 0
   secondaryTweens: []
   timelineEvents: []
   showPathGizmos: 1
+  detectAlpha: 1
+  invisAlphaThreshold: 0.01
+  detectScaleOrSize: 1
+  invisScaleThreshold: 0.02
+  invisSizeThreshold: 1
+  detectRotationY: 1
+  invisAngleToleranceDeg: 1
+  detectionSamples: 240
 --- !u!114 &2068837543
 MonoBehaviour:
   m_ObjectHideFlags: 0

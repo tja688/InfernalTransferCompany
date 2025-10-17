@@ -19,7 +19,7 @@ public class UITweenControllerEditor : Editor
     }
 
     Snap _snap;
-    bool _hasSnap = false; // 是否已经捕获快照并进入预览模式
+    bool _hasSnap = false; 
     Tween _previewTween;
     List<Action> _restoreActions = new List<Action>();
 
@@ -45,7 +45,6 @@ public class UITweenControllerEditor : Editor
         C = (UITweenController)target;
         serializedObject.Update();
 
-        // --- Inspector 面板 ---
         using (new EditorGUILayout.VerticalScope("box"))
         {
             EditorGUILayout.LabelField("Preset Binding", EditorStyles.boldLabel);
@@ -69,7 +68,6 @@ public class UITweenControllerEditor : Editor
         using (new EditorGUILayout.VerticalScope("box"))
         {
             EditorGUILayout.LabelField("Mode", EditorStyles.boldLabel);
-
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("useRelativeMode"));
             if (EditorGUI.EndChangeCheck())
@@ -84,28 +82,21 @@ public class UITweenControllerEditor : Editor
 
             if (C.useRelativeMode)
             {
-                EditorGUILayout.HelpBox("相對模式：所有變換屬性均為【偏移量】。此模式下為直線運動。", MessageType.Info);
-
+                EditorGUILayout.HelpBox("相對模式：所有變換屬性均為【偏移量】。此模式下為直線運動。對於循環動畫，將實現無縫累加效果。", MessageType.Info);
                 if (GUILayout.Button("復位偏移量 (Reset Offsets)"))
                 {
                     Undo.RecordObject(C, "Reset Tween Offsets");
                     C.targetAnchoredPosition = Vector2.zero;
                     C.targetSizeDelta = Vector2.zero;
-                    C.targetEulerZ = 0f;
+                    C.targetEulerAngles = Vector3.zero; // MODIFIED
                     EditorUtility.SetDirty(C);
                 }
             }
             else
             {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("useBezierPath"));
-                if (C.useBezierPath)
-                {
-                    EditorGUILayout.HelpBox("絕對模式+曲線路徑：可拖動Gizmo調節運動軌跡。", MessageType.Info);
-                }
-                else
-                {
-                    EditorGUILayout.HelpBox("絕對模式+直線路徑：點對點的直線運動。", MessageType.Info);
-                }
+                if (C.useBezierPath) EditorGUILayout.HelpBox("絕對模式+曲線路徑：可拖動Gizmo調節運動軌跡。", MessageType.Info);
+                else EditorGUILayout.HelpBox("絕對模式+直線路徑：點對點的直線運動。", MessageType.Info);
             }
         }
 
@@ -135,7 +126,7 @@ public class UITweenControllerEditor : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("targetAnchoredPosition"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("targetSizeDelta"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("targetPivot"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("targetEulerZ"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("targetEulerAngles")); // MODIFIED
             EditorGUILayout.PropertyField(serializedObject.FindProperty("targetAlpha"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("targetColor"));
             
@@ -150,19 +141,17 @@ public class UITweenControllerEditor : Editor
                         C.CaptureTargetFromCurrent();
                         EditorUtility.SetDirty(C);
                     }
-                    
                     if (C.useBezierPath)
                     {
                         if (GUILayout.Button(new GUIContent("Set Pass C = Current", "將必經點 C 設為當前對象位置。"), GUILayout.Height(24)))
                         {
-                            Undo.RecordObject(C, "Set Pass C From Current");
+                            Undo.RecordObject(C, "Set Pass-Through C From Current");
                             C.SetPassPointFromCurrent();
                             EditorUtility.SetDirty(C);
                         }
-
                         if (GUILayout.Button(new GUIContent("Pass C = Mid", "將必經點 C 設為當前與目標位置的中點。"), GUILayout.Height(24)))
                         {
-                            Undo.RecordObject(C, "Set Pass C Mid");
+                            Undo.RecordObject(C, "Set Pass-Through C Mid");
                             C.SetPassPointToMidCurrentAndTarget();
                             EditorUtility.SetDirty(C);
                         }
@@ -188,9 +177,32 @@ public class UITweenControllerEditor : Editor
             EditorGUILayout.LabelField("Animate What", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("animatePosition"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("animateSize"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("animateRotationZ"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("animateRotation")); // MODIFIED
             EditorGUILayout.PropertyField(serializedObject.FindProperty("animateAlpha"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("animateColor"));
+        }
+        
+        EditorGUILayout.Space();
+        using (new EditorGUILayout.VerticalScope("box"))
+        {
+            EditorGUILayout.LabelField("Invisibility Detection", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("detectAlpha"), new GUIContent("Detect by Alpha ≤ Threshold"));
+            if (C.detectAlpha)
+                EditorGUILayout.Slider(serializedObject.FindProperty("invisAlphaThreshold"), 0f, 0.2f, new GUIContent("Alpha Threshold"));
+
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("detectScaleOrSize"), new GUIContent("Detect by Small Scale/Size"));
+            if (C.detectScaleOrSize)
+            {
+                EditorGUILayout.Slider(serializedObject.FindProperty("invisScaleThreshold"), 0f, 0.2f, new GUIContent("Scale Threshold"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("invisSizeThreshold"), new GUIContent("Size Threshold (px)"));
+            }
+
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("detectRotationY"), new GUIContent("Detect by Y Rotation (edge-on)"));
+            if (C.detectRotationY)
+                EditorGUILayout.Slider(serializedObject.FindProperty("invisAngleToleranceDeg"), 0.1f, 15f, new GUIContent("Angle Tolerance (deg)"));
+
+            EditorGUILayout.IntSlider(serializedObject.FindProperty("detectionSamples"), 30, 720, new GUIContent("Sampling (steps)"));
+            EditorGUILayout.HelpBox("不可见检测会在时间轴上标出竖线：\n• Alpha ≤ 阈值\n• Scale/Size 极小\n• 绕Y轴旋转到“只剩一条缝”的角度（≈90°±容差）", MessageType.None);
         }
 
         EditorGUILayout.Space();
@@ -210,7 +222,6 @@ public class UITweenControllerEditor : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("timelineEvents"), true);
         }
 
-        // ======= 可视化时间轴 =======
         EditorGUILayout.Space();
         DrawTimelineEditor();
 
@@ -244,7 +255,7 @@ public class UITweenControllerEditor : Editor
                 return;
             }
 
-            Rect timelineRect = EditorGUILayout.GetControlRect(false, 160f);
+            Rect timelineRect = EditorGUILayout.GetControlRect(false, 180f);
             EditorGUI.DrawRect(timelineRect, new Color(0.12f, 0.12f, 0.12f));
 
             Handles.BeginGUI();
@@ -255,14 +266,13 @@ public class UITweenControllerEditor : Editor
                 DrawPropertyCurve(timelineRect, totalDuration, "Position", Color.cyan, curveIndex++, GetValueAtTime);
             if (C.animateSize)
                 DrawPropertyCurve(timelineRect, totalDuration, "Size", Color.yellow, curveIndex++, GetValueAtTime);
-            if (C.animateRotationZ)
+            if (C.animateRotation) // MODIFIED
                 DrawPropertyCurve(timelineRect, totalDuration, "Rotation", Color.magenta, curveIndex++, GetValueAtTime);
             if (C.animateAlpha)
                 DrawPropertyCurve(timelineRect, totalDuration, "Alpha", Color.green, curveIndex++, GetValueAtTime);
             if (C.animateColor)
                 DrawPropertyCurve(timelineRect, totalDuration, "Color", Color.white, curveIndex++, GetValueAtTime);
 
-            // 副轨道：曲线+左上角图例一次性标注
             var secondaryProp = serializedObject.FindProperty("secondaryTweens");
             if (secondaryProp != null && secondaryProp.isArray)
             {
@@ -272,13 +282,13 @@ public class UITweenControllerEditor : Editor
                     DrawSecondaryCurve(timelineRect, totalDuration, secondaryProp.GetArrayElementAtIndex(i), curveColor, curveIndex++);
                 }
             }
-
-            // 精简副轨道时间标记（仅细线）
+            
             DrawSecondaryMarkers(timelineRect, totalDuration, secondaryProp, new Color(1f, 0.8f, 0f, 0.9f));
-
-            // 事件节点：仅竖线，不再标注名称
             var eventProp = serializedObject.FindProperty("timelineEvents");
             DrawTimelineEventMarkers(timelineRect, totalDuration, eventProp, new Color(0.2f, 1f, 0.4f, 0.9f));
+            
+            var invisibleTimes = C.ComputeInvisibilityTimes();
+            DrawInvisibleMarkers(timelineRect, totalDuration, invisibleTimes, new Color(0.75f, 0.55f, 0.95f, 1f));
 
             Handles.EndGUI();
         }
@@ -296,7 +306,6 @@ public class UITweenControllerEditor : Editor
             float x = Mathf.Lerp(rect.x, rect.xMax, normalized);
             Handles.color = new Color(1f, 1f, 1f, 0.08f);
             Handles.DrawLine(new Vector3(x, rect.y), new Vector3(x, rect.yMax));
-
             GUI.Label(new Rect(x - 20f, rect.y - 18f, 50f, 16f), (duration * normalized).ToString("F2"), EditorStyles.whiteMiniLabel);
         }
         Handles.color = Color.white;
@@ -324,40 +333,20 @@ public class UITweenControllerEditor : Editor
         GUI.color = originalColor;
     }
 
-    // —— 精简后的副轨道曲线：仅左上角图例标注一次，不跟随曲线重复显示 —— 
     private void DrawSecondaryCurve(Rect rect, float totalDuration, SerializedProperty secondaryTweenProp, Color color, int legendIndex)
     {
         if (secondaryTweenProp == null) return;
-
         float startTime = secondaryTweenProp.FindPropertyRelative("startTime")?.floatValue ?? 0f;
         float duration = secondaryTweenProp.FindPropertyRelative("duration")?.floatValue ?? 0f;
-        SerializedProperty easeProp = secondaryTweenProp.FindPropertyRelative("easeType");
-        Ease easeType = easeProp != null ? (Ease)easeProp.enumValueIndex : Ease.Linear;
-
-        // 简洁模块名：优先使用 propertyType 的显示名
-        string label;
-        var propTypeProp = secondaryTweenProp.FindPropertyRelative("propertyType");
-        if (propTypeProp != null && propTypeProp.enumDisplayNames != null && propTypeProp.enumValueIndex >= 0)
-            label = propTypeProp.enumDisplayNames[propTypeProp.enumValueIndex];
-        else
-            label = "Secondary";
+        Ease easeType = (Ease)(secondaryTweenProp.FindPropertyRelative("easeType")?.enumValueIndex ?? 0);
+        string label = secondaryTweenProp.FindPropertyRelative("propertyType")?.enumDisplayNames[secondaryTweenProp.FindPropertyRelative("propertyType").enumValueIndex] ?? "Secondary";
 
         if (duration <= 0f) return;
 
         const int steps = 50;
         Vector3[] points = new Vector3[steps + 1];
 
-        // 采样以做Y轴归一化
-        float minValue = float.MaxValue, maxValue = float.MinValue;
-        for (int i = 0; i <= steps; i++)
-        {
-            float t = i / (float)steps;
-            float v = DOVirtual.EasedValue(0f, 1f, t, easeType);
-            if (v < minValue) minValue = v;
-            if (v > maxValue) maxValue = v;
-        }
-        if (Mathf.Approximately(maxValue, minValue)) maxValue = minValue + 1f;
-
+        float minValue = 0f, maxValue = 1f; // Simplified range for visualization
         for (int i = 0; i <= steps; i++)
         {
             float t = i / (float)steps;
@@ -372,18 +361,15 @@ public class UITweenControllerEditor : Editor
         Handles.color = color;
         Handles.DrawAAPolyLine(2f, points);
 
-        // 左上角图例：一次且仅一次
         var originalColor = GUI.color;
         GUI.color = color;
         GUI.Label(new Rect(rect.x + 6f, rect.y + 6f + legendIndex * 16f, 160f, 16f), label, EditorStyles.whiteMiniLabel);
         GUI.color = originalColor;
     }
 
-    // —— 精简副轨道时间标记：仅细线，无名称、无粗矩形 —— 
     private void DrawSecondaryMarkers(Rect rect, float duration, SerializedProperty listProp, Color color)
     {
         if (listProp == null || !listProp.isArray) return;
-
         for (int i = 0; i < listProp.arraySize; i++)
         {
             var element = listProp.GetArrayElementAtIndex(i);
@@ -398,11 +384,9 @@ public class UITweenControllerEditor : Editor
         Handles.color = Color.white;
     }
 
-    // —— 精简事件标记：只画竖线，不显示名称 —— 
     private void DrawTimelineEventMarkers(Rect rect, float duration, SerializedProperty listProp, Color color)
     {
         if (listProp == null || !listProp.isArray) return;
-
         Handles.color = color;
         for (int i = 0; i < listProp.arraySize; i++)
         {
@@ -412,6 +396,26 @@ public class UITweenControllerEditor : Editor
             Handles.DrawLine(new Vector3(x, rect.y), new Vector3(x, rect.yMax));
         }
         Handles.color = Color.white;
+    }
+    
+    private void DrawInvisibleMarkers(Rect rect, float duration, List<float> timesSec, Color color)
+    {
+        if (timesSec == null || timesSec.Count == 0) return;
+
+        Handles.color = color;
+        foreach (var t in timesSec)
+        {
+            float x = TimeToPixel(rect, duration, t);
+            Handles.DrawLine(new Vector3(x, rect.y), new Vector3(x, rect.yMax));
+            var labelRect = new Rect(x + 2f, rect.y + 2f, 60f, 16f);
+            GUI.Label(labelRect, t.ToString("F3"), EditorStyles.whiteMiniLabel);
+        }
+        Handles.color = Color.white;
+        
+        var original = GUI.color;
+        GUI.color = color;
+        GUI.Label(new Rect(rect.x + 6f, rect.y + 6f + 5 * 16f, 160f, 16f), "Invisible Instants", EditorStyles.whiteMiniLabel); // Adjusted Y pos
+        GUI.color = original;
     }
 
     private float GetValueAtTime(float normalizedTime)
@@ -437,7 +441,6 @@ public class UITweenControllerEditor : Editor
         var cg = C.GetComponent<CanvasGroup>();
         var g  = C.GetComponent<UnityEngine.UI.Graphic>();
 
-        // 捕获快照
         _snap.pos = rt.anchoredPosition;
         _snap.size = rt.sizeDelta;
         _snap.euler = rt.eulerAngles;
@@ -451,36 +454,24 @@ public class UITweenControllerEditor : Editor
         {
             foreach (var timelineEvent in C.timelineEvents)
             {
-                if (timelineEvent == null) continue;
-                if (timelineEvent.eventType == TimelineEventType.ChangeSprite && timelineEvent.targetImage != null)
+                if (timelineEvent?.eventType == TimelineEventType.ChangeSprite && timelineEvent.targetImage != null)
                 {
                     var targetImage = timelineEvent.targetImage;
                     Sprite originalSprite = targetImage.sprite;
-                    _restoreActions.Add(() =>
-                    {
-                        if (targetImage == null) return;
-                        Undo.RecordObject(targetImage, "Restore Timeline Event Sprite");
-                        targetImage.sprite = originalSprite;
-                    });
+                    _restoreActions.Add(() => { if (targetImage != null) targetImage.sprite = originalSprite; });
                 }
             }
         }
-
+        
         bool scaleCaptured = false;
         if (C.secondaryTweens != null)
         {
             foreach (var secTween in C.secondaryTweens)
             {
-                if (secTween == null) continue;
-                if (secTween.propertyType == SecondaryTweenType.Scale && !scaleCaptured)
+                if (secTween?.propertyType == SecondaryTweenType.Scale && !scaleCaptured)
                 {
                     Vector3 originalScale = rt.localScale;
-                    _restoreActions.Add(() =>
-                    {
-                        if (rt == null) return;
-                        Undo.RecordObject(rt, "Restore Secondary Scale");
-                        rt.localScale = originalScale;
-                    });
+                    _restoreActions.Add(() => { if (rt != null) rt.localScale = originalScale; });
                     scaleCaptured = true;
                 }
             }
@@ -495,7 +486,6 @@ public class UITweenControllerEditor : Editor
     void SafeStopPreview(bool inEditorDisable = false)
     {
         if (_previewTween != null && _previewTween.IsActive()) _previewTween.Kill();
-
         if (!_hasSnap || C == null) return;
 
         var rt = C.GetComponent<RectTransform>();
@@ -513,12 +503,9 @@ public class UITweenControllerEditor : Editor
         var g = C.GetComponent<UnityEngine.UI.Graphic>();
         if (g != null) { Undo.RecordObject(g, "Restore Snapshot"); g.color = _snap.color; }
 
-        if (_restoreActions != null)
-        {
-            foreach (var action in _restoreActions) action?.Invoke();
-            _restoreActions.Clear();
-        }
-
+        foreach (var action in _restoreActions) action?.Invoke();
+        _restoreActions.Clear();
+        
         if (!inEditorDisable) _hasSnap = false;
     }
 

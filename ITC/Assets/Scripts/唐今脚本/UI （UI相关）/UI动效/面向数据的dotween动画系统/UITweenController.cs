@@ -1,6 +1,8 @@
 // MIT License
-// Jin Tang – Goal-Driven UI Tween (Bézier via pass-through point)
-// + Preset binding & autosave
+// [MODIFIED] Upgraded rotation from float (Z-axis only) to Vector3 (X, Y, Z support).
+// [MODIFIED] Renamed animateRotationZ to animateRotation.
+// [MODIFIED] Reworked CreateAnimationSequence to use SetRelative() for seamless looping.
+// [MODIFIED] Updated Invisibility Detection to sample the main rotation track.
 
 using System.Collections.Generic;
 using DG.Tweening;
@@ -38,7 +40,7 @@ public class UITweenController : MonoBehaviour
     public Vector2 targetAnchoredPosition;
     public Vector2 targetSizeDelta;
     public Vector2 targetPivot = new Vector2(0.5f, 0.5f);
-    public float targetEulerZ = 0f;
+    public Vector3 targetEulerAngles = Vector3.zero; // MODIFIED
     [Range(0f,1f)] public float targetAlpha = 1f;
     public Color targetColor = Color.white;
 
@@ -49,7 +51,7 @@ public class UITweenController : MonoBehaviour
     [Header("What to Animate")]
     public bool animatePosition = true;
     public bool animateSize = true;
-    public bool animateRotationZ = true;
+    public bool animateRotation = true; // MODIFIED
     public bool animateAlpha = true;
     public bool animateColor = true;
 
@@ -64,11 +66,35 @@ public class UITweenController : MonoBehaviour
     [Header("Gizmos & Preview (Editor Only)")]
     public bool showPathGizmos = true;
 
+    // ================== Invisible Instants Detection (Config) ==================
+    [Header("Invisibility Detection")]
+    [Tooltip("启用 alpha<=阈值 的不可见检测")]
+    public bool detectAlpha = true;
+    [Range(0f, 0.2f)]
+    public float invisAlphaThreshold = 0.01f;
+
+    [Tooltip("启用 scale/size 很小的不可见检测")]
+    public bool detectScaleOrSize = true;
+    [Tooltip("当 localScale 的 min(x,y) ≤ 此阈值时判定为不可见（若无Scale轨，则按SizeDelta判定）")]
+    [Range(0f, 0.2f)]
+    public float invisScaleThreshold = 0.02f;
+    [Tooltip("当 sizeDelta 的 min(w,h) ≤ 此阈值时判定为不可见（px）")]
+    public float invisSizeThreshold = 1f;
+
+    [Tooltip("启用 Y 轴转到“只剩一条缝”的不可见检测（≈90°、270°…）")]
+    public bool detectRotationY = true;
+    [Tooltip("与 90°(mod 180°) 的角度容差（度）")]
+    [Range(0.1f, 15f)]
+    public float invisAngleToleranceDeg = 1.0f;
+
+    [Tooltip("检测采样数量（越大越精细，性能线性增加）")]
+    [Range(30, 720)]
+    public int detectionSamples = 240;
+
     RectTransform _rt;
     CanvasGroup _canvasGroup;
     Graphic _graphic;
 
-    
     void Reset()
     {
         _rt = GetComponent<RectTransform>();
@@ -78,7 +104,7 @@ public class UITweenController : MonoBehaviour
         
         animatePosition = true;
         animateSize = true;
-        animateRotationZ = false;
+        animateRotation = false; // MODIFIED
         animateAlpha = false;
         animateColor = false;
     }
@@ -110,9 +136,7 @@ public class UITweenController : MonoBehaviour
         if (_canvasGroup == null && _graphic == null) _graphic = GetComponent<Graphic>();
 
         var seq = DOTween.Sequence().SetDelay(delay).SetUpdate(unscaledTime);
-        // 注意：這裡的ApplyEaseTo是對整個序列設置，而單個tween的ease會在下面單獨設置
-        // preset.ApplyEaseTo(seq) 的邏輯是正確的，因為它包含了 loops/delay
-        
+
         if (animatePosition)
         {
             Tweener posTween;
@@ -144,19 +168,39 @@ public class UITweenController : MonoBehaviour
             seq.Join(sizeTween);
         }
 
-        if (animateRotationZ)
+        // ===== MODIFIED ROTATION LOGIC =====
+        if (animateRotation)
         {
-            Vector3 e = _rt.eulerAngles;
-            float finalEulerZ = useRelativeMode ? e.z + targetEulerZ : targetEulerZ;
-            var rotTween = _rt.DORotate(new Vector3(e.x, e.y, finalEulerZ), duration, RotateMode.FastBeyond360);
-            if (reversed) rotTween.From();
+            Tweener rotTween;
+            if (useRelativeMode)
+            {
+                // For seamless looping, use SetRelative. The target is the *change* per loop.
+                Vector3 relativeChange = reversed ? -targetEulerAngles : targetEulerAngles;
+                rotTween = _rt.DORotate(relativeChange, duration, RotateMode.FastBeyond360).SetRelative();
+            }
+            else // Absolute mode
+            {
+                Vector3 startEuler = _rt.localEulerAngles;
+                Vector3 finalEuler = reversed ? startEuler : targetEulerAngles;
+                 // Use .From() for reversible absolute tweens, but need to capture start state.
+                rotTween = _rt.DORotate(finalEuler, duration, RotateMode.Fast);
+                if (reversed)
+                {
+                    // In editor preview, we manually reset. .From() is more for runtime.
+                    // Let's emulate .From() by tweening from target to current.
+                    Vector3 tempTarget = _rt.localEulerAngles;
+                    _rt.localEulerAngles = targetEulerAngles;
+                    rotTween = _rt.DORotate(tempTarget, duration, RotateMode.Fast);
+                }
+            }
             ApplyEaseTo(rotTween);
             seq.Join(rotTween);
         }
+        // ===== END MODIFIED ROTATION LOGIC =====
+
 
         if (animateAlpha)
         {
-            // ==================== 同步修正 ====================
             Tweener alphaTween = null;
             if (_canvasGroup != null) alphaTween = _canvasGroup.DOFade(targetAlpha, duration);
             else if (_graphic != null) alphaTween = _graphic.DOFade(targetAlpha, duration);
@@ -201,73 +245,117 @@ public class UITweenController : MonoBehaviour
         return seq;
     }
 
-    // ==================== 修正區域：將缺失的輔助方法加回來 ====================
-    public void CaptureTargetFromCurrent()
+    public List<float> ComputeInvisibilityTimes()
     {
+        var result = new List<float>();
         if (_rt == null) _rt = GetComponent<RectTransform>();
-        targetAnchoredPosition = _rt.anchoredPosition;
-        targetSizeDelta = _rt.sizeDelta;
-        targetPivot = _rt.pivot;
-        targetEulerZ = _rt.eulerAngles.z;
+        if (_rt == null) return result;
 
-        if (_canvasGroup == null) _canvasGroup = GetComponent<CanvasGroup>();
-        if (_canvasGroup != null) targetAlpha = _canvasGroup.alpha;
-        else
+        float startAlpha = 1f;
+        if (_canvasGroup != null) startAlpha = _canvasGroup.alpha;
+        else if (_graphic != null) startAlpha = _graphic.color.a;
+
+        Vector2 startSize = _rt.sizeDelta;
+        Vector3 startEuler = _rt.localEulerAngles;
+
+        float mainAlphaTarget = animateAlpha ? targetAlpha : startAlpha;
+        Vector2 mainSizeTarget = animateSize ? (useRelativeMode ? (startSize + targetSizeDelta) : targetSizeDelta) : startSize;
+        Vector3 mainEulerTarget = animateRotation ? (useRelativeMode ? (startEuler + targetEulerAngles) : targetEulerAngles) : startEuler; // MODIFIED
+        
+        float EvaluateMain01(float t01)
         {
-            if (_graphic == null) _graphic = GetComponent<Graphic>();
-            if (_graphic != null) { var c = _graphic.color; targetAlpha = c.a; targetColor = c; }
+            t01 = Mathf.Clamp01(t01);
+            if (useCustomCurve && customCurve != null) return Mathf.Clamp01(customCurve.Evaluate(t01));
+            return Mathf.Clamp01(DOVirtual.EasedValue(0f, 1f, t01, easeType));
+        }
+
+        bool IsAlphaInvisible(float a) => detectAlpha && (a <= invisAlphaThreshold);
+        bool IsSizeInvisible(Vector2 sz) => detectScaleOrSize && (Mathf.Min(Mathf.Abs(sz.x), Mathf.Abs(sz.y)) <= invisSizeThreshold);
+
+        int N = Mathf.Max(30, detectionSamples);
+        Vector3 prevEuler = startEuler; // MODIFIED: Track previous euler for interval checking
+        
+        for (int i = 0; i <= N; i++)
+        {
+            float t01 = (i / (float)N);
+            float tSec = t01 * Mathf.Max(0.0001f, duration);
+            float k = EvaluateMain01(t01);
+
+            float alphaNow = Mathf.LerpUnclamped(startAlpha, mainAlphaTarget, k);
+            Vector2 sizeNow = Vector2.LerpUnclamped(startSize, mainSizeTarget, k);
+            
+            // --- MODIFICATION START for main track rotation detection ---
+            Vector3 eulerNow = Vector3.LerpUnclamped(startEuler, mainEulerTarget, k);
+            if (i > 0) // Check interval from previous sample to current
+            {
+                float prevTimeSec = ((i - 1) / (float)N) * duration;
+                FindCrossings(prevEuler.y, eulerNow.y, prevTimeSec, tSec, result);
+            }
+            prevEuler = eulerNow;
+            // --- MODIFICATION END ---
+            
+            if (IsAlphaInvisible(alphaNow) || IsSizeInvisible(sizeNow))
+            {
+                result.Add(tSec);
+            }
+        }
+        
+        // ... (Secondary tweens sampling remains the same)
+        if (secondaryTweens != null)
+        {
+            foreach (var sec in secondaryTweens)
+            {
+                if (sec == null || sec.duration <= 0f || sec.propertyType != SecondaryTweenType.Rotation || !detectRotationY) continue;
+
+                int n = Mathf.Clamp(N / 2, 30, 360);
+                Vector3 baseE = startEuler;
+                Vector3 tgt = sec.targetValue;
+                Vector3 prevE = baseE;
+
+                for (int i = 1; i <= n; i++)
+                {
+                    float local01 = i / (float)n;
+                    float eased = DOVirtual.EasedValue(0f, 1f, local01, sec.easeType);
+                    
+                    Vector3 currE = sec.isRelative 
+                        ? (baseE + tgt * eased) 
+                        : Vector3.LerpUnclamped(baseE, new Vector3(baseE.x, tgt.y, baseE.z), eased);
+
+                    float prevTimeSec = sec.startTime + sec.duration * ((i - 1) / (float)n);
+                    float currentTimeSec = sec.startTime + sec.duration * local01;
+
+                    FindCrossings(prevE.y, currE.y, prevTimeSec, currentTimeSec, result);
+                    prevE = currE;
+                }
+            }
+        }
+
+        result.Sort();
+        const float MERGE_EPS = 1f / 1000f;
+        if (result.Count == 0) return result;
+
+        var merged = new List<float> { result[0] };
+        for (int i = 1; i < result.Count; i++)
+        {
+            if (Mathf.Abs(result[i] - merged[merged.Count - 1]) > MERGE_EPS)
+                merged.Add(result[i]);
+        }
+        return merged;
+    }
+    
+    private void FindCrossings(float startAngle, float endAngle, float startTime, float endTime, List<float> result)
+    {
+        float startCos = Mathf.Cos(startAngle * Mathf.Deg2Rad);
+        float endCos = Mathf.Cos(endAngle * Mathf.Deg2Rad);
+        if (Mathf.Sign(startCos) != Mathf.Sign(endCos))
+        {
+            float t = -startCos / (endCos - startCos);
+            t = Mathf.Clamp01(t);
+            float crossingTime = Mathf.Lerp(startTime, endTime, t);
+            result.Add(crossingTime);
         }
     }
 
-    public void SetPassPointFromCurrent()
-    {
-        if (_rt == null) _rt = GetComponent<RectTransform>();
-        passThroughPointC = _rt.anchoredPosition;
-    }
-
-    public void SetPassPointToMidCurrentAndTarget()
-    {
-        if (_rt == null) _rt = GetComponent<RectTransform>();
-        passThroughPointC = 0.5f * (_rt.anchoredPosition + targetAnchoredPosition);
-    }
-    // ========================================================================
-
-    public void SaveToPreset(UITweenPreset p, bool keepPresetName = false)
-    {
-        if (p == null) return;
-        if (!keepPresetName && string.IsNullOrEmpty(p.presetName)) p.presetName = name + "_Preset";
-
-        p.useRelativeMode = useRelativeMode;
-        p.useBezierPath = useBezierPath;
-        
-        p.duration = duration; p.delay = delay; p.loops = loops; p.loopType = loopType; p.unscaledTime = unscaledTime;
-        p.useCustomCurve = useCustomCurve; p.customCurve = customCurve; p.easeType = easeType;
-        p.targetAnchoredPosition = targetAnchoredPosition; p.targetSizeDelta = targetSizeDelta; p.targetPivot = targetPivot; p.targetEulerZ = targetEulerZ; p.targetAlpha = targetAlpha; p.targetColor = targetColor;
-        p.passThroughPointC = passThroughPointC; p.passTStar = passTStar;
-        p.animatePosition = animatePosition; p.animateSize = animateSize; p.animateRotationZ = animateRotationZ; p.animateAlpha = animateAlpha; p.animateColor = animateColor;
-        p.secondaryTweens = CloneSecondaryTweens(secondaryTweens);
-        p.timelineEvents = CloneTimelineEvents(timelineEvents);
-
-#if UNITY_EDITOR
-        UnityEditor.EditorUtility.SetDirty(p);
-#endif
-    }
-
-    public void LoadFromPreset(UITweenPreset p)
-    {
-        if (p == null) return;
-
-        useRelativeMode = p.useRelativeMode;
-        useBezierPath = p.useBezierPath;
-
-        duration = p.duration; delay = p.delay; loops = p.loops; loopType = p.loopType; unscaledTime = p.unscaledTime;
-        useCustomCurve = p.useCustomCurve; customCurve = p.customCurve; easeType = p.easeType;
-        targetAnchoredPosition = p.targetAnchoredPosition; targetSizeDelta = p.targetSizeDelta; targetPivot = p.targetPivot; targetEulerZ = p.targetEulerZ; targetAlpha = p.targetAlpha; targetColor = p.targetColor;
-        passThroughPointC = p.passThroughPointC; passTStar = p.passTStar;
-        animatePosition = p.animatePosition; animateSize = p.animateSize; animateRotationZ = p.animateRotationZ; animateAlpha = p.animateAlpha; animateColor = p.animateColor;
-        secondaryTweens = CloneSecondaryTweens(p.secondaryTweens);
-        timelineEvents = CloneTimelineEvents(p.timelineEvents);
-    }
 
     private void ApplyEaseTo(Tween t)
     {
@@ -312,9 +400,7 @@ public class UITweenController : MonoBehaviour
         {
             case SecondaryTweenType.Rotation:
             {
-                Vector3 target = secondary.isRelative
-                    ? secondary.targetValue
-                    : new Vector3(_rt.localEulerAngles.x, _rt.localEulerAngles.y, secondary.targetValue.z);
+                Vector3 target = secondary.targetValue;
                 var mode = secondary.isRelative ? RotateMode.FastBeyond360 : RotateMode.Fast;
                 tween = _rt.DORotate(target, secondary.duration, mode);
                 if (secondary.isRelative) tween.SetRelative();
@@ -474,4 +560,161 @@ public class UITweenController : MonoBehaviour
         }
         return list;
     }
+    
+    public void SaveToPreset(UITweenPreset preset, bool keepPresetName = false)
+    {
+        if (preset == null) return;
+
+        #if UNITY_EDITOR
+        UnityEditor.Undo.RecordObject(preset, "Save UI Tween Preset");
+        #endif
+
+        var t = preset.GetType();
+
+        void SetFieldOrProp<T>(string name, T value)
+        {
+            var f = t.GetField(name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            if (f != null && f.FieldType.IsAssignableFrom(typeof(T))) { f.SetValue(preset, value); return; }
+
+            var p = t.GetProperty(name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            if (p != null && p.CanWrite && p.PropertyType.IsAssignableFrom(typeof(T))) { p.SetValue(preset, value, null); }
+        }
+
+        SetFieldOrProp("useRelativeMode", useRelativeMode);
+        SetFieldOrProp("useBezierPath", useBezierPath);
+        SetFieldOrProp("duration", duration);
+        SetFieldOrProp("delay", delay);
+        SetFieldOrProp("loops", loops);
+        SetFieldOrProp("loopType", loopType);
+        SetFieldOrProp("unscaledTime", unscaledTime);
+        SetFieldOrProp("useCustomCurve", useCustomCurve);
+        SetFieldOrProp("customCurve", customCurve);
+        SetFieldOrProp("easeType", easeType);
+        SetFieldOrProp("targetAnchoredPosition", targetAnchoredPosition);
+        SetFieldOrProp("targetSizeDelta", targetSizeDelta);
+        SetFieldOrProp("targetPivot", targetPivot);
+        SetFieldOrProp("targetEulerAngles", targetEulerAngles); // MODIFIED
+        SetFieldOrProp("targetAlpha", targetAlpha);
+        SetFieldOrProp("targetColor", targetColor);
+        SetFieldOrProp("passThroughPointC", passThroughPointC);
+        SetFieldOrProp("passTStar", passTStar);
+        SetFieldOrProp("animatePosition", animatePosition);
+        SetFieldOrProp("animateSize", animateSize);
+        SetFieldOrProp("animateRotation", animateRotation); // MODIFIED
+        SetFieldOrProp("animateAlpha", animateAlpha);
+        SetFieldOrProp("animateColor", animateColor);
+        SetFieldOrProp("secondaryTweens", CloneSecondaryTweens(secondaryTweens));
+        SetFieldOrProp("timelineEvents",  CloneTimelineEvents(timelineEvents));
+
+        #if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(preset);
+        #endif
+    }
+
+    public void LoadFromPreset(UITweenPreset preset)
+    {
+        if (preset == null) return;
+
+        var t = preset.GetType();
+
+        T GetFieldOrProp<T>(string name, T fallback)
+        {
+            var f = t.GetField(name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            if (f != null && typeof(T).IsAssignableFrom(f.FieldType))
+            {
+                object v = f.GetValue(preset);
+                if (v is T tv) return tv;
+            }
+            var p = t.GetProperty(name, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            if (p != null && p.CanRead && typeof(T).IsAssignableFrom(p.PropertyType))
+            {
+                object v = p.GetValue(preset, null);
+                if (v is T tv) return tv;
+            }
+            return fallback;
+        }
+
+        #if UNITY_EDITOR
+        UnityEditor.Undo.RecordObject(this, "Load UI Tween From Preset");
+        #endif
+        
+        useRelativeMode = GetFieldOrProp("useRelativeMode", useRelativeMode);
+        useBezierPath   = GetFieldOrProp("useBezierPath",   useBezierPath);
+        duration    = GetFieldOrProp("duration",    duration);
+        delay       = GetFieldOrProp("delay",       delay);
+        loops       = GetFieldOrProp("loops",       loops);
+        loopType    = GetFieldOrProp("loopType",    loopType);
+        unscaledTime= GetFieldOrProp("unscaledTime",unscaledTime);
+        useCustomCurve = GetFieldOrProp("useCustomCurve", useCustomCurve);
+        customCurve    = GetFieldOrProp("customCurve",    customCurve);
+        easeType       = GetFieldOrProp("easeType",       easeType);
+        targetAnchoredPosition = GetFieldOrProp("targetAnchoredPosition", targetAnchoredPosition);
+        targetSizeDelta        = GetFieldOrProp("targetSizeDelta",        targetSizeDelta);
+        targetPivot            = GetFieldOrProp("targetPivot",            targetPivot);
+        targetEulerAngles      = GetFieldOrProp("targetEulerAngles",      targetEulerAngles); // MODIFIED
+        targetAlpha            = GetFieldOrProp("targetAlpha",            targetAlpha);
+        targetColor            = GetFieldOrProp("targetColor",            targetColor);
+        passThroughPointC = GetFieldOrProp("passThroughPointC", passThroughPointC);
+        passTStar         = GetFieldOrProp("passTStar",         passTStar);
+        animatePosition  = GetFieldOrProp("animatePosition",  animatePosition);
+        animateSize      = GetFieldOrProp("animateSize",      animateSize);
+        animateRotation = GetFieldOrProp("animateRotation", animateRotation); // MODIFIED
+        animateAlpha     = GetFieldOrProp("animateAlpha",     animateAlpha);
+        animateColor     = GetFieldOrProp("animateColor",     animateColor);
+        secondaryTweens = CloneSecondaryTweens(GetFieldOrProp("secondaryTweens", secondaryTweens));
+        timelineEvents = CloneTimelineEvents(GetFieldOrProp("timelineEvents", timelineEvents));
+
+        #if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+        #endif
+    }
+
+    [ContextMenu("Capture Target From Current")]
+    public void CaptureTargetFromCurrent()
+    {
+        if (_rt == null) _rt = GetComponent<RectTransform>();
+        if (_rt == null) return;
+        
+        targetAnchoredPosition = _rt.anchoredPosition;
+        targetSizeDelta        = _rt.sizeDelta;
+        targetPivot            = _rt.pivot;
+        targetEulerAngles      = _rt.localEulerAngles; // MODIFIED
+
+        if (_canvasGroup == null) _canvasGroup = GetComponent<CanvasGroup>();
+        if (_graphic == null) _graphic = GetComponent<UnityEngine.UI.Graphic>();
+
+        if (_canvasGroup != null) targetAlpha = _canvasGroup.alpha;
+        else if (_graphic != null) targetAlpha = _graphic.color.a;
+
+        #if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+        #endif
+    }
+
+    [ContextMenu("Set Pass-Through C From Current")]
+    public void SetPassPointFromCurrent()
+    {
+        if (_rt == null) _rt = GetComponent<RectTransform>();
+        if (_rt == null) return;
+
+        passThroughPointC = _rt.anchoredPosition;
+
+        #if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+        #endif
+    }
+
+    [ContextMenu("Set Pass-Through C To Mid(Current, Target)")]
+    public void SetPassPointToMidCurrentAndTarget()
+    {
+        if (_rt == null) _rt = GetComponent<RectTransform>();
+        if (_rt == null) return;
+
+        passThroughPointC = 0.5f * (_rt.anchoredPosition + targetAnchoredPosition);
+
+        #if UNITY_EDITOR
+        UnityEditor.EditorUtility.SetDirty(this);
+        #endif
+    }
 }
+
