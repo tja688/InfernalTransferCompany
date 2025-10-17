@@ -25,7 +25,19 @@ public class HeContractGameConfig : ScriptableObject
     [Tooltip("符文输入时间限制(秒)")]
     [Range(5f, 30f)]
     public float runeInputTimeLimit = 10f;
-    
+
+    [Tooltip("符文输入数量最大(个)")]
+    [Range(5, 30)]
+    public int runeInputCountMaxLimit = 5;
+    [Tooltip("符文输入数量最小(个)")]
+    [Range(5, 30)]
+    public int runeInputCountMinLimit = 3;
+    [Tooltip("符文显示时间限制(秒)")]
+    [Range(5f, 30f)]
+    public float runeShowTimeLimit = 4f;
+    [Tooltip("符文游戏轮次(次)")]
+    [Range(5, 30)]
+    public int runeGameTuneCount = 3;
     [Tooltip("最大符文错误次数")]
     [Range(1, 5)]
     public int maxRuneErrors = 3;
@@ -51,7 +63,7 @@ public class HeContractGameConfig : ScriptableObject
     [Tooltip("印章蓄力时间(秒)")]
     [Range(1f, 5f)]
     public float stampChargeTime = 3f;
-    
+  
     [Tooltip("最大盖章尝试次数")]
     [Range(1, 5)]
     public int maxStampAttempts = 3;
