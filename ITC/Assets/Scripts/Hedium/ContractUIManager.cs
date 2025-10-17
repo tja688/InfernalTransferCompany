@@ -82,9 +82,26 @@ public class HeContractUIManager : MonoBehaviour
     private List<GameObject> runeGridItems = new List<GameObject>();
     private bool pneumaticChannelAnimatorOpen = false;
 
-  
+
+
+    private Image stampChargeRing;
+    private RectTransform _ringRect;
+    public Color initialColor = Color.blue; // 初始阶段（未到完美时机）
+    public Color optimalColor = Color.green; // 完美时机阶段
+    public Color warningColor = Color.yellow; // 过了完美时机（未超时）
+    public Color overTimeColor = Color.red; // 超时阶段
+    private float _maxChargeTime;       // 最大蓄力时间（默认3f）
+    private float _optimalTiming;       // 完美时机比例（默认0.8f）
+    private float _optimalTime;         // 完美时机具体时间（max*optimalTiming）
+    private float _tolerance;           // 完美时机容错范围（默认0.1f）
+    private float _overTimeThreshold;   // 超时阈值（max*1.2f）
+    private Coroutine _chargeCoroutine;
+
+
+
     public event System.Action<int> OnMoveAction;
     public event System.Action OnInteractAction;
+
     private void Awake()
     {
 
@@ -101,7 +118,7 @@ public class HeContractUIManager : MonoBehaviour
 
     private void RegisterAllEvent()
     {
-        //SlotCenter.Instance.add_listener<DocumentError>(HeEventNames.DocumentErrorChosen, OnDocumentErrorChosen);
+      
     }
 
     /// <summary>
@@ -344,8 +361,20 @@ public class HeContractUIManager : MonoBehaviour
     #endregion
     #region 印章UI
 
-
-
+    public void EnableAllStamp()
+    {
+        sphericalRunaSkeleton.GetComponent<SkeletonClick>().enableClick = true;
+        diamondRunaSkeleton.GetComponent<SkeletonClick>().enableClick = true;
+        triangularRunaSkeleton.GetComponent<SkeletonClick>().enableClick = true;
+        circularRunaSkeleton.GetComponent<SkeletonClick>().enableClick = true;
+    }
+    public void DisableAllStamp()
+    {
+        sphericalRunaSkeleton.GetComponent<SkeletonClick>().enableClick = false;
+        diamondRunaSkeleton.GetComponent<SkeletonClick>().enableClick = false;
+        triangularRunaSkeleton.GetComponent<SkeletonClick>().enableClick = false;
+        circularRunaSkeleton.GetComponent<SkeletonClick>().enableClick = false;
+    }
 
     /// <summary>
     /// 更新符文输入进度
@@ -397,19 +426,139 @@ public class HeContractUIManager : MonoBehaviour
     {
     }
 
-    private void OnStampSelected(int stampIndex)
-    {
-        Debug.Log($"选择了印章 {stampIndex}");
+   
 
-        // 开始蓄力阶段
-        StartStampCharging();
+    // 业务侧调用的UI启动方法（原uiManager?.StartStampCharging()）
+    public void StartStampCharging(HeContractGameConfig gameConfig)
+    {
+   
+        // 初始化参数（从gameConfig获取，确保和业务侧一致）
+        _maxChargeTime = gameConfig?.stampChargeTime ?? 3f;
+        _optimalTiming = gameConfig?.stampOptimalTiming ?? 0.8f;
+        _optimalTime = _maxChargeTime * _optimalTiming;
+        _tolerance = gameConfig?.stampAccuracyTolerance ?? 0.1f;
+        _overTimeThreshold = _maxChargeTime * 1.2f;
+
+        // 初始化圆环UI（位置、倾斜、初始状态）
+        InitChargeRing();
+
+        // 停止之前的协程（防止重复）
+        if (_chargeCoroutine != null)
+            StopCoroutine(_chargeCoroutine);
+
+        // 启动协程：实时更新进度和颜色
+        _chargeCoroutine = StartCoroutine(UpdateChargeProgressCoroutine());
     }
 
-    /// <summary>
-    /// 开始盖章蓄力
-    /// </summary>
-    public void StartStampCharging()
+
+    // 初始化圆环位置和状态（确保在typewriterSkeleton中央，倾斜80度）
+    private void InitChargeRing()
     {
+        if (stampChargeRing == null || typewriterSkeleton == null)
+        {
+            Debug.LogError("环形进度条或父物体未赋值！");
+            return;
+        }
+
+        // 父物体设为typewriterSkeleton，确保在中央
+        RectTransform ringRect = stampChargeRing.GetComponent<RectTransform>();
+        ringRect.SetParent(typewriterSkeleton.GetComponent<RectTransform>(), false);
+
+        // 位置居中（锚点和 pivot 都设为中心）
+        ringRect.anchorMin = ringRect.anchorMax = new Vector2(0.5f, 0.5f);
+        ringRect.pivot = new Vector2(0.5f, 0.5f);
+        ringRect.anchoredPosition = Vector2.zero;
+
+        // 向内倾斜80度（Z轴旋转）
+        ringRect.rotation = Quaternion.Euler(0, 0, 80f);
+
+        // 初始状态（进度0，初始色，显示UI）
+        stampChargeRing.fillAmount = 0f;
+        stampChargeRing.color = initialColor;
+        stampChargeRing.gameObject.SetActive(true);
+    }
+
+
+    // 协程：实时更新进度和颜色（核心逻辑）
+    private IEnumerator UpdateChargeProgressCoroutine()
+    {
+        float currentChargeTime = 0f; // UI侧独立计时，不依赖业务侧的chargeTime
+
+        while (true)
+        {
+            // 1. 实时累加时间（每帧更新，和Time.deltaTime同步）
+            currentChargeTime += Time.deltaTime;
+            yield return null; // 等待下一帧，确保实时性
+
+            //// 2. 检查中断条件（完成/失败/尝试次数用完，停止协程）
+            //if (context.isStampCompleted || context.isStampFailed || context.stampAttempts >= (context.gameConfig?.maxStampAttempts ?? 3))
+            //{
+            //    HideChargeRing();
+            //    _chargeCoroutine = null;
+            //    yield break;
+            //}
+
+            // 3. 计算进度并同步到环形条
+            float chargeProgress = currentChargeTime / _maxChargeTime;
+            if (chargeProgress > 1f) chargeProgress = 1f; // 进度不超过100%
+            stampChargeRing.fillAmount = chargeProgress;
+
+            // 4. 按时间阶段切换颜色（完全贴合原业务逻辑）
+            UpdateRingColorByTime(currentChargeTime);
+
+            // 5. 处理超时（和原逻辑一致：超时重置，尝试次数+1）
+            if (currentChargeTime > _overTimeThreshold)
+            {
+                Debug.Log("UI侧：蓄力超时，重新开始");
+                //context.stampAttempts++;
+                currentChargeTime = 0f; // 重置计时
+                stampChargeRing.fillAmount = 0f; // 重置进度
+                stampChargeRing.color = initialColor; // 重置颜色
+            }
+        }
+    }
+
+
+    // 根据当前时间切换圆环颜色
+    private void UpdateRingColorByTime(float currentChargeTime)
+    {
+        if (currentChargeTime < _overTimeThreshold) // 未超时
+        {
+            // 完美时机范围内（currentChargeTime在 [optimalTime-tolerance, optimalTime+tolerance]）
+            if (Mathf.Abs(currentChargeTime - _optimalTime) < _tolerance)
+            {
+                stampChargeRing.color = optimalColor;
+            }
+            // 未到完美时机（currentChargeTime < optimalTime - tolerance）
+            else if (currentChargeTime < _optimalTime - _tolerance)
+            {
+                stampChargeRing.color = initialColor;
+            }
+            // 过了完美时机但未超时（currentChargeTime > optimalTime + tolerance）
+            else
+            {
+                stampChargeRing.color = warningColor;
+            }
+        }
+        else // 超时
+        {
+            stampChargeRing.color = overTimeColor;
+        }
+    }
+
+
+    // 隐藏圆环（完成/失败时调用）
+    public void HideChargeRing()
+    {
+        if (stampChargeRing != null)
+            stampChargeRing.gameObject.SetActive(false);
+
+        // 停止协程
+        if (_chargeCoroutine != null)
+        {
+            StopCoroutine(_chargeCoroutine);
+            _chargeCoroutine = null;
+        }
     }
 
     #endregion
@@ -565,6 +714,7 @@ public class HeContractUIManager : MonoBehaviour
         {
             GameObject.Destroy(arrow);
         }
+        SlotCenter.Instance.trigger_event(HeEventNames.ArrowFadeOutDelete);
     }
     /// <summary>
     /// 输入错误时的箭头震动效果

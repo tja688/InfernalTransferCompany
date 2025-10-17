@@ -307,6 +307,7 @@ GameObject:
   - component: {fileID: 125450537}
   - component: {fileID: 125450539}
   - component: {fileID: 125450538}
+  - component: {fileID: 125450540}
   m_Layer: 0
   m_Name: "SkeletonGraphic (\u7403\u5F62\u5370\u7AE0)"
   m_TagString: Untagged
@@ -387,6 +388,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 125450536}
   m_CullTransparentMesh: 1
+--- !u!114 &125450540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125450536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a12f572049a617044bc57f0feeeaa89a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationNameClick: "\u7403\u5F62\u5370\u7AE0\u4E0B"
+  animationNameRelease: "\u7403\u5F62\u5370\u7AE0\u5F39\u51FA"
+  enableClick: 0
 --- !u!1 &142635532
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,7 +910,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragPreviewPrefab: {fileID: 2165234431239683893, guid: 12bb95254d435364083d2ef842fbe281, type: 3}
+  isDraggable: 0
   targetType: DocumentJudge
+  animationAName: None
+  animationBName: None
 --- !u!114 &405607739 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3192068238212579164, guid: 12bb95254d435364083d2ef842fbe281, type: 3}
@@ -1293,6 +1312,7 @@ GameObject:
   - component: {fileID: 484988893}
   - component: {fileID: 484988895}
   - component: {fileID: 484988894}
+  - component: {fileID: 484988896}
   m_Layer: 0
   m_Name: "SkeletonGraphic (\u4E09\u89D2\u5370\u7AE0)"
   m_TagString: Untagged
@@ -1373,6 +1393,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 484988892}
   m_CullTransparentMesh: 1
+--- !u!114 &484988896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484988892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a12f572049a617044bc57f0feeeaa89a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationNameClick: "\u4E09\u89D2\u5370\u7AE0\u4E0B"
+  animationNameRelease: "\u4E09\u89D2\u5370\u7AE0\u5F39\u51FA"
+  enableClick: 0
 --- !u!1001 &567296009
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4329,6 +4364,7 @@ GameObject:
   - component: {fileID: 1783584879}
   - component: {fileID: 1783584881}
   - component: {fileID: 1783584880}
+  - component: {fileID: 1783584882}
   m_Layer: 0
   m_Name: "SkeletonGraphic (\u5706\u5F62\u5370\u7AE0)"
   m_TagString: Untagged
@@ -4409,6 +4445,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1783584878}
   m_CullTransparentMesh: 1
+--- !u!114 &1783584882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1783584878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a12f572049a617044bc57f0feeeaa89a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationNameClick: "\u5706\u5F62\u5370\u7AE0\u4E0B"
+  animationNameRelease: "\u5706\u5F62\u5370\u7AE0\u5F39\u51FA"
+  enableClick: 0
 --- !u!1001 &1798426029
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5025,7 +5076,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragPreviewPrefab: {fileID: 0}
+  isDraggable: 0
   targetType: Typewriter
+  animationAName: None
+  animationBName: None
 --- !u!1 &1948417694
 GameObject:
   m_ObjectHideFlags: 0
@@ -5465,6 +5519,7 @@ GameObject:
   - component: {fileID: 2075403265}
   - component: {fileID: 2075403267}
   - component: {fileID: 2075403266}
+  - component: {fileID: 2075403268}
   m_Layer: 0
   m_Name: "SkeletonGraphic (\u83F1\u5F62\u5370\u7AE0)"
   m_TagString: Untagged
@@ -5545,6 +5600,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2075403264}
   m_CullTransparentMesh: 1
+--- !u!114 &2075403268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075403264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a12f572049a617044bc57f0feeeaa89a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationNameClick: "\u83F1\u5F62\u5370\u7AE0\u4E0B"
+  animationNameRelease: "\u83F1\u5F62\u5370\u7AE0\u5F39\u51FA"
+  enableClick: 0
 --- !u!212 &39463518827365974
 SpriteRenderer:
   m_ObjectHideFlags: 0

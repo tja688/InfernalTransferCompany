@@ -63,7 +63,7 @@ public class HeContractGameConfig : ScriptableObject
     [Tooltip("印章蓄力时间(秒)")]
     [Range(1f, 5f)]
     public float stampChargeTime = 3f;
-    
+  
     [Tooltip("最大盖章尝试次数")]
     [Range(1, 5)]
     public int maxStampAttempts = 3;
