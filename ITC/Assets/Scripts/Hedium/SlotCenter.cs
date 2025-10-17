@@ -11,7 +11,11 @@ public static class HeEventNames
     public const string DeliverDocumentEvent = "DeliverDocumentEvent";
     public const string EndDragEvent = "EndDragEvent";
     public const string DocumentErrorChosen = "DocumentErrorChosen";//DocumentError
+    public const string EnableChooseRuneEvent = "EnableChooseRuneEvent";
+    public const string ArrowFadeOutDelete = "ArrowFadeOutDelete";
+    public const string ChosenStampType = "ChosenStampType";//StampType
 }
+
 public class SlotCenter : MonoBehaviour
 {
     // 保留原有的 pending 集合（等待补注册时记录）

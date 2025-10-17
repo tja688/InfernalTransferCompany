@@ -10,17 +10,17 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 {
     [Tooltip("拖动时显示的临时预览")]
     public GameObject dragPreviewPrefab;
-    [NonSerialized]
+
     public bool isDraggable=false;
     private RectTransform _rectTransform; 
     private Canvas canvas;
     private GameObject dragPreview; // 拖动时的临时显示对象
     private bool isDragging = false;
-    
 
-    public string targetType = "DocumentJudge";
-    
-
+    private Vector2 dragOffset;
+    public string targetType = "None";
+    public string animationAName = "";
+    public string animationBName = "";
     private RectTransform rectTransform;
   
     void Awake()
@@ -39,26 +39,66 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (isDraggable == false) return;
         isDragging = true;
 
-        GetComponent<Image>().enabled = false;
+
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+           rectTransform,
+           eventData.position,
+           canvas.worldCamera,
+           out Vector2 localClickPos))
+        {
+            // 偏移量 = 点击点在物体本地的位置（相对于轴心）
+            dragOffset = localClickPos;
+        }
 
         // 创建临时预览
         if (dragPreviewPrefab != null)
         {
             dragPreview = Instantiate(dragPreviewPrefab, canvas.transform);
+            var previewRect = dragPreview.GetComponent<RectTransform>();
 
-            var rect = dragPreview.GetComponent<RectTransform>();
-            rect.anchoredPosition = rectTransform.anchoredPosition;
+            // 关键步骤2：预览对象的初始位置 = 鼠标位置 - 偏移量（确保点击点对齐）
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvas.GetComponent<RectTransform>(),
+                eventData.position,
+                canvas.worldCamera,
+                out Vector2 canvasLocalPos))
+            {
+                // 用鼠标当前位置减去偏移，让预览的点击点与鼠标对齐
+                previewRect.anchoredPosition = canvasLocalPos - dragOffset;
+            }
+
+            //var rect = dragPreview.GetComponent<RectTransform>();
+            //rect.anchoredPosition = rectTransform.anchoredPosition;
             if (dragPreview.TryGetComponent<Image>(out var previewImg))
             {
-                previewImg.raycastTarget = false; 
+                previewImg.raycastTarget = false;
+
             }
-          
+
             else if (dragPreview.TryGetComponent<SkeletonGraphic>(out var previewSkel))
             {
-                previewSkel.raycastTarget = false; 
+                previewSkel.raycastTarget = false;
+                if (!(animationAName==""))
+                previewSkel.AnimationState.SetAnimation(0, animationAName, false);
+                if (!(animationBName == ""))
+                    previewSkel.AnimationState.AddAnimation(0, animationBName, false, 0);
             }
 
         }
+        if (TryGetComponent<Image>(out var image))
+        {
+            image.enabled = false;
+        }
+        else if (TryGetComponent<SkeletonGraphic>(out var skeleton))
+        {
+            skeleton.enabled = false;
+        }
+        {
+
+        }
+
+
+
     }
 
    
@@ -76,11 +116,11 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         
             if (dragPreview != null)
             {
-                dragPreview.GetComponent<RectTransform>().anchoredPosition = localPos;
+                dragPreview.GetComponent<RectTransform>().anchoredPosition = localPos - dragOffset;
             }
             else
             {
-                rectTransform.anchoredPosition = localPos;
+                rectTransform.anchoredPosition = localPos - dragOffset;
             }
         }
     }
@@ -93,8 +133,18 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
 
         isDragging = false;
-     
-        GetComponent<Image>().enabled = true;
+      if(TryGetComponent<Image>(out var image))
+        {
+            image.enabled = true;
+        }
+        else if (TryGetComponent<SkeletonGraphic>(out var skeleton))
+        {
+            skeleton.enabled = true;
+        }
+        {
+
+        }
+           
        
 
         if (dragPreview != null)

@@ -1,19 +1,11 @@
 ﻿using NUnit.Framework;
 using PrimeTween;
-using QFramework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using static Pathfinding.SimpleSmoothModifier;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 using UnityEngine.UI;   
+
 
 public static class HeCoroutineUtil
 {
@@ -74,7 +66,7 @@ public enum DocumentError
     DangerousCustomer
 }
 #region Contract Stages
-
+#region DocumentVerifier Stages
 /// <summary>
 /// 文书核验系统
 /// </summary>
@@ -323,8 +315,8 @@ public class DocumentVerifier : IContractStage
     }
 
 }
-
-
+#endregion
+#region RuneInputManager Stages
 /// <summary>
 /// 符文输入管理器
 /// </summary>
@@ -335,28 +327,24 @@ public class RuneInputManager : IContractStage
     private HeContractGameConfig gameConfig;
     private bool completed = false;
     private bool failed = false;
-    private bool detailsFillCompleted = false;
+
     private List<int> requiredRunes;
     private List<int> inputRunes;
     private float timeRemaining;
 
-    private float smoothTime = 0.1f;
+
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
     public string StageName => "符文输入";
-    private int currentSlotIndex = 1;
-    private bool inputEnabled = true;
+
     private bool enableTimer = false;
     public GameObject ArrowObject;
-    private List<GameObject> spawnedArrows = new List<GameObject>();
+    
     private int invaild = 0;
-
-
-    private Vector3[] Slot;
-    private Vector3  SlotCenter=new Vector3(0,(float)-1.1800,0);
-
-
-
+    System.Diagnostics.Stopwatch stopWatch ;
+    private int tuneCount;
+    private bool detailsFillCompleted = false;  
+    private float runeShowDuration;
     private Tween positionTween;
     private Dictionary<int, KeyCode> runeKeyMap = new Dictionary<int, KeyCode>()
     {
@@ -365,10 +353,11 @@ public class RuneInputManager : IContractStage
         {2, KeyCode.A}, // 左
         {3, KeyCode.D}  // 右
     };
-
-
-
-
+    private bool enableChose = false;
+    private int ArrowMaxCount;
+    private int ArrowMinCount;
+    int deleteArrowCount = 0;
+    bool enableProcessedKey = false;
     public void Enter(HeContractContext ctx)
     {
         detailsFillCompleted = false;
@@ -376,18 +365,20 @@ public class RuneInputManager : IContractStage
         context = ctx;
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
-
+        runeShowDuration = gameConfig.runeShowTimeLimit;
+        tuneCount = gameConfig.runeGameTuneCount;
+        ArrowMaxCount = gameConfig.runeInputCountMaxLimit;
+        ArrowMinCount = gameConfig.runeInputCountMinLimit;
         Debug.Log("=== 开始符文输入阶段 ===");
-
-        GenerateRequiredRunes();
-        inputRunes = new List<int>();
+       
+  
         timeRemaining = gameConfig?.runeInputTimeLimit ?? 10f;
 
         // 正确获取 CopperRuneSelectorGameObject 的 transform
         if (uiManager != null )
         {
             InitPoistion();
-            SpawnRuneArrows();
+            SpawnRuneArrows(0.5f);
            
            
 
@@ -400,59 +391,58 @@ public class RuneInputManager : IContractStage
 
 
     }
-    private void SpawnRuneArrows()
+    /// <summary>
+    /// 
+    /// </summary>
+    private void SpawnRuneArrows(float delay)
     {
-        // 清理之前的箭头
-        foreach (var arrow in spawnedArrows)
-        {
-            if (arrow != null)
-                GameObject.Destroy(arrow);
-        }
-        spawnedArrows.Clear();
-         
-        // 生成新的箭头
-        for (int i = 0; i < requiredRunes.Count; i++)
-        {
-            if (ArrowObject != null)
-            {
-                GameObject arrow = GameObject.Instantiate(ArrowObject);
-                arrow.transform.localPosition = Slot[i];
-                Debug.Log($"生成箭头 {i} 在位置 {Slot[i]}");
-                // 根据符文类型设置箭头旋转
-                SetArrowRotation(arrow, requiredRunes[i]);
+        tuneCount -= 1;
+        Debug.Log($"生成箭头，剩余轮数:{tuneCount}");
+        enableChose = false;
+        inputRunes.Clear();
+        deleteArrowCount = 0;
+        enableProcessedKey = true;
+          var arrowGroup = uiManager.ArrowGroupGameObject.GetComponent<ArrowArrangeInArc>();
+      
 
-                // 设置层级，当前箭头高亮显示
-                SetArrowVisualState(arrow, true);
 
-                spawnedArrows.Add(arrow);
-            }
-        }
 
-        for(int i = 0; i < spawnedArrows.Count; i++)
+
+        GenerateRequiredRunes();
+        arrowGroup.ArrangeInArc(requiredRunes, delay);
+        stopWatch = System.Diagnostics.Stopwatch.StartNew();
+        for (int i = 0; i < arrowGroup.spawnedItems.Count; i++)
         {
-            uiManager.FadeOutArrow(spawnedArrows[i],3);
+            var obj = arrowGroup.spawnedItems[i];
+
+            uiManager.FadeOutArrow(obj, runeShowDuration);
+            //uiManager.ShakeArrow(obj);
         }
 
 
 
 
     }
-    private void Faild()
+    private void RuneInputFaild()
     {
+       
+
+        Debug.Log($"符文失败一轮，剩余轮数{tuneCount}");
         invaild++;
         if (invaild == 3)
         {
-            Debug.Log("符文输入错误次数过多，顾客满意度下降");
+            Debug.Log("符文输入错误次数过多，视为一次签约失败");
             context.AddFailure();
             failed = true;
         }
         else if (invaild == 2)
         {
+            Debug.Log("符文输入失败两次减少满意度");
             context.DecreaseSatisfaction();
         }
         else if (invaild==1)
         {
-
+            Debug.Log("符文输入失败一次，不惩罚");
 
         }
         else
@@ -460,53 +450,27 @@ public class RuneInputManager : IContractStage
             Assert.Fail("符文输入错误次数统计异常");
         }
 
-
+     
     }
-    private void SetArrowRotation(GameObject arrow, int runeType)
+    private void RuneInputSuccess()
     {
-        Vector3 rotation = Vector3.zero;
-
-        switch (runeType)
-        {
-            case 0: // 上
-                rotation = new Vector3(0, 0, 0);
-                break;
-            case 1: // 下
-                rotation = new Vector3(0, 0, 180);
-                break;
-            case 2: // 左
-                rotation = new Vector3(0, 0, 90);
-                break;
-            case 3: // 右
-                rotation = new Vector3(0, 0, -90);
-                break;
-        }
-
-        arrow.transform.localEulerAngles = rotation;
+        Debug.Log($"符文成功一轮，剩余轮数{tuneCount}");
+      
     }
-
-    // 设置透明度或颜色来表示当前激活状态
-    private void SetArrowVisualState(GameObject arrow, bool isActive)
+    private void OnArrowFadeOutDelete()
     {
-        var renderer = arrow.GetComponent<Renderer>();
-        if (renderer != null)
+        deleteArrowCount += 1;
+        if (deleteArrowCount == requiredRunes.Count)
         {
-            Color color = renderer.material.color;
-            color.a = isActive ? 1.0f : 0.5f;
-            renderer.material.color = color;
-        }
-
-    
-        var canvasGroup = arrow.GetComponent<CanvasGroup>();
-        if (canvasGroup != null)
-        {
-            canvasGroup.alpha = isActive ? 1.0f : 0.5f;
+            if(tuneCount!=0)
+            SpawnRuneArrows(1f);
         }
     }
     public void InitPoistion()
     {
         invaild = 0;
-
+        SlotCenter.Instance.add_listener(HeEventNames.ArrowFadeOutDelete, OnArrowFadeOutDelete);
+        inputRunes = new List<int>();
 
         uiManager.OnMoveAction += OnChoseRune;
 
@@ -516,28 +480,11 @@ public class RuneInputManager : IContractStage
 
         inputRunes.Clear();
         ArrowObject =null;
-        GenerateRequiredRunes();
+       
         uiManager.EnableMoveAction();
 
+        SlotCenter.Instance.add_listener(HeEventNames.EnableChooseRuneEvent, OnEnableChoseRune);
 
-        int arrowCount = requiredRunes.Count;
-        Slot = new Vector3[arrowCount];
-
-        float intvalX = 1.2f;
-        float intvalY = 0.2f;
-
-        for (int i = 0; i < arrowCount; i++)
-        {
-            float mid=(arrowCount-1) / 2;
-            float idx = Mathf.Abs(mid-i);
-
-            Slot[i] = new Vector3(SlotCenter.x + (i - mid) * intvalX, SlotCenter.y - idx*idx * intvalY, 0);
-
-
-
-
-
-        }
     }
 
     public void DeletePoistion()
@@ -550,6 +497,7 @@ public class RuneInputManager : IContractStage
         ArrowObject = null;
         requiredRunes.Clear();
         uiManager.DisableMoveAction();
+        SlotCenter.Instance.remove_listener(HeEventNames.EnableChooseRuneEvent, OnEnableChoseRune);
     }
 
 
@@ -567,11 +515,6 @@ public class RuneInputManager : IContractStage
             timeRemaining=gameConfig?.runeInputTimeLimit ?? 10f;
             return;
         }
-        
-
-   
-       
-
 
     }
 
@@ -587,27 +530,25 @@ public class RuneInputManager : IContractStage
 
     private void GenerateRequiredRunes()
     {
-        // 从配置文件获取符文序列
-        if (gameConfig != null)
-        {
-            //requiredRunes = gameConfig.GetRuneSequenceForContract(context.document.HeContractType);
-
-
-            //stub
-            requiredRunes = GetDefaultRuneSequence(context.document.HeContractType);
-        }
-        else
-        {
-            // 默认序列
-            requiredRunes = GetDefaultRuneSequence(context.document.HeContractType);
-        }
+       
+       requiredRunes = GetDefaultRuneSequence(context.document.HeContractType);
         
         Debug.Log($"需要输入符文序列: {string.Join(", ", requiredRunes)}");
     }
 
     private List<int> GetDefaultRuneSequence(HeContractType HeContractType)
     {
-        return new List<int> { 2,3,0,1,0};
+        
+        var len =  UnityEngine.Random.Range(ArrowMinCount, ArrowMaxCount+1);
+        var list = new List<int>(len);
+        for (int i = 0; i < len; i++)
+        {
+            list.Add(UnityEngine.Random.Range(0, 4)); 
+        }
+        
+        return list;
+
+
     }
   
 
@@ -619,23 +560,30 @@ public class RuneInputManager : IContractStage
             positionTween.Stop();
 
 
+
+
     }
 
 
-
+    private void OnEnableChoseRune()
+    {
+        enableChose = true;
+    }
     private void OnChoseRune(int directIndex)
     {
-
+        if (enableChose == false) return;
+        enableChose = false;
+        Debug.Log($"玩家选择了符文方向: {directIndex}");
         inputRunes.Add(directIndex);
   
-        ProcessRuneInput(); 
-      
+        ProcessRuneInput();
 
 
+        enableChose = true;
 
 
     }
-  
+
 
 
 
@@ -643,12 +591,16 @@ public class RuneInputManager : IContractStage
     private void ProcessRuneInput()
     {
 
-     
-        bool isCorrect =false;
+        if (!enableProcessedKey)
+        {
+            return;
+        }
+        bool isCorrect = false;
         bool isWrong = false;
+        var n = inputRunes.Count - 1;
         if (requiredRunes.Count == inputRunes.Count)
         {
-            var n = requiredRunes.Count-1;
+
 
             if (inputRunes[n] == requiredRunes[n])
                 isCorrect = true;
@@ -660,79 +612,101 @@ public class RuneInputManager : IContractStage
         else
         {
             isCorrect = false;
-        
-
-
-
-            for (int i = 0; i < requiredRunes.Count; i++)
+            if (inputRunes[n] != requiredRunes[n])
             {
-
-                if (inputRunes[i] != requiredRunes[i])
-                {
-
-
-                    if (inputRunes[i] != requiredRunes[i])
-                    {
-                        isWrong = true;
-                    }
-                    break;
-                }
+                isWrong = true;
             }
         }
-        if (isCorrect)
+
+        stopWatch.Stop();
+       
+        double elapsedSeconds = stopWatch.Elapsed.TotalSeconds;
+        Debug.Log($"第一次点击时距离箭头出现的秒数 {elapsedSeconds}");
+        bool isAutoDisappear = elapsedSeconds >= runeShowDuration + 3;
+        if( isAutoDisappear==false) 
+        if (isWrong != true)
+        {
+            var lastIndex = inputRunes.Count - 1;
+            var arrowGroup = uiManager.ArrowGroupGameObject.GetComponent<ArrowArrangeInArc>();
+
+
+            var obj = arrowGroup.spawnedItems[lastIndex];
+            if (obj != null)
+            {
+                arrowGroup.spawnedItems[lastIndex] = null;
+                uiManager.FadeOutArrow(obj, 0);
+            }
+        }
+       
+
+
+         if (isWrong == true)
+        {
+        
+            var lastIndex = inputRunes.Count - 1;
+            var arrowGroup = uiManager.ArrowGroupGameObject.GetComponent<ArrowArrangeInArc>();
+
+
+            var obj = arrowGroup.spawnedItems[lastIndex];
+            Debug.Log($"符文输入错误!,index:{n},lastIndex:{lastIndex},objIsNull:{obj==null}");
+
+            if (obj != null)
+            {
+                arrowGroup.spawnedItems[lastIndex] = null;
+                //Debug.Log($"elapsedSeconds:{elapsedSeconds},isAutoDisappear:{isAutoDisappear}");
+                if (isAutoDisappear == false)
+                   {
+                    uiManager.ShakeArrow(obj);
+                    for (int i = 0; i < requiredRunes.Count; i++)
+                    {
+                        if (i == lastIndex)
+                            continue;
+                        var arrowObject = arrowGroup.spawnedItems[i];
+                         //Debug.Log($"符文输入错误!,index:{i},is_null{arrowGroup.spawnedItems[i]==null}");
+                        uiManager.FadeOutArrow(arrowObject, 0);
+                     
+                    }
+                }
+
+            }
+                RuneInputFaild();
+            /**************Loop_Entry****************/
+
+            enableProcessedKey = false;
+
+
+
+                /**************Loop_Entry_End****************/
+            }
+
+      if (isCorrect)
         {
             Debug.Log("符文输入完成!");
-
-            if (inputRunes.Count == requiredRunes.Count)
+            RuneInputSuccess();
+            if (tuneCount == 0)
             {
-
-
                 if (SigningFlowManager.ProbabilityDetermine(30))
                 {
                     //TODO:突发 符文核对
-                  
-
-
                 }
-
                 completed = true;
-
-
             }
+            /**************Loop_Entry****************/
+
+
+            enableProcessedKey = false;
 
 
 
 
-        }
-        else if (isWrong==true)
-        {
-          
-            Debug.Log("符文输入错误!");
-
-
-
-
-
-            Faild();
-
-
-
+            /**************Loop_Entry_End****************/
 
         }
-        
         uiManager?.UpdateRuneInputProgress(inputRunes.Count, context.runeErrors, isCorrect);
     }
 
-
-
-    private void TriggerRuneVerification()
-    {
-        Debug.Log("触发符文核对环节");
-        // TODO: 创建符文核对数据并显示UI
-        // uiManager?.ShowRuneVerification(runeGridData);
-    }   
 }
-
+#endregion
 /// <summary>
 /// 特殊事件系统
 /// </summary>
@@ -760,7 +734,7 @@ public class SpecialEventSystem : IContractStage
         
         // 随机决定是否触发事件
         float triggerChance = gameConfig?.eventTriggerChance ?? 0.3f;
-        if (UnityEngine.Random.value < triggerChance)
+        if (UnityEngine.Random.value < triggerChance&&false)//直接跳过特殊事件
         {
             TriggerRandomEvent();
         }
@@ -912,10 +886,25 @@ public class SpecialEventSystem : IContractStage
         }
     }
 }
+#endregion
+
+#region StampSystem Stages
+
+
+[Serializable]
+enum StampType
+{
+    Circular,
+    Diamond,
+    Triangular,
+    Spherical,
+    None
+}
 
 /// <summary>
 /// 盖章系统
 /// </summary>
+/// 
 public class StampSystem : IContractStage
 {
     private HeContractContext context;
@@ -931,7 +920,7 @@ public class StampSystem : IContractStage
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
     public string StageName => "契约盖印";
-
+    private StampType stampType = StampType.None; 
     public void Enter(HeContractContext ctx)
     {
         context = ctx;
@@ -944,7 +933,7 @@ public class StampSystem : IContractStage
 
 
     }
-
+    
     public void Update()
     {
         if (completed || failed) return;
@@ -961,18 +950,29 @@ public class StampSystem : IContractStage
 
     private void InitHandleStampSelection()
     {
+        uiManager.EnableAllStamp();
+        SlotCenter.Instance.add_listener<StampType>(HeEventNames.ChosenStampType, OnHandleStampSelection);
+
 
     }
     private void DisableHandleStampSelection()
     {
 
+        uiManager.DisableAllStamp();
 
+        SlotCenter.Instance.remove_listener<StampType>(HeEventNames.ChosenStampType, OnHandleStampSelection);
 
     }
-
+    private void OnHandleStampSelection(StampType type)
+    {
+       Debug.Log($"选择了印章类型: {type}");
+        stampType = type;
+        InitChargingStampSelection();
+        StartStampCharging();
+    }
     private void InitChargingStampSelection()
     {
-
+        
     }
     private void DisableChargingStampSelection()
     {
@@ -986,42 +986,10 @@ public class StampSystem : IContractStage
     public void Exit()
     {
         Debug.Log("=== 契约盖印阶段结束 ===");
-    }
-    /// <summary>
-    /// 从印章架上选取符合契约类型的印章
-    /// </summary>
-    private void OnHandleStampSelection()
-    {
-
-        HeContractType type = HeContractType.Event;
-        SelectStamp(type,Vector3.zero);
-
-
-        uiManager.ShowStampSelection(type);
+        DisableHandleStampSelection();
     }
 
-    private void SelectStamp(HeContractType stampType,Vector3 pos)
-    {
-        selectedStampType = stampType;
-        
-        // 检查印章类型是否正确
-        if (stampType != context.document.HeContractType)
-        {
-            Debug.Log($"印章类型错误! 选择了{stampType}，应该是{context.document.HeContractType}");
-            context.AddFailure();
-          
-            return;
-        }
-        ///判断盖印位置是否准确
-        if (false)
-        {
-            Debug.Log("盖印位置不准确，顾客满意度下降");
-            context.DecreaseSatisfaction();
-        }
-        Debug.Log($"正确选择了{stampType}印章");
-        stampSelected = true;
-        StartStampCharging();
-    }
+ 
 
     private void StartStampCharging()
     {
@@ -1030,10 +998,10 @@ public class StampSystem : IContractStage
         chargeTime = 0f;
         
         // 通知UI
-        uiManager?.StartStampCharging();
+        //uiManager?.StartStampCharging(GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig);
     }
 
-    private void HandleStampCharging()
+    private void OnHandleStampCharging()
     {
         chargeTime += Time.deltaTime;
         
@@ -1071,7 +1039,7 @@ public class StampSystem : IContractStage
                 {
                     // 重新开始蓄力
                     chargeTime = 0f;
-                    uiManager?.StartStampCharging();
+                    uiManager?.StartStampCharging(GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig);
                 }
             }
         }
@@ -1085,7 +1053,7 @@ public class StampSystem : IContractStage
         }
     }
 }
-
+#region SoulHarvestSystem Stages
 /// <summary>
 /// 灵魂收取系统
 /// </summary>
@@ -1332,9 +1300,9 @@ public class SigningFlowManager : MonoBehaviour
     private void SetupStages()
     {
         stages = new Queue<IContractStage>(new IContractStage[] {
-            new DocumentVerifier(),
-            new RuneInputManager(),
-            new SpecialEventSystem(),
+            //new DocumentVerifier(),
+            //new RuneInputManager(),
+            //new SpecialEventSystem(),
             new StampSystem(),
             new SoulHarvestSystem()
         });
@@ -1579,5 +1547,5 @@ public class SigningFlowManager : MonoBehaviour
                $"顾客: {ctx.customer?.name ?? "未知"}";
     }
 }
-
+#endregion
 #endregion
