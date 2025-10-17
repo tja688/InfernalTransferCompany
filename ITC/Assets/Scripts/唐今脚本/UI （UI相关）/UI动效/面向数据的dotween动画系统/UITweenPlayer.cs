@@ -1,9 +1,8 @@
 // MIT License
 // Goal-Driven UI Tween Player (multi-preset, name-based play)
-// - [MODIFIED] Added Animation Lock system for priority control.
-// - Features Master API (PlayMaster*) to lock and play high-priority tweens.
-// - Standard Play API now respects the lock, preventing animation snatching.
-// - Core logic remains: baseline caching, no .From(), stable relative reversed playback.
+// [MODIFIED] Upgraded rotation system to support Vector3 (X, Y, Z) and seamless relative looping via SetRelative().
+// [MODIFIED] Secondary tweens' absolute rotation now correctly supports Vector3 targets.
+// [MODIFIED] Baseline struct now stores a Vector3 for eulerAngles.
 
 using System;
 using System.Collections.Generic;
@@ -38,7 +37,7 @@ public class UITweenPlayer : MonoBehaviour
     struct Baseline {
         public Vector2 pos;
         public Vector2 size;
-        public float eulerZ;
+        public Vector3 eulerAngles; // MODIFIED: Was float eulerZ
         public float? alpha;
         public Color? color;
         public Vector2 pivot;
@@ -157,7 +156,7 @@ public class UITweenPlayer : MonoBehaviour
         return new Baseline {
             pos = _rt.anchoredPosition,
             size = _rt.sizeDelta,
-            eulerZ = _rt.eulerAngles.z,
+            eulerAngles = _rt.eulerAngles, // MODIFIED
             alpha = baseAlpha,
             color = baseColor,
             pivot = _rt.pivot
@@ -168,7 +167,6 @@ public class UITweenPlayer : MonoBehaviour
     {
         if (preset == null || _rt == null) return null;
 
-        // ★ 根据相对基线策略选择基线
         Baseline baseL = preset.useRelativeMode
             ? (preset.relativeBaselineMode == RelativeBaselineMode.RebaseAtInterrupt
                 ? CaptureBaselineNow()
@@ -181,6 +179,7 @@ public class UITweenPlayer : MonoBehaviour
         // Position
         if (preset.animatePosition)
         {
+            // Position logic remains the same
             if (!preset.useRelativeMode && preset.useBezierPath)
             {
                 Vector2 A_design = baseL.pos;
@@ -227,17 +226,28 @@ public class UITweenPlayer : MonoBehaviour
             seq.Join(s);
         }
 
-        // Rotation Z
-        if (preset.animateRotationZ)
+        // ===== ROTATION LOGIC: REBUILT =====
+        if (preset.animateRotation)
         {
-            float targetZ = preset.useRelativeMode
-                ? (reversed ? baseL.eulerZ : baseL.eulerZ + preset.targetEulerZ)
-                : (reversed ? baseL.eulerZ : preset.targetEulerZ);
-            var e = _rt.eulerAngles;
-            var r = _rt.DORotate(new Vector3(e.x, e.y, targetZ), dur, RotateMode.Fast);
-            preset.ApplyTweenSettings(r);
-            seq.Join(r);
+            Tweener rotTween;
+            if (preset.useRelativeMode)
+            {
+                // In relative mode, the target is the CHANGE per loop. SetRelative() makes it additive.
+                // This is the key for seamless looping.
+                Vector3 relativeChange = reversed ? -preset.targetEulerAngles : preset.targetEulerAngles;
+                rotTween = _rt.DORotate(relativeChange, dur, RotateMode.FastBeyond360).SetRelative();
+            }
+            else // Absolute Mode
+            {
+                // In absolute mode, tween TO a specific target rotation.
+                Vector3 targetAngles = reversed ? baseL.eulerAngles : preset.targetEulerAngles;
+                rotTween = _rt.DORotate(targetAngles, dur, RotateMode.Fast);
+            }
+            preset.ApplyTweenSettings(rotTween);
+            seq.Join(rotTween);
         }
+        // ===== END OF REBUILT ROTATION LOGIC =====
+
 
         // Alpha
         if (preset.animateAlpha)
@@ -305,7 +315,7 @@ public class UITweenPlayer : MonoBehaviour
         var monitor = UITweenMonitor.Instance;
         var requestId = monitor.Register(this, preset, reversed, seq, context);
 
-        bool completed = false; // ← 新增：用本地标志记录完成状态
+        bool completed = false; 
 
         seq.OnStart(() =>
         {
@@ -315,7 +325,7 @@ public class UITweenPlayer : MonoBehaviour
 
         seq.OnComplete(() =>
         {
-            completed = true; // ← 新增：在完成时置位
+            completed = true; 
             monitor.MarkCompleted(requestId);
             _pendingMonitorKillReason = null;
             if (master)
@@ -327,7 +337,6 @@ public class UITweenPlayer : MonoBehaviour
 
         seq.OnKill(() =>
         {
-            // ← 修复点：不再调用 seq.IsComplete()，避免 DOTween 的“invalid tween”警告
             if (!completed)
             {
                 var reason = string.IsNullOrEmpty(_pendingMonitorKillReason) ? "Killed" : _pendingMonitorKillReason;
@@ -361,9 +370,8 @@ public class UITweenPlayer : MonoBehaviour
         {
             case SecondaryTweenType.Rotation:
             {
-                Vector3 target = secondary.isRelative
-                    ? secondary.targetValue
-                    : new Vector3(_rt.localEulerAngles.x, _rt.localEulerAngles.y, secondary.targetValue.z);
+                // MODIFIED: Absolute rotation now respects the full Vector3 target
+                Vector3 target = secondary.targetValue;
                 var mode = secondary.isRelative ? RotateMode.FastBeyond360 : RotateMode.Fast;
                 tween = _rt.DORotate(target, secondary.duration, mode);
                 if (secondary.isRelative) tween.SetRelative();
@@ -488,14 +496,14 @@ public class UITweenPlayer : MonoBehaviour
             if (p != null && p.presetName == presetName) return p;
         foreach (var lib in libraries)
             if (lib != null && lib.TryGet(presetName, out var p)) return p;
-        // Debug.LogWarning($"[UITweenPlayer] Preset not found: {presetName}", this);
         return null;
     }
-    public bool TryGetBaseline(UITweenPreset p, out Vector2 pos, out Vector2 size, out float eulerZ, out float? alpha, out Color? color, out Vector2 pivot)
+
+    public bool TryGetBaseline(UITweenPreset p, out Vector2 pos, out Vector2 size, out Vector3 eulerAngles, out float? alpha, out Color? color, out Vector2 pivot)
     {
         pos = Vector2.zero;
         size = Vector2.zero;
-        eulerZ = 0f;
+        eulerAngles = Vector3.zero; // MODIFIED
         alpha = null;
         color = null;
         pivot = Vector2.zero;
@@ -504,12 +512,13 @@ public class UITweenPlayer : MonoBehaviour
         var baseLine = GetOrCaptureBaseline(p);
         pos = baseLine.pos;
         size = baseLine.size;
-        eulerZ = baseLine.eulerZ;
+        eulerAngles = baseLine.eulerAngles; // MODIFIED
         alpha = baseLine.alpha;
         color = baseLine.color;
         pivot = baseLine.pivot;
         return true;
     }
+    
     private Baseline GetOrCaptureBaseline(UITweenPreset p)
     {
         if (_baselines.TryGetValue(p, out var b)) return b;
@@ -520,7 +529,7 @@ public class UITweenPlayer : MonoBehaviour
         b = new Baseline {
             pos = _rt.anchoredPosition,
             size = _rt.sizeDelta,
-            eulerZ = _rt.eulerAngles.z,
+            eulerAngles = _rt.eulerAngles, // MODIFIED
             alpha = baseAlpha,
             color = baseColor,
             pivot = _rt.pivot

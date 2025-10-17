@@ -1,9 +1,7 @@
 // MIT License
 // ScriptableObject preset for Goal-Driven UI Tween
-// - 保留旧字段名：presetName / delay / loops / loopType / unscaledTime / useCustomCurve / customCurve / easeType / targetPivot
-// - 新增打断策略枚举与字段（相对/贝塞尔）
-// - 统一提供 ApplyEaseTo(Tween) 供 Player/Controller 复用
-// [MODIFIED] Split ApplyEaseTo into ApplyTweenSettings and ApplySequenceSettings to fix double delay issue.
+// [MODIFIED] Upgraded rotation from float (Z-axis only) to Vector3 (X, Y, Z support).
+// [MODIFIED] Renamed animateRotationZ to animateRotation for clarity.
 
 using System.Collections.Generic;
 using DG.Tweening;
@@ -35,7 +33,7 @@ public class SecondaryTween
     [Tooltip("此动画自身的持续时间（秒）")]
     public float duration = 0.5f;
 
-    [Tooltip("动画的目标值。对于旋转是欧拉角Z，对于缩放是(x,y,z)，对于位置是(x,y)")]
+    [Tooltip("动画的目标值。对于旋转是欧拉角(x,y,z)，对于缩放是(x,y,z)，对于位置是(x,y)")]
     public Vector3 targetValue = Vector3.zero;
 
     [Tooltip("缓动类型")]
@@ -136,10 +134,12 @@ public class UITweenPreset : ScriptableObject
     [Tooltip("绝对模式：最终 sizeDelta；相对模式：sizeDelta 增量")]
     public Vector2 targetSizeDelta = Vector2.zero;
 
+    // ===== MODIFICATION START =====
     [Header("Rotation")]
-    public bool animateRotationZ = false;
-    [Tooltip("绝对模式：最终 Z 欧拉角；相对模式：Z 增量")]
-    public float targetEulerZ = 0f;
+    public bool animateRotation = false;
+    [Tooltip("绝对模式：最终欧拉角 (X, Y, Z)；相对模式：每輪循环的旋转增量。")]
+    public Vector3 targetEulerAngles = Vector3.zero;
+    // ===== MODIFICATION END =====
 
     [Header("Pivot (optional, absolute only)")]
     [Tooltip("可选：目标 Pivot（仅建议在绝对模式下使用）。")]
@@ -180,13 +180,7 @@ public class UITweenPreset : ScriptableObject
     [Header("Timeline Events")]
     [Tooltip("在时间轴特定时间点触发的模块化事件")]
     public List<TimelineEvent> timelineEvents = new List<TimelineEvent>();
-
-    // ===== MODIFICATION START =====
-    // 原有的 ApplyEaseTo 方法已被拆分为以下两个方法，以避免双重延遲问题
-
-    /// <summary>
-    /// 僅將缓動曲線（Ease/AnimationCurve）應用到 Tween。
-    /// </summary>
+    
     public void ApplyTweenSettings(Tween t)
     {
         if (useCustomCurve && customCurve != null)
@@ -198,10 +192,7 @@ public class UITweenPreset : ScriptableObject
             t.SetEase(easeType);
         }
     }
-
-    /// <summary>
-    /// 將序列級別的設定（延遲、循環、時間縮放等）應用到 Sequence。
-    /// </summary>
+    
     public void ApplySequenceSettings(Sequence seq)
     {
         seq.SetUpdate(unscaledTime);
@@ -214,5 +205,4 @@ public class UITweenPreset : ScriptableObject
             seq.SetDelay(delay);
         }
     }
-    // ===== MODIFICATION END =====
 }
