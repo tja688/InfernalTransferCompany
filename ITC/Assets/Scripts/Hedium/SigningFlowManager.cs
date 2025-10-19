@@ -998,7 +998,7 @@ public class StampSystem : IContractStage
         chargeTime = 0f;
         
         // 通知UI
-        //uiManager?.StartStampCharging(GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig);
+        uiManager?.StartStampCharging(GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig);
     }
 
     private void OnHandleStampCharging()
