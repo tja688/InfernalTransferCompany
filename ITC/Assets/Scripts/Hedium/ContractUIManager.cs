@@ -434,20 +434,13 @@ public class HeContractUIManager : MonoBehaviour
    
         // 初始化参数（从gameConfig获取，确保和业务侧一致）
         _maxChargeTime = gameConfig?.stampChargeTime ?? 3f;
-        _optimalTiming = gameConfig?.stampOptimalTiming ?? 0.8f;
+        _optimalTiming = gameConfig?.stampOptimalTiming ?? 0.8f; 
         _optimalTime = _maxChargeTime * _optimalTiming;
         _tolerance = gameConfig?.stampAccuracyTolerance ?? 0.1f;
         _overTimeThreshold = _maxChargeTime * 1.2f;
 
-        // 初始化圆环UI（位置、倾斜、初始状态）
-        InitChargeRing();
-
-        // 停止之前的协程（防止重复）
-        if (_chargeCoroutine != null)
-            StopCoroutine(_chargeCoroutine);
-
-        // 启动协程：实时更新进度和颜色
-        _chargeCoroutine = StartCoroutine(UpdateChargeProgressCoroutine());
+         
+     
     }
 
 
