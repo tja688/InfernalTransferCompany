@@ -1,4 +1,5 @@
 using Spine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.PackageManager;
@@ -7,6 +8,13 @@ using UnityEngine.EventSystems;
 
 using UnityEngine.UI;
 using static MoreMountains.Tools.ShaderController;
+public enum SuccessType { 
+    BigSuccess,
+    MediaSuccess,
+    SmallSuccess,
+    Faild,
+    BigFailed,
+}
 
 public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
     IPointerExitHandler
@@ -30,50 +38,76 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
     [Tooltip("接近绿色的阈值（0-1，如0.9表示90%接近绿色时有效）")]
     public float greenThreshold = 0.9f;
 
-    [Header("引用")]
-    public Image ringImage; // 圆环图像
-    public delegate void OnJudgeResult(bool isSuccess, string reason);
-    public OnJudgeResult onJudgeResult; // 外部可注册的结果回调
 
+    private Image ringImage; // 圆环图像
+    public delegate void OnJudgeResult(bool isSuccess, SuccessType type);
+    public OnJudgeResult onJudgeResult;
 
+    public bool lockOnce = false;
     private bool isAnimating = false; // 动画是否运行中
     private float animationTime = 0f; // 当前动画时长
     private bool isTriggered = false; // 是否已触发结束判断
     void Start()
     {
         // 初始化圆环颜色
-        if (ringImage != null)
+        if (ringImage == null)
         {
+            ringImage=GetComponent<Image>();
             ringImage.color = initialColor;
             ringImage.material = new Material(Shader.Find("UI/Unlit/Transparent"));
         }
+        
     }
+  
+    public struct debugTec {
+        bool f;
+        string str;
+        public debugTec( string strValue)
+        {
+            f = true;
+            str = strValue;
+        }
+        public void debug()
+        {
+            if (f == true)
+            {
+                Debug.Log(str);
+                f = false;
+            }
+            return;
+        }
+            
+            
+            
+            }
 
     void Update()
     {
+        //dbg.debug();
         // 动画运行中且未触发判断时，更新颜色渐变
         if (isAnimating && !isTriggered)
         {
             animationTime += Time.deltaTime;
             float totalDuration = phase1Duration + phase2Duration;
-
             // 检查是否超时（蓝色阶段结束）
             if (animationTime >= totalDuration)
             {
                 isAnimating = false;
-                JudgeResult(false, "超时（蓝色阶段结束）");
+                JudgeResult(false, "超时（蓝色阶段结束）",SuccessType .Faild);
                 return;
             }
 
             // 阶段1：初始色 → 绿色（有效区域）
             if (animationTime <= phase1Duration)
             {
+                //dbg3.debug();
                 float t1 = animationTime / phase1Duration;
                 ringImage.color = Color.Lerp(initialColor, targetGreen, t1);
             }
             // 阶段2：绿色 → 蓝色（超时区域）
             else
             {
+                //dbg4.debug();
                 float t2 = (animationTime - phase1Duration) / phase2Duration;
                 ringImage.color = Color.Lerp(targetGreen, endBlue, t2);
             }
@@ -85,7 +119,7 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (eventData.pointerDrag == null) return;
+        if (eventData.pointerDrag == null&& lockOnce==true) return;
 
         DraggableUI draggable = eventData.pointerDrag.GetComponent<DraggableUI>();
         if (draggable == null) return;
@@ -93,6 +127,7 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
         // 类型匹配时启动动画
         if (draggable.targetType == targetType)
         {
+         
             isMatchedDraggingOver = true;
             StartAnimation(); // 开启动画
         }
@@ -128,7 +163,7 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
             // 检查当前动画阶段，判断结果
             if (animationTime >= totalDuration)
             {
-                JudgeResult(false, "超时（拖拽结束时已过蓝色阶段）");
+                JudgeResult(false, "超时（拖拽结束时已过蓝色阶段）",SuccessType.Faild);
             }
             else if (animationTime <= phase1Duration)
             {
@@ -136,17 +171,17 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
                 float t1 = animationTime / phase1Duration;
                 if (t1 >= greenThreshold)
                 {
-                    JudgeResult(true, "时机正确（接近绿色区域）");
+                    JudgeResult(true, "时机正确（接近绿色区域）", SuccessType.BigSuccess);
                 }
                 else
                 {
-                    JudgeResult(false, "时机过早（未接近绿色区域）");
+                    JudgeResult(false, "时机过早（未接近绿色区域）", SuccessType.Faild);
                 }
             }
             else
             {
                 // 阶段2：已过绿色区域
-                JudgeResult(false, "时机过晚（已进入蓝色区域）");
+                JudgeResult(false, "时机过晚（已进入蓝色区域）", SuccessType.Faild);
             }
         }
     }
@@ -161,6 +196,7 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
         isTriggered = false;
         ringImage.color = initialColor; // 重置为初始色
         Debug.Log("动画启动：开始向绿色渐变");
+        lockOnce = true;
     }
 
     /// <summary>
@@ -168,6 +204,7 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
     /// </summary>
     private void StopAnimation()
     {
+        lockOnce = false;
         isAnimating = false;
         isTriggered = false;
         ringImage.color = initialColor; // 重置颜色
@@ -177,14 +214,15 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
     /// <summary>
     /// 判定结果并触发回调
     /// </summary>
-    private void JudgeResult(bool success, string reason)
+    private void JudgeResult(bool success, string reason,SuccessType type)
     {
         isTriggered = true;
         // 视觉反馈
         ringImage.color = success ? successColor : failColor;
         // 日志与回调
         Debug.Log($"判定结果：{(success ? "成功" : "失败")} - {reason}");
-        onJudgeResult?.Invoke(success, reason); // 通知外部
+        onJudgeResult?.Invoke(success, type); // 通知外部
+        StopAnimation();
     }
 
     /// <summary>
