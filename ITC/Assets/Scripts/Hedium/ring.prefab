@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5963181236700923943}
   - component: {fileID: 1522225305295147276}
   - component: {fileID: 5183607881458594637}
-  - component: {fileID: 849255276690946329}
+  - component: {fileID: 3980186264245801660}
   m_Layer: 5
   m_Name: ring
   m_TagString: Untagged
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &849255276690946329
+--- !u!114 &3980186264245801660
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,10 +85,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 8529366660006307252}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fba0cb0849b8d44686f52314be51f73, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a3b313d473207c4584f14cb9e8c7443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventName: EndDragUpTheStampingTool
-  error: 2
-  highlightColor: {r: 1.2, g: 1.2, b: 0.8, a: 1}
   targetType: Stamping tool
+  initialColor: {r: 0.6320754, g: 0.5694642, b: 0.5694642, a: 1}
+  targetGreen: {r: 0, g: 1, b: 0, a: 1}
+  endBlue: {r: 0, g: 0, b: 1, a: 1}
+  successColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  failColor: {r: 1, g: 0, b: 0, a: 1}
+  phase1Duration: 2
+  phase2Duration: 1
+  greenThreshold: 0.9

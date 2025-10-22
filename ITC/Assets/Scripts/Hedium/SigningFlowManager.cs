@@ -928,6 +928,8 @@ public class StampSystem : IContractStage
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
         neededStampType = HeContractType.Event; // TODO: 根据契约类型设置需要的印章类型
         Debug.Log("=== 开始契约盖印阶段 ===");
+        uiManager.InitRingPrefab();
+        uiManager.InitStampToolTemp();
         InitHandleStampSelection();
 
 
@@ -948,14 +950,14 @@ public class StampSystem : IContractStage
         }
     }
 
-    private void InitHandleStampSelection()
+    public void InitHandleStampSelection()
     {
         uiManager.EnableAllStamp();
         SlotCenter.Instance.add_listener<StampType>(HeEventNames.ChosenStampType, OnHandleStampSelection);
 
 
     }
-    private void DisableHandleStampSelection()
+    public void DisableHandleStampSelection()
     {
 
         uiManager.DisableAllStamp();
@@ -987,6 +989,9 @@ public class StampSystem : IContractStage
     {
         Debug.Log("=== 契约盖印阶段结束 ===");
         DisableHandleStampSelection();
+        uiManager.DestroyRingPrefab();
+        uiManager.DestroyStampToolTemp();
+     ;
     }
 
  
@@ -996,7 +1001,7 @@ public class StampSystem : IContractStage
         Debug.Log("开始盖印仪式，符文开始发光...");
         isCharging = true;
         chargeTime = 0f;
-        
+       
         // 通知UI
         uiManager?.StartStampCharging(GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig);
     }

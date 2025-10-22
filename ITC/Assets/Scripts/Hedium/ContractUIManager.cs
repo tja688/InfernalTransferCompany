@@ -39,6 +39,7 @@ public class HeContractUIManager : MonoBehaviour
         SoulHarvest,
 
     }
+    public Canvas gameCanvas;
     public event System.Action<bool> OnPlayerDecisionMade;
     [Header("=== 触发设置 ===")]
 
@@ -61,7 +62,10 @@ public class HeContractUIManager : MonoBehaviour
     public Image arrowImage;              // 箭头提示
     public Image roleImage;
     public GameObject ArrowGroupGameObject;
-
+    public GameObject RingTempPrefab;
+    public GameObject StampToolPrefab;
+    private GameObject _ringTempInstance;
+    private GameObject _stampToolInstance;
 
     [Header("=== 动画设置 ===")]
     public float panelTransitionTime = 0.5f;
@@ -85,16 +89,7 @@ public class HeContractUIManager : MonoBehaviour
 
 
     private Image stampChargeRing;
-    private RectTransform _ringRect;
-    public Color initialColor = Color.blue; // 初始阶段（未到完美时机）
-    public Color optimalColor = Color.green; // 完美时机阶段
-    public Color warningColor = Color.yellow; // 过了完美时机（未超时）
-    public Color overTimeColor = Color.red; // 超时阶段
-    private float _maxChargeTime;       // 最大蓄力时间（默认3f）
-    private float _optimalTiming;       // 完美时机比例（默认0.8f）
-    private float _optimalTime;         // 完美时机具体时间（max*optimalTiming）
-    private float _tolerance;           // 完美时机容错范围（默认0.1f）
-    private float _overTimeThreshold;   // 超时阈值（max*1.2f）
+  
     private Coroutine _chargeCoroutine;
 
 
@@ -110,12 +105,20 @@ public class HeContractUIManager : MonoBehaviour
     {
         flowManager = FindFirstObjectByType<SigningFlowManager>();
         gameConfig = flowManager?.gameConfig;
-
+        InitCheck();
         InitializeUI();
         RegisterAllEvent();
-
+        
     }
 
+    private void InitCheck()
+    {
+        if (gameCanvas == null)
+        {
+            Debug.LogError("Canvas未附加在UIManager");
+        }
+        return;
+    }
     private void RegisterAllEvent()
     {
       
@@ -424,135 +427,107 @@ public class HeContractUIManager : MonoBehaviour
 
     private void HighlightCorrectStamp(HeContractType correctType)
     {
+
+
     }
-
-   
-
-    // 业务侧调用的UI启动方法（原uiManager?.StartStampCharging()）
-    public void StartStampCharging(HeContractGameConfig gameConfig)
+  
+    public void InitRingPrefab()
     {
-   
-        // 初始化参数（从gameConfig获取，确保和业务侧一致）
-        _maxChargeTime = gameConfig?.stampChargeTime ?? 3f;
-        _optimalTiming = gameConfig?.stampOptimalTiming ?? 0.8f; 
-        _optimalTime = _maxChargeTime * _optimalTiming;
-        _tolerance = gameConfig?.stampAccuracyTolerance ?? 0.1f;
-        _overTimeThreshold = _maxChargeTime * 1.2f;
-
-         
-     
-    }
-
-
-    // 初始化圆环位置和状态（确保在typewriterSkeleton中央，倾斜80度）
-    private void InitChargeRing()
-    {
-        if (stampChargeRing == null || typewriterSkeleton == null)
+        if (RingTempPrefab == null)
         {
-            Debug.LogError("环形进度条或父物体未赋值！");
+            Debug.LogError("InitRingPrefab: RingTempPrefab 未设置");
             return;
         }
 
-        // 父物体设为typewriterSkeleton，确保在中央
-        RectTransform ringRect = stampChargeRing.GetComponent<RectTransform>();
-        ringRect.SetParent(typewriterSkeleton.GetComponent<RectTransform>(), false);
+       
 
-        // 位置居中（锚点和 pivot 都设为中心）
-        ringRect.anchorMin = ringRect.anchorMax = new Vector2(0.5f, 0.5f);
-        ringRect.pivot = new Vector2(0.5f, 0.5f);
-        ringRect.anchoredPosition = Vector2.zero;
+        // 实例化预制体
+        _ringTempInstance = GameObject.Instantiate(RingTempPrefab, gameCanvas.transform);
+        if (_ringTempInstance == null)
+        {
+            Debug.LogError("InitRingPrefab: 实例化失败");
+            return;
+        }
 
-        // 向内倾斜80度（Z轴旋转）
-        ringRect.rotation = Quaternion.Euler(0, 0, 80f);
+        // 确保是 UI 元素时重置 RectTransform，否则设置为本地原点
+        RectTransform rt = _ringTempInstance.GetComponent<RectTransform>();
+        if (rt != null)
+        {
+            rt.SetAsLastSibling();
+            rt.localScale = Vector3.one;
+            rt.anchoredPosition = new Vector2(0, -192.5f);
+            rt.localRotation = Quaternion.identity;
+    
+        }
+    
 
-        // 初始状态（进度0，初始色，显示UI）
-        stampChargeRing.fillAmount = 0f;
-        stampChargeRing.color = initialColor;
-        stampChargeRing.gameObject.SetActive(true);
+
     }
-
-
-    // 协程：实时更新进度和颜色（核心逻辑）
-    private IEnumerator UpdateChargeProgressCoroutine()
+    public void DestroyRingPrefab()
     {
-        float currentChargeTime = 0f; // UI侧独立计时，不依赖业务侧的chargeTime
-
-        while (true)
+        if (_ringTempInstance != null)
         {
-            // 1. 实时累加时间（每帧更新，和Time.deltaTime同步）
-            currentChargeTime += Time.deltaTime;
-            yield return null; // 等待下一帧，确保实时性
-
-            //// 2. 检查中断条件（完成/失败/尝试次数用完，停止协程）
-            //if (context.isStampCompleted || context.isStampFailed || context.stampAttempts >= (context.gameConfig?.maxStampAttempts ?? 3))
-            //{
-            //    HideChargeRing();
-            //    _chargeCoroutine = null;
-            //    yield break;
-            //}
-
-            // 3. 计算进度并同步到环形条
-            float chargeProgress = currentChargeTime / _maxChargeTime;
-            if (chargeProgress > 1f) chargeProgress = 1f; // 进度不超过100%
-            stampChargeRing.fillAmount = chargeProgress;
-
-            // 4. 按时间阶段切换颜色（完全贴合原业务逻辑）
-            UpdateRingColorByTime(currentChargeTime);
-
-            // 5. 处理超时（和原逻辑一致：超时重置，尝试次数+1）
-            if (currentChargeTime > _overTimeThreshold)
-            {
-                Debug.Log("UI侧：蓄力超时，重新开始");
-                //context.stampAttempts++;
-                currentChargeTime = 0f; // 重置计时
-                stampChargeRing.fillAmount = 0f; // 重置进度
-                stampChargeRing.color = initialColor; // 重置颜色
-            }
+           
+            GameObject.Destroy(_ringTempInstance);
+            _ringTempInstance = null;
+           
         }
     }
-
-
-    // 根据当前时间切换圆环颜色
-    private void UpdateRingColorByTime(float currentChargeTime)
+    public void DestroyStampToolTemp()
     {
-        if (currentChargeTime < _overTimeThreshold) // 未超时
+        if (_stampToolInstance != null)
         {
-            // 完美时机范围内（currentChargeTime在 [optimalTime-tolerance, optimalTime+tolerance]）
-            if (Mathf.Abs(currentChargeTime - _optimalTime) < _tolerance)
-            {
-                stampChargeRing.color = optimalColor;
-            }
-            // 未到完美时机（currentChargeTime < optimalTime - tolerance）
-            else if (currentChargeTime < _optimalTime - _tolerance)
-            {
-                stampChargeRing.color = initialColor;
-            }
-            // 过了完美时机但未超时（currentChargeTime > optimalTime + tolerance）
-            else
-            {
-                stampChargeRing.color = warningColor;
-            }
-        }
-        else // 超时
-        {
-            stampChargeRing.color = overTimeColor;
+
+            GameObject.Destroy(_stampToolInstance);
+            _ringTempInstance = null;
+
         }
     }
 
 
-    // 隐藏圆环（完成/失败时调用）
-    public void HideChargeRing()
+    public void InitStampToolTemp()
     {
-        if (stampChargeRing != null)
-            stampChargeRing.gameObject.SetActive(false);
-
-        // 停止协程
-        if (_chargeCoroutine != null)
+        if(StampToolPrefab == null)
         {
-            StopCoroutine(_chargeCoroutine);
-            _chargeCoroutine = null;
+            Debug.LogError("InitStampToolTemp: StampToolPrefab 未设置");
+            return;
         }
+
+
+        // 实例化预制体
+        _stampToolInstance = GameObject.Instantiate(StampToolPrefab, gameCanvas.transform);
+
+        RectTransform rt = _stampToolInstance.GetComponent<RectTransform>();
+        rt.SetAsLastSibling();
+        rt.localScale = Vector3.one;
+        rt.anchoredPosition =new Vector2(-103f, -212.1f);
+        rt.localRotation = Quaternion.identity;
+      
+        DraggableUI db = _stampToolInstance.GetComponent<DraggableUI>();
+        db.isDraggable = true; 
+
     }
+
+    // 业务侧调用的UI启动方法（原uiManager?.StartStampCharging()）
+    //目前实现为拖拽进入自动触发
+    public void StartStampCharging(HeContractGameConfig gameConfig)
+    {
+
+        if (_stampToolInstance)
+        {
+            Debug.LogError("StartStampCharging: 盖章工具未初始化");
+            return;
+
+        }
+
+
+        //RingChangeColor ringChangeColor = _stampToolInstance.GetComponent<RingChangeColor>();
+        //ringChangeColor.StartAnimation();
+
+    }
+
+
+
 
     #endregion
 
