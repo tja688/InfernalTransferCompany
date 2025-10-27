@@ -37,7 +37,7 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
     public float phase2Duration = 1f;
     [Tooltip("接近绿色的阈值（0-1，如0.9表示90%接近绿色时有效）")]
     public float greenThreshold = 0.9f;
-
+    public float greenThresholdSuccessSmall = 0.8f;
 
     private Image ringImage; // 圆环图像
     public delegate void OnJudgeResult(bool isSuccess, SuccessType type);
@@ -121,8 +121,12 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
     {
         if (eventData.pointerDrag == null&& lockOnce==true) return;
 
-        DraggableUI draggable = eventData.pointerDrag.GetComponent<DraggableUI>();
-        if (draggable == null) return;
+        DraggableUI draggable = eventData.pointerDrag.TryGetComponent<DraggableUI>(out var d) ? d : null;
+        if (draggable == null) { 
+            Debug.LogError("拖拽物无法获得缺少DraggableUI组件，无法启动动画");
+
+            return;
+        }
 
         // 类型匹配时启动动画
         if (draggable.targetType == targetType)
@@ -172,6 +176,10 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
                 if (t1 >= greenThreshold)
                 {
                     JudgeResult(true, "时机正确（接近绿色区域）", SuccessType.BigSuccess);
+                }
+                else if (t1 >= greenThresholdSuccessSmall)
+                {
+                    JudgeResult(true, "时机较好（接近绿色区域）", SuccessType.SmallSuccess);
                 }
                 else
                 {

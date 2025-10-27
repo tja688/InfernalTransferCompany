@@ -96,7 +96,6 @@ public class HeContractUIManager : MonoBehaviour
 
     public event System.Action<int> OnMoveAction;
     public event System.Action OnInteractAction;
-
     private void Awake()
     {
 
@@ -430,7 +429,12 @@ public class HeContractUIManager : MonoBehaviour
 
 
     }
-  
+    public void OnTabChargeEnd(bool success, SuccessType type)
+    {
+        SlotCenter.Instance.trigger_event< SuccessType>(HeEventNames.OnChargingSth, type);   
+    }
+   
+
     public void InitRingPrefab()
     {
         if (RingTempPrefab == null)
@@ -443,6 +447,8 @@ public class HeContractUIManager : MonoBehaviour
 
         // 实例化预制体
         _ringTempInstance = GameObject.Instantiate(RingTempPrefab, gameCanvas.transform);
+        RingChangeColor rg = _ringTempInstance.GetComponent<RingChangeColor>();
+        rg.onJudgeResult+= OnTabChargeEnd;
         if (_ringTempInstance == null)
         {
             Debug.LogError("InitRingPrefab: 实例化失败");
@@ -463,11 +469,18 @@ public class HeContractUIManager : MonoBehaviour
 
 
     }
+
+ 
     public void DestroyRingPrefab()
     {
+
+
+       
+        
         if (_ringTempInstance != null)
         {
-           
+            RingChangeColor rg =  _ringTempInstance.GetComponent<RingChangeColor>();
+            rg.onJudgeResult -= OnTabChargeEnd;
             GameObject.Destroy(_ringTempInstance);
             _ringTempInstance = null;
            
