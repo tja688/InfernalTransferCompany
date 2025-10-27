@@ -52,17 +52,17 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
         // 初始化圆环颜色
         if (ringImage == null)
         {
-            ringImage=GetComponent<Image>();
+            ringImage = GetComponent<Image>();
             ringImage.color = initialColor;
             ringImage.material = new Material(Shader.Find("UI/Unlit/Transparent"));
         }
-        
+
     }
-  
+
     public struct debugTec {
         bool f;
         string str;
-        public debugTec( string strValue)
+        public debugTec(string strValue)
         {
             f = true;
             str = strValue;
@@ -76,10 +76,10 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
             }
             return;
         }
-            
-            
-            
-            }
+
+
+
+    }
 
     void Update()
     {
@@ -93,7 +93,7 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
             if (animationTime >= totalDuration)
             {
                 isAnimating = false;
-                JudgeResult(false, "超时（蓝色阶段结束）",SuccessType .Faild);
+                JudgeResult(false, "超时（蓝色阶段结束）", SuccessType.Faild);
                 return;
             }
 
@@ -119,7 +119,7 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (eventData.pointerDrag == null&& lockOnce==true) return;
+        if (eventData.pointerDrag == null|| lockOnce==true) return;
 
         DraggableUI draggable = eventData.pointerDrag.TryGetComponent<DraggableUI>(out var d) ? d : null;
         if (draggable == null) { 
