@@ -1357,6 +1357,16 @@ public class SigningFlowManager : MonoBehaviour
         currentStage?.Exit();
         currentStage = stages.Dequeue();
         Debug.Log($"进入阶段: {currentStage.StageName}");
+        StartCoroutine(HeCoroutineUtil.Run(() => {
+            return Inner();
+            System.Collections.IEnumerator Inner()
+            {
+                yield return new WaitForSeconds(1f);
+            }
+        }));
+
+
+
         currentStage.Enter(ctx);
     }
 
