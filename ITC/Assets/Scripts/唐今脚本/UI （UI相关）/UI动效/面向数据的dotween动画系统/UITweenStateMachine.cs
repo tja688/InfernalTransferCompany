@@ -1,6 +1,7 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
 
 /// <summary>
 /// 響應UI交互事件，並播放對應的低優先級動畫的狀態機。
@@ -40,16 +41,55 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
         public string onExitPresetName;
     }
 
-    [Tooltip("狀態與動畫的綁定列表")]
+    [Serializable]
+    public class PanelStateAnimationProfile
+    {
+        [Tooltip("此配置適用的面板狀態名稱。")]
+        public string panelStateName;
+
+        [Tooltip("當處於對應面板狀態時使用的狀態動畫綁定。")]
+        public List<StateAnimationBinding> stateAnimations = new();
+
+        [Tooltip("是否響應指針事件。")]
+        public bool respondToPointerEvents = true;
+    }
+
+    [Tooltip("狀態與動畫的綁定列表（作為默認配置使用）。")]
     public List<StateAnimationBinding> stateAnimations = new List<StateAnimationBinding>();
+
+    [Tooltip("當前按鈕關注的面板狀態配置資源。")]
+    public UIPanelStateConfiguration panelStateConfiguration;
+
+    [Tooltip("針對特定面板狀態的覆蓋配置。")]
+    public List<PanelStateAnimationProfile> panelStateProfiles = new();
 
     private UITweenPlayer _player;
     private UIState _currentState = UIState.Normal;
     private bool _isInteractable = true;
+    private bool _respondToPointerEvents = true;
+    private PanelStateAnimationProfile _activePanelProfile;
+    private string _currentPanelState;
 
     void Awake()
     {
         _player = GetComponent<UITweenPlayer>();
+        SubscribeToPanelStateMachine();
+        RefreshPanelState(UIPanelStateMachine.Instance != null ? UIPanelStateMachine.Instance.CurrentState : null);
+    }
+
+    void OnEnable()
+    {
+        SubscribeToPanelStateMachine();
+    }
+
+    void OnDisable()
+    {
+        UnsubscribeFromPanelStateMachine();
+    }
+
+    void OnDestroy()
+    {
+        UnsubscribeFromPanelStateMachine();
     }
 
     /// <summary>
@@ -58,7 +98,7 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
     /// <param name="newState">要轉換到的新狀態</param>
     private void TransitionTo(UIState newState)
     {
-        if (!_isInteractable || _currentState == newState)
+        if (!_isInteractable || !_respondToPointerEvents || _currentState == newState)
         {
             return;
         }
@@ -88,7 +128,7 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
 
     private StateAnimationBinding FindBinding(UIState state)
     {
-        foreach (var binding in stateAnimations)
+        foreach (var binding in GetActiveBindings())
         {
             if (binding.state == state)
             {
@@ -102,7 +142,7 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (_currentState != UIState.Pressed)
+        if (_respondToPointerEvents && _currentState != UIState.Pressed)
         {
             TransitionTo(UIState.Hover);
         }
@@ -110,7 +150,7 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (_currentState != UIState.Pressed)
+        if (_respondToPointerEvents && _currentState != UIState.Pressed)
         {
             TransitionTo(UIState.Normal);
         }
@@ -118,11 +158,21 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (!_respondToPointerEvents)
+        {
+            return;
+        }
+
         TransitionTo(UIState.Pressed);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (!_respondToPointerEvents)
+        {
+            return;
+        }
+
         if (_currentState == UIState.Pressed)
         {
             if (eventData.pointerCurrentRaycast.gameObject == gameObject)
@@ -140,6 +190,11 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
     
     public void SetSelected(bool isSelected)
     {
+        if (!_respondToPointerEvents)
+        {
+            return;
+        }
+
         if (isSelected)
         {
             if (_currentState != UIState.Selected) TransitionTo(UIState.Selected);
@@ -180,4 +235,113 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
             }
         }
     }
+
+    List<StateAnimationBinding> GetActiveBindings()
+    {
+        if (_activePanelProfile != null && _activePanelProfile.stateAnimations != null && _activePanelProfile.stateAnimations.Count > 0)
+        {
+            return _activePanelProfile.stateAnimations;
+        }
+
+        return stateAnimations ??= new List<StateAnimationBinding>();
+    }
+
+    void SubscribeToPanelStateMachine()
+    {
+        var machine = UIPanelStateMachine.Instance;
+        if (machine == null)
+        {
+            return;
+        }
+
+        machine.StateTransitionRequested -= HandlePanelStateRequested;
+        machine.StateTransitionRequested += HandlePanelStateRequested;
+    }
+
+    void UnsubscribeFromPanelStateMachine()
+    {
+        var machine = UIPanelStateMachine.Instance;
+        if (machine == null)
+        {
+            return;
+        }
+
+        machine.StateTransitionRequested -= HandlePanelStateRequested;
+    }
+
+    void HandlePanelStateRequested(string _, string targetState)
+    {
+        RefreshPanelState(targetState);
+    }
+
+    void RefreshPanelState(string targetState)
+    {
+        _currentPanelState = targetState;
+        _activePanelProfile = null;
+        _respondToPointerEvents = false;
+
+        if (string.IsNullOrEmpty(targetState))
+        {
+            ResetToNormal();
+            return;
+        }
+
+        if (panelStateConfiguration != null && !panelStateConfiguration.Contains(targetState))
+        {
+            ResetToNormal();
+            return;
+        }
+
+        foreach (var profile in panelStateProfiles)
+        {
+            if (profile == null || string.IsNullOrEmpty(profile.panelStateName))
+            {
+                continue;
+            }
+
+            if (string.Equals(profile.panelStateName, targetState, StringComparison.Ordinal))
+            {
+                _activePanelProfile = profile;
+                bool hasBindings = GetActiveBindings() != null && GetActiveBindings().Count > 0;
+                _respondToPointerEvents = profile.respondToPointerEvents && hasBindings;
+                if (!_respondToPointerEvents)
+                {
+                    ResetToNormal();
+                }
+                return;
+            }
+        }
+
+        // 未配置的面板狀態不響應指針事件。
+        ResetToNormal();
+    }
+
+    void ResetToNormal()
+    {
+        _currentState = UIState.Normal;
+    }
+
+#if UNITY_EDITOR
+    void OnValidate()
+    {
+        if (panelStateProfiles == null || panelStateConfiguration == null)
+        {
+            return;
+        }
+
+        var validNames = new HashSet<string>(panelStateConfiguration.GetStateNames(), StringComparer.Ordinal);
+        foreach (var profile in panelStateProfiles)
+        {
+            if (profile == null || string.IsNullOrEmpty(profile.panelStateName))
+            {
+                continue;
+            }
+
+            if (!validNames.Contains(profile.panelStateName))
+            {
+                profile.panelStateName = string.Empty;
+            }
+        }
+    }
+#endif
 }
