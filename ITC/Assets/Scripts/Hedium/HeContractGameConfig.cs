@@ -106,27 +106,18 @@ public class HeContractGameConfig : ScriptableObject
     [Tooltip("契约类型和对应符文序列")]
     public List<HeContractTypeConfig> HeContractTypeConfigs = new List<HeContractTypeConfig>();
 
-    [Header("=== 难度调节 ===")]
-    [Space(10)]
-    [Tooltip("选择预设难度")]
-    public DifficultyPreset difficultyPreset = DifficultyPreset.Normal;
-    
-    [Space(5)]
-    [Button("应用难度预设")]
-    public bool applyDifficultyPreset;
+    int day = 1;
 
-
-    /// <summary>
-    /// 难度枚举用于调整游戏进程
-    /// </summary>
-    public enum DifficultyPreset
+  
+    public void CalculateCameConfigMaker(int day)
     {
-        Easy,      
-        Normal, 
-        Hard,       
-        Expert     
-    }
+        runeInputCountMaxLimit =5 ;
+        runeInputCountMinLimit = 5;
+        runeInputTimeLimit = 10f;
+        runeShowTimeLimit = 4f;
+        runeGameTuneCount = 3;
 
+    }
     [System.Serializable]
     public class RuneConfig
     {
@@ -156,71 +147,8 @@ public class HeContractGameConfig : ScriptableObject
         public float maxSoulPercentage = 0.6f;
     }
 
-    private void OnValidate()
-    {
-        // 确保数值合理性
-        if (minSatisfaction >= initialSatisfaction)
-            minSatisfaction = Mathf.Max(0, initialSatisfaction - 1);
-        
-        // 自动应用难度预设
-        if (applyDifficultyPreset)
-        {
-            ApplyDifficultyPreset(difficultyPreset);
-            applyDifficultyPreset = false;
-        }
-    }
 
-    /// <summary>
-    /// 应用难度预设
-    /// </summary>
-    public void ApplyDifficultyPreset(DifficultyPreset preset)
-    {
-        switch (preset)
-        {
-            case DifficultyPreset.Easy:
-                runeInputTimeLimit = 15f;
-                maxRuneErrors = 4;
-                runeVerificationTime = 8f;
-                stampAccuracyTolerance = 0.2f;
-                soulHarvestAccuracy = 0.08f;
-                eventTriggerChance = 0.2f;
-                maxStampAttempts = 4;
-                break;
-                
-            case DifficultyPreset.Normal:
-                runeInputTimeLimit = 10f;
-                maxRuneErrors = 3;
-                runeVerificationTime = 5f;
-                stampAccuracyTolerance = 0.1f;
-                soulHarvestAccuracy = 0.05f;
-                eventTriggerChance = 0.3f;
-                maxStampAttempts = 3;
-                break;
-                
-            case DifficultyPreset.Hard:
-                runeInputTimeLimit = 7f;
-                maxRuneErrors = 2;
-                runeVerificationTime = 3f;
-                stampAccuracyTolerance = 0.07f;
-                soulHarvestAccuracy = 0.03f;
-                eventTriggerChance = 0.4f;
-                maxStampAttempts = 2;
-                break;
-                
-            case DifficultyPreset.Expert:
-                runeInputTimeLimit = 5f;
-                maxRuneErrors = 1;
-                runeVerificationTime = 2f;
-                stampAccuracyTolerance = 0.05f;
-                soulHarvestAccuracy = 0.02f;
-                eventTriggerChance = 0.5f;
-                maxStampAttempts = 1;
-                break;
-        }
-        
-        //Debug.Log($"已应用{preset}难度预设");
-    }
-
+   
     /// <summary>
     /// 获取契约类型的符文序列
     /// </summary>
@@ -277,7 +205,7 @@ public class HeContractGameConfig : ScriptableObject
     [ContextMenu("Reset to Default")]
     public void ResetToDefault()
     {
-        ApplyDifficultyPreset(DifficultyPreset.Normal);
+     
         
         // 设置默认符文配置
         if (runeConfigs.Count == 0)

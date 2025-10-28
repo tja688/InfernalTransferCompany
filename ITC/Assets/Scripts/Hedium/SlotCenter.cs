@@ -13,6 +13,7 @@ public static class HeEventNames
     public const string DocumentErrorChosen = "DocumentErrorChosen";//DocumentError
     public const string EnableChooseRuneEvent = "EnableChooseRuneEvent";
     public const string ArrowFadeOutDelete = "ArrowFadeOutDelete";
+    public const string OnChargingSth = "OnChargingSth";//
     public const string ChosenStampType = "ChosenStampType";//StampType
 }
 

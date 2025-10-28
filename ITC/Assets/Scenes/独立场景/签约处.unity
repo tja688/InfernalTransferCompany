@@ -1921,10 +1921,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveAction: {fileID: -1412686185753986710, guid: 223da5f3e9640004fb90d28561bf1ac9, type: 3}
   interactAction: {fileID: 628884908304310996, guid: 223da5f3e9640004fb90d28561bf1ac9, type: 3}
-  circularRunaSkeleton: {fileID: 0}
-  diamondRunaSkeleton: {fileID: 0}
-  triangularRunaSkeleton: {fileID: 0}
-  sphericalRunaSkeleton: {fileID: 0}
+  gameCanvas: {fileID: 2057023471}
+  circularRunaSkeleton: {fileID: 1783584880}
+  diamondRunaSkeleton: {fileID: 2075403266}
+  triangularRunaSkeleton: {fileID: 484988894}
+  sphericalRunaSkeleton: {fileID: 125450538}
   pneumaticChannelSkeleton: {fileID: 965413463}
   copperRuneSelectorSkeleton: {fileID: 0}
   leftBookSkeleton: {fileID: 0}
@@ -1936,6 +1937,8 @@ MonoBehaviour:
   arrowImage: {fileID: 0}
   roleImage: {fileID: 1155682647}
   ArrowGroupGameObject: {fileID: 869754514}
+  RingTempPrefab: {fileID: 8529366660006307252, guid: 84ad8642e88bf5843b935e2f4b050cbf, type: 3}
+  StampToolPrefab: {fileID: 2134020477775123444, guid: 1471a0358953e8f4f92073fe9d6e44b2, type: 3}
   panelTransitionTime: 0.5
   uiElementFadeTime: 0.3
   useSkeletonGraphicForPneumatic: 1
@@ -6249,7 +6252,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 23
+  m_SortingOrder: 156
   m_Sprite: {fileID: -3846190005299227843, guid: a26e66802e00ce74db92514a7840a4d1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
