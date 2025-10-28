@@ -23,9 +23,9 @@ namespace HSM {
                 var rb = ctx.rb;
 
                 if (rb != null) {
-                    var v = rb.linearVelocity;
+                    var v = rb.velocity;
                     v.y = ctx.jumpSpeed;
-                    rb.linearVelocity = v;
+                    rb.velocity = v;
                 }
                 return ((PlayerRoot)Parent).Airborne;
             }

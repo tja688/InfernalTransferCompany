@@ -60,11 +60,11 @@ namespace HSM {
         }
 
         void FixedUpdate() {
-            var v = rb.linearVelocity;
+            var v = rb.velocity;
             v.x = ctx.velocity.x;
-            rb.linearVelocity = v;
+            rb.velocity = v;
 
-            ctx.velocity.x = rb.linearVelocity.x;
+            ctx.velocity.x = rb.velocity.x;
         }
 
         void OnDrawGizmosSelected() {
