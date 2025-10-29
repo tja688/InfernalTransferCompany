@@ -9,6 +9,7 @@ public class UITweenTrackEditor : Editor
 {
     SerializedProperty _tracksProp;
     SerializedProperty _useUnscaledProp;
+    SerializedProperty _playFlowProp; // 新增
 
     // —— Editor-only: 测试区状态 —— //
     int _testTrackIndex = 0;
@@ -18,6 +19,7 @@ public class UITweenTrackEditor : Editor
     {
         _tracksProp = serializedObject.FindProperty("tracks");
         _useUnscaledProp = serializedObject.FindProperty("useUnscaledIntervals");
+        _playFlowProp = serializedObject.FindProperty("playFlow"); // 新增
         RefreshTrackNameOptions();
     }
 
@@ -54,7 +56,11 @@ public class UITweenTrackEditor : Editor
             EditorGUILayout.LabelField("运行测试（Play 模式）", EditorStyles.boldLabel);
 
             var track = (UITweenTrack)target;
-            int trackCount = _tracksProp != null ? _tracksProp.arraySize : 0;
+            int trackCount = _tracksProp?.arraySize ?? 0;
+
+            // 新增：播放流程控制
+            EditorGUILayout.PropertyField(_playFlowProp, new GUIContent("播放流程"));
+            EditorGUILayout.Space();
 
             using (new EditorGUI.DisabledScope(trackCount == 0))
             {
@@ -69,6 +75,7 @@ public class UITweenTrackEditor : Editor
                 }
             }
 
+
             if (!EditorApplication.isPlaying)
             {
                 EditorGUILayout.HelpBox("进入 Play 模式后才能运行测试。", MessageType.None);
@@ -76,20 +83,46 @@ public class UITweenTrackEditor : Editor
 
             using (new EditorGUI.DisabledScope(!EditorApplication.isPlaying || trackCount == 0))
             {
+                // 正向播放
+                if (GUILayout.Button("▶ 运行正向轨道", GUILayout.Height(28)))
+                {
+                    Undo.RecordObject(track, "Run Test Track Forward");
+                    track.PlayTrack(_testTrackIndex);
+                }
+
+                // 反向播放按钮
+                EditorGUILayout.LabelField("反向播放模式", EditorStyles.miniBoldLabel);
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    if (GUILayout.Button("▶ 运行测试", GUILayout.Height(24)))
+                    if (GUILayout.Button("◀ 默认反向", GUILayout.Height(24)))
                     {
-                        Undo.RecordObject(track, "Run Test Track");
-                        track.PlayTrack(_testTrackIndex);
+                        Undo.RecordObject(track, "Run Test Track Reverse Default");
+                        track.PlayTrackReverse(_testTrackIndex, UITweenTrack.ReversePlayMode.Default);
                     }
 
-                    if (GUILayout.Button("⏹ 停止该轨道", GUILayout.Height(24)))
+                    if (GUILayout.Button("◀ 正序反向", GUILayout.Height(24)))
+                    {
+                        Undo.RecordObject(track, "Run Test Track Reverse Forward Order");
+                        track.PlayTrackReverse(_testTrackIndex, UITweenTrack.ReversePlayMode.ForwardOrderReverse);
+                    }
+
+                    if (GUILayout.Button("⏪ 快速退场", GUILayout.Height(24)))
+                    {
+                        Undo.RecordObject(track, "Run Test Track Quick Exit");
+                        track.PlayTrackReverse(_testTrackIndex, UITweenTrack.ReversePlayMode.QuickExit);
+                    }
+                }
+                
+                // 停止按钮
+                EditorGUILayout.Space();
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    if (GUILayout.Button("⏹ 停止该轨道", GUILayout.Height(22)))
                     {
                         track.StopTrack(_testTrackIndex);
                     }
 
-                    if (GUILayout.Button("⏹ 全部停止", GUILayout.Height(24)))
+                    if (GUILayout.Button("⏹ 全部停止", GUILayout.Height(22)))
                     {
                         track.StopAllTracks();
                     }

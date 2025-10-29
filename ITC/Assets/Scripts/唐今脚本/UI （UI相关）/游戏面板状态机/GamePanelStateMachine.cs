@@ -32,6 +32,10 @@ public class GamePanelTransition
     public UITweenTrack transitionTrack;
     [Tooltip("要播放的轨道名称")]
     public string trackNameToPlay;
+    [Tooltip("选择轨道的播放模式")]
+    public GamePanelStateMachine.TransitionPlayMode playMode = GamePanelStateMachine.TransitionPlayMode.Forward;
+    [Tooltip("如果选择反向播放，在这里指定反向的模式")]
+    public UITweenTrack.ReversePlayMode reverseMode = UITweenTrack.ReversePlayMode.Default;
 }
 
 /// <summary>
@@ -39,6 +43,11 @@ public class GamePanelTransition
 /// </summary>
 public class GamePanelStateMachine : MonoBehaviour
 {
+    /// <summary>
+    /// 定义过渡轨道的播放模式
+    /// </summary>
+    public enum TransitionPlayMode { Forward, Reverse }
+
     #region Singleton and Initialization
 
     private static GamePanelStateMachine _instance;
@@ -64,42 +73,30 @@ public class GamePanelStateMachine : MonoBehaviour
 
     private void Awake()
     {
-        // 情况 1: Instance 属性先于 Awake 执行，并且找到了 this
-        if (_instance == this)
-        {
-            // 我们已经被 Instance 属性“指定”为单例
-            // 确保我们被正确设置并初始化
-            DontDestroyOnLoad(gameObject);
-            _currentPanel = startingPanel; // <--- 关键：补上初始化
-            return;
-        }
-
-        // 情况 2: Awake 先于 Instance 属性执行
         if (_instance == null)
         {
-            // 我们是第一个，将自己设为单例
+            // 如果还没有实例，当前实例成为单例
             _instance = this;
             DontDestroyOnLoad(gameObject);
-            _currentPanel = startingPanel; // 初始化
+            _currentPanel = startingPanel;
         }
-        // 情况 3: 场景中已存在一个单例 ( _instance != null 且 _instance != this )
         else if (_instance != this)
         {
-            // 这是重复的实例，优先保留拥有完整配置的实例
-            bool existingConfigured = _instance != null && _instance.HasMeaningfulConfiguration();
-            bool thisConfigured = HasMeaningfulConfiguration();
+            // 如果单例已存在，检查是否应该替换它
+            bool existingIsBlank = _instance.startingPanel == "None";
+            bool thisIsConfigured = this.startingPanel != "None";
 
-            if (!existingConfigured && thisConfigured)
+            if (existingIsBlank && thisIsConfigured)
             {
-                // 用这个“已配置”的实例替换现有的“空白”实例
+                // 如果现存的是“空白”实例，而当前实例是“已配置”的，则取代它
                 Destroy(_instance.gameObject);
                 _instance = this;
                 DontDestroyOnLoad(gameObject);
-                _currentPanel = startingPanel; // 初始化
+                _currentPanel = startingPanel; // 使用当前实例的配置初始化
             }
             else
             {
-                // 否则（现有实例更“完整”或两者都为空白），销毁这个重复的
+                // 否则（现存的已配置，或当前实例是空白的），销毁当前这个重复的实例
                 Destroy(gameObject);
             }
         }
@@ -181,13 +178,23 @@ public class GamePanelStateMachine : MonoBehaviour
     private void PlayTransition(string from, string to)
     {
         var transition = transitions.Find(t => t.fromPanel == from && t.toPanel == to);
-        if (transition?.transitionTrack != null && !string.IsNullOrEmpty(transition.trackNameToPlay))
+        if (transition?.transitionTrack == null || string.IsNullOrEmpty(transition.trackNameToPlay)) return;
+
+        if (transition.playMode == TransitionPlayMode.Forward)
         {
             if (debugMode)
             {
-                Debug.Log($"[GamePanelStateMachine] Playing transition track: <color=lime>'{transition.trackNameToPlay}'</color> on {transition.transitionTrack.name}", transition.transitionTrack);
+                Debug.Log($"[GamePanelStateMachine] Playing transition track [Forward]: <color=lime>'{transition.trackNameToPlay}'</color> on {transition.transitionTrack.name}", transition.transitionTrack);
             }
-            transition.transitionTrack.PlayTrackByName(transition.trackNameToPlay);
+            transition.transitionTrack.PlayTrackByName_Event(transition.trackNameToPlay);
+        }
+        else // Reverse
+        {
+            if (debugMode)
+            {
+                Debug.Log($"[GamePanelStateMachine] Playing transition track [Reverse - {transition.reverseMode}]: <color=lime>'{transition.trackNameToPlay}'</color> on {transition.transitionTrack.name}", transition.transitionTrack);
+            }
+            transition.transitionTrack.PlayTrackReverse(transition.trackNameToPlay, transition.reverseMode);
         }
     }
 

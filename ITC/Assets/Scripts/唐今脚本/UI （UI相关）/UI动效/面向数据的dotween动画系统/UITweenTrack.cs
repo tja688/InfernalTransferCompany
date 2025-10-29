@@ -10,8 +10,36 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class UITweenTrack : MonoBehaviour
 {
-    public enum PlayFlow { SequentialWait, StaggeredStart }
-    public PlayFlow playFlow = PlayFlow.StaggeredStart; 
+    /// <summary>
+    /// 轨道播放模式
+    /// </summary>
+    public enum PlayMode
+    {
+        Forward, // 正向播放
+        Reverse  // 反向播放
+    }
+
+    /// <summary>
+    /// 轨道反向播放的策略
+    /// </summary>
+    public enum ReversePlayMode
+    {
+        Default,           // 倒序播放Clip、倒序执行Item、带延迟
+        ForwardOrderReverse, // 正序播放Clip、倒序执行Item、带延迟
+        QuickExit          // 倒序播放Clip、同时执行所有Item、无延迟
+    }
+
+    public enum TrackPlayFlow
+    {
+        [Tooltip("上一个动画播放完毕后，再等待延迟，然后播放下一个")]
+        Sequential,
+        [Tooltip("上一个动画开始后，直接等待延迟，然后播放下一个（动画会重叠）")]
+        Staggered
+    }
+
+    [Header("播放流程控制")]
+    [Tooltip("控制正向播放时，轨道内元素的播放方式")]
+    public TrackPlayFlow playFlow = TrackPlayFlow.Staggered;
     
     [System.Serializable]
     public class TrackItem
@@ -49,6 +77,7 @@ public class UITweenTrack : MonoBehaviour
         }
     }
 
+    [Header("轨道集合")]
     [Tooltip("轨道集合")]
     public List<Track> tracks = new List<Track>();
 
@@ -57,43 +86,67 @@ public class UITweenTrack : MonoBehaviour
 
     readonly Dictionary<int, Coroutine> _runningTracks = new();
 
-    public void PlayTrackByIndex_Event(int trackIndex)
-    {
-        PlayTrack(trackIndex);
-    }
+    #region Public API for UnityEvents
 
-    public void PlayTrackByName(string trackName)
-    {
-        if (string.IsNullOrEmpty(trackName)) return;
+    // --- 正向播放 ---
+    public void PlayTrackByIndex_Event(int trackIndex) => PlayTrack(trackIndex);
+    public void PlayTrackByName_Event(string trackName) => PlayTrack(trackName);
 
-        for (int i = 0; i < tracks.Count; i++)
-        {
-            if (tracks[i] != null && tracks[i].trackName == trackName)
-            {
-                PlayTrack(i);
-                return;
-            }
-        }
+    // --- 默认反向 ---
+    public void PlayTrackReverse_Default_ByIndex(int trackIndex) => PlayTrackReverse(trackIndex, ReversePlayMode.Default);
+    public void PlayTrackReverse_Default_ByName(string trackName) => PlayTrackReverse(trackName, ReversePlayMode.Default);
+
+    // --- 正序反向 ---
+    public void PlayTrackReverse_ForwardOrder_ByIndex(int trackIndex) => PlayTrackReverse(trackIndex, ReversePlayMode.ForwardOrderReverse);
+    public void PlayTrackReverse_ForwardOrder_ByName(string trackName) => PlayTrackReverse(trackName, ReversePlayMode.ForwardOrderReverse);
+
+    // --- 快速退场 ---
+    public void PlayTrackReverse_QuickExit_ByIndex(int trackIndex) => PlayTrackReverse(trackIndex, ReversePlayMode.QuickExit);
+    public void PlayTrackReverse_QuickExit_ByName(string trackName) => PlayTrackReverse(trackName, ReversePlayMode.QuickExit);
+
+    #endregion
+
+    public void PlayTrack(string trackName)
+    {
+        int index = FindTrackIndex(trackName);
+        if (index != -1) PlayTrack(index);
     }
 
     public void PlayTrack(int trackIndex)
     {
-        if (!isActiveAndEnabled) return;
-        if (trackIndex < 0 || trackIndex >= tracks.Count) return;
+        PlayTrackCore(trackIndex, PlayMode.Forward, ReversePlayMode.Default);
+    }
+
+    public void PlayTrackReverse(string trackName, ReversePlayMode reverseMode)
+    {
+        int index = FindTrackIndex(trackName);
+        if (index != -1) PlayTrackReverse(index, reverseMode);
+    }
+
+    public void PlayTrackReverse(int trackIndex, ReversePlayMode reverseMode)
+    {
+        PlayTrackCore(trackIndex, PlayMode.Reverse, reverseMode);
+    }
+
+    private void PlayTrackCore(int trackIndex, PlayMode playMode, ReversePlayMode reverseMode)
+    {
+        if (!isActiveAndEnabled || trackIndex < 0 || trackIndex >= tracks.Count)
+        {
+            return;
+        }
 
         StopTrack(trackIndex);
         var track = tracks[trackIndex];
         if (track == null) return;
 
-        var routine = StartCoroutine(RunTrackInitializer(trackIndex, track));
+        var routine = StartCoroutine(RunTrackCoroutine(track, playMode, reverseMode));
         _runningTracks[trackIndex] = routine;
     }
 
-    private IEnumerator RunTrackInitializer(int trackIndex, Track track)
+    private int FindTrackIndex(string trackName)
     {
-        yield return new WaitForEndOfFrame(); 
-    
-        yield return RunTrack(trackIndex, track);
+        if (string.IsNullOrEmpty(trackName)) return -1;
+        return tracks.FindIndex(t => t != null && t.trackName == trackName);
     }
 
     public void StopTrack(int trackIndex)
@@ -109,10 +162,7 @@ public class UITweenTrack : MonoBehaviour
     {
         foreach (var routine in _runningTracks.Values)
         {
-            if (routine != null)
-            {
-                StopCoroutine(routine);
-            }
+            if (routine != null) StopCoroutine(routine);
         }
         _runningTracks.Clear();
     }
@@ -120,49 +170,110 @@ public class UITweenTrack : MonoBehaviour
     public void ApplyUniformInterval(int trackIndex, float interval)
     {
         if (trackIndex < 0 || trackIndex >= tracks.Count) return;
-        var track = tracks[trackIndex];
-        track?.ApplyUniformInterval(interval);
+        tracks[trackIndex]?.ApplyUniformInterval(interval);
     }
 
-    IEnumerator RunTrack(int trackIndex, Track track)
+    private IEnumerator RunTrackCoroutine(Track track, PlayMode playMode, ReversePlayMode reverseMode)
     {
-        for (int itemIndex = 0; itemIndex < track.items.Count; itemIndex++)
+        // 等待一帧确保所有UI对象初始化完毕
+        yield return new WaitForEndOfFrame();
+
+        if (playMode == PlayMode.Forward)
         {
-            var item = track.items[itemIndex];
-            if (item == null || item.player == null) continue;
-
-            Tween tween;
-            string sourceName = string.IsNullOrEmpty(track.trackName) ? gameObject.name : track.trackName;
-            using (UITweenCallContext.BeginScope(this, "Track", sourceName, BuildTrackDetail(itemIndex, item)))
+            for (int i = 0; i < track.items.Count; i++)
             {
-                tween = item.player.PlayMasterByName(item.presetName);
-            }
+                var item = track.items[i];
+                Tween tween = PlayItem(item, false);
 
-            if (playFlow == PlayFlow.SequentialWait)
-            {
-                if (tween != null) yield return tween.WaitForCompletion();
+                if (playFlow == TrackPlayFlow.Sequential)
+                {
+                    if (tween != null) yield return tween.WaitForCompletion();
+                }
 
                 float wait = Mathf.Max(0f, item.delayAfterPlay);
                 if (wait > 0f)
+                {
                     yield return useUnscaledIntervals ? new WaitForSecondsRealtime(wait) : new WaitForSeconds(wait);
-            }
-            else // PlayFlow.StaggeredStart
-            {
-                float wait = Mathf.Max(0f, item.delayAfterPlay);
-                if (wait > 0f)
-                    yield return useUnscaledIntervals ? new WaitForSecondsRealtime(wait) : new WaitForSeconds(wait);
+                }
             }
         }
-        _runningTracks.Remove(trackIndex);
+        else // Reverse Modes
+        {
+            switch (reverseMode)
+            {
+                case ReversePlayMode.Default:
+                    for (int i = track.items.Count - 1; i >= 0; i--)
+                    {
+                        var item = track.items[i];
+                        Tween tween = PlayItem(item, true);
+
+                        if (playFlow == TrackPlayFlow.Sequential)
+                        {
+                            if (tween != null) yield return tween.WaitForCompletion();
+                        }
+
+                        float wait = Mathf.Max(0f, item.delayAfterPlay);
+                        if (wait > 0f)
+                        {
+                            yield return useUnscaledIntervals ? new WaitForSecondsRealtime(wait) : new WaitForSeconds(wait);
+                        }
+                    }
+                    break;
+
+                case ReversePlayMode.ForwardOrderReverse:
+                    for (int i = 0; i < track.items.Count; i++)
+                    {
+                        var item = track.items[i];
+                        Tween tween = PlayItem(item, true);
+
+                        if (playFlow == TrackPlayFlow.Sequential)
+                        {
+                            if (tween != null) yield return tween.WaitForCompletion();
+                        }
+
+                        float wait = Mathf.Max(0f, item.delayAfterPlay);
+                        if (wait > 0f)
+                        {
+                            yield return useUnscaledIntervals ? new WaitForSecondsRealtime(wait) : new WaitForSeconds(wait);
+                        }
+                    }
+                    break;
+
+                case ReversePlayMode.QuickExit:
+                    foreach (var item in track.items)
+                    {
+                        PlayItem(item, true);
+                    }
+                    break;
+            }
+        }
     }
 
-    private string BuildTrackDetail(int itemIndex, TrackItem item)
+    private IEnumerator PlayItemAndWait(TrackItem item, bool reversed)
     {
-        string preset = item != null && !string.IsNullOrEmpty(item.presetName) ? item.presetName : "<none>";
-        string playerName = item != null && item.player != null ? item.player.name : "<missing player>";
-        return $"Item #{itemIndex + 1} · {playerName} · {preset}";
+        Tween tween = PlayItem(item, reversed);
+        if (tween != null) yield return tween.WaitForCompletion();
+
+        float wait = Mathf.Max(0f, item.delayAfterPlay);
+        if (wait > 0f)
+        {
+            yield return useUnscaledIntervals ? new WaitForSecondsRealtime(wait) : new WaitForSeconds(wait);
+        }
     }
 
+    private Tween PlayItem(TrackItem item, bool reversed)
+    {
+        if (item == null || item.player == null) return null;
+
+        string sourceName = string.IsNullOrEmpty(item.player.name) ? "<Unnamed>" : item.player.name;
+        string detail = $"TrackItem: {sourceName} · {item.presetName}";
+        using (UITweenCallContext.BeginScope(this, "Track", gameObject.name, detail))
+        {
+            return reversed
+                ? item.player.PlayMasterReversedByName(item.presetName)
+                : item.player.PlayMasterByName(item.presetName);
+        }
+    }
 
     void OnDisable()
     {
