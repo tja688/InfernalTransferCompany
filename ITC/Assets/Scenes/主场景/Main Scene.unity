@@ -672,6 +672,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 148400496}
+  - component: {fileID: 148400497}
   m_Layer: 0
   m_Name: UIStateSystem
   m_TagString: Untagged
@@ -694,6 +695,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1360210875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &148400497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 148400495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3d6b06ab8edf8046b2eab66b5a5641c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelLibrary: {fileID: 11400000, guid: 95e0439e31e261646aa0abbb63165c49, type: 2}
+  startingPanel: None
+  transitions:
+  - fromPanel: 
+    toPanel: Pause Panel
+    transitionTrack: {fileID: 304332302}
+    trackNameToPlay: None to Pause Panel
 --- !u!28 &182872107
 Texture2D:
   m_ObjectHideFlags: 0
@@ -1238,6 +1258,7 @@ GameObject:
   - component: {fileID: 210919022}
   - component: {fileID: 210919023}
   - component: {fileID: 210919024}
+  - component: {fileID: 210919025}
   m_Layer: 5
   m_Name: "\u70B9\u51FB\u540E\u5927\u56FE\u6807"
   m_TagString: Untagged
@@ -1346,16 +1367,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 304332302}
-        m_TargetAssemblyTypeName: UITweenTrack, Assembly-CSharp
-        m_MethodName: PlayTrack
-        m_Mode: 3
+      - m_Target: {fileID: 210919025}
+        m_TargetAssemblyTypeName: GamePanelChanger, Assembly-CSharp
+        m_MethodName: ChangeToPanel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Pause Panel
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &210919022
@@ -1475,6 +1496,19 @@ MonoBehaviour:
   detectRotationY: 1
   invisAngleToleranceDeg: 1
   detectionSamples: 240
+--- !u!114 &210919025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210919015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e22f680869742534d836392f051c3be5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  logDebugInfo: 0
 --- !u!21 &228270012
 Material:
   serializedVersion: 8
@@ -2026,7 +2060,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playFlow: 1
   tracks:
-  - trackName: "\u4E00\u7EA7\u83DC\u5355\u5165\u573A"
+  - trackName: None to Pause Panel
     uniformInterval: 0.1
     items:
     - player: {fileID: 210919022}
