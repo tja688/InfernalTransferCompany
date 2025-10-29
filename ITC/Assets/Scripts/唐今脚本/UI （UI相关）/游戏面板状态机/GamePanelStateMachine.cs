@@ -85,11 +85,11 @@ public class GamePanelStateMachine : MonoBehaviour
         // 情况 3: 场景中已存在一个单例 ( _instance != null 且 _instance != this )
         else if (_instance != this)
         {
-            // 这是重复的实例，检查是否应该替换现有的
-            bool existingIsBlank = _instance.startingPanel == "None";
-            bool thisIsConfigured = this.startingPanel != "None";
+            // 这是重复的实例，优先保留拥有完整配置的实例
+            bool existingConfigured = _instance != null && _instance.HasMeaningfulConfiguration();
+            bool thisConfigured = HasMeaningfulConfiguration();
 
-            if (existingIsBlank && thisIsConfigured)
+            if (!existingConfigured && thisConfigured)
             {
                 // 用这个“已配置”的实例替换现有的“空白”实例
                 Destroy(_instance.gameObject);
@@ -99,7 +99,7 @@ public class GamePanelStateMachine : MonoBehaviour
             }
             else
             {
-                // 否则（现有的已配置，或当前的是空白的），销毁这个重复的
+                // 否则（现有实例更“完整”或两者都为空白），销毁这个重复的
                 Destroy(gameObject);
             }
         }
@@ -189,6 +189,26 @@ public class GamePanelStateMachine : MonoBehaviour
             }
             transition.transitionTrack.PlayTrackByName(transition.trackNameToPlay);
         }
+    }
+
+    private bool HasMeaningfulConfiguration()
+    {
+        if (panelLibrary != null) return true;
+        if (!string.IsNullOrEmpty(startingPanel) && startingPanel != "None") return true;
+
+        if (transitions != null)
+        {
+            foreach (var transition in transitions)
+            {
+                if (transition == null) continue;
+                if (!string.IsNullOrEmpty(transition.fromPanel)) return true;
+                if (!string.IsNullOrEmpty(transition.toPanel)) return true;
+                if (transition.transitionTrack != null) return true;
+                if (!string.IsNullOrEmpty(transition.trackNameToPlay)) return true;
+            }
+        }
+
+        return false;
     }
 
     // 辅助类，用于实现 IDisposable 退订
