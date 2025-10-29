@@ -708,9 +708,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panelLibrary: {fileID: 11400000, guid: 95e0439e31e261646aa0abbb63165c49, type: 2}
-  startingPanel: None
+  startingPanel: Game Panel
+  debugMode: 0
   transitions:
-  - fromPanel: 
+  - fromPanel: Game Panel
     toPanel: Pause Panel
     transitionTrack: {fileID: 304332302}
     trackNameToPlay: None to Pause Panel
@@ -2881,7 +2882,6 @@ GameObject:
   - component: {fileID: 583028971}
   - component: {fileID: 583028976}
   - component: {fileID: 583028974}
-  - component: {fileID: 583028973}
   m_Layer: 5
   m_Name: "\u80CC\u666F"
   m_TagString: Untagged
@@ -2946,18 +2946,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 583028969}
   m_CullTransparentMesh: 1
---- !u!114 &583028973
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 583028969}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &583028974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7156,7 +7144,6 @@ GameObject:
   - component: {fileID: 1547583155}
   - component: {fileID: 1547583160}
   - component: {fileID: 1547583158}
-  - component: {fileID: 1547583157}
   m_Layer: 5
   m_Name: "\u9009\u62E9\u6307\u9488"
   m_TagString: Untagged
@@ -7221,18 +7208,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1547583153}
   m_CullTransparentMesh: 1
---- !u!114 &1547583157
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1547583153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf6cf3dbe60a9934a8ac00ce4a5381fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1547583158
 MonoBehaviour:
   m_ObjectHideFlags: 0
