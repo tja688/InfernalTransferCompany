@@ -84,6 +84,18 @@ public class UITweenPlayer : MonoBehaviour
         return PlayMasterCore(presets[index], false);
     }
 
+    // --- 新增的主控反向播放方法 ---
+    public void PlayMasterReversed_Event(UITweenPreset preset) { PlayMasterReversed(preset); }
+    public void PlayMasterReversedByName_Event(string presetName) { PlayMasterReversedByName(presetName); }
+    public void PlayMasterReversedByIndex_Event(int index) { PlayMasterReversedByIndex(index); }
+    public Tween PlayMasterReversed(UITweenPreset preset) { return PlayMasterCore(preset, true); }
+    public Tween PlayMasterReversedByName(string presetName) { return PlayMasterCore(FindPreset(presetName), true); }
+    public Tween PlayMasterReversedByIndex(int index)
+    {
+        if (index < 0 || index >= presets.Count) return null;
+        return PlayMasterCore(presets[index], true);
+    }
+
     public void Kill(bool complete = false)
     {
         if (_active != null && _active.IsActive())

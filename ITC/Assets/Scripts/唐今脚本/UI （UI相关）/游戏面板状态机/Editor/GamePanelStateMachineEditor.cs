@@ -79,7 +79,20 @@ public class GamePanelStateMachineEditor : Editor
                 DrawPanelSelector(fromPanelProp, "从");
                 DrawPanelSelector(toPanelProp, "到");
                 EditorGUILayout.PropertyField(trackProp, new GUIContent("动画轨道 (Track)"));
-                EditorGUILayout.PropertyField(trackNameProp, new GUIContent("轨道名称 (Name)")); // 新增
+                EditorGUILayout.PropertyField(trackNameProp, new GUIContent("轨道名称 (Name)"));
+
+                // 新增：播放模式选择
+                var playModeProp = transitionProp.FindPropertyRelative("playMode");
+                EditorGUILayout.PropertyField(playModeProp, new GUIContent("播放模式"));
+
+                // 新增：仅在反向模式下显示反向类型选择
+                if (playModeProp.enumValueIndex == (int)GamePanelStateMachine.TransitionPlayMode.Reverse)
+                {
+                    using (new EditorGUI.IndentLevelScope())
+                    {
+                        EditorGUILayout.PropertyField(transitionProp.FindPropertyRelative("reverseMode"), new GUIContent("反向模式"));
+                    }
+                }
             }
         }
 

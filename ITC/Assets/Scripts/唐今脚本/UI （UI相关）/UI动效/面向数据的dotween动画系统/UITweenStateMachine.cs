@@ -1,119 +1,190 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using System;
 
 /// <summary>
-/// 響應UI交互事件，並播放對應的低優先級動畫的狀態機。
-/// 必須與 UITweenPlayer 組件掛載在同一個 GameObject 上。
+/// 响应UI交互事件，并根据全局 GamePanelStateMachine 的当前面板状态，播放对应的动画和轨道。
 /// </summary>
 [RequireComponent(typeof(UITweenPlayer))]
 public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
+    #region Data Structures
+
     /// <summary>
-    /// 定義了UI元素可能存在的狀態
+    /// 定义了UI元素可能存在的状态
     /// </summary>
     public enum UIState
     {
-        Normal,   // 正常/默認狀態
-        Hover,    // 鼠標懸停狀態
-        Pressed,  // 鼠標按下狀態
-        Selected, // 選中狀態（例如 Toggle on）
-        Disabled  // 禁用狀態
+        Normal,   // 正常/默认状态
+        Hover,    // 鼠标悬停状态
+        Pressed,  // 鼠标按下状态
+        Selected, // 选中状态（例如 Toggle on）
+        Disabled  // 禁用状态
     }
 
     /// <summary>
-    /// 將一個UI狀態與進入/退出時播放的動畫預設名稱進行綁定
+    /// 单个UI状态的动画/轨道绑定
     /// </summary>
     [System.Serializable]
-    public class StateAnimationBinding
+    public class UIStateBinding
     {
-        [Tooltip("此綁定對應的UI狀態")]
         public UIState state;
 
-        [Tooltip("當進入此狀態時要播放的動畫預設名稱")]
+        [Header("动画预设 (Preset)")]
         public string onEnterPresetName;
-
-        [Tooltip("如果勾選，退出狀態時將反向播放進入動畫，並忽略下方的“退出動畫名稱”")]
         public bool reverseOnExit = true;
-        
-        [Tooltip("（可選）當退出此狀態時要播放的動畫預設名稱（僅在 reverseOnExit 未勾選時生效）")]
         public string onExitPresetName;
+
+        [Header("动画轨道 (Track)")]
+        public bool playTrackOnEnter = false;
+        public UITweenTrack onEnterTrack;
+        public string onEnterTrackName;
+        public bool reverseTrackOnExit = false;
+        public UITweenTrack.ReversePlayMode onExitTrackReverseMode = UITweenTrack.ReversePlayMode.Default;
     }
 
-    [Tooltip("狀態與動畫的綁定列表")]
-    public List<StateAnimationBinding> stateAnimations = new List<StateAnimationBinding>();
+    /// <summary>
+    /// 单个面板所对应的状态配置集合
+    /// </summary>
+    [System.Serializable]
+    public class PanelStateConfiguration
+    {
+        [Tooltip("此配置对应的面板名称")]
+        public string panelName;
+        public List<UIStateBinding> stateBindings = new List<UIStateBinding>();
+    }
+
+    #endregion
+
+    [Tooltip("包含所有面板状态配置的列表")]
+    public List<PanelStateConfiguration> panelConfigurations = new List<PanelStateConfiguration>();
 
     private UITweenPlayer _player;
     private UIState _currentState = UIState.Normal;
     private bool _isInteractable = true;
+
+    // --- 全局状态机相关 ---
+    private IDisposable _panelStateSubscription;
+    private string _currentGlobalPanel = "None";
 
     void Awake()
     {
         _player = GetComponent<UITweenPlayer>();
     }
 
-    /// <summary>
-    /// 核心狀態轉換邏輯
-    /// </summary>
-    /// <param name="newState">要轉換到的新狀態</param>
-    private void TransitionTo(UIState newState)
+    void OnEnable()
     {
-        if (!_isInteractable || _currentState == newState)
-        {
-            return;
-        }
+        // 订阅全局面板状态机
+        _panelStateSubscription = GamePanelStateMachine.Instance.Subscribe(OnPanelStateChanged);
+    }
 
-        // --- 修改後的退出邏輯 ---
-        var oldBinding = FindBinding(_currentState);
+    void OnDisable()
+    {
+        // 取消订阅
+        _panelStateSubscription?.Dispose();
+    }
+
+    private void OnPanelStateChanged(PanelStateChange change)
+    {
+        _currentGlobalPanel = change.CurrentPanel;
+        // 当全局面板切换时，可能需要将当前UI元素重置到Normal状态
+        // 如果当前不是Normal，则触发一次从当前状态到Normal的退出逻辑
+        if (_currentState != UIState.Normal)
+        {
+            TransitionTo(UIState.Normal, true);
+        }
+    }
+
+    /// <summary>
+    /// 核心状态转换逻辑
+    /// </summary>
+    /// <param name="newState">要转换到的新状态</param>
+    /// <param name="isGlobalReset">是否是因全局面板切换而触发的重置</param>
+    private void TransitionTo(UIState newState, bool isGlobalReset = false)
+    {
+        if (!_isInteractable || _currentState == newState) return;
+
+        // 查找当前全局面板对应的配置
+        var config = panelConfigurations.Find(c => c.panelName == _currentGlobalPanel);
+        if (config == null) return; // 如果当前面板没有任何配置，则不响应
+
+        UIState oldState = _currentState;
+        _currentState = newState;
+
+        // --- 执行退出逻辑 ---
+        var oldBinding = config.stateBindings.Find(b => b.state == oldState);
         if (oldBinding != null)
         {
+            // 播放退出的动画预设
             if (oldBinding.reverseOnExit && !string.IsNullOrEmpty(oldBinding.onEnterPresetName))
             {
-                PlayStateAnimation("Exit", oldBinding.onEnterPresetName, true, _currentState, newState);
+                PlayPreset(oldBinding.onEnterPresetName, true, oldState, newState);
             }
             else if (!string.IsNullOrEmpty(oldBinding.onExitPresetName))
             {
-                PlayStateAnimation("Exit", oldBinding.onExitPresetName, false, _currentState, newState);
+                PlayPreset(oldBinding.onExitPresetName, false, oldState, newState);
+            }
+
+            // 播放退出的轨道
+            if (oldBinding.playTrackOnEnter && oldBinding.reverseTrackOnExit && oldBinding.onEnterTrack != null)
+            {
+                PlayTrack(oldBinding.onEnterTrack, oldBinding.onEnterTrackName, true, oldBinding.onExitTrackReverseMode, oldState, newState);
             }
         }
 
-        var newBinding = FindBinding(newState);
+        // 如果是全局重置，则只执行退出逻辑，不执行进入逻辑
+        if (isGlobalReset) return;
+
+        // --- 执行进入逻辑 ---
+        var newBinding = config.stateBindings.Find(b => b.state == newState);
         if (newBinding != null)
         {
-            PlayStateAnimation("Enter", newBinding.onEnterPresetName, false, _currentState, newState);
-        }
-
-        _currentState = newState;
-    }
-
-    private StateAnimationBinding FindBinding(UIState state)
-    {
-        foreach (var binding in stateAnimations)
-        {
-            if (binding.state == state)
+            // 播放进入的动画预设
+            if (!string.IsNullOrEmpty(newBinding.onEnterPresetName))
             {
-                return binding;
+                PlayPreset(newBinding.onEnterPresetName, false, oldState, newState);
+            }
+
+            // 播放进入的轨道
+            if (newBinding.playTrackOnEnter && newBinding.onEnterTrack != null)
+            {
+                PlayTrack(newBinding.onEnterTrack, newBinding.onEnterTrackName, false, newBinding.onExitTrackReverseMode, oldState, newState);
             }
         }
-        return null;
     }
-    
-    // --- Unity UI Event System Interfaces (無需修改) ---
 
+    private void PlayPreset(string presetName, bool reversed, UIState from, UIState to)
+    {
+        if (string.IsNullOrEmpty(presetName)) return;
+        string detail = $"UIState: {from} -> {to} | Preset: {presetName}";
+        using (UITweenCallContext.BeginScope(this, "UITweenStateMachine", gameObject.name, detail))
+        {
+            if (reversed) _player.PlayReversedByName(presetName);
+            else _player.PlayByName(presetName);
+        }
+    }
+
+    private void PlayTrack(UITweenTrack track, string trackName, bool reversed, UITweenTrack.ReversePlayMode reverseMode, UIState from, UIState to)
+    {
+        if (track == null || string.IsNullOrEmpty(trackName)) return;
+        string detail = $"UIState: {from} -> {to} | Track: {trackName}";
+        using (UITweenCallContext.BeginScope(this, "UITweenStateMachine", gameObject.name, detail))
+        {
+            if (reversed) track.PlayTrackReverse(trackName, reverseMode);
+            else track.PlayTrack(trackName);
+        }
+    }
+
+    #region Event Handlers
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (_currentState != UIState.Pressed)
-        {
-            TransitionTo(UIState.Hover);
-        }
+        if (_currentState != UIState.Pressed) TransitionTo(UIState.Hover);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (_currentState != UIState.Pressed)
-        {
-            TransitionTo(UIState.Normal);
-        }
+        if (_currentState != UIState.Pressed) TransitionTo(UIState.Normal);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -125,21 +196,13 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
     {
         if (_currentState == UIState.Pressed)
         {
-            if (eventData.pointerCurrentRaycast.gameObject == gameObject)
-            {
-                TransitionTo(UIState.Hover);
-            }
-            else
-            {
-                TransitionTo(UIState.Normal);
-            }
+            TransitionTo(eventData.pointerCurrentRaycast.gameObject == gameObject ? UIState.Hover : UIState.Normal);
         }
     }
 
-    // --- Public API for external control (無需修改) ---
-    
     public void SetSelected(bool isSelected)
     {
+        if (!_isInteractable) return;
         if (isSelected)
         {
             if (_currentState != UIState.Selected) TransitionTo(UIState.Selected);
@@ -149,7 +212,7 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
             if (_currentState == UIState.Selected) TransitionTo(UIState.Normal);
         }
     }
-    
+
     public void SetDisabled(bool isDisabled)
     {
         _isInteractable = !isDisabled;
@@ -162,22 +225,5 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
             if (_currentState == UIState.Disabled) TransitionTo(UIState.Normal);
         }
     }
-
-    private void PlayStateAnimation(string phase, string presetName, bool reversed, UIState fromState, UIState toState)
-    {
-        if (string.IsNullOrEmpty(presetName)) return;
-        string transitionLabel = fromState + "→" + toState;
-        string detail = phase + " " + transitionLabel + " · " + presetName + (reversed ? " (Reversed)" : string.Empty);
-        using (UITweenCallContext.BeginScope(this, "StateMachine", gameObject != null ? gameObject.name : name, detail))
-        {
-            if (reversed)
-            {
-                _player.PlayReversedByName(presetName);
-            }
-            else
-            {
-                _player.PlayByName(presetName);
-            }
-        }
-    }
+    #endregion
 }
