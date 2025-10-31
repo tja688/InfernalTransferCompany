@@ -14,6 +14,9 @@ public class UITweenTrackEditor : Editor
     // —— Editor-only: 测试区状态 —— //
     int _testTrackIndex = 0;
     GUIContent[] _trackNameOptions = Array.Empty<GUIContent>();
+    
+    // —— Editor-only: 轨道折叠状态 —— //
+    Dictionary<int, bool> _trackFoldoutStates = new Dictionary<int, bool>();
 
     void OnEnable()
     {
@@ -143,12 +146,27 @@ public class UITweenTrackEditor : Editor
         for (int i = 0; i < _tracksProp.arraySize; i++)
         {
             var trackProp = _tracksProp.GetArrayElementAtIndex(i);
+            var trackNameProp = trackProp.FindPropertyRelative("trackName");
+            
+            // 确保折叠状态存在
+            if (!_trackFoldoutStates.ContainsKey(i))
+            {
+                _trackFoldoutStates[i] = true; // 默认展开
+            }
+            
             using (new EditorGUILayout.VerticalScope("box"))
             {
+                // 折叠面板标题栏
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    EditorGUILayout.PropertyField(trackProp.FindPropertyRelative("trackName"), new GUIContent("轨道名称"));
-
+                    // 获取轨道名称用于显示
+                    string trackName = string.IsNullOrEmpty(trackNameProp.stringValue) ? $"轨道 {i + 1}" : trackNameProp.stringValue;
+                    
+                    // 折叠控制
+                    _trackFoldoutStates[i] = EditorGUILayout.Foldout(_trackFoldoutStates[i], trackName, true);
+                    
+                    GUILayout.FlexibleSpace();
+                    
                     // 便捷测试按钮（Play 模式单轨）
                     using (new EditorGUI.DisabledScope(!EditorApplication.isPlaying))
                     {
@@ -163,21 +181,47 @@ public class UITweenTrackEditor : Editor
                     if (GUILayout.Button("删除", GUILayout.Width(50f)))
                     {
                         _tracksProp.DeleteArrayElementAtIndex(i);
+                        // 更新折叠状态：删除当前轨道的状态，并将后面的轨道状态向前移动
+                        _trackFoldoutStates.Remove(i);
+                        var newStates = new Dictionary<int, bool>();
+                        foreach (var kvp in _trackFoldoutStates)
+                        {
+                            if (kvp.Key < i)
+                            {
+                                newStates[kvp.Key] = kvp.Value;
+                            }
+                            else if (kvp.Key > i)
+                            {
+                                newStates[kvp.Key - 1] = kvp.Value;
+                            }
+                        }
+                        _trackFoldoutStates = newStates;
                         break;
                     }
                 }
-
-                var intervalProp = trackProp.FindPropertyRelative("uniformInterval");
-                using (new EditorGUILayout.HorizontalScope())
+                
+                // 展开时显示完整内容
+                if (_trackFoldoutStates[i])
                 {
-                    EditorGUILayout.PropertyField(intervalProp, new GUIContent("统一间隔"));
-                    if (GUILayout.Button("应用到轨道", GUILayout.Width(100f)))
-                    {
-                        ApplyUniformInterval(i, intervalProp.floatValue);
-                    }
-                }
+                    EditorGUILayout.Space(4);
+                    
+                    // 轨道名称编辑
+                    EditorGUILayout.PropertyField(trackNameProp, new GUIContent("轨道名称"));
 
-                DrawTrackItems(trackProp, i);
+                    // 统一间隔设置
+                    var intervalProp = trackProp.FindPropertyRelative("uniformInterval");
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        EditorGUILayout.PropertyField(intervalProp, new GUIContent("统一间隔"));
+                        if (GUILayout.Button("应用到轨道", GUILayout.Width(100f)))
+                        {
+                            ApplyUniformInterval(i, intervalProp.floatValue);
+                        }
+                    }
+
+                    // 轨道元素
+                    DrawTrackItems(trackProp, i);
+                }
             }
         }
 
