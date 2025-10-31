@@ -36,6 +36,10 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
         public bool reverseOnExit = true;
         public string onExitPresetName;
 
+        [Header("基线捕获模式")]
+        public UITweenPlayer.BaselineCaptureMode onEnterBaselineMode = UITweenPlayer.BaselineCaptureMode.CurrentState;
+        public UITweenPlayer.BaselineCaptureMode onExitBaselineMode = UITweenPlayer.BaselineCaptureMode.CurrentState;
+
         [Header("动画轨道 (Track)")]
         public bool playTrackOnEnter = false;
         public UITweenTrack onEnterTrack;
@@ -119,11 +123,11 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
             // 播放退出的动画预设
             if (oldBinding.reverseOnExit && !string.IsNullOrEmpty(oldBinding.onEnterPresetName))
             {
-                PlayPreset(oldBinding.onEnterPresetName, true, oldState, newState);
+                PlayPreset(oldBinding.onEnterPresetName, true, oldState, newState, oldBinding.onEnterBaselineMode);
             }
             else if (!string.IsNullOrEmpty(oldBinding.onExitPresetName))
             {
-                PlayPreset(oldBinding.onExitPresetName, false, oldState, newState);
+                PlayPreset(oldBinding.onExitPresetName, false, oldState, newState, oldBinding.onExitBaselineMode);
             }
 
             // 播放退出的轨道
@@ -143,7 +147,7 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
             // 播放进入的动画预设
             if (!string.IsNullOrEmpty(newBinding.onEnterPresetName))
             {
-                PlayPreset(newBinding.onEnterPresetName, false, oldState, newState);
+                PlayPreset(newBinding.onEnterPresetName, false, oldState, newState, newBinding.onEnterBaselineMode);
             }
 
             // 播放进入的轨道
@@ -154,14 +158,14 @@ public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointer
         }
     }
 
-    private void PlayPreset(string presetName, bool reversed, UIState from, UIState to)
+    private void PlayPreset(string presetName, bool reversed, UIState from, UIState to, UITweenPlayer.BaselineCaptureMode baselineMode = UITweenPlayer.BaselineCaptureMode.CurrentState)
     {
         if (string.IsNullOrEmpty(presetName)) return;
         string detail = $"UIState: {from} -> {to} | Preset: {presetName}";
         using (UITweenCallContext.BeginScope(this, "UITweenStateMachine", gameObject.name, detail))
         {
-            if (reversed) _player.PlayReversedByName(presetName);
-            else _player.PlayByName(presetName);
+            if (reversed) _player.PlayReversedByName(presetName, baselineMode);
+            else _player.PlayByName(presetName, baselineMode);
         }
     }
 

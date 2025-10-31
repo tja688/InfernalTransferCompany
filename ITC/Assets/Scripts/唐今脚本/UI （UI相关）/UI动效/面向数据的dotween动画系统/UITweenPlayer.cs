@@ -28,6 +28,12 @@ public class UITweenPlayer : MonoBehaviour
     Graphic _gfx;
     Tween _active;
 
+    public enum BaselineCaptureMode
+    {
+        CurrentState = 0,
+        FunctionalState = 1
+    }
+
     public event Action<UITweenPreset, bool, Sequence> SequencePrepared;
 
     public UITweenPreset LastPreparedPreset { get; private set; }
@@ -43,6 +49,8 @@ public class UITweenPlayer : MonoBehaviour
         public Vector2 pivot;
     }
     readonly Dictionary<UITweenPreset, Baseline> _baselines = new();
+    Baseline _functionalBaseline;
+    bool _functionalBaselineInitialized;
     
     private bool _isLocked = false;
     private string _pendingMonitorKillReason;
@@ -71,29 +79,30 @@ public class UITweenPlayer : MonoBehaviour
         _rt = GetComponent<RectTransform>();
         _cg = GetComponent<CanvasGroup>();
         if (_cg == null) _gfx = GetComponent<Graphic>();
+        InitializeFunctionalBaseline();
     }
 
     public void PlayMaster_Event(UITweenPreset preset) { PlayMaster(preset); }
     public void PlayMasterByName_Event(string presetName) { PlayMasterByName(presetName); }
     public void PlayMasterByIndex_Event(int index) { PlayMasterByIndex(index); }
-    public Tween PlayMaster(UITweenPreset preset) { return PlayMasterCore(preset, false); }
-    public Tween PlayMasterByName(string presetName) { return PlayMasterCore(FindPreset(presetName), false); }
-    public Tween PlayMasterByIndex(int index)
+    public Tween PlayMaster(UITweenPreset preset, BaselineCaptureMode baselineMode = BaselineCaptureMode.CurrentState) { return PlayMasterCore(preset, false, baselineMode); }
+    public Tween PlayMasterByName(string presetName, BaselineCaptureMode baselineMode = BaselineCaptureMode.CurrentState) { return PlayMasterCore(FindPreset(presetName), false, baselineMode); }
+    public Tween PlayMasterByIndex(int index, BaselineCaptureMode baselineMode = BaselineCaptureMode.CurrentState)
     {
         if (index < 0 || index >= presets.Count) return null;
-        return PlayMasterCore(presets[index], false);
+        return PlayMasterCore(presets[index], false, baselineMode);
     }
 
     // --- 新增的主控反向播放方法 ---
     public void PlayMasterReversed_Event(UITweenPreset preset) { PlayMasterReversed(preset); }
     public void PlayMasterReversedByName_Event(string presetName) { PlayMasterReversedByName(presetName); }
     public void PlayMasterReversedByIndex_Event(int index) { PlayMasterReversedByIndex(index); }
-    public Tween PlayMasterReversed(UITweenPreset preset) { return PlayMasterCore(preset, true); }
-    public Tween PlayMasterReversedByName(string presetName) { return PlayMasterCore(FindPreset(presetName), true); }
-    public Tween PlayMasterReversedByIndex(int index)
+    public Tween PlayMasterReversed(UITweenPreset preset, BaselineCaptureMode baselineMode = BaselineCaptureMode.CurrentState) { return PlayMasterCore(preset, true, baselineMode); }
+    public Tween PlayMasterReversedByName(string presetName, BaselineCaptureMode baselineMode = BaselineCaptureMode.CurrentState) { return PlayMasterCore(FindPreset(presetName), true, baselineMode); }
+    public Tween PlayMasterReversedByIndex(int index, BaselineCaptureMode baselineMode = BaselineCaptureMode.CurrentState)
     {
         if (index < 0 || index >= presets.Count) return null;
-        return PlayMasterCore(presets[index], true);
+        return PlayMasterCore(presets[index], true, baselineMode);
     }
 
     public void Kill(bool complete = false)
@@ -114,29 +123,29 @@ public class UITweenPlayer : MonoBehaviour
         LastPreparedSequence = null;
     }
 
-    public void Play(int index)
+    public void Play(int index, BaselineCaptureMode baselineMode = BaselineCaptureMode.CurrentState)
     {
         if (index < 0 || index >= presets.Count) return;
-        PlayCore(presets[index], false);
+        PlayCore(presets[index], false, baselineMode);
     }
-    public void PlayByName(string presetName) { PlayCore(FindPreset(presetName), false); }
-    public void Play(UITweenPreset preset) { PlayCore(preset, false); }
-    public void PlayReversed(int index)
+    public void PlayByName(string presetName, BaselineCaptureMode baselineMode = BaselineCaptureMode.CurrentState) { PlayCore(FindPreset(presetName), false, baselineMode); }
+    public void Play(UITweenPreset preset, BaselineCaptureMode baselineMode = BaselineCaptureMode.CurrentState) { PlayCore(preset, false, baselineMode); }
+    public void PlayReversed(int index, BaselineCaptureMode baselineMode = BaselineCaptureMode.CurrentState)
     {
         if (index < 0 || index >= presets.Count) return;
-        PlayCore(presets[index], true);
+        PlayCore(presets[index], true, baselineMode);
     }
-    public void PlayReversedByName(string presetName) { PlayCore(FindPreset(presetName), true); }
-    public void PlayReversed(UITweenPreset preset) { PlayCore(preset, true); }
+    public void PlayReversedByName(string presetName, BaselineCaptureMode baselineMode = BaselineCaptureMode.CurrentState) { PlayCore(FindPreset(presetName), true, baselineMode); }
+    public void PlayReversed(UITweenPreset preset, BaselineCaptureMode baselineMode = BaselineCaptureMode.CurrentState) { PlayCore(preset, true, baselineMode); }
     
     
-    private Tween PlayMasterCore(UITweenPreset preset, bool reversed)
+    private Tween PlayMasterCore(UITweenPreset preset, bool reversed, BaselineCaptureMode baselineMode)
     {
         PrepareMonitorKillReason($"Superseded by {DescribePlayRequest(preset, reversed, true)}");
         Kill(false);
         Lock();
 
-        var seq = CreateAnimationSequence(preset, reversed, true);
+        var seq = CreateAnimationSequence(preset, reversed, true, baselineMode);
         if (seq != null)
         {
             _active = seq.Play();
@@ -147,13 +156,13 @@ public class UITweenPlayer : MonoBehaviour
         return null;
     }
 
-    private void PlayCore(UITweenPreset preset, bool reversed)
+    private void PlayCore(UITweenPreset preset, bool reversed, BaselineCaptureMode baselineMode)
     {
         if (IsLocked) return;
         PrepareMonitorKillReason($"Superseded by {DescribePlayRequest(preset, reversed, false)}");
         Kill(false);
 
-        var seq = CreateAnimationSequence(preset, reversed, false);
+        var seq = CreateAnimationSequence(preset, reversed, false, baselineMode);
         if (seq != null)
         {
             _active = seq.Play();
@@ -175,15 +184,144 @@ public class UITweenPlayer : MonoBehaviour
         };
     }
 
-    private Sequence CreateAnimationSequence(UITweenPreset preset, bool reversed, bool master)
+    private void InitializeFunctionalBaseline()
+    {
+        if (_rt == null) return;
+        _functionalBaseline = CaptureBaselineNow();
+        _functionalBaselineInitialized = true;
+    }
+
+    private Baseline GetFunctionalBaselineSnapshot()
+    {
+        if (!_functionalBaselineInitialized)
+        {
+            _functionalBaseline = CaptureBaselineNow();
+            _functionalBaselineInitialized = true;
+        }
+        return _functionalBaseline;
+    }
+
+    private void SetFunctionalBaseline(Baseline baseline)
+    {
+        _functionalBaseline = baseline;
+        _functionalBaselineInitialized = true;
+    }
+
+    private Baseline GetOrCaptureBaselineFunctional(UITweenPreset p, Baseline fallback)
+    {
+        if (p == null) return fallback;
+        if (_baselines.TryGetValue(p, out var existing)) return existing;
+        _baselines[p] = fallback;
+        return fallback;
+    }
+
+    private Baseline ComputeFunctionalStateAfterPlay(Baseline baseline, UITweenPreset preset, bool reversed)
+    {
+        if (reversed || preset == null) return baseline;
+
+        var result = baseline;
+
+        if (preset.animatePosition)
+        {
+            result.pos = preset.useRelativeMode
+                ? baseline.pos + preset.targetAnchoredPosition
+                : preset.targetAnchoredPosition;
+        }
+
+        if (preset.animateSize)
+        {
+            result.size = preset.useRelativeMode
+                ? baseline.size + preset.targetSizeDelta
+                : preset.targetSizeDelta;
+        }
+
+        if (preset.animateRotation)
+        {
+            result.eulerAngles = preset.useRelativeMode
+                ? baseline.eulerAngles + preset.targetEulerAngles
+                : preset.targetEulerAngles;
+        }
+
+        if (preset.animateAlpha)
+        {
+            float baseAlpha = baseline.alpha
+                ?? baseline.color?.a
+                ?? (_cg != null ? _cg.alpha : (_gfx != null ? _gfx.color.a : 1f));
+            float targetAlpha = preset.useRelativeMode ? baseAlpha + preset.targetAlpha : preset.targetAlpha;
+            targetAlpha = Mathf.Clamp01(targetAlpha);
+            result.alpha = targetAlpha;
+            if (result.color.HasValue)
+            {
+                var c = result.color.Value;
+                c.a = targetAlpha;
+                result.color = c;
+            }
+        }
+
+        if (preset.animateColor)
+        {
+            result.color = preset.targetColor;
+            result.alpha = preset.targetColor.a;
+        }
+
+        if (preset.animatePivot)
+        {
+            result.pivot = preset.targetPivot;
+        }
+
+        return result;
+    }
+
+    private Sequence CreateAnimationSequence(UITweenPreset preset, bool reversed, bool master, BaselineCaptureMode baselineMode)
     {
         if (preset == null || _rt == null) return null;
 
-        Baseline baseL = preset.useRelativeMode
-            ? (preset.relativeBaselineMode == RelativeBaselineMode.RebaseAtInterrupt
-                ? CaptureBaselineNow()
-                : GetOrCaptureBaseline(preset))
-            : GetOrCaptureBaseline(preset);
+        Baseline? functionalBefore = null;
+        Baseline baseL;
+
+        if (baselineMode == BaselineCaptureMode.FunctionalState)
+        {
+            functionalBefore = GetFunctionalBaselineSnapshot();
+            if (preset.useRelativeMode && preset.relativeBaselineMode == RelativeBaselineMode.RebaseAtInterrupt)
+            {
+                if (reversed)
+                {
+                    if (_baselines.TryGetValue(preset, out var existing))
+                    {
+                        baseL = existing;
+                    }
+                    else
+                    {
+                        baseL = functionalBefore.Value;
+                        _baselines[preset] = baseL;
+                    }
+                }
+                else
+                {
+                    baseL = functionalBefore.Value;
+                    _baselines[preset] = baseL;
+                }
+            }
+            else
+            {
+                baseL = GetOrCaptureBaselineFunctional(preset, functionalBefore.Value);
+            }
+        }
+        else
+        {
+            if (preset.useRelativeMode && preset.relativeBaselineMode == RelativeBaselineMode.RebaseAtInterrupt)
+            {
+                baseL = CaptureBaselineNow();
+            }
+            else
+            {
+                baseL = GetOrCaptureBaseline(preset);
+            }
+        }
+
+        Baseline? functionalAfter = baselineMode == BaselineCaptureMode.FunctionalState
+            ? ComputeFunctionalStateAfterPlay(baseL, preset, reversed)
+            : (Baseline?)null;
 
         var seq = DOTween.Sequence();
         float dur = Mathf.Max(0.0001f, preset.duration);
@@ -338,6 +476,10 @@ public class UITweenPlayer : MonoBehaviour
         seq.OnComplete(() =>
         {
             completed = true; 
+            if (functionalAfter.HasValue)
+            {
+                SetFunctionalBaseline(functionalAfter.Value);
+            }
             monitor.MarkCompleted(requestId);
             _pendingMonitorKillReason = null;
             if (master)
