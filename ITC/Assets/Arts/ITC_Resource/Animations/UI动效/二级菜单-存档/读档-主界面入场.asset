@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b8ad049090ec554eb1570780b8bd9a5, type: 3}
-  m_Name: "\u4E8C\u7EA7\u83DC\u5355-\u4E3B\u754C\u9762\u5165\u573A"
+  m_Name: "\u8BFB\u6863-\u4E3B\u754C\u9762\u5165\u573A"
   m_EditorClassIdentifier: 
-  presetName: Main interface entry
+  presetName: Read Main In
   useRelativeMode: 0
   relativeBaselineMode: 0
   useBezierPath: 0
@@ -20,14 +20,14 @@ MonoBehaviour:
   passTStar: 0.5
   bezierInterruptPolicy: 0
   animatePosition: 1
-  targetAnchoredPosition: {x: -221, y: 0}
+  targetAnchoredPosition: {x: 379, y: 1}
   animateSize: 1
   targetSizeDelta: {x: 1522, y: 1092}
-  animateRotationZ: 0
-  targetEulerZ: 0
+  animateRotation: 1
+  targetEulerAngles: {x: -0, y: 0, z: 0}
   targetPivot: {x: 0.5, y: 0.5}
   animatePivot: 0
-  animateAlpha: 1
+  animateAlpha: 0
   targetAlpha: 1
   animateColor: 0
   targetColor: {r: 1, g: 1, b: 1, a: 1}
@@ -35,7 +35,7 @@ MonoBehaviour:
   delay: 0
   loops: 0
   loopType: 0
-  unscaledTime: 1
+  unscaledTime: 0
   useCustomCurve: 0
   customCurve:
     serializedVersion: 2
@@ -44,7 +44,7 @@ MonoBehaviour:
       time: 0
       value: 0
       inSlope: 0
-      outSlope: 0
+      outSlope: 1
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -52,7 +52,7 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
+      inSlope: 1
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
@@ -63,3 +63,5 @@ MonoBehaviour:
     m_RotationOrder: 4
   easeType: 16
   scaleDurationByDistance: 0
+  secondaryTweens: []
+  timelineEvents: []

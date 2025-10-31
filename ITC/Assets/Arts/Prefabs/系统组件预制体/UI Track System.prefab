@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8627072398584238645
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6213977055401697059}
+  - component: {fileID: 5621145069614301991}
+  m_Layer: 0
+  m_Name: UI Track System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6213977055401697059
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8627072398584238645}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 606.05133, y: 474.86182, z: -7.872903}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5621145069614301991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8627072398584238645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abef3c196b634641a240cb1806424b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playFlow: 1
+  tracks:
+  - trackName: GamePanel-PausePanel
+    disableInteractionDuringPlay: 1
+    uniformInterval: 0.1
+    items:
+    - player: {fileID: 0}
+      presetName: PrimaryMenu_Menu icon
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: PrimaryMenu_Menu BG
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: Button down(1156)
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: Button down(1156)
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: Button down(1156)
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: Button down(1156)
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: Button down(1156)
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: Button down(1156)
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: PrimaryMenu_Close button
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: PrimaryMenu_Select notion
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: PrimaryMenu_Select pointer
+      delayAfterPlay: 0.1
+  - trackName: PausePanel-SavePaner
+    disableInteractionDuringPlay: 1
+    uniformInterval: 0.1
+    items:
+    - player: {fileID: 0}
+      presetName: BG in
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: Main interface entry
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: Button left
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: Button down
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: Button down
+      delayAfterPlay: 0.1
+  useUnscaledIntervals: 1

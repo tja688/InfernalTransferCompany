@@ -88,6 +88,10 @@ public class UITweenTrack : MonoBehaviour
     [Tooltip("播放间隔是否使用真实时间")]
     public bool useUnscaledIntervals = true;
 
+    [Header("调试选项")]
+    [Tooltip("开启后会在控制台输出轨道播放和播放完毕的调试信息")]
+    public bool enableDebugLog = false;
+
     readonly Dictionary<int, Coroutine> _runningTracks = new();
 
     // 运行时交互状态快照（用于在播放结束或被打断时恢复）
@@ -153,6 +157,17 @@ public class UITweenTrack : MonoBehaviour
         StopTrack(trackIndex);
         var track = tracks[trackIndex];
         if (track == null) return;
+
+        // Debug日志：轨道开始播放
+        if (enableDebugLog)
+        {
+            string trackName = string.IsNullOrEmpty(track.trackName) ? $"轨道 {trackIndex}" : track.trackName;
+            string playModeStr = playMode == PlayMode.Forward ? "正向" : "反向";
+            string reverseModeStr = playMode == PlayMode.Reverse 
+                ? $" ({reverseMode})" 
+                : "";
+            Debug.Log($"[UITweenTrack] 开始播放轨道: {trackName} | 模式: {playModeStr}{reverseModeStr} | 管理器: {gameObject.name} | 元素数量: {track.items.Count}");
+        }
 
         // 可选：播放期间禁用交互（在第一个对象播放开始前立即生效）
         if (track.disableInteractionDuringPlay)
@@ -299,6 +314,17 @@ public class UITweenTrack : MonoBehaviour
         {
             RestoreInteractions(trackIndex);
         }
+
+        // Debug日志：轨道播放完毕
+        if (enableDebugLog)
+        {
+            string trackName = string.IsNullOrEmpty(track.trackName) ? $"轨道 {trackIndex}" : track.trackName;
+            string playModeStr = playMode == PlayMode.Forward ? "正向" : "反向";
+            string reverseModeStr = playMode == PlayMode.Reverse 
+                ? $" ({reverseMode})" 
+                : "";
+            Debug.Log($"[UITweenTrack] 轨道播放完毕: {trackName} | 模式: {playModeStr}{reverseModeStr} | 管理器: {gameObject.name}");
+        }
     }
 
     private IEnumerator PlayItemAndWait(TrackItem item, bool reversed)
@@ -405,6 +431,17 @@ public class UITweenTrack : MonoBehaviour
         if (_runningTracks.TryGetValue(trackIndex, out var routine) && routine != null)
         {
             StopCoroutine(routine);
+            
+            // Debug日志：轨道被停止
+            if (enableDebugLog && trackIndex >= 0 && trackIndex < tracks.Count)
+            {
+                var track = tracks[trackIndex];
+                if (track != null)
+                {
+                    string trackName = string.IsNullOrEmpty(track.trackName) ? $"轨道 {trackIndex}" : track.trackName;
+                    Debug.Log($"[UITweenTrack] 轨道被停止: {trackName} | 管理器: {gameObject.name}");
+                }
+            }
         }
         _runningTracks.Remove(trackIndex);
         // 确保被中断时也能恢复交互
