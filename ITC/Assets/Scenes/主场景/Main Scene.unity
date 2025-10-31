@@ -1662,7 +1662,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 272004040}
-  - component: {fileID: 272004041}
   m_Layer: 5
   m_Name: "\u5B58\u6863\u83DC\u5355\u9762\u677F"
   m_TagString: Untagged
@@ -1693,40 +1692,6 @@ RectTransform:
   m_AnchoredPosition: {x: -22, y: -22}
   m_SizeDelta: {x: 1964, y: 1092}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &272004041
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 272004039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abef3c196b634641a240cb1806424b65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playFlow: 1
-  tracks:
-  - trackName: PausePanel-SavePaner
-    disableInteractionDuringPlay: 1
-    uniformInterval: 0.1
-    items:
-    - player: {fileID: 684949081}
-      presetName: BG in
-      delayAfterPlay: 0.1
-    - player: {fileID: 2068837543}
-      presetName: Main interface entry
-      delayAfterPlay: 0.1
-    - player: {fileID: 781666289}
-      presetName: Button left
-      delayAfterPlay: 0.1
-    - player: {fileID: 1049642235}
-      presetName: Button down
-      delayAfterPlay: 0.1
-    - player: {fileID: 12013235}
-      presetName: Button down
-      delayAfterPlay: 0.1
-  useUnscaledIntervals: 1
 --- !u!1 &293818453
 GameObject:
   m_ObjectHideFlags: 0
@@ -1982,7 +1947,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 304332301}
-  - component: {fileID: 304332302}
   m_Layer: 5
   m_Name: "\u6682\u505C\u83DC\u5355\u9762\u677F"
   m_TagString: Untagged
@@ -2020,58 +1984,6 @@ RectTransform:
   m_AnchoredPosition: {x: 128, y: 1.5}
   m_SizeDelta: {x: 1364, y: 1083}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &304332302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 304332300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abef3c196b634641a240cb1806424b65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playFlow: 1
-  tracks:
-  - trackName: GamePanel-PausePanel
-    disableInteractionDuringPlay: 1
-    uniformInterval: 0.1
-    items:
-    - player: {fileID: 210919022}
-      presetName: PrimaryMenu_Menu icon
-      delayAfterPlay: 0.1
-    - player: {fileID: 583028974}
-      presetName: PrimaryMenu_Menu BG
-      delayAfterPlay: 0.1
-    - player: {fileID: 1691546866}
-      presetName: Button down(1156)
-      delayAfterPlay: 0.1
-    - player: {fileID: 195974310}
-      presetName: Button down(1156)
-      delayAfterPlay: 0.1
-    - player: {fileID: 1725409555}
-      presetName: Button down(1156)
-      delayAfterPlay: 0.1
-    - player: {fileID: 986504112}
-      presetName: Button down(1156)
-      delayAfterPlay: 0.1
-    - player: {fileID: 1232613348}
-      presetName: Button down(1156)
-      delayAfterPlay: 0.1
-    - player: {fileID: 388834735}
-      presetName: Button down(1156)
-      delayAfterPlay: 0.1
-    - player: {fileID: 1679115684}
-      presetName: PrimaryMenu_Close button
-      delayAfterPlay: 0.1
-    - player: {fileID: 293818458}
-      presetName: PrimaryMenu_Select notion
-      delayAfterPlay: 0.1
-    - player: {fileID: 1547583158}
-      presetName: PrimaryMenu_Select pointer
-      delayAfterPlay: 0.1
-  useUnscaledIntervals: 1
 --- !u!1 &331982934
 GameObject:
   m_ObjectHideFlags: 0
@@ -2580,7 +2492,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMin.x
@@ -2588,7 +2500,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_SizeDelta.x
@@ -2628,11 +2540,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 654.40027
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -105
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3640,6 +3552,109 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 767680218}
   m_CullTransparentMesh: 1
+--- !u!1 &775343890
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 775343892}
+  - component: {fileID: 775343891}
+  m_Layer: 0
+  m_Name: "ITC\u52A8\u6548\u8F68\u9053"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &775343891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 775343890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abef3c196b634641a240cb1806424b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playFlow: 1
+  tracks:
+  - trackName: GamePanel-PausePanel
+    disableInteractionDuringPlay: 1
+    uniformInterval: 0.1
+    items:
+    - player: {fileID: 210919022}
+      presetName: PrimaryMenu_Menu icon
+      delayAfterPlay: 0.1
+    - player: {fileID: 583028974}
+      presetName: PrimaryMenu_Menu BG
+      delayAfterPlay: 0.1
+    - player: {fileID: 1691546866}
+      presetName: Button down(1156)
+      delayAfterPlay: 0.1
+    - player: {fileID: 195974310}
+      presetName: Button down(1156)
+      delayAfterPlay: 0.1
+    - player: {fileID: 1725409555}
+      presetName: Button down(1156)
+      delayAfterPlay: 0.1
+    - player: {fileID: 986504112}
+      presetName: Button down(1156)
+      delayAfterPlay: 0.1
+    - player: {fileID: 1232613348}
+      presetName: Button down(1156)
+      delayAfterPlay: 0.1
+    - player: {fileID: 388834735}
+      presetName: Button down(1156)
+      delayAfterPlay: 0.1
+    - player: {fileID: 1679115684}
+      presetName: PrimaryMenu_Close button
+      delayAfterPlay: 0.1
+    - player: {fileID: 293818458}
+      presetName: PrimaryMenu_Select notion
+      delayAfterPlay: 0.1
+    - player: {fileID: 1547583158}
+      presetName: PrimaryMenu_Select pointer
+      delayAfterPlay: 0.1
+  - trackName: PausePanel-SavePaner
+    disableInteractionDuringPlay: 1
+    uniformInterval: 0.1
+    items:
+    - player: {fileID: 684949081}
+      presetName: BG in
+      delayAfterPlay: 0.1
+    - player: {fileID: 2068837543}
+      presetName: Main interface entry
+      delayAfterPlay: 0.1
+    - player: {fileID: 781666289}
+      presetName: Button left
+      delayAfterPlay: 0.1
+    - player: {fileID: 1049642235}
+      presetName: Button down
+      delayAfterPlay: 0.1
+    - player: {fileID: 12013235}
+      presetName: Button down
+      delayAfterPlay: 0.1
+  useUnscaledIntervals: 1
+--- !u!4 &775343892
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 775343890}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 606.05133, y: 474.86182, z: -7.872903}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &781666286
 GameObject:
   m_ObjectHideFlags: 0
@@ -12141,11 +12156,11 @@ PrefabInstance:
     - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
       propertyPath: transitions.Array.data[0].transitionTrack
       value: 
-      objectReference: {fileID: 304332302}
+      objectReference: {fileID: 775343891}
     - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
       propertyPath: transitions.Array.data[1].transitionTrack
       value: 
-      objectReference: {fileID: 304332302}
+      objectReference: {fileID: 775343891}
     - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
       propertyPath: transitions.Array.data[2].trackNameToPlay
       value: PausePanel-SavePaner
@@ -12153,7 +12168,7 @@ PrefabInstance:
     - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
       propertyPath: transitions.Array.data[2].transitionTrack
       value: 
-      objectReference: {fileID: 272004041}
+      objectReference: {fileID: 775343891}
     - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
       propertyPath: transitions.Array.data[3].trackNameToPlay
       value: PausePanel-SavePaner
@@ -12161,7 +12176,7 @@ PrefabInstance:
     - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
       propertyPath: transitions.Array.data[3].transitionTrack
       value: 
-      objectReference: {fileID: 272004041}
+      objectReference: {fileID: 775343891}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13080,3 +13095,4 @@ SceneRoots:
   - {fileID: 6605120020253551952}
   - {fileID: 1582724114}
   - {fileID: 956931274}
+  - {fileID: 775343892}
