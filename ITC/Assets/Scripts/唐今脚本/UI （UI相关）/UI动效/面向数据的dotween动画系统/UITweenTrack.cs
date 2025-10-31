@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 /// <summary>
@@ -60,6 +61,9 @@ public class UITweenTrack : MonoBehaviour
         [Tooltip("轨道名称，仅用于标识。")]
         public string trackName;
 
+            [Tooltip("播放过程中禁用鼠标交互（在第一个对象开始到最后一个对象完成）。")]
+            public bool disableInteractionDuringPlay = true;
+
         [Tooltip("为该轨道全部元素统一设置的播放间隔。点击“应用到轨道”按钮后生效。")]
         public float uniformInterval = 0.1f;
 
@@ -85,6 +89,17 @@ public class UITweenTrack : MonoBehaviour
     public bool useUnscaledIntervals = true;
 
     readonly Dictionary<int, Coroutine> _runningTracks = new();
+
+    // 运行时交互状态快照（用于在播放结束或被打断时恢复）
+    private struct InteractionSnapshot
+    {
+        public CanvasGroup canvasGroup;
+        public bool hadCanvasGroup;
+        public bool prevInteractable;
+        public bool prevBlocksRaycasts;
+    }
+
+    private readonly Dictionary<int, List<InteractionSnapshot>> _trackInteractionSnapshots = new();
 
     #region Public API for UnityEvents
 
@@ -139,7 +154,13 @@ public class UITweenTrack : MonoBehaviour
         var track = tracks[trackIndex];
         if (track == null) return;
 
-        var routine = StartCoroutine(RunTrackCoroutine(track, playMode, reverseMode));
+        // 可选：播放期间禁用交互（在第一个对象播放开始前立即生效）
+        if (track.disableInteractionDuringPlay)
+        {
+            ApplyInteractionDisable(trackIndex, track);
+        }
+
+        var routine = StartCoroutine(RunTrackCoroutine(track, playMode, reverseMode, trackIndex, track.disableInteractionDuringPlay));
         _runningTracks[trackIndex] = routine;
     }
 
@@ -149,23 +170,7 @@ public class UITweenTrack : MonoBehaviour
         return tracks.FindIndex(t => t != null && t.trackName == trackName);
     }
 
-    public void StopTrack(int trackIndex)
-    {
-        if (_runningTracks.TryGetValue(trackIndex, out var routine) && routine != null)
-        {
-            StopCoroutine(routine);
-        }
-        _runningTracks.Remove(trackIndex);
-    }
-
-    public void StopAllTracks()
-    {
-        foreach (var routine in _runningTracks.Values)
-        {
-            if (routine != null) StopCoroutine(routine);
-        }
-        _runningTracks.Clear();
-    }
+    
 
     public void ApplyUniformInterval(int trackIndex, float interval)
     {
@@ -173,10 +178,12 @@ public class UITweenTrack : MonoBehaviour
         tracks[trackIndex]?.ApplyUniformInterval(interval);
     }
 
-    private IEnumerator RunTrackCoroutine(Track track, PlayMode playMode, ReversePlayMode reverseMode)
+    private IEnumerator RunTrackCoroutine(Track track, PlayMode playMode, ReversePlayMode reverseMode, int trackIndex, bool shouldDisableInteraction)
     {
         // 等待一帧确保所有UI对象初始化完毕
         yield return new WaitForEndOfFrame();
+
+        Tween lastStartedTween = null; // 用于在非顺序播放时等待“最后一个对象”完成
 
         if (playMode == PlayMode.Forward)
         {
@@ -184,16 +191,24 @@ public class UITweenTrack : MonoBehaviour
             {
                 var item = track.items[i];
                 Tween tween = PlayItem(item, false);
+                if (tween != null) lastStartedTween = tween;
 
                 if (playFlow == TrackPlayFlow.Sequential)
                 {
+                    bool isLast = (i == track.items.Count - 1);
                     if (tween != null) yield return tween.WaitForCompletion();
+                    // 按需求，播放过程在“最后一个对象动画完成”即结束：跳过最后一个的额外延迟
+                    if (isLast && shouldDisableInteraction) continue;
                 }
 
                 float wait = Mathf.Max(0f, item.delayAfterPlay);
                 if (wait > 0f)
                 {
-                    yield return useUnscaledIntervals ? new WaitForSecondsRealtime(wait) : new WaitForSeconds(wait);
+                    bool isLast = (i == track.items.Count - 1);
+                    if (!(shouldDisableInteraction && isLast))
+                    {
+                        yield return useUnscaledIntervals ? new WaitForSecondsRealtime(wait) : new WaitForSeconds(wait);
+                    }
                 }
             }
         }
@@ -206,16 +221,23 @@ public class UITweenTrack : MonoBehaviour
                     {
                         var item = track.items[i];
                         Tween tween = PlayItem(item, true);
+                        if (tween != null) lastStartedTween = tween;
 
                         if (playFlow == TrackPlayFlow.Sequential)
                         {
+                            bool isLastInOrder = (i == 0);
                             if (tween != null) yield return tween.WaitForCompletion();
+                            if (isLastInOrder && shouldDisableInteraction) continue;
                         }
 
                         float wait = Mathf.Max(0f, item.delayAfterPlay);
                         if (wait > 0f)
                         {
-                            yield return useUnscaledIntervals ? new WaitForSecondsRealtime(wait) : new WaitForSeconds(wait);
+                            bool isLastInOrder = (i == 0);
+                            if (!(shouldDisableInteraction && isLastInOrder))
+                            {
+                                yield return useUnscaledIntervals ? new WaitForSecondsRealtime(wait) : new WaitForSeconds(wait);
+                            }
                         }
                     }
                     break;
@@ -225,27 +247,57 @@ public class UITweenTrack : MonoBehaviour
                     {
                         var item = track.items[i];
                         Tween tween = PlayItem(item, true);
+                        if (tween != null) lastStartedTween = tween;
 
                         if (playFlow == TrackPlayFlow.Sequential)
                         {
+                            bool isLast = (i == track.items.Count - 1);
                             if (tween != null) yield return tween.WaitForCompletion();
+                            if (isLast && shouldDisableInteraction) continue;
                         }
 
                         float wait = Mathf.Max(0f, item.delayAfterPlay);
                         if (wait > 0f)
                         {
-                            yield return useUnscaledIntervals ? new WaitForSecondsRealtime(wait) : new WaitForSeconds(wait);
+                            bool isLast = (i == track.items.Count - 1);
+                            if (!(shouldDisableInteraction && isLast))
+                            {
+                                yield return useUnscaledIntervals ? new WaitForSecondsRealtime(wait) : new WaitForSeconds(wait);
+                            }
                         }
                     }
                     break;
 
                 case ReversePlayMode.QuickExit:
-                    foreach (var item in track.items)
+                    for (int i = 0; i < track.items.Count; i++)
                     {
-                        PlayItem(item, true);
+                        var item = track.items[i];
+                        var tween = PlayItem(item, true);
+                        if (tween != null) lastStartedTween = tween;
                     }
                     break;
             }
+        }
+
+        // 在非顺序播放或快速退场等情况下，确保等待“最后一个对象动画完成”的瞬间
+        if (shouldDisableInteraction)
+        {
+            bool needWaitLastTween =
+                (playFlow == TrackPlayFlow.Staggered) ||
+                (playMode == PlayMode.Reverse && reverseMode == ReversePlayMode.QuickExit) ||
+                (playMode == PlayMode.Forward && playFlow != TrackPlayFlow.Sequential) ||
+                (playMode == PlayMode.Reverse && playFlow != TrackPlayFlow.Sequential);
+
+            if (needWaitLastTween && lastStartedTween != null)
+            {
+                yield return lastStartedTween.WaitForCompletion();
+            }
+        }
+
+        // 恢复交互
+        if (shouldDisableInteraction)
+        {
+            RestoreInteractions(trackIndex);
         }
     }
 
@@ -275,8 +327,103 @@ public class UITweenTrack : MonoBehaviour
         }
     }
 
+    private void ApplyInteractionDisable(int trackIndex, Track track)
+    {
+        // 防止重复应用
+        if (_trackInteractionSnapshots.ContainsKey(trackIndex)) return;
+
+        var snapshots = new List<InteractionSnapshot>();
+        var processedObjectIds = new HashSet<int>();
+
+        foreach (var it in track.items)
+        {
+            if (it == null || it.player == null) continue;
+            var go = it.player.gameObject;
+            if (go == null) continue;
+
+            int id = go.GetInstanceID();
+            if (!processedObjectIds.Add(id)) continue; // 对同一对象只处理一次
+
+            var cg = go.GetComponent<CanvasGroup>();
+            bool hadCg = cg != null;
+            if (!hadCg)
+            {
+                cg = go.AddComponent<CanvasGroup>();
+            }
+
+            var snap = new InteractionSnapshot
+            {
+                canvasGroup = cg,
+                hadCanvasGroup = hadCg,
+                prevInteractable = cg.interactable,
+                prevBlocksRaycasts = cg.blocksRaycasts
+            };
+
+            // 禁用交互与射线
+            cg.interactable = false;
+            cg.blocksRaycasts = false;
+
+            snapshots.Add(snap);
+        }
+
+        if (snapshots.Count > 0)
+        {
+            _trackInteractionSnapshots[trackIndex] = snapshots;
+        }
+    }
+
+    private void RestoreInteractions(int trackIndex)
+    {
+        if (!_trackInteractionSnapshots.TryGetValue(trackIndex, out var snapshots)) return;
+
+        foreach (var snap in snapshots)
+        {
+            if (snap.canvasGroup == null) continue;
+
+            if (snap.hadCanvasGroup)
+            {
+                snap.canvasGroup.interactable = snap.prevInteractable;
+                snap.canvasGroup.blocksRaycasts = snap.prevBlocksRaycasts;
+            }
+            else
+            {
+                // 我们在播放开始时添加的，播放结束后移除
+                Destroy(snap.canvasGroup);
+            }
+        }
+
+        _trackInteractionSnapshots.Remove(trackIndex);
+    }
+
     void OnDisable()
     {
         StopAllTracks();
+    }
+
+    public void StopTrack(int trackIndex)
+    {
+        if (_runningTracks.TryGetValue(trackIndex, out var routine) && routine != null)
+        {
+            StopCoroutine(routine);
+        }
+        _runningTracks.Remove(trackIndex);
+        // 确保被中断时也能恢复交互
+        RestoreInteractions(trackIndex);
+    }
+
+    public void StopAllTracks()
+    {
+        // 停止所有并恢复交互
+        if (_runningTracks.Count > 0)
+        {
+            var keys = new List<int>(_runningTracks.Keys);
+            foreach (var key in keys)
+            {
+                var routine = _runningTracks[key];
+                if (routine != null) StopCoroutine(routine);
+                RestoreInteractions(key);
+            }
+            _runningTracks.Clear();
+        }
     }
 }
