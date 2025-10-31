@@ -10,6 +10,7 @@ public class UITweenTrackEditor : Editor
     SerializedProperty _tracksProp;
     SerializedProperty _useUnscaledProp;
     SerializedProperty _playFlowProp; // 新增
+    SerializedProperty _enableDebugLogProp; // 新增
 
     // —— Editor-only: 测试区状态 —— //
     int _testTrackIndex = 0;
@@ -23,7 +24,24 @@ public class UITweenTrackEditor : Editor
         _tracksProp = serializedObject.FindProperty("tracks");
         _useUnscaledProp = serializedObject.FindProperty("useUnscaledIntervals");
         _playFlowProp = serializedObject.FindProperty("playFlow"); // 新增
+        _enableDebugLogProp = serializedObject.FindProperty("enableDebugLog"); // 新增
         RefreshTrackNameOptions();
+        InitializeFoldoutStates();
+    }
+
+    void InitializeFoldoutStates()
+    {
+        _trackFoldoutStates.Clear();
+        if (_tracksProp == null) return;
+
+        for (int i = 0; i < _tracksProp.arraySize; i++)
+        {
+            var trackProp = _tracksProp.GetArrayElementAtIndex(i);
+            var trackNameProp = trackProp.FindPropertyRelative("trackName");
+            string trackName = trackNameProp != null ? trackNameProp.stringValue : string.Empty;
+            // 有名称的轨道默认折叠(false)，无名称的默认展开(true)
+            _trackFoldoutStates[i] = string.IsNullOrEmpty(trackName);
+        }
     }
 
     public override void OnInspectorGUI()
@@ -37,6 +55,7 @@ public class UITweenTrackEditor : Editor
         serializedObject.Update();
 
         EditorGUILayout.PropertyField(_useUnscaledProp);
+        EditorGUILayout.PropertyField(_enableDebugLogProp, new GUIContent("启用调试日志", "开启后会在控制台输出轨道播放和播放完毕的调试信息"));
         EditorGUILayout.Space();
 
         // —— 运行测试（Play 模式） —— //
@@ -148,10 +167,12 @@ public class UITweenTrackEditor : Editor
             var trackProp = _tracksProp.GetArrayElementAtIndex(i);
             var trackNameProp = trackProp.FindPropertyRelative("trackName");
             
-            // 确保折叠状态存在
+            // 确保折叠状态存在（如果轨道数量变化，可能会有新增的轨道）
             if (!_trackFoldoutStates.ContainsKey(i))
             {
-                _trackFoldoutStates[i] = true; // 默认展开
+                // 根据轨道是否有名称来决定默认折叠状态
+                string trackName = trackNameProp.stringValue;
+                _trackFoldoutStates[i] = string.IsNullOrEmpty(trackName); // 有名称则折叠(false)，无名称则展开(true)
             }
             
             using (new EditorGUILayout.VerticalScope("box"))
