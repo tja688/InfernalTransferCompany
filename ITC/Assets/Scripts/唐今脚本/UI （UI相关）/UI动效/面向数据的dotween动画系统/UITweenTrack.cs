@@ -270,8 +270,8 @@ public class UITweenTrack : MonoBehaviour
         using (UITweenCallContext.BeginScope(this, "Track", gameObject.name, detail))
         {
             return reversed
-                ? item.player.PlayMasterReversedByName(item.presetName)
-                : item.player.PlayMasterByName(item.presetName);
+                ? item.player.PlayMasterReversedByName(item.presetName, UITweenPlayer.BaselineCaptureMode.FunctionalState)
+                : item.player.PlayMasterByName(item.presetName, UITweenPlayer.BaselineCaptureMode.FunctionalState);
         }
     }
 
