@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Diagnostics; // 1. 在文件顶部添加这个 using
+using UnityEngine.EventSystems; // <--- 在这里添加这一行
 
 namespace ITC.UIFX
 {
@@ -149,6 +151,11 @@ namespace ITC.UIFX
         /// </summary>
         public void StartFlipTransition(int targetTextureIndex)
         {
+            // 打印时间、目标索引和调用堆栈
+            // UnityEngine.Debug.LogWarning($"UISolariBoard: StartFlipTransition({targetTextureIndex}) " +
+            //                    $"在 {Time.time} 时被调用。\n" +
+            //                    $"调用堆栈: \n{new StackTrace()}\n", this);
+
             Texture target = ResolveTextureByIndex(targetTextureIndex);
             StartFlipTransition(target, defaultStrategy, defaultStartupDuration, defaultFlippingDuration, defaultEndingDuration);
         }
@@ -178,7 +185,7 @@ namespace ITC.UIFX
         {
             if (!EnsureInspector())
             {
-                Debug.LogWarning("UISolariBoard：未找到 UVInspector，无法清空单元格。", this);
+                UnityEngine.Debug.LogWarning("UISolariBoard：未找到 UVInspector，无法清空单元格。", this);
                 return;
             }
 
@@ -213,13 +220,13 @@ namespace ITC.UIFX
         {
             if (!EnsureInspector())
             {
-                Debug.LogWarning("UISolariBoard：未找到 UVInspector，无法启动翻牌。", this);
+                UnityEngine.Debug.LogWarning("UISolariBoard：未找到 UVInspector，无法启动翻牌。", this);
                 return false;
             }
 
             if (!SynchronizeCells())
             {
-                Debug.LogWarning("UISolariBoard：UVInspector 未发现可用的 RawImage 单元格。", this);
+                UnityEngine.Debug.LogWarning("UISolariBoard：UVInspector 未发现可用的 RawImage 单元格。", this);
                 return false;
             }
 
@@ -615,6 +622,29 @@ namespace ITC.UIFX
         {
             _transitionActive = false;
             _elapsed = 0f;
+        }
+
+        /// <summary>
+        /// 【推荐】启动翻牌至清空状态（索引0），并立即清除EventSystem的选择。
+        /// 专用于解决关闭菜单按钮导致的“幽灵触发”问题。
+        /// </summary>
+        public void StartFlipToClearAndDeselect()
+        {
+            // 1. 像以前一样，调用清空（索引0）的翻牌
+            // 这会触发翻牌器开始翻转到空图像
+            StartFlipTransition(0); 
+            
+            // 2. (关键修复) 立刻取消 EventSystem 的当前选择
+            // 确保没有按钮保持“选中”状态
+            if (EventSystem.current != null)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+            }
+            else
+            {
+                // 增加一个安全检查，以防 EventSystem 丢失
+                UnityEngine.Debug.LogWarning("UISolariBoard: EventSystem.current 为空，无法取消选择。", this);
+            }
         }
     }
 }
