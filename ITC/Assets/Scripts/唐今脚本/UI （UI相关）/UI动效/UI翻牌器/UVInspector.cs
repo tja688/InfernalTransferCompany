@@ -10,7 +10,7 @@ namespace ITC.UIFX
     /// </summary>
     [DisallowMultipleComponent]
     [ExecuteAlways]
-    public sealed class UV分区映射器 : MonoBehaviour
+    public sealed class UVInspector : MonoBehaviour
     {
         [Header("网格主体设置")]
         [Tooltip("包含所有基础单元格的父节点，通常挂有GridLayoutGroup。若为空则默认使用当前对象的RectTransform。")]
