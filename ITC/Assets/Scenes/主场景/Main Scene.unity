@@ -14120,6 +14120,7 @@ GameObject:
   - component: {fileID: 1427252909}
   - component: {fileID: 1427252908}
   - component: {fileID: 1427252910}
+  - component: {fileID: 1427252911}
   m_Layer: 5
   m_Name: "\u63D0\u793A\u56FE\u7FFB\u724C\u5668"
   m_TagString: Untagged
@@ -14215,6 +14216,33 @@ MonoBehaviour:
   previewTextureIndex: 1
   randomPreviewSeed: 332463046
   logWarnings: 1
+--- !u!114 &1427252911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1427252906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e28c6160c6306e489ea007e93864f81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uvInspector: {fileID: 1427252910}
+  autoResolveInspector: 1
+  useUnscaledTime: 1
+  defaultStartupDuration: 0.3
+  defaultFlippingDuration: 0.1
+  defaultEndingDuration: 0.3
+  defaultStrategy: 1
+  rotationSpeed: 3000
+  defaultTargetTextureIndex: 0
+  deterministicRandom: 0
+  randomSeed: 2025
+  perlinSeed: 12345
+  perlinScale: 0.35
+  perlinAnchorCount: 2
+  anchorInfluence: 0.6
 --- !u!1 &1476307464
 GameObject:
   m_ObjectHideFlags: 0
@@ -16648,17 +16676,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1427252910}
-        m_TargetAssemblyTypeName: "ITC.UIFX.UV\u5206\u533A\u6620\u5C04\u5668, Assembly-CSharp"
-        m_MethodName: RandomizePreview
-        m_Mode: 6
+      - m_Target: {fileID: 1427252911}
+        m_TargetAssemblyTypeName: ITC.UIFX.UISolariBoard, Assembly-CSharp
+        m_MethodName: StartFlipTransition
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1661444313
 MonoBehaviour:

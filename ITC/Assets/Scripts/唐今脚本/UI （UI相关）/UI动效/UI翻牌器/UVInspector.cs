@@ -57,6 +57,7 @@ namespace ITC.UIFX
         public IReadOnlyList<RawImage> Cells => _cells;
         public int ColumnCount => _columns;
         public int RowCount => _rows;
+        public bool InvertVerticalSampling => invertVerticalSampling;
 
         private void Reset()
         {
@@ -237,6 +238,16 @@ namespace ITC.UIFX
                 _cellAssignments[i] = -1;
             }
             ApplyAssignments();
+        }
+
+        public Rect GetUvRectForCell(int cellIndex)
+        {
+            if (cellIndex < 0 || cellIndex >= _cells.Count)
+            {
+                return _defaultUvRect;
+            }
+
+            return CalculateUvRect(cellIndex);
         }
 
 #if UNITY_EDITOR
