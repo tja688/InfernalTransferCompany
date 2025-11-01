@@ -171,6 +171,29 @@ namespace ITC.UIFX
             CompleteTransition();
         }
 
+        /// <summary>
+        /// 立即清空翻牌器内所有基础单元显示的纹理（索引0的默认清空状态）。
+        /// </summary>
+        public void ClearAllCells()
+        {
+            if (!EnsureInspector())
+            {
+                Debug.LogWarning("UISolariBoard：未找到 UVInspector，无法清空单元格。", this);
+                return;
+            }
+
+            if (!SynchronizeCells())
+            {
+                return;
+            }
+
+            for (int i = 0; i < _cells.Count; i++)
+            {
+                ApplyTextureToCell(_cells[i], null);
+                ResetCellTransform(_cells[i]);
+            }
+        }
+
 #if UNITY_EDITOR
         [ContextMenu("调试：使用默认配置翻牌")]
         private void ContextStartDefault()
@@ -521,6 +544,7 @@ namespace ITC.UIFX
                 _random = new System.Random();
             }
 
+            // 随机选择时不包括清空状态（索引0），只从实际贴图中选择
             int attempts = Mathf.Max(1, textures.Count);
             for (int i = 0; i < attempts; i++)
             {
@@ -537,18 +561,31 @@ namespace ITC.UIFX
 
         private Texture ResolveTextureByIndex(int textureIndex)
         {
+            // 索引0表示清空状态（不显示任何图片）
+            if (textureIndex == 0)
+            {
+                return null;
+            }
+
             if (textureIndex < 0 || uvInspector == null)
             {
                 return null;
             }
 
             IReadOnlyList<Texture> textures = uvInspector.SourceTextures;
-            if (textures == null || textureIndex < 0 || textureIndex >= textures.Count)
+            if (textures == null || textures.Count == 0)
             {
                 return null;
             }
 
-            return textures[textureIndex];
+            // 索引1对应原来的索引0，索引2对应原来的索引1，以此类推
+            int actualIndex = textureIndex - 1;
+            if (actualIndex < 0 || actualIndex >= textures.Count)
+            {
+                return null;
+            }
+
+            return textures[actualIndex];
         }
 
         private void ResetCellTransform(CellRuntime cell)
