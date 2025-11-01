@@ -175,28 +175,52 @@ public class GamePanelStateMachine : MonoBehaviour
         }
     }
 
-    private void PlayTransition(string from, string to)
-    {
-        var transition = transitions.Find(t => t.fromPanel == from && t.toPanel == to);
-        if (transition?.transitionTrack == null || string.IsNullOrEmpty(transition.trackNameToPlay)) return;
+// 替换 GamePanelStateMachine.cs 中的 PlayTransition
+private void PlayTransition(string from, string to)
+{
+    var transition = transitions.Find(t => t.fromPanel == from && t.toPanel == to);
 
-        if (transition.playMode == TransitionPlayMode.Forward)
+    // --- 新增的诊断代码 ---
+    if (transition == null)
+    {
+        if (debugMode)
         {
-            if (debugMode)
-            {
-                Debug.Log($"[GamePanelStateMachine] Playing transition track [Forward]: <color=lime>'{transition.trackNameToPlay}'</color> on {transition.transitionTrack.name}", transition.transitionTrack);
-            }
-            transition.transitionTrack.PlayTrackByName_Event(transition.trackNameToPlay);
+            Debug.LogWarning($"[GamePanelStateMachine] 没有找到从 '{from}' 到 '{to}' 的过渡配置。轨道未播放。", this);
         }
-        else // Reverse
-        {
-            if (debugMode)
-            {
-                Debug.Log($"[GamePanelStateMachine] Playing transition track [Reverse - {transition.reverseMode}]: <color=lime>'{transition.trackNameToPlay}'</color> on {transition.transitionTrack.name}", transition.transitionTrack);
-            }
-            transition.transitionTrack.PlayTrackReverse(transition.trackNameToPlay, transition.reverseMode);
-        }
+        return;
     }
+
+    if (transition.transitionTrack == null)
+    {
+        Debug.LogError($"[GamePanelStateMachine] 找到从 '{from}' 到 '{to}' 的过渡，但其 'transitionTrack' 字段为 Null！请在 Inspector 中拖拽正确的 UITweenTrack。", this);
+        return;
+    }
+
+    if (string.IsNullOrEmpty(transition.trackNameToPlay))
+    {
+        Debug.LogError($"[GamePanelStateMachine] 找到从 '{from}' 到 '{to}' 的过渡，但 'trackNameToPlay' 字段为空！请输入要在 {transition.transitionTrack.name} 上播放的轨道名称。", this);
+        return;
+    }
+    // --- 诊断代码结束 ---
+
+    // 原有逻辑
+    if (transition.playMode == TransitionPlayMode.Forward)
+    {
+        if (debugMode)
+        {
+            Debug.Log($"[GamePanelStateMachine] Playing transition track [Forward]: <color=lime>'{transition.trackNameToPlay}'</color> on {transition.transitionTrack.name}", transition.transitionTrack);
+        }
+        transition.transitionTrack.PlayTrackByName_Event(transition.trackNameToPlay);
+    }
+    else // Reverse
+    {
+        if (debugMode)
+        {
+            Debug.Log($"[GamePanelStateMachine] Playing transition track [Reverse - {transition.reverseMode}]: <color=lime>'{transition.trackNameToPlay}'</color> on {transition.transitionTrack.name}", transition.transitionTrack);
+        }
+        transition.transitionTrack.PlayTrackReverse(transition.trackNameToPlay, transition.reverseMode);
+    }
+}
 
     private bool HasMeaningfulConfiguration()
     {
