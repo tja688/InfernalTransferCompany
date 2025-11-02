@@ -126,10 +126,61 @@ public class UITweenPlayer : MonoBehaviour
     // 在 UITweenPlayer.cs 中添加这个新方法
     
     /// <summary>
+    /// 将 Ease 类型转换为对应的 Out 版本缓动效果
+    /// </summary>
+    /// <param name="ease">原始缓动类型</param>
+    /// <returns>对应的 Out 版本，如果是线性或自定义则返回 OutQuad</returns>
+    private static Ease ConvertToOutEase(Ease ease)
+    {
+        // 处理所有 Ease 类型，转换为对应的 Out 版本
+        switch (ease)
+        {
+            // Out 类型：直接返回
+            case Ease.OutQuad:
+            case Ease.OutCubic:
+            case Ease.OutQuart:
+            case Ease.OutQuint:
+            case Ease.OutSine:
+            case Ease.OutExpo:
+            case Ease.OutCirc:
+            case Ease.OutElastic:
+            case Ease.OutBack:
+            case Ease.OutBounce:
+                return ease;
+            
+            // In 类型转换为对应的 Out 类型
+            case Ease.InQuad: return Ease.OutQuad;
+            case Ease.InCubic: return Ease.OutCubic;
+            case Ease.InQuart: return Ease.OutQuart;
+            case Ease.InQuint: return Ease.OutQuint;
+            case Ease.InSine: return Ease.OutSine;
+            case Ease.InExpo: return Ease.OutExpo;
+            case Ease.InCirc: return Ease.OutCirc;
+            case Ease.InElastic: return Ease.OutElastic;
+            case Ease.InBack: return Ease.OutBack;
+            case Ease.InBounce: return Ease.OutBounce;
+            
+            // InOut 类型也转换为对应的 Out 类型
+            case Ease.InOutQuad: return Ease.OutQuad;
+            case Ease.InOutCubic: return Ease.OutCubic;
+            case Ease.InOutQuart: return Ease.OutQuart;
+            case Ease.InOutQuint: return Ease.OutQuint;
+            case Ease.InOutSine: return Ease.OutSine;
+            case Ease.InOutExpo: return Ease.OutExpo;
+            case Ease.InOutCirc: return Ease.OutCirc;
+            case Ease.InOutElastic: return Ease.OutElastic;
+            case Ease.InOutBack: return Ease.OutBack;
+            case Ease.InOutBounce: return Ease.OutBounce;
+            
+            // 线性、自定义或其他类型（包括 Linear、Flash、INTERNAL_Zero、INTERNAL_Custom 等），统一使用默认 OutQuad
+            default: return Ease.OutQuad;
+        }
+    }
+    
+    /// <summary>
     /// 优雅地停止当前动画，通过将动画的TimeScale平滑地Tween到0来实现减速效果。
     /// </summary>
     /// <param name="stopDuration">减速到完全停止所需的时间</param>
-    /// <param name="stopEase">减速时使用的缓动曲线（建议使用 Out 类型，如 OutQuad）</param>
     public void StopGracefully(float stopDuration = 0.5f)
     {
         if (_active == null || !_active.IsActive())
@@ -152,10 +203,18 @@ public class UITweenPlayer : MonoBehaviour
         // 从 LastPreparedPreset 中获取，如果没有则默认使用 false（遵循 timeScale）
         bool isUnscaled = LastPreparedPreset != null ? LastPreparedPreset.unscaledTime : false;
 
+        // 获取停止动画的缓动效果：从预设的缓动类型转换为对应的 Out 版本
+        // 如果预设使用了自定义曲线，则使用默认的 OutQuad
+        Ease stopEase = Ease.OutQuad; // 默认值
+        if (LastPreparedPreset != null && !LastPreparedPreset.useCustomCurve)
+        {
+            stopEase = ConvertToOutEase(LastPreparedPreset.easeType);
+        }
+
         // 创建一个新的 Tween，它的目标是 _active 本身
         // 我们将 _active 的 TimeScale 从当前值 (通常是1) 动画到 0
         _active.DOTimeScale(0f, stopDuration)
-               .SetEase(Ease.OutQuad)
+               .SetEase(stopEase)
                .SetUpdate(isUnscaled) // 确保这个"减速"动画本身遵循正确的 Update 模式
                .OnComplete(() =>
                {

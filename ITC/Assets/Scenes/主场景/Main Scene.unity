@@ -6587,7 +6587,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMin.x
@@ -6595,7 +6595,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_SizeDelta.x
@@ -6635,11 +6635,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 654.40027
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -105
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -16351,18 +16351,6 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1569075289}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: Play
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
         - m_Target: {fileID: 308543671}
           m_TargetAssemblyTypeName: ITC.UIFX.UISolariBoard, Assembly-CSharp
           m_MethodName: StartFlipTransition
@@ -16375,20 +16363,32 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1569075289}
+        - m_Target: {fileID: 1953724644}
           m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: PlayReversed
-          m_Mode: 3
+          m_MethodName: PlayMasterByName_Event
+          m_Mode: 5
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: 
+            m_StringArgument: General_Blow up
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1953724644}
+          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
+          m_MethodName: PlayMasterReversedByName_Event
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: General_Blow up
             m_BoolArgument: 0
           m_CallState: 2
 --- !u!114 &1241706883
@@ -17535,6 +17535,7 @@ GameObject:
   - component: {fileID: 1335237323}
   - component: {fileID: 1335237321}
   - component: {fileID: 1335237322}
+  - component: {fileID: 1335237325}
   m_Layer: 5
   m_Name: "\u81EA\u52A8\u4FDD\u5B58\u3001\u6700\u65B0\u4FDD\u5B58 \u80CC\u666F"
   m_TagString: Untagged
@@ -17614,6 +17615,77 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1264, y: 286}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1335237325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1335237320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf87cd9a31932de4b9fa99df3aa7d00e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boundPreset: {fileID: 11400000, guid: bfc76945515fbdb41ad61ad8cc9b450d, type: 2}
+  autoSaveToPreset: 0
+  useRelativeMode: 1
+  useBezierPath: 0
+  duration: 0.6
+  delay: 0
+  loops: 0
+  loopType: 0
+  unscaledTime: 1
+  useCustomCurve: 0
+  customCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  easeType: 27
+  targetAnchoredPosition: {x: 0, y: 0}
+  targetSizeDelta: {x: 50, y: 50}
+  targetPivot: {x: 0.5, y: 0.5}
+  targetEulerAngles: {x: 0, y: 0, z: 0}
+  targetAlpha: 1
+  targetColor: {r: 1, g: 1, b: 1, a: 1}
+  passThroughPointC: {x: 0, y: 0}
+  passTStar: 0.5
+  animatePosition: 1
+  animateSize: 1
+  animateRotation: 0
+  animateAlpha: 0
+  animateColor: 0
+  secondaryTweens: []
+  timelineEvents: []
+  showPathGizmos: 1
+  detectAlpha: 1
+  invisAlphaThreshold: 0.01
+  detectScaleOrSize: 1
+  invisScaleThreshold: 0.02
+  invisSizeThreshold: 1
+  detectRotationY: 1
+  invisAngleToleranceDeg: 1
+  detectionSamples: 240
 --- !u!1 &1338071988
 GameObject:
   m_ObjectHideFlags: 0
@@ -25815,7 +25887,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMin.x
@@ -25823,7 +25895,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_SizeDelta.x
@@ -25863,11 +25935,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 654.40027
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -105
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -26958,6 +27030,7 @@ GameObject:
   - component: {fileID: 1953724640}
   - component: {fileID: 1953724643}
   - component: {fileID: 1953724642}
+  - component: {fileID: 1953724644}
   m_Layer: 5
   m_Name: "\u81EA\u52A8\u4FDD\u5B58\u56FE\u6807"
   m_TagString: Untagged
@@ -27022,6 +27095,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1953724639}
   m_CullTransparentMesh: 1
+--- !u!114 &1953724644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953724639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f314a76c289312b479a52c144d916227, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  presets: []
+  libraries:
+  - {fileID: 11400000, guid: d9bf89a5c7c7b8548b8764a1247aeeeb, type: 2}
+  onPlay:
+    m_PersistentCalls:
+      m_Calls: []
+  onComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1954152167
 GameObject:
   m_ObjectHideFlags: 0
