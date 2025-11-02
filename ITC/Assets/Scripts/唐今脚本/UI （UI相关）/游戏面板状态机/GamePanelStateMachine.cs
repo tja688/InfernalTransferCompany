@@ -149,7 +149,7 @@ public class GamePanelStateMachine : MonoBehaviour
     /// <summary>
     /// (由 GamePanelChanger 调用) 请求切换到新的面板状态。
     /// </summary>
-    internal void RequestStateChange(string newPanel)
+    public void RequestStateChange(string newPanel)
     {
         if (string.IsNullOrEmpty(newPanel) || _currentPanel == newPanel)
         {

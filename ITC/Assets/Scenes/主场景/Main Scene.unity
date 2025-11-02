@@ -278,6 +278,7 @@ GameObject:
   - component: {fileID: 12013237}
   - component: {fileID: 12013236}
   - component: {fileID: 12013235}
+  - component: {fileID: 12013238}
   m_Layer: 5
   m_Name: WHERE TO SAVE IT
   m_TagString: Untagged
@@ -363,6 +364,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 12013233}
   m_CullTransparentMesh: 1
+--- !u!114 &12013238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12013233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a9f567c02a81439e85f31168f7aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelConfigurations:
+  - panelName: Save Panel
+    stateBindings:
+    - state: 1
+      configItems:
+      - itemType: 0
+        presetConfig:
+          onEnterPresetName: General_Blow up
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!1 &38418820
 GameObject:
   m_ObjectHideFlags: 0
@@ -2477,7 +2519,6 @@ GameObject:
   - component: {fileID: 195974312}
   - component: {fileID: 195974310}
   - component: {fileID: 195974314}
-  - component: {fileID: 195974313}
   m_Layer: 5
   m_Name: "\u89D2\u8272"
   m_TagString: Untagged
@@ -2607,35 +2648,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &195974313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 195974305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1547583158}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: PlayMasterByName_Event
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: Pointer to role
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &195974314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2652,16 +2664,55 @@ MonoBehaviour:
   - panelName: Pause Panel
     stateBindings:
     - state: 1
-      onEnterPresetName: General_Blow up
-      reverseOnExit: 1
-      onExitPresetName: 
-      onEnterBaselineMode: 0
-      onExitBaselineMode: 0
-      playTrackOnEnter: 0
-      onEnterTrack: {fileID: 0}
-      onEnterTrackName: 
-      reverseTrackOnExit: 0
-      onExitTrackReverseMode: 0
+      configItems:
+      - itemType: 0
+        presetConfig:
+          onEnterPresetName: General_Blow up
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
+      - itemType: 2
+        presetConfig:
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 1547583158}
+          onEnterPresetName: Pointer to role
+          reverseOnExit: 0
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!1 &197838372
 GameObject:
   m_ObjectHideFlags: 0
@@ -2953,16 +3004,31 @@ MonoBehaviour:
   - panelName: Game Panel
     stateBindings:
     - state: 1
-      onEnterPresetName: left bigger
-      reverseOnExit: 1
-      onExitPresetName: 
-      onEnterBaselineMode: 0
-      onExitBaselineMode: 0
-      playTrackOnEnter: 0
-      onEnterTrack: {fileID: 0}
-      onEnterTrackName: 
-      reverseTrackOnExit: 0
-      onExitTrackReverseMode: 0
+      configItems:
+      - itemType: 0
+        presetConfig:
+          onEnterPresetName: left bigger
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!114 &210919024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4242,16 +4308,31 @@ MonoBehaviour:
   - panelName: Pause Panel
     stateBindings:
     - state: 1
-      onEnterPresetName: General_Blow up
-      reverseOnExit: 1
-      onExitPresetName: 
-      onEnterBaselineMode: 0
-      onExitBaselineMode: 0
-      playTrackOnEnter: 0
-      onEnterTrack: {fileID: 0}
-      onEnterTrackName: 
-      reverseTrackOnExit: 0
-      onExitTrackReverseMode: 0
+      configItems:
+      - itemType: 0
+        presetConfig:
+          onEnterPresetName: General_Blow up
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!1 &302503980
 GameObject:
   m_ObjectHideFlags: 0
@@ -5949,7 +6030,6 @@ GameObject:
   - component: {fileID: 388834737}
   - component: {fileID: 388834735}
   - component: {fileID: 388834739}
-  - component: {fileID: 388834738}
   - component: {fileID: 388834740}
   m_Layer: 5
   m_Name: "\u5B58\u50A8"
@@ -6104,35 +6184,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &388834738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 388834730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1547583158}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: PlayMasterByName_Event
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: Pointer to store
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &388834739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6149,16 +6200,55 @@ MonoBehaviour:
   - panelName: Pause Panel
     stateBindings:
     - state: 1
-      onEnterPresetName: General_Blow up
-      reverseOnExit: 1
-      onExitPresetName: 
-      onEnterBaselineMode: 0
-      onExitBaselineMode: 0
-      playTrackOnEnter: 0
-      onEnterTrack: {fileID: 0}
-      onEnterTrackName: 
-      reverseTrackOnExit: 0
-      onExitTrackReverseMode: 0
+      configItems:
+      - itemType: 0
+        presetConfig:
+          onEnterPresetName: General_Blow up
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
+      - itemType: 2
+        presetConfig:
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 1547583158}
+          onEnterPresetName: Pointer to store
+          reverseOnExit: 0
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!114 &388834740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6665,6 +6755,14 @@ PrefabInstance:
       propertyPath: m_FontData.m_Font
       value: 
       objectReference: {fileID: 527307162}
+    - target: {fileID: 6022454957062038468, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
+      propertyPath: panelConfigurations.Array.data[0].stateBindings.Array.data[0].configItems.Array.data[0].unityEventConfig.onExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1427252911}
+    - target: {fileID: 6022454957062038468, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
+      propertyPath: panelConfigurations.Array.data[0].stateBindings.Array.data[0].configItems.Array.data[0].unityEventConfig.onEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1427252911}
     - target: {fileID: 6632057173356100120, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_FontData.m_Font
       value: 
@@ -6673,10 +6771,6 @@ PrefabInstance:
       propertyPath: m_FontData.m_Font
       value: 
       objectReference: {fileID: 915860391}
-    - target: {fileID: 9065236790014919169, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1427252911}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7888,6 +7982,7 @@ GameObject:
   - component: {fileID: 569779120}
   - component: {fileID: 569779119}
   - component: {fileID: 569779118}
+  - component: {fileID: 569779124}
   m_Layer: 5
   m_Name: "\u5173\u95ED\u6309\u94AE"
   m_TagString: Untagged
@@ -8125,6 +8220,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 569779116}
   m_CullTransparentMesh: 1
+--- !u!114 &569779124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569779116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a9f567c02a81439e85f31168f7aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelConfigurations:
+  - panelName: Load Panel
+    stateBindings:
+    - state: 1
+      configItems:
+      - itemType: 0
+        presetConfig:
+          onEnterPresetName: General_Blow up
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!1 &569915970
 GameObject:
   m_ObjectHideFlags: 0
@@ -10419,7 +10555,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1175766232}
+  - {fileID: 419989881946722204}
   m_Father: {fileID: 1931175440}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -13353,7 +13489,6 @@ GameObject:
   - component: {fileID: 986504114}
   - component: {fileID: 986504112}
   - component: {fileID: 986504116}
-  - component: {fileID: 986504115}
   m_Layer: 5
   m_Name: "\u8BBE\u7F6E"
   m_TagString: Untagged
@@ -13483,35 +13618,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &986504115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 986504107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1547583158}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: PlayMasterByName_Event
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: Pointer to setting
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &986504116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13528,16 +13634,55 @@ MonoBehaviour:
   - panelName: Pause Panel
     stateBindings:
     - state: 1
-      onEnterPresetName: General_Blow up
-      reverseOnExit: 1
-      onExitPresetName: 
-      onEnterBaselineMode: 0
-      onExitBaselineMode: 0
-      playTrackOnEnter: 0
-      onEnterTrack: {fileID: 0}
-      onEnterTrackName: 
-      reverseTrackOnExit: 0
-      onExitTrackReverseMode: 0
+      configItems:
+      - itemType: 0
+        presetConfig:
+          onEnterPresetName: General_Blow up
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
+      - itemType: 2
+        presetConfig:
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 1547583158}
+          onEnterPresetName: Pointer to setting
+          reverseOnExit: 0
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!1 &994365241
 GameObject:
   m_ObjectHideFlags: 0
@@ -14113,6 +14258,7 @@ GameObject:
   - component: {fileID: 1049642234}
   - component: {fileID: 1049642239}
   - component: {fileID: 1049642238}
+  - component: {fileID: 1049642240}
   m_Layer: 5
   m_Name: "\u5173\u95ED\u6309\u94AE"
   m_TagString: Untagged
@@ -14350,6 +14496,47 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1049642240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1049642232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a9f567c02a81439e85f31168f7aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelConfigurations:
+  - panelName: Save Panel
+    stateBindings:
+    - state: 1
+      configItems:
+      - itemType: 0
+        presetConfig:
+          onEnterPresetName: General_Blow up
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!1 &1051868857
 GameObject:
   m_ObjectHideFlags: 0
@@ -15173,73 +15360,6 @@ RectTransform:
   m_AnchoredPosition: {x: 84, y: 1}
   m_SizeDelta: {x: 1090, y: 209}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1175766231 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4322714676312941047, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-  m_PrefabInstance: {fileID: 1891608737}
-  m_PrefabAsset: {fileID: 0}
---- !u!224 &1175766232 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-  m_PrefabInstance: {fileID: 1891608737}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1175766233
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1175766231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1569075289}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: Play
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 308543671}
-          m_TargetAssemblyTypeName: ITC.UIFX.UISolariBoard, Assembly-CSharp
-          m_MethodName: StartFlipTransition
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 1
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1569075289}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: PlayReversed
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &1182820879
 GameObject:
   m_ObjectHideFlags: 0
@@ -16026,7 +16146,6 @@ GameObject:
   - component: {fileID: 1232613350}
   - component: {fileID: 1232613348}
   - component: {fileID: 1232613352}
-  - component: {fileID: 1232613351}
   - component: {fileID: 1232613353}
   m_Layer: 5
   m_Name: "\u52A0\u8F7D"
@@ -16181,35 +16300,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1232613351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1232613343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1547583158}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: PlayMasterByName_Event
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: Pointer to read
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &1232613352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16226,16 +16316,55 @@ MonoBehaviour:
   - panelName: Pause Panel
     stateBindings:
     - state: 1
-      onEnterPresetName: General_Blow up
-      reverseOnExit: 1
-      onExitPresetName: 
-      onEnterBaselineMode: 0
-      onExitBaselineMode: 0
-      playTrackOnEnter: 0
-      onEnterTrack: {fileID: 0}
-      onEnterTrackName: 
-      reverseTrackOnExit: 0
-      onExitTrackReverseMode: 0
+      configItems:
+      - itemType: 0
+        presetConfig:
+          onEnterPresetName: General_Blow up
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
+      - itemType: 2
+        presetConfig:
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 1547583158}
+          onEnterPresetName: Pointer to read
+          reverseOnExit: 0
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!114 &1232613353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16261,7 +16390,8 @@ GameObject:
   - component: {fileID: 1241706881}
   - component: {fileID: 1241706884}
   - component: {fileID: 1241706883}
-  - component: {fileID: 1241706882}
+  - component: {fileID: 1241706886}
+  - component: {fileID: 1241706885}
   m_Layer: 5
   m_Name: "\u5B58\u50A8\u680F-\u7F6E\u9876"
   m_TagString: Untagged
@@ -16334,63 +16464,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1241706882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1241706879}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 308543671}
-          m_TargetAssemblyTypeName: ITC.UIFX.UISolariBoard, Assembly-CSharp
-          m_MethodName: StartFlipTransition
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 3
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 1953724644}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: PlayMasterByName_Event
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: General_Blow up
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1953724644}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: PlayMasterReversedByName_Event
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: General_Blow up
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &1241706883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16425,6 +16498,116 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1241706885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241706879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a9f567c02a81439e85f31168f7aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelConfigurations:
+  - panelName: Load Panel
+    stateBindings:
+    - state: 1
+      configItems:
+      - itemType: 2
+        presetConfig:
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 1953724644}
+          onEnterPresetName: General_Blow up
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
+      - itemType: 3
+        presetConfig:
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls:
+              - m_Target: {fileID: 308543671}
+                m_TargetAssemblyTypeName: ITC.UIFX.UISolariBoard, Assembly-CSharp
+                m_MethodName: StartFlipTransition
+                m_Mode: 3
+                m_Arguments:
+                  m_ObjectArgument: {fileID: 0}
+                  m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                  m_IntArgument: 3
+                  m_FloatArgument: 0
+                  m_StringArgument: 
+                  m_BoolArgument: 0
+                m_CallState: 2
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls:
+              - m_Target: {fileID: 308543671}
+                m_TargetAssemblyTypeName: ITC.UIFX.UISolariBoard, Assembly-CSharp
+                m_MethodName: StartFlipToClearAndDeselect
+                m_Mode: 1
+                m_Arguments:
+                  m_ObjectArgument: {fileID: 0}
+                  m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                  m_IntArgument: 0
+                  m_FloatArgument: 0
+                  m_StringArgument: 
+                  m_BoolArgument: 0
+                m_CallState: 2
+--- !u!114 &1241706886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241706879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f314a76c289312b479a52c144d916227, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  presets: []
+  libraries:
+  - {fileID: 11400000, guid: d9bf89a5c7c7b8548b8764a1247aeeeb, type: 2}
+  onPlay:
+    m_PersistentCalls:
+      m_Calls: []
+  onComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1253935386
 GameObject:
   m_ObjectHideFlags: 0
@@ -17094,6 +17277,7 @@ GameObject:
   - component: {fileID: 1305392428}
   - component: {fileID: 1305392427}
   - component: {fileID: 1305392426}
+  - component: {fileID: 1305392429}
   m_Layer: 5
   m_Name: WHERE TO READ
   m_TagString: Untagged
@@ -17179,6 +17363,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1305392424}
   m_CullTransparentMesh: 1
+--- !u!114 &1305392429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1305392424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a9f567c02a81439e85f31168f7aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelConfigurations:
+  - panelName: Load Panel
+    stateBindings:
+    - state: 1
+      configItems:
+      - itemType: 0
+        presetConfig:
+          onEnterPresetName: General_Blow up
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!1 &1305622450
 GameObject:
   m_ObjectHideFlags: 0
@@ -18268,6 +18493,7 @@ GameObject:
   - component: {fileID: 1385796204}
   - component: {fileID: 1385796206}
   - component: {fileID: 1385796207}
+  - component: {fileID: 1385796208}
   m_Layer: 0
   m_Name: "\u9ED8\u8BA4\u5DE5\u5177\u6D4B\u8BD5\u5BF9\u8C61"
   m_TagString: Untagged
@@ -18316,6 +18542,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clipGroup: {fileID: 11400000, guid: 6d1f875970d02d24fb7e45e48e71a9ad, type: 2}
   triggerKey: 112
+--- !u!114 &1385796208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385796203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306d3b907d08d4e479831f73b90039c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkInterval: 0.5
 --- !u!28 &1386507727
 Texture2D:
   m_ObjectHideFlags: 0
@@ -22149,16 +22388,31 @@ MonoBehaviour:
   - panelName: Pause Panel
     stateBindings:
     - state: 1
-      onEnterPresetName: General_Blow up
-      reverseOnExit: 1
-      onExitPresetName: 
-      onEnterBaselineMode: 0
-      onExitBaselineMode: 0
-      playTrackOnEnter: 0
-      onEnterTrack: {fileID: 0}
-      onEnterTrackName: 
-      reverseTrackOnExit: 0
-      onExitTrackReverseMode: 0
+      configItems:
+      - itemType: 0
+        presetConfig:
+          onEnterPresetName: General_Blow up
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!114 &1679115688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22326,7 +22580,6 @@ GameObject:
   - component: {fileID: 1691546868}
   - component: {fileID: 1691546866}
   - component: {fileID: 1691546870}
-  - component: {fileID: 1691546869}
   m_Layer: 5
   m_Name: "\u8FD4\u56DE\u521D\u59CB\u754C\u9762"
   m_TagString: Untagged
@@ -22456,35 +22709,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1691546869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1691546861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1547583158}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: PlayMasterByName_Event
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: Pointer to back to menu
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &1691546870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22501,16 +22725,55 @@ MonoBehaviour:
   - panelName: Pause Panel
     stateBindings:
     - state: 1
-      onEnterPresetName: General_Blow up
-      reverseOnExit: 1
-      onExitPresetName: 
-      onEnterBaselineMode: 0
-      onExitBaselineMode: 0
-      playTrackOnEnter: 0
-      onEnterTrack: {fileID: 0}
-      onEnterTrackName: 
-      reverseTrackOnExit: 0
-      onExitTrackReverseMode: 0
+      configItems:
+      - itemType: 0
+        presetConfig:
+          onEnterPresetName: General_Blow up
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
+      - itemType: 2
+        presetConfig:
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 1547583158}
+          onEnterPresetName: Pointer to back to menu
+          reverseOnExit: 0
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!1 &1701833263
 GameObject:
   m_ObjectHideFlags: 0
@@ -23219,7 +23482,6 @@ GameObject:
   - component: {fileID: 1725409557}
   - component: {fileID: 1725409555}
   - component: {fileID: 1725409559}
-  - component: {fileID: 1725409558}
   m_Layer: 5
   m_Name: "\u8BCD\u5E93"
   m_TagString: Untagged
@@ -23349,35 +23611,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1725409558
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1725409550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1547583158}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: PlayMasterByName_Event
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: Pointer to word
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &1725409559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23394,16 +23627,55 @@ MonoBehaviour:
   - panelName: Pause Panel
     stateBindings:
     - state: 1
-      onEnterPresetName: General_Blow up
-      reverseOnExit: 1
-      onExitPresetName: 
-      onEnterBaselineMode: 0
-      onExitBaselineMode: 0
-      playTrackOnEnter: 0
-      onEnterTrack: {fileID: 0}
-      onEnterTrackName: 
-      reverseTrackOnExit: 0
-      onExitTrackReverseMode: 0
+      configItems:
+      - itemType: 0
+        presetConfig:
+          onEnterPresetName: General_Blow up
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
+      - itemType: 2
+        presetConfig:
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 1547583158}
+          onEnterPresetName: Pointer to word
+          reverseOnExit: 0
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!1 &1730540763
 GameObject:
   m_ObjectHideFlags: 0
@@ -25865,254 +26137,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1883221300}
   m_CullTransparentMesh: 1
---- !u!1001 &1891608737
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 794738598}
-    m_Modifications:
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 1300
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 210
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1157488898755802215, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 1157488898755802215, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 277
-      objectReference: {fileID: 0}
-    - target: {fileID: 1157488898755802215, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -26
-      objectReference: {fileID: 0}
-    - target: {fileID: 1233393137891717421, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 1233393137891717421, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -351.00012
-      objectReference: {fileID: 0}
-    - target: {fileID: 1233393137891717421, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 35.999985
-      objectReference: {fileID: 0}
-    - target: {fileID: 1918561928307596169, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 1918561928307596169, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -559
-      objectReference: {fileID: 0}
-    - target: {fileID: 1918561928307596169, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -89
-      objectReference: {fileID: 0}
-    - target: {fileID: 2082639642801510091, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 2082639642801510091, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -159
-      objectReference: {fileID: 0}
-    - target: {fileID: 2082639642801510091, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -45
-      objectReference: {fileID: 0}
-    - target: {fileID: 2366662022735033826, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_FontData.m_Font
-      value: 
-      objectReference: {fileID: 607856081}
-    - target: {fileID: 3402356935750086895, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 3402356935750086895, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 3402356935750086895, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 82
-      objectReference: {fileID: 0}
-    - target: {fileID: 3782251430849217870, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 3782251430849217870, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 3782251430849217870, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 36
-      objectReference: {fileID: 0}
-    - target: {fileID: 3884775309543234081, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 3884775309543234081, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 287
-      objectReference: {fileID: 0}
-    - target: {fileID: 3884775309543234081, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 21
-      objectReference: {fileID: 0}
-    - target: {fileID: 4322714676312941047, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_Name
-      value: "\u5B58\u50A8\u6761\u6309\u94AE\u6A21\u7248"
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081280121891806062, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081280121891806062, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -149.00012
-      objectReference: {fileID: 0}
-    - target: {fileID: 5081280121891806062, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -44.000015
-      objectReference: {fileID: 0}
-    - target: {fileID: 5363671031013537624, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_FontData.m_Font
-      value: 
-      objectReference: {fileID: 527307162}
-    - target: {fileID: 6482448605091210591, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 6482448605091210591, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -355
-      objectReference: {fileID: 0}
-    - target: {fileID: 6482448605091210591, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 37
-      objectReference: {fileID: 0}
-    - target: {fileID: 6536130633257580901, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 6536130633257580901, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -413
-      objectReference: {fileID: 0}
-    - target: {fileID: 6536130633257580901, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -15
-      objectReference: {fileID: 0}
-    - target: {fileID: 6571421052951986120, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -13
-      objectReference: {fileID: 0}
-    - target: {fileID: 6571421052951986120, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -569
-      objectReference: {fileID: 0}
-    - target: {fileID: 6571421052951986120, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6632057173356100120, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_FontData.m_Font
-      value: 
-      objectReference: {fileID: 2019955609}
-    - target: {fileID: 7418504577882921457, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      propertyPath: m_FontData.m_Font
-      value: 
-      objectReference: {fileID: 915860391}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4322714676312941047, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1175766233}
-  m_SourcePrefab: {fileID: 100100000, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
 --- !u!1 &1892145929
 GameObject:
   m_ObjectHideFlags: 0
@@ -29026,7 +29050,8 @@ GameObject:
   - component: {fileID: 2134673810}
   - component: {fileID: 2134673813}
   - component: {fileID: 2134673812}
-  - component: {fileID: 2134673811}
+  - component: {fileID: 2134673815}
+  - component: {fileID: 2134673814}
   m_Layer: 5
   m_Name: "\u5B58\u50A8\u680F-\u7F6E\u9876"
   m_TagString: Untagged
@@ -29099,63 +29124,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2134673811
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2134673808}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1427252911}
-          m_TargetAssemblyTypeName: ITC.UIFX.UISolariBoard, Assembly-CSharp
-          m_MethodName: StartFlipTransition
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 4
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 1771748655}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: PlayMasterByName_Event
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: Set icon rotation
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1771748655}
-          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: StopGracefully
-          m_Mode: 4
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0.5
-            m_StringArgument: 
-            m_BoolArgument: 1
-          m_CallState: 2
 --- !u!114 &2134673812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29190,6 +29158,127 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2134673814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134673808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9a9f567c02a81439e85f31168f7aa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelConfigurations:
+  - panelName: Save Panel
+    stateBindings:
+    - state: 1
+      configItems:
+      - itemType: 2
+        presetConfig:
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 1771748655}
+          onEnterPresetName: Set icon rotation
+          reverseOnExit: 0
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
+      - itemType: 3
+        presetConfig:
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls:
+              - m_Target: {fileID: 1427252911}
+                m_TargetAssemblyTypeName: ITC.UIFX.UISolariBoard, Assembly-CSharp
+                m_MethodName: StartFlipTransition
+                m_Mode: 3
+                m_Arguments:
+                  m_ObjectArgument: {fileID: 0}
+                  m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                  m_IntArgument: 4
+                  m_FloatArgument: 0
+                  m_StringArgument: 
+                  m_BoolArgument: 0
+                m_CallState: 2
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls:
+              - m_Target: {fileID: 1771748655}
+                m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
+                m_MethodName: StopGracefully
+                m_Mode: 4
+                m_Arguments:
+                  m_ObjectArgument: {fileID: 0}
+                  m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                  m_IntArgument: 0
+                  m_FloatArgument: 0.5
+                  m_StringArgument: 
+                  m_BoolArgument: 0
+                m_CallState: 2
+              - m_Target: {fileID: 1427252911}
+                m_TargetAssemblyTypeName: ITC.UIFX.UISolariBoard, Assembly-CSharp
+                m_MethodName: StartFlipToClearAndDeselect
+                m_Mode: 1
+                m_Arguments:
+                  m_ObjectArgument: {fileID: 0}
+                  m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                  m_IntArgument: 0
+                  m_FloatArgument: 0
+                  m_StringArgument: 
+                  m_BoolArgument: 0
+                m_CallState: 2
+--- !u!114 &2134673815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134673808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f314a76c289312b479a52c144d916227, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  presets: []
+  libraries: []
+  onPlay:
+    m_PersistentCalls:
+      m_Calls: []
+  onComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!212 &16412244349872533
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -29439,6 +29528,127 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c06143945eeef094f9d53b75699c4275, type: 3}
+--- !u!1001 &225005692174583700
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 794738598}
+    m_Modifications:
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1300
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 210
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1244266662512272791, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_Name
+      value: "\u8BFB\u6863\u6761\u6309\u94AE\u6A21\u7248"
+      objectReference: {fileID: 0}
+    - target: {fileID: 2130547566645490579, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 915860391}
+    - target: {fileID: 5247431111313435607, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 2019955609}
+    - target: {fileID: 5696940241763125621, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 527307162}
+    - target: {fileID: 5979793610935672584, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: panelConfigurations.Array.data[0].stateBindings.Array.data[0].configItems.Array.data[0].unityEventConfig.onExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 308543671}
+    - target: {fileID: 5979793610935672584, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: panelConfigurations.Array.data[0].stateBindings.Array.data[0].configItems.Array.data[0].unityEventConfig.onEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 308543671}
+    - target: {fileID: 6742731404666652867, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 607856081}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
 --- !u!1 &253133962420712903
 GameObject:
   m_ObjectHideFlags: 0
@@ -29471,6 +29681,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1670789329833856636}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!224 &419989881946722204 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
+  m_PrefabInstance: {fileID: 225005692174583700}
+  m_PrefabAsset: {fileID: 0}
 --- !u!212 &561826740865959314
 SpriteRenderer:
   m_ObjectHideFlags: 0
