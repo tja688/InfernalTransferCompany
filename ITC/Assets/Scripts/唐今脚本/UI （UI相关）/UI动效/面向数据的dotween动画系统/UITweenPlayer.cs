@@ -123,6 +123,49 @@ public class UITweenPlayer : MonoBehaviour
         LastPreparedSequence = null;
     }
 
+    // 在 UITweenPlayer.cs 中添加这个新方法
+    
+    /// <summary>
+    /// 优雅地停止当前动画，通过将动画的TimeScale平滑地Tween到0来实现减速效果。
+    /// </summary>
+    /// <param name="stopDuration">减速到完全停止所需的时间</param>
+    /// <param name="stopEase">减速时使用的缓动曲线（建议使用 Out 类型，如 OutQuad）</param>
+    public void StopGracefully(float stopDuration = 0.5f)
+    {
+        if (_active == null || !_active.IsActive())
+        {
+            // 动画已经不在播放
+            return;
+        }
+
+        // 检查是否已经有一个 "DOTimeScale" 动画正在作用于 _active
+        // (防止连续调用 StopGracefully)
+        if (DOTween.IsTweening(_active))
+        {
+            return;
+        }
+
+        // 准备一个监控理由，以便在动画最终被 Kill 时记录
+        PrepareMonitorKillReason($"StopGracefully (ease out over {stopDuration}s)");
+
+        // 关键：获取当前动画的 unscaledTime 设置
+        // 从 LastPreparedPreset 中获取，如果没有则默认使用 false（遵循 timeScale）
+        bool isUnscaled = LastPreparedPreset != null ? LastPreparedPreset.unscaledTime : false;
+
+        // 创建一个新的 Tween，它的目标是 _active 本身
+        // 我们将 _active 的 TimeScale 从当前值 (通常是1) 动画到 0
+        _active.DOTimeScale(0f, stopDuration)
+               .SetEase(Ease.OutQuad)
+               .SetUpdate(isUnscaled) // 确保这个"减速"动画本身遵循正确的 Update 模式
+               .OnComplete(() =>
+               {
+                   // 当 timescale 降到 0 (动画已完全停止) 时，
+                   // 我们再安全地 Kill 它，以完成清理。
+                   // Kill 的理由已经通过 PrepareMonitorKillReason 准备好了。
+                   Kill(false);
+               });
+    }
+
     public void Play(int index, BaselineCaptureMode baselineMode = BaselineCaptureMode.CurrentState)
     {
         if (index < 0 || index >= presets.Count) return;

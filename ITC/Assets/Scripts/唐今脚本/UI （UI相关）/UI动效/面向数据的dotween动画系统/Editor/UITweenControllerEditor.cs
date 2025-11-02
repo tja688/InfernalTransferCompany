@@ -479,7 +479,6 @@ public class UITweenControllerEditor : Editor
 
         _previewTween = C.CreateAnimationSequence()
                          .SetUpdate(true)
-                         .SetLoops(1)
                          .Play();
     }
     
