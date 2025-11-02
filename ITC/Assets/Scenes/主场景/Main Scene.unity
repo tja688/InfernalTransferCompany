@@ -23887,7 +23887,7 @@ GameObject:
   - component: {fileID: 1771748650}
   - component: {fileID: 1771748653}
   - component: {fileID: 1771748652}
-  - component: {fileID: 1771748651}
+  - component: {fileID: 1771748655}
   m_Layer: 5
   m_Name: "\u81EA\u52A8\u4FDD\u5B58\u56FE\u6807"
   m_TagString: Untagged
@@ -23914,22 +23914,6 @@ RectTransform:
   m_AnchoredPosition: {x: -450, y: -8.5}
   m_SizeDelta: {x: 118, y: 117}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1771748651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1771748649}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fc721deb0e179e459eadf70741cc903, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetButton: {fileID: 2134673810}
-  rotateSpeed: 180
-  accelTime: 0.5
-  decelTime: 0.6
 --- !u!114 &1771748652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23968,6 +23952,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1771748649}
   m_CullTransparentMesh: 1
+--- !u!114 &1771748655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771748649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f314a76c289312b479a52c144d916227, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  presets: []
+  libraries:
+  - {fileID: 11400000, guid: d9bf89a5c7c7b8548b8764a1247aeeeb, type: 2}
+  onPlay:
+    m_PersistentCalls:
+      m_Calls: []
+  onComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1772145748
 GameObject:
   m_ObjectHideFlags: 0
@@ -29029,21 +29034,33 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 1771748655}
           m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
-          m_MethodName: PlayReversed
-          m_Mode: 3
+          m_MethodName: PlayMasterByName_Event
+          m_Mode: 5
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: 
+            m_StringArgument: Set icon rotation
             m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1771748655}
+          m_TargetAssemblyTypeName: UITweenPlayer, Assembly-CSharp
+          m_MethodName: StopGracefully
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0.5
+            m_StringArgument: 
+            m_BoolArgument: 1
           m_CallState: 2
 --- !u!114 &2134673812
 MonoBehaviour:
