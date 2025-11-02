@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: "\u4E8C\u7EA7\u83DC\u5355-\u7EAF\u9ED1\u80CC\u666F\u5165\u573A"
   m_EditorClassIdentifier: 
   presetName: BG in
-  useRelativeMode: 0
+  useRelativeMode: 1
   relativeBaselineMode: 0
   useBezierPath: 0
   passThroughPointC: {x: 0, y: 0}
   passTStar: 0.5
   bezierInterruptPolicy: 0
-  animatePosition: 1
-  targetAnchoredPosition: {x: -690.5, y: 383.5}
-  animateSize: 1
-  targetSizeDelta: {x: 1920, y: 1082}
-  animateRotationZ: 0
-  targetEulerZ: 0
+  animatePosition: 0
+  targetAnchoredPosition: {x: 0, y: 0}
+  animateSize: 0
+  targetSizeDelta: {x: 0, y: 0}
+  animateRotation: 0
+  targetEulerAngles: {x: 0, y: 0, z: 0}
   targetPivot: {x: 0.5, y: 0.5}
   animatePivot: 0
   animateAlpha: 1
@@ -61,5 +61,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  easeType: 15
+  easeType: 27
   scaleDurationByDistance: 0
+  secondaryTweens: []
+  timelineEvents: []

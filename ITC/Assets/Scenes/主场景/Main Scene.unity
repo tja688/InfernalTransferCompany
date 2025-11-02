@@ -3610,8 +3610,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2610, y: 1466}
-  m_SizeDelta: {x: 1920, y: 1082}
+  m_AnchoredPosition: {x: -616.88025, y: 384.33563}
+  m_SizeDelta: {x: 1986.2395, y: 1119.3286}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &253264923
 MonoBehaviour:
@@ -3718,8 +3718,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -6249,6 +6249,30 @@ MonoBehaviour:
           onExitEvent:
             m_PersistentCalls:
               m_Calls: []
+      - itemType: 3
+        presetConfig:
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+          onEnterBaselineMode: 0
+          onExitBaselineMode: 0
+        trackConfig:
+          onEnterTrack: {fileID: 0}
+          onEnterTrackName: 
+          reverseTrackOnExit: 0
+          onExitTrackReverseMode: 0
+        externalPlayerConfig:
+          externalPlayer: {fileID: 0}
+          onEnterPresetName: 
+          reverseOnExit: 1
+          onExitPresetName: 
+        unityEventConfig:
+          onEnterEvent:
+            m_PersistentCalls:
+              m_Calls: []
+          onExitEvent:
+            m_PersistentCalls:
+              m_Calls: []
 --- !u!114 &388834740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6677,7 +6701,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMin.x
@@ -6685,7 +6709,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_SizeDelta.x
@@ -6725,11 +6749,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 654.40027
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -105
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6756,6 +6780,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 527307162}
     - target: {fileID: 6022454957062038468, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
+      propertyPath: panelConfigurations.Array.data[0].stateBindings.Array.data[0].configItems.Array.data[0].unityEventConfig.onEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6022454957062038468, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: panelConfigurations.Array.data[0].stateBindings.Array.data[0].configItems.Array.data[0].unityEventConfig.onExitEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1427252911}
@@ -6763,6 +6791,18 @@ PrefabInstance:
       propertyPath: panelConfigurations.Array.data[0].stateBindings.Array.data[0].configItems.Array.data[0].unityEventConfig.onEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1427252911}
+    - target: {fileID: 6022454957062038468, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
+      propertyPath: panelConfigurations.Array.data[0].stateBindings.Array.data[0].configItems.Array.data[0].unityEventConfig.onEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StartFlipTransition
+      objectReference: {fileID: 0}
+    - target: {fileID: 6022454957062038468, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
+      propertyPath: panelConfigurations.Array.data[0].stateBindings.Array.data[0].configItems.Array.data[0].unityEventConfig.onEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ITC.UIFX.UISolariBoard, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6022454957062038468, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
+      propertyPath: panelConfigurations.Array.data[0].stateBindings.Array.data[0].configItems.Array.data[0].unityEventConfig.onEnterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6632057173356100120, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_FontData.m_Font
       value: 
@@ -8078,18 +8118,6 @@ MonoBehaviour:
           m_StringArgument: Pause Panel
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 308543671}
-        m_TargetAssemblyTypeName: ITC.UIFX.UISolariBoard, Assembly-CSharp
-        m_MethodName: StartFlipToClearAndDeselect
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &569779120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9331,8 +9359,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2610, y: 1466}
-  m_SizeDelta: {x: 1920, y: 1082}
+  m_AnchoredPosition: {x: -726.68, y: 386}
+  m_SizeDelta: {x: 1992.3691, y: 1122.783}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &684949080
 MonoBehaviour:
@@ -9348,9 +9376,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boundPreset: {fileID: 11400000, guid: b87b0a9758036354fbeb2ada76d5d49c, type: 2}
   autoSaveToPreset: 0
-  useRelativeMode: 0
+  useRelativeMode: 1
   useBezierPath: 0
-  duration: 1
+  duration: 0.5
   delay: 0
   loops: 0
   loopType: 0
@@ -9380,18 +9408,18 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  easeType: 15
-  targetAnchoredPosition: {x: -690.5, y: 383.5}
-  targetSizeDelta: {x: 1920, y: 1082}
+  easeType: 27
+  targetAnchoredPosition: {x: 0, y: 0}
+  targetSizeDelta: {x: 0, y: 0}
   targetPivot: {x: 0.5, y: 0.5}
   targetEulerAngles: {x: 0, y: 0, z: 0}
   targetAlpha: 1
   targetColor: {r: 1, g: 1, b: 1, a: 1}
   passThroughPointC: {x: 0, y: 0}
   passTStar: 0.5
-  animatePosition: 1
-  animateSize: 1
-  animateRotation: 1
+  animatePosition: 0
+  animateSize: 0
+  animateRotation: 0
   animateAlpha: 1
   animateColor: 0
   secondaryTweens: []
@@ -9439,8 +9467,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -14484,18 +14512,6 @@ MonoBehaviour:
           m_StringArgument: Pause Panel
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1427252911}
-        m_TargetAssemblyTypeName: ITC.UIFX.UISolariBoard, Assembly-CSharp
-        m_MethodName: StartFlipToClearAndDeselect
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1049642240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18549,7 +18565,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1385796203}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 306d3b907d08d4e479831f73b90039c7, type: 3}
   m_Name: 
@@ -27722,12 +27738,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ba875997bc5c4d85a9b0478acbccfc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Mixer: {fileID: 0}
+  Mixer: {fileID: -8024322330251490997, guid: 6ee4a7963c3e41b4b97ded437513a6d0, type: 2}
   ScenePersistent: 0
-  CollapseObjectLibrary: 0
-  CollapseGroupLibrary: 0
-  SFXObjectLibrary: []
-  SFXGroupLibrary: []
+  CollapseObjectLibrary: 1
+  CollapseGroupLibrary: 1
+  SFXObjectLibrary:
+  - {fileID: 11400000, guid: f181e4140dfa2db4da44023d8aafe2a2, type: 2}
+  SFXGroupLibrary:
+  - {fileID: 11400000, guid: 6d1f875970d02d24fb7e45e48e71a9ad, type: 2}
 --- !u!114 &2025657420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27755,7 +27773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c714dff07c3144d2ba31f5d5947a7013, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Mixer: {fileID: 0}
+  Mixer: {fileID: 3770603785117137521, guid: 6ee4a7963c3e41b4b97ded437513a6d0, type: 2}
   ScenePersistent: 0
   CollapseLibrary: 0
   TrackLibrary: []
@@ -29550,7 +29568,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchorMin.x
@@ -29558,7 +29576,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_SizeDelta.x
@@ -29598,11 +29616,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 654.40027
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -105
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

@@ -58,7 +58,7 @@ public class GamePanelStateMachine : MonoBehaviour
             if (_instance == null)
             {
                 // 场景中查找
-                _instance = FindObjectOfType<GamePanelStateMachine>();
+                _instance = FindFirstObjectByType<GamePanelStateMachine>();
 
                 // 如果没有，则自动创建
                 if (_instance == null)
@@ -78,17 +78,18 @@ public class GamePanelStateMachine : MonoBehaviour
             // 如果还没有实例，当前实例成为单例
             _instance = this;
             DontDestroyOnLoad(gameObject);
-            _currentPanel = startingPanel;
+            // 确保使用正确的初始值，如果startingPanel为空则使用"None"
+            _currentPanel = string.IsNullOrEmpty(startingPanel) ? "None" : startingPanel;
         }
         else if (_instance != this)
         {
             // 如果单例已存在，检查是否应该替换它
-            bool existingIsBlank = _instance.startingPanel == "None";
-            bool thisIsConfigured = this.startingPanel != "None";
+            bool existingIsBlank = string.IsNullOrEmpty(_instance.startingPanel) || _instance.startingPanel == "None";
+            bool thisIsConfigured = !string.IsNullOrEmpty(this.startingPanel) && this.startingPanel != "None";
 
             if (existingIsBlank && thisIsConfigured)
             {
-                // 如果现存的是“空白”实例，而当前实例是“已配置”的，则取代它
+                // 如果现存的是"空白"实例，而当前实例是"已配置"的，则取代它
                 Destroy(_instance.gameObject);
                 _instance = this;
                 DontDestroyOnLoad(gameObject);
@@ -100,13 +101,45 @@ public class GamePanelStateMachine : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+        else
+        {
+            // 如果_instance == this，说明这是同一个实例被多次调用Awake（不应该发生，但为了安全）
+            // 确保_currentPanel被正确初始化
+            if (string.IsNullOrEmpty(_currentPanel))
+            {
+                _currentPanel = string.IsNullOrEmpty(startingPanel) ? "None" : startingPanel;
+            }
+        }
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void AutoCreateInstance()
     {
         // 确保在场景加载后实例存在
-        var _ = Instance;
+        var instance = Instance;
+        // 确保_currentPanel被正确初始化（防止通过代码创建的实例没有正确初始化）
+        if (instance != null && string.IsNullOrEmpty(instance._currentPanel))
+        {
+            instance._currentPanel = string.IsNullOrEmpty(instance.startingPanel) ? "None" : instance.startingPanel;
+            if (instance.debugMode)
+            {
+                Debug.Log($"[GamePanelStateMachine] Auto-initialized current panel to: <color=cyan>{instance._currentPanel}</color>", instance);
+            }
+        }
+    }
+    
+    private void Start()
+    {
+        // 在Start中再次确保_currentPanel被正确初始化
+        // 这样可以处理场景中已存在实例但startingPanel在运行时被修改的情况
+        if (string.IsNullOrEmpty(_currentPanel))
+        {
+            _currentPanel = string.IsNullOrEmpty(startingPanel) ? "None" : startingPanel;
+            if (debugMode)
+            {
+                Debug.Log($"[GamePanelStateMachine] Initialized current panel in Start(): <color=cyan>{_currentPanel}</color>", this);
+            }
+        }
     }
 
     #endregion
