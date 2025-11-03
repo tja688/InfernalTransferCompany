@@ -53,6 +53,18 @@ namespace ITC.UIFX
         [Tooltip("起点权重：0仅使用噪声，1则完全按起点距离排序。")]
         [Range(0f, 1f)] [SerializeField] private float anchorInfluence = 0.6f;
 
+        [Header("音效设置")]
+        [Tooltip("用于播放翻牌音效的AudioSource组件。")]
+        [SerializeField] private AudioSource audioSource;
+        [Tooltip("翻牌切换内容时播放的音效片段。")]
+        [SerializeField] private AudioClip flipSoundClip;
+        [Tooltip("最小音效播放间隔（秒），当翻牌数量很多时使用此间隔。")]
+        [Min(0.01f)] [SerializeField] private float minSoundInterval = 0.05f;
+        [Tooltip("最大音效播放间隔（秒），当翻牌数量很少时使用此间隔。")]
+        [Min(0.01f)] [SerializeField] private float maxSoundInterval = 0.3f;
+        [Tooltip("用于映射翻牌数量到播放间隔的参考单元格数量。当翻牌数量达到此值时，使用最小间隔。")]
+        [Min(1)] [SerializeField] private int referenceCellCount = 20;
+
         private enum CellPhase
         {
             Idle,
@@ -93,6 +105,10 @@ namespace ITC.UIFX
         private int _cachedColumns = 1;
         private int _cachedRows = 1;
 
+        // 音效播放控制
+        private float _soundTimer;
+        private float _currentSoundInterval;
+
         public bool IsTransitionActive => _transitionActive;
 
         private void Awake()
@@ -119,13 +135,25 @@ namespace ITC.UIFX
             _elapsed += deltaTime;
 
             bool anyRunning = false;
+            int activeFlipCount = 0;
             for (int i = 0; i < _cells.Count; i++)
             {
                 if (UpdateCell(_cells[i], deltaTime))
                 {
                     anyRunning = true;
                 }
+                
+                // 统计正在翻牌的单元格数量（Flipping、Ending、Finalizing状态）
+                if (_cells[i].phase == CellPhase.Flipping || 
+                    _cells[i].phase == CellPhase.Ending || 
+                    _cells[i].phase == CellPhase.Finalizing)
+                {
+                    activeFlipCount++;
+                }
             }
+
+            // 根据当前翻牌数量动态调整音效播放间隔
+            UpdateSoundPlayback(activeFlipCount, deltaTime);
 
             if (!anyRunning)
             {
@@ -254,6 +282,10 @@ namespace ITC.UIFX
                 cell.phase = CellPhase.Waiting;
                 cell.rectTransform.localEulerAngles = Vector3.zero;
             }
+
+            // 重置音效播放计时器
+            _soundTimer = 0f;
+            _currentSoundInterval = minSoundInterval;
 
             return true;
         }
@@ -538,6 +570,58 @@ namespace ITC.UIFX
             }
         }
 
+        /// <summary>
+        /// 根据当前翻牌数量动态更新音效播放间隔并播放音效。
+        /// </summary>
+        private void UpdateSoundPlayback(int activeFlipCount, float deltaTime)
+        {
+            if (audioSource == null || activeFlipCount == 0)
+            {
+                _soundTimer = 0f;
+                return;
+            }
+
+            // 根据翻牌数量计算播放间隔（函数映射）
+            // 数量越多，间隔越短；数量越少，间隔越长
+            // 使用线性插值：当数量为1时使用maxInterval，当数量>=referenceCellCount时使用minInterval
+            float normalizedCount = Mathf.Clamp01(activeFlipCount / (float)Mathf.Max(1, referenceCellCount));
+            _currentSoundInterval = Mathf.Lerp(maxSoundInterval, minSoundInterval, normalizedCount);
+            _currentSoundInterval = Mathf.Max(minSoundInterval, _currentSoundInterval);
+
+            // 累加计时器
+            _soundTimer += deltaTime;
+
+            // 达到间隔时播放音效
+            if (_soundTimer >= _currentSoundInterval)
+            {
+                PlayFlipSound();
+                _soundTimer = 0f; // 重置计时器
+            }
+        }
+
+        /// <summary>
+        /// 播放翻牌音效。
+        /// </summary>
+        private void PlayFlipSound()
+        {
+            if (audioSource == null)
+            {
+                return;
+            }
+
+            // 确定要播放的音频片段：优先使用flipSoundClip，否则尝试从AudioSource获取
+            AudioClip clipToPlay = flipSoundClip;
+            if (clipToPlay == null && audioSource.clip != null)
+            {
+                clipToPlay = audioSource.clip;
+            }
+
+            if (clipToPlay != null)
+            {
+                audioSource.PlayOneShot(clipToPlay);
+            }
+        }
+
         private Texture GetRandomTexture()
         {
             IReadOnlyList<Texture> textures = uvInspector?.SourceTextures;
@@ -616,12 +700,14 @@ namespace ITC.UIFX
             }
 
             _transitionActive = false;
+            _soundTimer = 0f;
         }
 
         private void CompleteTransition()
         {
             _transitionActive = false;
             _elapsed = 0f;
+            _soundTimer = 0f;
         }
 
         /// <summary>
