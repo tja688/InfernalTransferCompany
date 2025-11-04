@@ -6864,7 +6864,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMin.x
@@ -6872,7 +6872,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_SizeDelta.x
@@ -6912,11 +6912,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 654.40027
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -105
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -25378,7 +25378,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1591851372}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9999947
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -25579,7 +25579,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1835219197}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999684
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -29915,18 +29915,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1565471608}
-    - target: {fileID: 1876595239487980141, guid: c06143945eeef094f9d53b75699c4275, type: 3}
-      propertyPath: m_RenderMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1876595239487980141, guid: c06143945eeef094f9d53b75699c4275, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1876595239487980141, guid: c06143945eeef094f9d53b75699c4275, type: 3}
-      propertyPath: m_SortingLayerID
-      value: -1596609345
-      objectReference: {fileID: 0}
     - target: {fileID: 3609820685598891862, guid: c06143945eeef094f9d53b75699c4275, type: 3}
       propertyPath: m_Name
       value: ITC Main Dialogue Manager
@@ -29998,7 +29986,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchorMin.x
@@ -30006,7 +29994,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_SizeDelta.x
@@ -30046,11 +30034,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 654.40027
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -105
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -31562,42 +31550,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: enableDebugLog
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[1].trackName
-      value: PausePanel-SavePanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[2].trackName
-      value: PausePanel-LoadPanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].trackName
-      value: LoadPanel-SavePanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[2].uniformInterval
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].uniformInterval
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[2].items.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
       propertyPath: tracks.Array.data[0].items.Array.data[0].player
       value: 
       objectReference: {fileID: 210919022}
@@ -31678,121 +31630,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1305392426}
     - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[0].player
-      value: 
-      objectReference: {fileID: 684949081}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[1].player
-      value: 
-      objectReference: {fileID: 2068837543}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[2].player
-      value: 
-      objectReference: {fileID: 781666289}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[3].player
-      value: 
-      objectReference: {fileID: 1049642235}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[4].player
-      value: 
-      objectReference: {fileID: 12013235}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
       propertyPath: tracks.Array.data[0].items.Array.data[10].player
       value: 
       objectReference: {fileID: 1547583158}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[2].disableInteractionDuringPlay
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].disableInteractionDuringPlay
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[1].items.Array.data[1].presetName
-      value: Save Main In
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[2].items.Array.data[0].presetName
-      value: BG in
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[2].items.Array.data[1].presetName
-      value: Read Main In
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[2].items.Array.data[2].presetName
-      value: Button right
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[2].items.Array.data[3].presetName
-      value: Button down
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[2].items.Array.data[4].presetName
-      value: Button down
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[0].presetName
-      value: BG in
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[1].presetName
-      value: Main interface entry
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[2].presetName
-      value: Button left
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[3].presetName
-      value: Button down
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[4].presetName
-      value: Button down
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[2].items.Array.data[0].delayAfterPlay
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[2].items.Array.data[1].delayAfterPlay
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[2].items.Array.data[2].delayAfterPlay
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[2].items.Array.data[3].delayAfterPlay
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[2].items.Array.data[4].delayAfterPlay
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[0].delayAfterPlay
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[1].delayAfterPlay
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[2].delayAfterPlay
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[3].delayAfterPlay
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5621145069614301991, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
-      propertyPath: tracks.Array.data[3].items.Array.data[4].delayAfterPlay
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 6213977055401697059, guid: c01a808c74cd16a47bd354b6863f3868, type: 3}
       propertyPath: m_LocalPosition.x
       value: 606.05133
@@ -32120,70 +31960,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: debugMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[2].toPanel
-      value: Save Panel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[3].toPanel
-      value: Pause Panel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[4].toPanel
-      value: Load Panel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[5].toPanel
-      value: Pause Panel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[2].playMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[3].playMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[4].playMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[5].playMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[2].fromPanel
-      value: Pause Panel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[3].fromPanel
-      value: Save Panel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[4].fromPanel
-      value: Pause Panel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[5].fromPanel
-      value: Load Panel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[2].reverseMode
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[3].reverseMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
       propertyPath: transitions.Array.data[0].transitionTrack
       value: 
       objectReference: {fileID: 775343891}
@@ -32192,33 +31968,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 775343891}
     - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[2].trackNameToPlay
-      value: PausePanel-SavePanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
       propertyPath: transitions.Array.data[2].transitionTrack
       value: 
       objectReference: {fileID: 775343891}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[3].trackNameToPlay
-      value: PausePanel-SavePanel
-      objectReference: {fileID: 0}
     - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
       propertyPath: transitions.Array.data[3].transitionTrack
       value: 
       objectReference: {fileID: 775343891}
     - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[4].trackNameToPlay
-      value: PausePanel-LoadPanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
       propertyPath: transitions.Array.data[4].transitionTrack
       value: 
       objectReference: {fileID: 775343891}
-    - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
-      propertyPath: transitions.Array.data[5].trackNameToPlay
-      value: PausePanel-LoadPanel
-      objectReference: {fileID: 0}
     - target: {fileID: 7901143148007395926, guid: 705b725fd8700d34c886788ebd98d511, type: 3}
       propertyPath: transitions.Array.data[5].transitionTrack
       value: 

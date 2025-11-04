@@ -83,7 +83,7 @@ MonoBehaviour:
     - player: {fileID: 0}
       presetName: PrimaryMenu_Select pointer
       delayAfterPlay: 0.1
-  - trackName: PausePanel-SavePaner
+  - trackName: PausePanel-SavePanel
     disableInteractionDuringPlay: 1
     uniformInterval: 0.1
     items:
@@ -91,7 +91,7 @@ MonoBehaviour:
       presetName: BG in
       delayAfterPlay: 0.1
     - player: {fileID: 0}
-      presetName: Main interface entry
+      presetName: Save Main In
       delayAfterPlay: 0.1
     - player: {fileID: 0}
       presetName: Button left
@@ -102,4 +102,24 @@ MonoBehaviour:
     - player: {fileID: 0}
       presetName: Button down
       delayAfterPlay: 0.1
+  - trackName: PausePanel-LoadPanel
+    disableInteractionDuringPlay: 1
+    uniformInterval: 0.1
+    items:
+    - player: {fileID: 0}
+      presetName: BG in
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: Read Main In
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: Button right
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: Button down
+      delayAfterPlay: 0.1
+    - player: {fileID: 0}
+      presetName: Button down
+      delayAfterPlay: 0.1
   useUnscaledIntervals: 1
+  enableDebugLog: 0
