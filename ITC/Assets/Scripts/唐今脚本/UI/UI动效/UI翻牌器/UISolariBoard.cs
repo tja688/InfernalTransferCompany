@@ -716,20 +716,14 @@ namespace ITC.UIFX
         /// </summary>
         public void StartFlipToClearAndDeselect()
         {
-            // 1. 像以前一样，调用清空（索引0）的翻牌
-            // 这会触发翻牌器开始翻转到空图像
-            StartFlipTransition(0); 
-            
-            // 2. (关键修复) 立刻取消 EventSystem 的当前选择
-            // 确保没有按钮保持“选中”状态
-            if (EventSystem.current != null)
+            // 【修改点】检查当前的目标贴图 (_targetTexture) 是否已经为 null。
+            // _targetTexture 保存的是当前（或上一次）过渡的目标。
+            // 如果它已经为 null，说明翻牌器正处于“清空状态”或“正在前往清空状态”。
+            if (_targetTexture != null)
             {
-                EventSystem.current.SetSelectedGameObject(null);
-            }
-            else
-            {
-                // 增加一个安全检查，以防 EventSystem 丢失
-                UnityEngine.Debug.LogWarning("UISolariBoard: EventSystem.current 为空，无法取消选择。", this);
+                // 1. 只有当目标不是 "clear" (null) 时，才调用清空（索引0）的翻牌
+                // 这会触发翻牌器开始翻转到空图像
+                StartFlipTransition(0); 
             }
         }
     }
