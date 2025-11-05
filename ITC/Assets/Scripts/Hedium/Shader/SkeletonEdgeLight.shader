@@ -1,14 +1,14 @@
 ﻿// This is a premultiply-alpha adaptation of the built-in Unity shader "UI/Default" in Unity 5.6.2 to allow Unity UI stencil masking.
 
-Shader "Custom/ShaderSkeletonTest"
+Shader "Custom/UI/ShaderSkeletonEdgeLight"
 {
 	Properties
 	{
-		 _MainTex ("Sprite Texture", 2D) = "white" {}
+		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
 		[Toggle(_STRAIGHT_ALPHA_INPUT)] _StraightAlphaInput("Straight Alpha Texture", Int) = 0
 		[Toggle(_CANVAS_GROUP_COMPATIBLE)] _CanvasGroupCompatible("CanvasGroup Compatible", Int) = 0
 		_Color ("Tint", Color) = (1,1,1,1)
-
+		
 		[HideInInspector][Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Comparison", Float) = 8
 		[HideInInspector] _Stencil ("Stencil ID", Float) = 0
 		[HideInInspector][Enum(UnityEngine.Rendering.StencilOp)] _StencilOp ("Stencil Operation", Float) = 0
@@ -27,6 +27,13 @@ Shader "Custom/ShaderSkeletonTest"
 		[HideInInspector] _OutlineSmoothness("Outline Smoothness", Range(0,1)) = 1.0
 		[HideInInspector][MaterialToggle(_USE8NEIGHBOURHOOD_ON)] _Use8Neighbourhood("Sample 8 Neighbours", Float) = 1
 		[HideInInspector] _OutlineMipLevel("Outline Mip Level", Range(0,3)) = 0
+		[HDR]_OutlineColor_0 ("Outline Color_0", Color) = (1,1,1,1)
+		[HDR]_OutlineColor_1 ("Outline Color_1", Color) = (1,1,1,1)
+		_GlowSpeed ("Glow Speed", Range(0,10)) = 2
+		_OutLineWidth ("Outline Width", Range(0,0.1)) = 0.01
+		_Overall_Alpha ("_Overall_Alpha", float) = 1
+		_OutlineMinAlpha ("Outline Min Alpha", Range(0,0.5)) = 0.1
+        _OutlineMaxAlpha ("Outline Max Alpha", Range(0,2)) = 0.3
 	}
 
 	SubShader
@@ -91,7 +98,8 @@ Shader "Custom/ShaderSkeletonTest"
 			fixed4 _Color;
 			fixed4 _TextureSampleAdd;
 			float4 _ClipRect;
-
+		
+		
 			VertexOutput vert (VertexInput IN) {
 				VertexOutput OUT;
 
@@ -111,31 +119,45 @@ Shader "Custom/ShaderSkeletonTest"
 			}
 
 			sampler2D _MainTex;
+			float4 _MainTex_TexelSize;
+
+            float _OutlineMinAlpha, _OutlineMaxAlpha, _OutLineWidth, _GlowSpeed;
+            float4 _OutlineColor_0, _OutlineColor_1;
+            float _Overall_Alpha;
 
 			fixed4 frag (VertexOutput IN) : SV_Target
 			{
-				half4 texColor = tex2D(_MainTex, IN.texcoord);
+			float4 col = tex2D(_MainTex, IN.texcoord);
+			float Alpha = col.a;
 
+			for (int x = -10 ; x < 10; x++)
+			{
+				for(int y = -10; y < 10; y++)
+				{
+					float2 offset = (float2(x, y)  *_OutLineWidth )/10;
+					Alpha += tex2D(_MainTex, IN.texcoord + offset).a;
+				}
+			}
+			Alpha /= 361;
+			clip(Alpha - _OutlineMinAlpha);
+			Alpha = clamp(Alpha,0,_OutlineMaxAlpha);
+			float3 OutLine =  lerp(_OutlineColor_0, _OutlineColor_1, (0.5 * sin(_GlowSpeed * _Time.y + 2* IN.texcoord.x) + 0.5)) * Alpha;
+			col.a += Alpha;
+			col.rgb += OutLine;
+			col.a *= pow(_Overall_Alpha,3);
 				#if defined(_STRAIGHT_ALPHA_INPUT)
-				texColor.rgb *= texColor.a;
-				#endif
-
-				half4 color = (texColor + _TextureSampleAdd) * IN.color;
-				#ifdef _CANVAS_GROUP_COMPATIBLE
-				// CanvasGroup alpha sets vertex color alpha, but does not premultiply it to rgb components.
-				color.rgb *= IN.color.a;
-				#endif
-
-				color *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
-
-				#ifdef UNITY_UI_ALPHACLIP
-				clip (color.a - 0.001);
-				#endif
-
-				return color;
+						col.rgb *= texColor.a;
+						#endif
+				 col = (col + _TextureSampleAdd) * IN.color;
+   				 col *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
+   				 #ifdef UNITY_UI_ALPHACLIP
+  					  clip(col.a - 0.001);
+  				  #endif
+   				 return col;
+	
 			}
 		ENDCG
 		}
 	}
-	CustomEditor "SpineShaderWithOutlineGUI"
+	
 }

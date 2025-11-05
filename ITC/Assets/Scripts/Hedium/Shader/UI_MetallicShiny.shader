@@ -34,7 +34,8 @@ Shader "Custom/UI/MetallicScan"
         _ScanPosXYMAX ("ScanPosXYMAX", Vector) = (-6.499928, -1.429978, 0, 0)
 		_TransparentDegree("TransparentDegree",Float) = 0.5
 		 _UseScan("Use Scan", Float) = 1.0 
-		 _GoldColor ("Gold Color", Color) = (1, 0.84, 0, 1) 
+		 _GoldColor ("Gold Color", Color) = (1, 0.84, 0, 1)
+		 _ColorThreshold ("ColorThreshold", float) = 0.5
 }
 	SubShader
 	{
@@ -103,6 +104,7 @@ Shader "Custom/UI/MetallicScan"
             float2 _ScanPosXYMAX;
 			float _TransparentDegree;
 			float _UseScan;
+			float _ColorThreshold;
 			VertexOutput vert (VertexInput IN) {
 				VertexOutput OUT;
 
@@ -160,16 +162,16 @@ fixed4 frag (VertexOutput IN) : SV_Target
 	pos.y=frac(pos.y);
 	half4 subCol = tex2D(_SubTex,pos);
 
-
+	
 
 
 	
     float3 targetColor = _GoldColor.rgb; 
     float3 pixColor = texColor.rgb;
 
-  float diffSum = abs(pixColor.r - targetColor.r) + abs(pixColor.g - targetColor.g);
+    float diffSum = abs(pixColor.r - targetColor.r) + abs(pixColor.g - targetColor.g);
 
-  float diff = (diffSum > 0.5) ? 1 : diffSum;
+  float diff = (diffSum > (1-_ColorThreshold)) ? 1 : diffSum;
 
   
    
@@ -205,5 +207,5 @@ fixed4 frag (VertexOutput IN) : SV_Target
 		ENDCG
 		}
 	}
-	CustomEditor "SpineShaderWithOutlineGUI"
+
 }
