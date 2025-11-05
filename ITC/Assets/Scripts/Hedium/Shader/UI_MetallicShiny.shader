@@ -1,6 +1,6 @@
 ﻿// This is a premultiply-alpha adaptation of the built-in Unity shader "UI/Default" in Unity 5.6.2 to allow Unity UI stencil masking.
 
-Shader "Custom/UI/MetallicShiny"
+Shader "Custom/UI/MetallicScan"
 {
 	Properties
 	{
@@ -28,14 +28,14 @@ Shader "Custom/UI/MetallicShiny"
 		[HideInInspector] _OutlineSmoothness("Outline Smoothness", Range(0,1)) = 1.0
 		[HideInInspector][MaterialToggle(_USE8NEIGHBOURHOOD_ON)] _Use8Neighbourhood("Sample 8 Neighbours", Float) = 1
 		[HideInInspector] _OutlineMipLevel("Outline Mip Level", Range(0,3)) = 0
-
-
-
-
-		_SubTex ("Sub Sprite Texture", 2D) = "white" {}
+		_SubTex ("SubTex", 2D) = "white" {}
 		_ScanSpeed ("ScanSpeed", Float) = 0.1
-	}
-
+        _ScanPosXYMIN ("ScanPosXYMIN", Vector) = (-9.7799, -4.43, 0, 0)
+        _ScanPosXYMAX ("ScanPosXYMAX", Vector) = (-6.499928, -1.429978, 0, 0)
+		_TransparentDegree("TransparentDegree",Float) = 0.5
+		 _UseScan("Use Scan", Float) = 1.0 
+		 _GoldColor ("Gold Color", Color) = (1, 0.84, 0, 1) 
+}
 	SubShader
 	{
 		Tags
@@ -91,36 +91,51 @@ Shader "Custom/UI/MetallicShiny"
 				float4 vertex   : SV_POSITION;
 				fixed4 color    : COLOR;
 				half2 texcoord  : TEXCOORD0;
-				float4 worldPosition : TEXCOORD1;
+				float4 objPosition : TEXCOORD1;
+				float2 worldPosition : TEXCOORD2;
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			fixed4 _Color;
 			fixed4 _TextureSampleAdd;
 			float4 _ClipRect;
-
+			float2 _ScanPosXYMIN; 
+            float2 _ScanPosXYMAX;
+			float _TransparentDegree;
+			float _UseScan;
 			VertexOutput vert (VertexInput IN) {
 				VertexOutput OUT;
 
 				UNITY_SETUP_INSTANCE_ID(IN);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
-
-				OUT.worldPosition = IN.vertex;
-				OUT.vertex = UnityObjectToClipPos(OUT.worldPosition);
+				
+				OUT.objPosition = IN.vertex;
+				OUT.vertex = UnityObjectToClipPos(OUT.objPosition);
 				OUT.texcoord = IN.texcoord;
+
+
+				float4 WorldPosition =mul(UNITY_MATRIX_M,IN.vertex);
+			
+				float2 vertexSize = _ScanPosXYMAX - _ScanPosXYMIN;
+                OUT.worldPosition = (WorldPosition.xy - _ScanPosXYMIN) / vertexSize;
+
+
+
 
 				#ifdef UNITY_HALF_TEXEL_OFFSET
 				OUT.vertex.xy += (_ScreenParams.zw-1.0) * float2(-1,1);
 				#endif
+
+
 
 				OUT.color = IN.color * float4(_Color.rgb * _Color.a, _Color.a); // Combine a PMA version of _Color with vertexColor.
 				return OUT;
 			}
 
 			sampler2D _MainTex;
-			sampler2D _SubTex;
-			float4 _SubTex_ST;
 			float _ScanSpeed;
+			sampler2D _SubTex;
+			float4 _GoldColor;
 fixed4 frag (VertexOutput IN) : SV_Target
 {
     half4 texColor = tex2D(_MainTex, IN.texcoord);
@@ -129,26 +144,57 @@ fixed4 frag (VertexOutput IN) : SV_Target
         texColor.rgb *= texColor.a;
     #endif
 
-    half4 baseCol = (texColor + _TextureSampleAdd) * IN.color;
-    float2 uv = IN.worldPosition.xy;
-	 float scanPos = fmod(_Time.y * _ScanSpeed, 1.0 ); 
+
+
+	texColor = (texColor + _TextureSampleAdd) * IN.color;
+	float lineWidth = 0.1;
+	float2 pos = IN.worldPosition.xy;
+
+
 	
-    uv *= 0.01;
-    uv+= scanPos;
+
+
+
+	float2 runDis =frac(_Time.y * _ScanSpeed); 
+	pos.y+=runDis;
+	pos.y=frac(pos.y);
+	half4 subCol = tex2D(_SubTex,pos);
+
+
+
+
 	
-    uv = frac(uv ) ; 
+    float3 targetColor = _GoldColor.rgb; 
+    float3 pixColor = texColor.rgb;
+
+  float diffSum = abs(pixColor.r - targetColor.r) + abs(pixColor.g - targetColor.g);
+
+  float diff = (diffSum > 0.5) ? 1 : diffSum;
+
+  
    
 
-    half4 subCol = tex2D(_SubTex, uv);
+    float goldFactor = saturate(1.0 - diff);   
+    goldFactor*=goldFactor;
+	
 
-		subCol.a = subCol.a*0.5;
-    float mask = baseCol.a * (subCol.a);
-    half4 outCol = lerp(baseCol, subCol, mask);
+
+	float mask = texColor.a * subCol.a * goldFactor  * _UseScan*_TransparentDegree;
+
+	half4 outCol  =texColor+subCol*mask;
+
+	// float2 normPos = pos * 0.5 + 0.5;
+	// float offset = frac(_Time.y * _ScanSpeed); 
+	// float line1 = abs(normPos.y - ( offset-normPos.x)); 
+	// float mask = smoothstep(lineWidth, 0.0, line1); 
+	// half4 lineColor = fixed4(1,0,0,1);
+	// half4 outCol = lerp(texColor, lineColor, mask);
+
     #ifdef _CANVAS_GROUP_COMPATIBLE
         outCol.rgb *= IN.color.a;
     #endif
 	
-    outCol *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
+    outCol *= UnityGet2DClipping(IN.objPosition.xy, _ClipRect);
 
     #ifdef UNITY_UI_ALPHACLIP
         clip(outCol.a - 0.001);
