@@ -12,7 +12,6 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 [DisallowMultipleComponent]
-[RequireComponent(typeof(RectTransform))]
 public class UITweenPlayer : MonoBehaviour
 {
     [Header("Sources")]

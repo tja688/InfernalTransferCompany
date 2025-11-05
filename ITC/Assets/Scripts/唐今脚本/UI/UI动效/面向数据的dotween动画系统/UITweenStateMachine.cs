@@ -7,7 +7,6 @@ using System;
 /// <summary>
 /// 响应UI交互事件，并根据全局 GamePanelStateMachine 的当前面板状态，播放对应的动画和轨道。
 /// </summary>
-[RequireComponent(typeof(UITweenPlayer))]
 public class UITweenStateMachine : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     #region Data Structures
