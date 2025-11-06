@@ -40,18 +40,18 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     {
 
    
-        if (mat.HasProperty("_EnableHighLight ")) 
-        {
-            mat.SetFloat("_EnableHighLight", 1f); 
-        }
+        //if (mat.HasProperty("_EnableHighLight ")) 
+        //{
+        //    mat.SetFloat("_EnableHighLight", 1f); 
+        //}
     }
     public void UnSetHighLight()
     {
        
-        if (mat.HasProperty("_EnableHighLight "))
-        {
-            mat.SetFloat("_EnableHighLight", 0f);
-        }
+        //if (mat.HasProperty("_EnableHighLight "))
+        //{
+        //    mat.SetFloat("_EnableHighLight", 0f);
+        //}
     }
     
     /// <summary>

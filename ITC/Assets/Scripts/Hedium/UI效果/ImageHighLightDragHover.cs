@@ -65,18 +65,18 @@ public class ImageHighLightDragHover : MonoBehaviour,
 
        
        
-        if (mat.HasProperty("_EnableHighLight "))
-        {
-            mat.SetFloat("_EnableHighLight", 1f);
-        }
+        //if (mat.HasProperty("_EnableHighLight "))
+        //{
+        //    mat.SetFloat("_EnableHighLight", 1f);
+        //}
     }
     private void UnSetHighLight()
     {
   
-        if (mat.HasProperty("_EnableHighLight "))
-        {
-            mat.SetFloat("_EnableHighLight", 0f);
-        }
+        //if (mat.HasProperty("_EnableHighLight "))
+        //{
+        //    mat.SetFloat("_EnableHighLight", 0f);
+        //}
     }
     /// <summary>
     /// 拖拽对象离开目标区域时触发
