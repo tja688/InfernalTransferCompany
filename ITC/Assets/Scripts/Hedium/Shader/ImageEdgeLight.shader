@@ -1,10 +1,10 @@
 ﻿// This is a premultiply-alpha adaptation of the built-in Unity shader "UI/Default" in Unity 5.6.2 to allow Unity UI stencil masking.
 
-Shader "Custom/UI/ShaderSkeletonEdgeLight"
+Shader "Custom/UI/ImageEdgeLight"
 {
 	Properties
 	{
-		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
+		_MainTex ("Sprite Texture", 2D) = "white" {}
 		[Toggle(_STRAIGHT_ALPHA_INPUT)] _StraightAlphaInput("Straight Alpha Texture", Int) = 0
 		[Toggle(_CANVAS_GROUP_COMPATIBLE)] _CanvasGroupCompatible("CanvasGroup Compatible", Int) = 0
 		_Color ("Tint", Color) = (1,1,1,1)
@@ -34,7 +34,9 @@ Shader "Custom/UI/ShaderSkeletonEdgeLight"
 		_Overall_Alpha ("_Overall_Alpha", float) = 1
 		_OutlineMinAlpha ("Outline Min Alpha", Range(0,0.5)) = 0.1
         _OutlineMaxAlpha ("Outline Max Alpha", Range(0,2)) = 0.3
+
 		[Toggle] _EnableHighLight ("Enable HighLight", float) = 1
+
 	}
 
 	SubShader
@@ -99,7 +101,7 @@ Shader "Custom/UI/ShaderSkeletonEdgeLight"
 			fixed4 _Color;
 			fixed4 _TextureSampleAdd;
 			float4 _ClipRect;
-		
+			
 		
 			VertexOutput vert (VertexInput IN) {
 				VertexOutput OUT;
@@ -129,31 +131,26 @@ Shader "Custom/UI/ShaderSkeletonEdgeLight"
 			fixed4 frag (VertexOutput IN) : SV_Target
 			{
 			float4 col = tex2D(_MainTex, IN.texcoord);
-
-
-			if (_EnableHighLight)
-			{
 			float Alpha = col.a;
-
-			for (int x = -10 ; x < 10; x++)
+			if(_EnableHighLight)
 			{
-				for(int y = -10; y < 10; y++)
-				{
-					float2 offset = (float2(x, y)*_MainTex_TexelSize.xy*_OutLineWidth )/10;
-					Alpha += tex2D(_MainTex, IN.texcoord + offset).a;
-				}
+							for (int x = -10 ; x < 10; x++)
+							{
+								for(int y = -10; y < 10; y++)
+								{
+									float2 offset = (float2(x, y)*_MainTex_TexelSize.xy*_OutLineWidth )/10;
+									Alpha += tex2D(_MainTex, IN.texcoord + offset).a;
+								}
+							}
+							Alpha /= 361;
+							clip(Alpha - _OutlineMinAlpha);
+							Alpha = clamp(Alpha,0,_OutlineMaxAlpha);
+							float3 OutLine =  lerp(_OutlineColor_0, _OutlineColor_1, (0.5 * sin(_GlowSpeed * _Time.y + 2* IN.texcoord.x) + 0.5)) * Alpha;
+			
+							col.a += Alpha;
+							col.rgb += OutLine;
+							col.a *= pow(_Overall_Alpha,3);
 			}
-			Alpha /= 361;
-			clip(Alpha - _OutlineMinAlpha);
-			Alpha = clamp(Alpha,0,_OutlineMaxAlpha);
-			float3 OutLine =  lerp(_OutlineColor_0, _OutlineColor_1, (0.5 * sin(_GlowSpeed * _Time.y + 2* IN.texcoord.x) + 0.5)) * Alpha;
-			col.a += Alpha;
-			col.rgb += OutLine;
-			col.a *= pow(_Overall_Alpha,3);
-			}
-
-
-
 				#if defined(_STRAIGHT_ALPHA_INPUT)
 						col.rgb *= texColor.a;
 						#endif

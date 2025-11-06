@@ -26,10 +26,9 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
     public DocumentError error= DocumentError.Stub;
     //public DocumentError error = DocumentError.NoPassStub;
     private SkeletonGraphic skeleton;
-    private Color originalColor;
+    [SerializeField]
+    private Material mat;
 
-    [Header("高亮配置")]
-    public Color highlightColor = new Color(1.2f, 1.2f, 0.8f, 1);
     public string targetType = "DocumentJudge";
 
     // 标记当前是否有匹配的拖拽对象在目标上
@@ -39,12 +38,12 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
     {
 
         skeleton = GetComponent<SkeletonGraphic>();
-        originalColor = skeleton.color;
+    
     }
     void Start()
     {
-       
-        SlotCenter.Instance.add_listener(HeEventNames.EndDragEvent, OnRemotgeEndDrag);
+     
+     SlotCenter.Instance.add_listener(HeEventNames.EndDragEvent, OnRemotgeEndDrag);
     }
     /// <summary>
     /// 拖拽对象进入目标区域时触发（仅拖拽状态下）
@@ -62,7 +61,7 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
         if (draggable.targetType == targetType)
         {
             isMatchedDraggingOver = true;
-            skeleton.color = highlightColor; // 显示高亮
+            SetHighLight();
         }
         else
         {
@@ -70,6 +69,25 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
         }
     }
 
+    private void SetHighLight()
+    {
+
+        Renderer rend = GetComponent<Renderer>();
+        Material mat = rend.material;
+        if (mat.HasProperty("_EnableHighLight "))
+        {
+            mat.SetFloat("_EnableHighLight", 1f);
+        }
+    }
+    private void UnSetHighLight()
+    {
+        Renderer rend = GetComponent<Renderer>();
+        Material mat = rend.material;
+        if (mat.HasProperty("_EnableHighLight "))
+        {
+            mat.SetFloat("_EnableHighLight", 0f);
+        }
+    }
     /// <summary>
     /// 拖拽对象离开目标区域时触发
     /// </summary>
@@ -79,7 +97,7 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
         if (isMatchedDraggingOver)
         {
             isMatchedDraggingOver = false;
-            skeleton.color = originalColor; 
+            UnSetHighLight();
         }
         else
         {
@@ -96,7 +114,7 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
         if (isMatchedDraggingOver)
         {
             isMatchedDraggingOver = false;
-            skeleton.color = originalColor;
+            UnSetHighLight();
             SlotCenter.Instance.trigger_event<DocumentError>(eventName, error);
         }
     }
