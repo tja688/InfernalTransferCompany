@@ -72,21 +72,20 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
     private void SetHighLight()
     {
 
-        Renderer rend = GetComponent<Renderer>();
-        Material mat = rend.material;
-        if (mat.HasProperty("_EnableHighLight "))
-        {
-            mat.SetFloat("_EnableHighLight", 1f);
-        }
+ 
+        //if (mat.HasProperty("_EnableHighLight "))
+        //{
+        //    mat.SetFloat("_EnableHighLight", 1f);
+        //}
     }
     private void UnSetHighLight()
     {
-        Renderer rend = GetComponent<Renderer>();
-        Material mat = rend.material;
-        if (mat.HasProperty("_EnableHighLight "))
-        {
-            mat.SetFloat("_EnableHighLight", 0f);
-        }
+      
+       
+        //if (mat.HasProperty("_EnableHighLight "))
+        //{
+        //    mat.SetFloat("_EnableHighLight", 0f);
+        //}
     }
     /// <summary>
     /// 拖拽对象离开目标区域时触发
