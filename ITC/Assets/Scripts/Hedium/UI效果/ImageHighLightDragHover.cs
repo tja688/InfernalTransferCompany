@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// 仅在拖拽时，且类型匹配才显示高亮的组件（挂载到目标对象，如打字机）
 /// </summary>
-[RequireComponent(typeof(Image), typeof(RectTransform))]
+//[RequireComponent(typeof(Image), typeof(RectTransform))]
 public class ImageHighLightDragHover : MonoBehaviour,
     IPointerEnterHandler,
     IPointerExitHandler
@@ -16,24 +16,23 @@ public class ImageHighLightDragHover : MonoBehaviour,
   
     public DocumentError error = DocumentError.Stub;
     private Image image;
-    private Color originalColor;
-
-    [Header("高亮配置")]
-    public Color highlightColor = new Color(1.2f, 1.2f, 0.8f, 1);
+    [SerializeField]
+    private Material mat;
     public string targetType = "DocumentJudge";
 
     // 标记当前是否有匹配的拖拽对象在目标上
     private bool isMatchedDraggingOver = false;
-
+    
     private void Awake()
     {
         image = GetComponent<Image>();
-        originalColor = image.color;
+       
     }
-
+    
     void Start()
     {
         SlotCenter.Instance.add_listener(HeEventNames.EndDragEvent, OnRemotgeEndDrag);
+        
     }
 
     /// <summary>
@@ -51,7 +50,7 @@ public class ImageHighLightDragHover : MonoBehaviour,
         if (draggable.targetType == targetType)
         {
             isMatchedDraggingOver = true;
-            image.color = highlightColor; // 显示高亮
+            SetHighLight();
         }
         else
         {
@@ -61,7 +60,24 @@ public class ImageHighLightDragHover : MonoBehaviour,
 
 
     }
+    private void SetHighLight()
+    {
 
+       
+       
+        if (mat.HasProperty("_EnableHighLight "))
+        {
+            mat.SetFloat("_EnableHighLight", 1f);
+        }
+    }
+    private void UnSetHighLight()
+    {
+  
+        if (mat.HasProperty("_EnableHighLight "))
+        {
+            mat.SetFloat("_EnableHighLight", 0f);
+        }
+    }
     /// <summary>
     /// 拖拽对象离开目标区域时触发
     /// </summary>
@@ -70,7 +86,7 @@ public class ImageHighLightDragHover : MonoBehaviour,
         if (isMatchedDraggingOver)
         {
             isMatchedDraggingOver = false;
-            image.color = originalColor;
+            UnSetHighLight();
         }
         else
         {
@@ -87,7 +103,7 @@ public class ImageHighLightDragHover : MonoBehaviour,
         if (isMatchedDraggingOver)
         {
             isMatchedDraggingOver = false;
-            image.color = originalColor;
+            UnSetHighLight();
             SlotCenter.Instance.trigger_event<DocumentError>(HeEventNames.DocumentErrorChosen, DocumentError.NoPass);
         }
     }   

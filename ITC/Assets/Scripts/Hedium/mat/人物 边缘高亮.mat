@@ -7,11 +7,12 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: "\u65B0\u5EFA\u6750\u8D28"
-  m_Shader: {fileID: 4800000, guid: 606e8b4c00ce0f947a2a95d901d7e10f, type: 3}
+  m_Name: "\u4EBA\u7269 \u8FB9\u7F18\u9AD8\u4EAE"
+  m_Shader: {fileID: 4800000, guid: 4de490c34bc9abb4bbf61ed1d275b147, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - UNITY_UI_ALPHACLIP
   m_InvalidKeywords:
   - _USE8NEIGHBOURHOOD_ON
   m_LightmapFlags: 4
@@ -45,7 +46,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 57f82c08233cae442adb0a6604cb221d, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -60,10 +61,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SubTex:
-        m_Texture: {fileID: 2800000, guid: 57f82c08233cae442adb0a6604cb221d, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _BumpScale: 1
@@ -72,23 +69,25 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _EdgeSoftness: 0.993
+    - _EdgeThickness: 0.4
+    - _EnableHighLight: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _GlowSpeed: 1.72
+    - _GlowSpeed: 2
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _OutLineWidth: 0.0216
-    - _OutlineMaxAlpha: 0.3
-    - _OutlineMinAlpha: 0.1
+    - _OutLineWidth: 15
+    - _OutlineMaxAlpha: 0.25
+    - _OutlineMinAlpha: 0.2
     - _OutlineMipLevel: 0
     - _OutlineReferenceTexWidth: 1024
     - _OutlineSmoothness: 1
     - _OutlineWidth: 3
     - _Overall_Alpha: 1
     - _Parallax: 0.02
-    - _ScanSpeed: 0.1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -99,15 +98,17 @@ Material:
     - _StencilWriteMask: 255
     - _StraightAlphaInput: 0
     - _ThresholdEnd: 0.25
+    - _Transparent: 0.27
     - _UVSec: 0
     - _Use8Neighbourhood: 1
-    - _UseUIAlphaClip: 0
+    - _UseUIAlphaClip: 1
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EdgeColor: {r: 0.8588236, g: 0.75294125, b: 0.74509805, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 1, g: 1, b: 0, a: 1}
-    - _OutlineColor_0: {r: 1, g: 1, b: 1, a: 1}
-    - _OutlineColor_1: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor_0: {r: 1, g: 0.5457247, b: 0.09989874, a: 1}
+    - _OutlineColor_1: {r: 0.057805434, g: 0.026241222, b: 0.014443844, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

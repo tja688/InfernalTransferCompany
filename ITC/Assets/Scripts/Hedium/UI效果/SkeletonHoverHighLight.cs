@@ -14,9 +14,9 @@ public class SkeletonHoverHighLight : MonoBehaviour,
 {
     private SkeletonGraphic skeleton;
     private Color originalColor;
+    [SerializeField]
+    private Material mat; 
 
-    [Header("高亮配置")]
-    public Color highlightColor = new Color(1.2f, 1.2f, 0.8f, 1);
   
     [NonSerialized]
     public bool enableHighLightOnHover=false;
@@ -26,20 +26,32 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     {
 
         skeleton = GetComponent<SkeletonGraphic>();
-        originalColor = skeleton.color;
+      
     }
     void Start()
     {
-
      
+
     }
+
+
+ 
     public void SetHighLight()
     {
-        skeleton.color = highlightColor; 
+
+   
+        if (mat.HasProperty("_EnableHighLight ")) 
+        {
+            mat.SetFloat("_EnableHighLight", 1f); 
+        }
     }
     public void UnSetHighLight()
     {
-        skeleton.color = originalColor;
+       
+        if (mat.HasProperty("_EnableHighLight "))
+        {
+            mat.SetFloat("_EnableHighLight", 0f);
+        }
     }
     
     /// <summary>
@@ -49,7 +61,7 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     {
         if (enableHighLightOnHover)
         {
-            skeleton.color = highlightColor; // 显示高亮
+            SetHighLight();
 
         }
 
@@ -60,7 +72,7 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
-            skeleton.color = originalColor;
+        UnSetHighLight();
     }
 
   

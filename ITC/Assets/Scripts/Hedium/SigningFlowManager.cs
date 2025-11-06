@@ -124,7 +124,7 @@ public class DocumentVerifier : IContractStage
         SlotCenter.Instance.add_listener<DocumentError>(HeEventNames.DocumentErrorChosen, DocumentJudgeProsses);
         var Hover = uiManager.pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>();
 
-        Hover.SetHighLight();
+        //Hover.SetHighLight();
        
     }
     public void Exit()
