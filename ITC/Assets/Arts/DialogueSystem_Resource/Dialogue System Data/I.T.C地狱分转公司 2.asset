@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 935899b62f48ae5498594680ed17d133, type: 3}
-  m_Name: "I.T.C\u5730\u72F1\u5206\u8F6C\u516C\u53F8"
+  m_Name: "I.T.C\u5730\u72F1\u5206\u8F6C\u516C\u53F8 2"
   m_EditorClassIdentifier: 
-  version: 2025/11/6 12:27:55
-  author: articy:draft 3.2.5
+  version: 2025/11/7 1:02:29
+  author: articy:draft 4.2.5
   description: 
   globalUserScript: 
   emphasisSettings:
@@ -48,7 +48,7 @@ MonoBehaviour:
     - title: Description
       value: 
       type: 0
-      typeString: CustomFieldType_Text
+      typeString: 
     - title: IsPlayer
       value: False
       type: 2
@@ -167,7 +167,7 @@ MonoBehaviour:
     - title: Description
       value: 
       type: 0
-      typeString: CustomFieldType_Text
+      typeString: 
     - title: IsPlayer
       value: False
       type: 2
@@ -341,7 +341,7 @@ MonoBehaviour:
     - title: Description
       value: 
       type: 0
-      typeString: CustomFieldType_Text
+      typeString: 
     - title: IsPlayer
       value: False
       type: 2
@@ -401,7 +401,7 @@ MonoBehaviour:
     - title: Description
       value: 
       type: 0
-      typeString: CustomFieldType_Text
+      typeString: 
     - title: IsPlayer
       value: False
       type: 2
@@ -837,8 +837,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 50
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 1
@@ -900,8 +900,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 134
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 2
@@ -967,8 +967,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 218
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 3
@@ -1034,8 +1034,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 302
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 4
@@ -1101,8 +1101,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 386
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 5
@@ -1128,7 +1128,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "\u4E00\u4E2A\u58F0\u97F3\u5728\u8033\u8FB9\u54CD\u8D77\uFF0C\u5982\u540C\u6076\u9B54\u7684\u4F4E\u8BED<i><b>\uFF1A\"\u6B22\u8FCE\u6765\u5230\u5730\u72F1\uFF0C\u65B0\u6765\u7684\u3002\"</b></i>"
+        value: "\u4E00\u4E2A\u58F0\u97F3\u5728\u8033\u8FB9\u54CD\u8D77\uFF0C\u5982\u540C\u6076\u9B54\u7684\u4F4E\u8BED[b][i]\uFF1A\"\u6B22\u8FCE\u6765\u5230\u5730\u72F1\uFF0C\u65B0\u6765\u7684\u3002\"[/i][/b]"
         type: 0
         typeString: 
       - title: Sequence
@@ -1168,8 +1168,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 470
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 6
@@ -1225,13 +1225,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 554
+        x: 0
+        y: 0
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 94.31821}
-    canvasZoom: 0.8800001
+    canvasScrollPosition: {x: 0, y: 0}
+    canvasZoom: 1
   - id: 2
     fields:
     - title: Title
@@ -1337,8 +1337,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 50
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 1
@@ -1400,8 +1400,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 134
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 2
@@ -1467,8 +1467,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 218
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 3
@@ -1534,8 +1534,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 302
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 4
@@ -1601,8 +1601,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 386
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 5
@@ -1658,13 +1658,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 470
+        x: 0
+        y: 0
         width: 160
         height: 30
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.85000014
+    canvasZoom: 1
   - id: 3
     fields:
     - title: Title
@@ -1770,8 +1770,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 20
-        y: 30
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 1
@@ -1833,8 +1833,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 200
-        y: 30
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 2
@@ -1884,7 +1884,7 @@ MonoBehaviour:
       isGroup: 0
       nodeColor: 
       delaySimStatus: 0
-      falseConditionAction: Block
+      falseConditionAction: 
       conditionPriority: 2
       outgoingLinks:
       - originConversationID: 3
@@ -1900,8 +1900,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 380
-        y: 30
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 3
@@ -1967,8 +1967,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 560
-        y: 30
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 4
@@ -1994,7 +1994,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "<color=#FFA61A><b>\u5185\u5FC3\u72EC\u767D - \u4E0D\u4EC5\u6B7B\u4E86\uFF0C\u8FD8\u6210\u4E86\u4E2A\u884C\u8D70\u7684\u65F6\u5C1A\u707E\u96BE\u3002\u8FD9\u9020\u578B\u662F\u54EA\u4E2A\u6076\u9B54\u8BBE\u8BA1\u5E08\u60F3\u51FA\u6765\u7684\uFF1F</b></color>"
+        value: "[b][color=#FFA61A]\u5185\u5FC3\u72EC\u767D - \u4E0D\u4EC5\u6B7B\u4E86\uFF0C\u8FD8\u6210\u4E86\u4E2A\u884C\u8D70\u7684\u65F6\u5C1A\u707E\u96BE\u3002\u8FD9\u9020\u578B\u662F\u54EA\u4E2A\u6076\u9B54\u8BBE\u8BA1\u5E08\u60F3\u51FA\u6765\u7684\uFF1F[/color][/b]"
         type: 0
         typeString: 
       - title: Sequence
@@ -2034,8 +2034,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 740
-        y: 30
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 5
@@ -2091,8 +2091,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 920
-        y: 30
+        x: 0
+        y: 0
         width: 160
         height: 30
     entryGroups: []
@@ -2203,8 +2203,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 20
-        y: 30
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 1
@@ -2266,8 +2266,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 200
-        y: 30
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 2
@@ -2333,8 +2333,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 380
-        y: 30
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 3
@@ -2400,8 +2400,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 560
-        y: 30
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 4
@@ -2467,8 +2467,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 740
-        y: 30
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 5
@@ -2534,8 +2534,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 920
-        y: 30
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 6
@@ -2601,8 +2601,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1100
-        y: 30
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 7
@@ -2658,13 +2658,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 1280
-        y: 30
+        x: 0
+        y: 0
         width: 160
         height: 30
     entryGroups: []
     canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.7000003
+    canvasZoom: 1
   - id: 5
     fields:
     - title: Title
@@ -2770,8 +2770,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 50
+        x: 0
+        y: 0
         width: 160
         height: 30
     - id: 1
@@ -2827,8 +2827,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
-        y: 134
+        x: 0
+        y: 0
         width: 160
         height: 30
     entryGroups: []
@@ -2843,9 +2843,4 @@ MonoBehaviour:
     syncItemsDatabase: {fileID: 0}
     syncLocationsDatabase: {fileID: 0}
     syncVariablesDatabase: {fileID: 0}
-  templateJson: '{"treatItemsAsQuests":true,"actorFields":[{"title":"Name","value":"","type":0,"typeString":""},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":""},{"title":"IsPlayer","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"itemFields":[{"title":"Name","value":"","type":0,"typeString":""},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":""},{"title":"Is
-    Item","value":"True","type":2,"typeString":"CustomFieldType_Boolean"}],"questFields":[{"title":"Name","value":"","type":0,"typeString":""},{"title":"Pictures","value":"[]","type":3,"typeString":"CustomFieldType_Files"},{"title":"Description","value":"","type":0,"typeString":""},{"title":"Success
-    Description","value":"","type":0,"typeString":""},{"title":"Failure Description","value":"","type":0,"typeString":""},{"title":"State","value":"unassigned","type":0,"typeString":""},{"title":"Is
-    Item","value":"False","type":2,"typeString":"CustomFieldType_Boolean"}],"locationFields":[{"title":"Name","value":"","type":0,"typeString":""},{"title":"Description","value":"","type":0,"typeString":""}],"variableFields":[{"title":"Name","value":"","type":0,"typeString":""},{"title":"Initial
-    Value","value":"","type":0,"typeString":""},{"title":"Description","value":"","type":0,"typeString":""}],"conversationFields":[{"title":"Title","value":"","type":0,"typeString":""},{"title":"Description","value":"","type":0,"typeString":""},{"title":"Actor","value":"0","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conversant","value":"0","type":5,"typeString":"CustomFieldType_Actor"}],"dialogueEntryFields":[{"title":"Title","value":"","type":0,"typeString":""},{"title":"Description","value":"","type":0,"typeString":""},{"title":"Actor","value":"","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Conversant","value":"","type":5,"typeString":"CustomFieldType_Actor"},{"title":"Menu
-    Text","value":"","type":0,"typeString":""},{"title":"Dialogue Text","value":"","type":0,"typeString":""},{"title":"Sequence","value":"","type":0,"typeString":""}],"actorPrimaryFieldTitles":[],"itemPrimaryFieldTitles":[],"questPrimaryFieldTitles":[],"locationPrimaryFieldTitles":[],"variablePrimaryFieldTitles":[],"conversationPrimaryFieldTitles":[],"dialogueEntryPrimaryFieldTitles":[],"npcLineColor":{"r":1.0,"g":0.0,"b":0.0,"a":1.0},"pcLineColor":{"r":0.0,"g":0.0,"b":1.0,"a":1.0},"repeatLineColor":{"r":0.5,"g":0.5,"b":0.5,"a":1.0}}'
+  templateJson: 
