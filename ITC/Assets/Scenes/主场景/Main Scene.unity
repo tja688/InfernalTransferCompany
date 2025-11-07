@@ -2742,6 +2742,7 @@ GameObject:
   - component: {fileID: 210919017}
   - component: {fileID: 210919020}
   - component: {fileID: 210919021}
+  - component: {fileID: 210919022}
   m_Layer: 5
   m_Name: "\u70B9\u51FB\u540E\u5927\u56FE\u6807"
   m_TagString: Untagged
@@ -2897,6 +2898,20 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &210919022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210919015}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffdab622715698349b7a592febbf9fb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoverFeedback: {fileID: 4690531267969931980}
+  idleFeedback: {fileID: 7910989515563032651}
 --- !u!1 &219509264
 GameObject:
   m_ObjectHideFlags: 0
@@ -11493,7 +11508,7 @@ GameObject:
   m_Component:
   - component: {fileID: 924940029}
   m_Layer: 5
-  m_Name: "\u70B9\u51FB\u540E\u653E\u5927\u56FE\u6807"
+  m_Name: "ITC\u6838\u5FC3\u56FE\u6807"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28926,7 +28941,7 @@ MonoBehaviour:
   CooldownDuration: 0
   InitialDelay: 0
   CanPlay: 1
-  CanPlayWhileAlreadyPlaying: 1
+  CanPlayWhileAlreadyPlaying: 0
   ChanceToPlay: 100
   FeedbacksIntensity: 1
   Events:
@@ -30861,7 +30876,7 @@ MonoBehaviour:
   CooldownDuration: 0
   InitialDelay: 0
   CanPlay: 1
-  CanPlayWhileAlreadyPlaying: 1
+  CanPlayWhileAlreadyPlaying: 0
   ChanceToPlay: 100
   FeedbacksIntensity: 1
   Events:
