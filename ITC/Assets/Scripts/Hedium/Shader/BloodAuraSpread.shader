@@ -186,7 +186,7 @@ Shader "Custom/UI/BloodAuraSpread"
 					             float2 burrDir = normalize(vec + 1e-6); 
                     float2 burrOffset = burrDir * random * _BurrLength * burrMask; 
 
-                    float timeVal = sin(_Time.y * 100 * dis);
+                    float timeVal = 1;
                     uvTemp = IN.texcoord + dis_factor.x * timeVal * burrDir + burrOffset;
 
                    

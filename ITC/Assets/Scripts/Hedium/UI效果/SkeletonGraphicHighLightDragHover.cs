@@ -16,12 +16,6 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
 
 {
     public string eventName = "EndDragUpThePneumaticChannelSkeleton";
-    //public string EventName => eventName;
-
-    //public void TriggerEvent(DocumentError param)
-    //{
-    //   SlotCenter.Instance.trigger_event<DocumentError>(EventName, param);
-    //}
 
     public DocumentError error= DocumentError.Stub;
     //public DocumentError error = DocumentError.NoPassStub;
@@ -38,7 +32,7 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
     {
 
         skeleton = GetComponent<SkeletonGraphic>();
-    
+        mat = skeleton.material;
     }
     void Start()
     {
@@ -65,6 +59,8 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
         }
         else
         {
+            Debug.Log("Type does not match. No highlight applied.");
+
             return;
         }
     }
@@ -72,20 +68,27 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
     private void SetHighLight()
     {
 
- 
-        //if (mat.HasProperty("_EnableHighLight "))
-        //{
-        //    mat.SetFloat("_EnableHighLight", 1f);
-        //}
+
+        if (mat.HasProperty("_EnableHighLight "))
+        {
+            mat.SetFloat("_EnableHighLight", 1f);
+        }
+        else
+        {
+            Debug.LogWarning("_EnableHighLight property not found in material.");
+        }
     }
     private void UnSetHighLight()
     {
-      
-       
-        //if (mat.HasProperty("_EnableHighLight "))
-        //{
-        //    mat.SetFloat("_EnableHighLight", 0f);
-        //}
+
+        if (mat.HasProperty("_EnableHighLight "))
+        {
+            mat.SetFloat("_EnableHighLight", 0f);
+        }
+        else
+        {
+            Debug.LogWarning("_EnableHighLight property not found in material.");
+        }
     }
     /// <summary>
     /// 拖拽对象离开目标区域时触发
@@ -93,6 +96,7 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
     public void OnPointerExit(PointerEventData eventData)
     {
       
+        Debug.Log("Pointer exited the target area.");
         if (isMatchedDraggingOver)
         {
             isMatchedDraggingOver = false;
@@ -115,6 +119,10 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
             isMatchedDraggingOver = false;
             UnSetHighLight();
             SlotCenter.Instance.trigger_event<DocumentError>(eventName, error);
+        }
+        else
+        {
+            Debug.Log("No matched dragging over. No highlight to remove.");
         }
     }
 }
