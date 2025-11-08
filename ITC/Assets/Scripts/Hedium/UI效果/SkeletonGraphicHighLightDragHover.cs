@@ -16,20 +16,13 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
 
 {
     public string eventName = "EndDragUpThePneumaticChannelSkeleton";
-    //public string EventName => eventName;
-
-    //public void TriggerEvent(DocumentError param)
-    //{
-    //   SlotCenter.Instance.trigger_event<DocumentError>(EventName, param);
-    //}
 
     public DocumentError error= DocumentError.Stub;
     //public DocumentError error = DocumentError.NoPassStub;
     private SkeletonGraphic skeleton;
-    private Color originalColor;
+    [SerializeField]
+    private Material mat;
 
-    [Header("高亮配置")]
-    public Color highlightColor = new Color(1.2f, 1.2f, 0.8f, 1);
     public string targetType = "DocumentJudge";
 
     // 标记当前是否有匹配的拖拽对象在目标上
@@ -39,12 +32,12 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
     {
 
         skeleton = GetComponent<SkeletonGraphic>();
-        originalColor = skeleton.color;
+        mat = skeleton.material;
     }
     void Start()
     {
-       
-        SlotCenter.Instance.add_listener(HeEventNames.EndDragEvent, OnRemotgeEndDrag);
+     
+     SlotCenter.Instance.add_listener(HeEventNames.EndDragEvent, OnRemotgeEndDrag);
     }
     /// <summary>
     /// 拖拽对象进入目标区域时触发（仅拖拽状态下）
@@ -62,24 +55,52 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
         if (draggable.targetType == targetType)
         {
             isMatchedDraggingOver = true;
-            skeleton.color = highlightColor; // 显示高亮
+            SetHighLight();
         }
         else
         {
+            Debug.Log("Type does not match. No highlight applied.");
+
             return;
         }
     }
 
+    private void SetHighLight()
+    {
+
+
+        if (mat.HasProperty("_EnableHighLight "))
+        {
+            mat.SetFloat("_EnableHighLight", 1f);
+        }
+        else
+        {
+            Debug.LogWarning("_EnableHighLight property not found in material.");
+        }
+    }
+    private void UnSetHighLight()
+    {
+
+        if (mat.HasProperty("_EnableHighLight "))
+        {
+            mat.SetFloat("_EnableHighLight", 0f);
+        }
+        else
+        {
+            Debug.LogWarning("_EnableHighLight property not found in material.");
+        }
+    }
     /// <summary>
     /// 拖拽对象离开目标区域时触发
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
       
+        Debug.Log("Pointer exited the target area.");
         if (isMatchedDraggingOver)
         {
             isMatchedDraggingOver = false;
-            skeleton.color = originalColor; 
+            UnSetHighLight();
         }
         else
         {
@@ -96,8 +117,12 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
         if (isMatchedDraggingOver)
         {
             isMatchedDraggingOver = false;
-            skeleton.color = originalColor;
+            UnSetHighLight();
             SlotCenter.Instance.trigger_event<DocumentError>(eventName, error);
+        }
+        else
+        {
+            Debug.Log("No matched dragging over. No highlight to remove.");
         }
     }
 }

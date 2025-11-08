@@ -13,6 +13,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
+  - _ENABLEHIGHLIGHT_ON
   - _USE8NEIGHBOURHOOD_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -70,16 +71,17 @@ Material:
     - _DstBlend: 0
     - _EdgeSoftness: 0.993
     - _EdgeThickness: 0.4
+    - _EnableHighLight: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _GlowSpeed: 2
+    - _GlowSpeed: 6.15
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _OutLineWidth: 0.01
-    - _OutlineMaxAlpha: 0.3
-    - _OutlineMinAlpha: 0.1
+    - _OutLineWidth: 15.12
+    - _OutlineMaxAlpha: 0.25
+    - _OutlineMinAlpha: 0.2
     - _OutlineMipLevel: 0
     - _OutlineReferenceTexWidth: 1024
     - _OutlineSmoothness: 1
@@ -106,7 +108,7 @@ Material:
     - _EdgeColor: {r: 0.8588236, g: 0.75294125, b: 0.74509805, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 1, g: 1, b: 0, a: 1}
-    - _OutlineColor_0: {r: 1, g: 0.5457247, b: 0.10461649, a: 1}
-    - _OutlineColor_1: {r: 0.07227186, g: 0.023153365, b: 0.002428216, a: 1}
+    - _OutlineColor_0: {r: 0.913099, g: 0.37626222, b: 0.082282715, a: 1}
+    - _OutlineColor_1: {r: 0.26225072, g: 0.07618539, b: 0.014443844, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

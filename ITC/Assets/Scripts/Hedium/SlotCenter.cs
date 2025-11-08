@@ -42,6 +42,7 @@ public class SlotCenter : MonoBehaviour
 
     public void add_listener(string name, Action ev)
     {
+        Debug.Log($"添加listener:{name}");
         if (!slot_table.ContainsKey(name))
         {
             slot_table[name] = ev;
@@ -60,6 +61,7 @@ public class SlotCenter : MonoBehaviour
     // 泛型注册：推荐使用此方法
     public void add_listener<T>(string name, Action<T> ev)
     {
+        Debug.Log($"添加listener:{name}");
         if (!slot_table.ContainsKey(name))
         {
             Debug.Log($"注册{name}事件");
@@ -79,6 +81,10 @@ public class SlotCenter : MonoBehaviour
     // 泛型移除
     public void remove_listener<T>(string name, Action<T> ev)
     {
+
+
+
+        Debug.Log($"注销特定监听者:{name}");
         if (slot_table.TryGetValue(name, out var d))
         {
             var newd = Delegate.Remove(d, ev);
@@ -91,6 +97,8 @@ public class SlotCenter : MonoBehaviour
 
     public void remove_listener(string name, Action ev)
     {
+
+        Debug.Log($"注销特定监听者:{name}");
         if (slot_table.TryGetValue(name, out var d))
         {
             var newd = Delegate.Remove(d, ev);
@@ -104,6 +112,7 @@ public class SlotCenter : MonoBehaviour
     // 完全注销某个事件名对应的所有监听器
     public void unregister_listener(string name)
     {
+        Debug.Log($"注销全部监听者:{name}");
         slot_table.Remove(name);
     }
 
@@ -114,7 +123,7 @@ public class SlotCenter : MonoBehaviour
     {
         if (slot_table.TryGetValue(name, out var d))
         {
-            Debug.Log($"{name}事件触发");
+            Debug.Log($"{name}事件触发,参数类型为:{param.GetType().Name}");
 
             // 如果整体委托本身就是 Action<T>
             if (d is Action<T> directAction)

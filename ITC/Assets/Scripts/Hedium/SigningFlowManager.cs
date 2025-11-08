@@ -113,7 +113,11 @@ public class DocumentVerifier : IContractStage
 
 
     }
-
+    public void ToExit()
+    {
+        context.documentVerified = true;
+        completed = true;
+    }
     public void initRes()
     {
         Button button = uiManager.pneumaticChannelSkeleton.GetComponent<Button>();
@@ -124,7 +128,7 @@ public class DocumentVerifier : IContractStage
         SlotCenter.Instance.add_listener<DocumentError>(HeEventNames.DocumentErrorChosen, DocumentJudgeProsses);
         var Hover = uiManager.pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>();
 
-        Hover.SetHighLight();
+        //Hover.SetHighLight();
        
     }
     public void Exit()
@@ -262,8 +266,7 @@ public class DocumentVerifier : IContractStage
             Debug.Log("强制下一阶段");
 
        
-            context.documentVerified = true;
-            completed = true;
+            ToExit();
             JudgeSuccess();
         }
         else
@@ -298,8 +301,7 @@ public class DocumentVerifier : IContractStage
             if (error == DocumentError.Pass)
             {
                 Debug.Log("玩家选择文书无误，通过到下一阶段");
-                context.documentVerified = true;
-                completed = true;
+                ToExit();
                 JudgeSuccess();
             }
             else
