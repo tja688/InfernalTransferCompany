@@ -7,12 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: "\u65B0\u5EFA\u6750\u8D28"
-  m_Shader: {fileID: 4800000, guid: 606e8b4c00ce0f947a2a95d901d7e10f, type: 3}
+  m_Name: "\u7EA2\u8272"
+  m_Shader: {fileID: 4800000, guid: f7683fb16055b424985c59c24653880a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
+  - _ENABLEAURA_ON
   - _USE8NEIGHBOURHOOD_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -45,7 +46,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 57f82c08233cae442adb0a6604cb221d, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -61,34 +62,35 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SubTex:
-        m_Texture: {fileID: 2800000, guid: 57f82c08233cae442adb0a6604cb221d, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _BumpScale: 1
+    - _BurrEdgeRange: 0.03
+    - _BurrLength: 0.05
     - _CanvasGroupCompatible: 0
     - _ColorMask: 15
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _EnableAura: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _GlowSpeed: 1.72
+    - _GlowSpeed: 2
     - _Metallic: 0
     - _Mode: 0
+    - _NoiseIntensity: 0.8
+    - _NoiseScale: 10
+    - _NoiseTimeSpeed: 0.5
     - _OcclusionStrength: 1
-    - _OutLineWidth: 0.0216
-    - _OutlineMaxAlpha: 0.3
-    - _OutlineMinAlpha: 0.1
     - _OutlineMipLevel: 0
     - _OutlineReferenceTexWidth: 1024
     - _OutlineSmoothness: 1
     - _OutlineWidth: 3
-    - _Overall_Alpha: 1
     - _Parallax: 0.02
-    - _ScanSpeed: 0.1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -102,12 +104,18 @@ Material:
     - _UVSec: 0
     - _Use8Neighbourhood: 1
     - _UseUIAlphaClip: 0
+    - _WaveAuraWidth: 1
+    - _YRad: 0.7
     - _ZWrite: 1
     m_Colors:
+    - _AuraColor: {r: 1, g: 0.84, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DirRatio: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 1, g: 1, b: 0, a: 1}
     - _OutlineColor_0: {r: 1, g: 1, b: 1, a: 1}
     - _OutlineColor_1: {r: 1, g: 1, b: 1, a: 1}
+    - _ScanPosXYMAX: {r: -6.499928, g: -1.429978, b: 0, a: 0}
+    - _ScanPosXYMIN: {r: -9.7799, g: -4.43, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
