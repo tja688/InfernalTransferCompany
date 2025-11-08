@@ -20,13 +20,12 @@ public class SkeletonHoverHighLight : MonoBehaviour,
   
     [NonSerialized]
     public bool enableHighLightOnHover=false;
-
-
+    private MeshRenderer _mR;
     private void Awake()
     {
 
         skeleton = GetComponent<SkeletonGraphic>();
-      
+        mat = skeleton.material;
     }
     void Start()
     {
@@ -39,19 +38,27 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     public void SetHighLight()
     {
 
-   
-        //if (mat.HasProperty("_EnableHighLight ")) 
-        //{
-        //    mat.SetFloat("_EnableHighLight", 1f); 
-        //}
+
+        if (mat.HasProperty("_EnableHighLight "))
+        {
+            mat.SetFloat("_EnableHighLight", 1f);
+        }
+        else
+        {
+            Debug.LogWarning("_EnableHighLight property not found in material.");
+        }
     }
     public void UnSetHighLight()
     {
-       
-        //if (mat.HasProperty("_EnableHighLight "))
-        //{
-        //    mat.SetFloat("_EnableHighLight", 0f);
-        //}
+
+        if (mat.HasProperty("_EnableHighLight "))
+        {
+            mat.SetFloat("_EnableHighLight", 0f);
+        }
+        else
+        {
+            Debug.LogWarning("_EnableHighLight property not found in material.");
+        }
     }
     
     /// <summary>

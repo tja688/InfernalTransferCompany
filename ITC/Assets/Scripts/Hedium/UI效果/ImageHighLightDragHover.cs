@@ -1,5 +1,6 @@
 ﻿using QFramework;
 using Spine.Unity;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -26,7 +27,7 @@ public class ImageHighLightDragHover : MonoBehaviour,
     private void Awake()
     {
         image = GetComponent<Image>();
-       
+        mat = image.material;
     }
     
     void Start()
@@ -40,12 +41,14 @@ public class ImageHighLightDragHover : MonoBehaviour,
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
+        
+
         if (eventData.pointerDrag == null)
             return;
-
+       
         DraggableUI draggable = eventData.pointerDrag.GetComponent<DraggableUI>();
         if (draggable == null) return;
-
+        Debug.Log("PointerEnter and Drag");
         // 校验类型是否匹配
         if (draggable.targetType == targetType)
         {
@@ -54,29 +57,40 @@ public class ImageHighLightDragHover : MonoBehaviour,
         }
         else
         {
+            //Debug.Log("Type does not match. No highlight applied.");
             return;
         }
 
 
 
     }
+
     private void SetHighLight()
     {
 
-       
-       
-        //if (mat.HasProperty("_EnableHighLight "))
-        //{
-        //    mat.SetFloat("_EnableHighLight", 1f);
-        //}
+
+        if (mat.HasProperty("_EnableHighLight"))
+        {
+            //Debug.Log("Seting HighLight called,");
+            mat.SetFloat("_EnableHighLight", 1f);
+            //Debug.Log("SetHighLight called, _EnableHighLight set to 1");
+        }
+        else
+        {
+            //Debug.Log("_EnableHighLight property not found in material.");
+        }
     }
     private void UnSetHighLight()
     {
-  
-        //if (mat.HasProperty("_EnableHighLight "))
-        //{
-        //    mat.SetFloat("_EnableHighLight", 0f);
-        //}
+
+        if (mat.HasProperty("_EnableHighLight"))
+        {
+            mat.SetFloat("_EnableHighLight", 0f);
+        }
+        else
+        {
+            //Debug.Log("_EnableHighLight property not found in material.");
+        }
     }
     /// <summary>
     /// 拖拽对象离开目标区域时触发
