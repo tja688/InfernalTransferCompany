@@ -2749,7 +2749,6 @@ GameObject:
   - component: {fileID: 210919018}
   - component: {fileID: 210919017}
   - component: {fileID: 210919020}
-  - component: {fileID: 210919022}
   - component: {fileID: 210919025}
   - component: {fileID: 210919026}
   m_Layer: 5
@@ -2874,215 +2873,6 @@ MonoBehaviour:
           m_StringArgument: Pause Panel
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &210919022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 210919015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -333801856, guid: aa0b1eebb5db27a419fa4564bbe5c9c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  updateType: 0
-  isSpeedBased: 0
-  hasOnStart: 0
-  hasOnPlay: 0
-  hasOnUpdate: 0
-  hasOnStepComplete: 0
-  hasOnComplete: 0
-  hasOnTweenCreated: 0
-  hasOnRewind: 0
-  onStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onPlay:
-    m_PersistentCalls:
-      m_Calls: []
-  onUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  onStepComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  onComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  onTweenCreated:
-    m_PersistentCalls:
-      m_Calls: []
-  onRewind:
-    m_PersistentCalls:
-      m_Calls: []
-  delay: 0
-  duration: 1
-  easeType: 16
-  easeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  loops: 1
-  id: 
-  loopType: 0
-  orientType: 0
-  lookAtTransform: {fileID: 0}
-  lookAtPosition: {x: 0, y: 0, z: 0}
-  lookAhead: 0.01
-  autoPlay: 0
-  autoKill: 1
-  relative: 0
-  isLocal: 0
-  isClosedPath: 0
-  pathResolution: 10
-  pathMode: 3
-  lockRotation: 0
-  assignForwardAndUp: 0
-  forwardDirection: {x: 0, y: 0, z: 1}
-  upDirection: {x: 0, y: 1, z: 0}
-  tweenRigidbody: 0
-  wps:
-  - {x: 5.925731, y: 10.012953, z: 78.75}
-  - {x: -3.987187, y: 9.437221, z: 78.75}
-  - {x: -2.2149713, y: 5.0716367, z: 78.75}
-  fullWps: []
-  path:
-    wpLengths:
-    - 0
-    - 6.275021
-    - 10.041274
-    - 5.128197
-    wps:
-    - {x: 9.965924, y: 5.415556, z: 78.75}
-    - {x: 5.925731, y: 10.012953, z: 78.75}
-    - {x: -3.987187, y: 9.437221, z: 78.75}
-    - {x: -2.2149713, y: 5.0716367, z: 78.75}
-    type: 1
-    subdivisionsXSegment: 10
-    subdivisions: 40
-    controlPoints:
-    - a: {x: 5.925731, y: 10.012953, z: 78.75}
-      b: {x: 0, y: 0, z: 0}
-    - a: {x: -0.4427557, y: 0.7060528, z: 78.75}
-      b: {x: 0, y: 0, z: 0}
-    length: 21.452599
-    isFinalized: 1
-    timesTable:
-    - 0.025
-    - 0.05
-    - 0.075
-    - 0.1
-    - 0.125
-    - 0.15
-    - 0.175
-    - 0.2
-    - 0.22500001
-    - 0.25
-    - 0.275
-    - 0.3
-    - 0.32500002
-    - 0.35
-    - 0.375
-    - 0.4
-    - 0.425
-    - 0.45000002
-    - 0.475
-    - 0.5
-    - 0.52500004
-    - 0.55
-    - 0.575
-    - 0.6
-    - 0.625
-    - 0.65000004
-    - 0.675
-    - 0.7
-    - 0.725
-    - 0.75
-    - 0.77500004
-    - 0.8
-    - 0.825
-    - 0.85
-    - 0.875
-    - 0.90000004
-    - 0.925
-    - 0.95
-    - 0.975
-    - 1
-    lengthsTable:
-    - 0.06935224
-    - 0.26561713
-    - 0.5712274
-    - 0.968811
-    - 1.441259
-    - 1.9718188
-    - 2.5442297
-    - 3.142932
-    - 3.7533822
-    - 4.3625474
-    - 4.959702
-    - 5.5376782
-    - 6.0948
-    - 6.664808
-    - 7.3346996
-    - 8.094137
-    - 8.923502
-    - 9.802164
-    - 10.70898
-    - 11.622548
-    - 12.521357
-    - 13.383895
-    - 14.188791
-    - 14.915007
-    - 15.54224
-    - 16.05194
-    - 16.433113
-    - 16.730669
-    - 17.001192
-    - 17.287931
-    - 17.613726
-    - 17.983715
-    - 18.393425
-    - 18.833765
-    - 19.29343
-    - 19.760109
-    - 20.22117
-    - 20.664242
-    - 21.07786
-    - 21.452599
-  inspectorMode: 0
-  pathType: 1
-  handlesType: 1
-  livePreview: 1
-  handlesDrawMode: 0
-  perspectiveHandleSize: 0.5
-  showIndexes: 1
-  showWpLength: 0
-  pathColor: {r: 0.21248412, g: 1, b: 0, a: 1}
-  lastSrcPosition: {x: 9.965924, y: 5.415556, z: 78.75}
-  lastSrcRotation: {x: -0, y: -0, z: -0, w: 1}
-  wpsDropdown: 1
-  dropToFloorOffset: 0
 --- !u!114 &210919025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5205,7 +4995,7 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 331982939}
         DebugActive: 0
-        TargetDOTweenPath: {fileID: 210919022}
+        TargetDOTweenPath: {fileID: 924940030}
         Mode: 0
     - rid: 6282995574172286976
       type: {class: MMF_Scale, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
@@ -12212,6 +12002,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 924940029}
+  - component: {fileID: 924940030}
   m_Layer: 5
   m_Name: "ITC\u6838\u5FC3\u56FE\u6807"
   m_TagString: Untagged
@@ -12241,6 +12032,215 @@ RectTransform:
   m_AnchoredPosition: {x: 901.5117, y: 0.000030517578}
   m_SizeDelta: {x: 255.02344, y: 127.04999}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &924940030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924940028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -333801856, guid: aa0b1eebb5db27a419fa4564bbe5c9c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updateType: 0
+  isSpeedBased: 0
+  hasOnStart: 0
+  hasOnPlay: 0
+  hasOnUpdate: 0
+  hasOnStepComplete: 0
+  hasOnComplete: 0
+  hasOnTweenCreated: 0
+  hasOnRewind: 0
+  onStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlay:
+    m_PersistentCalls:
+      m_Calls: []
+  onUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  onStepComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onTweenCreated:
+    m_PersistentCalls:
+      m_Calls: []
+  onRewind:
+    m_PersistentCalls:
+      m_Calls: []
+  delay: 0
+  duration: 1
+  easeType: 16
+  easeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  loops: 1
+  id: 
+  loopType: 0
+  orientType: 0
+  lookAtTransform: {fileID: 0}
+  lookAtPosition: {x: 0, y: 0, z: 0}
+  lookAhead: 0.01
+  autoPlay: 0
+  autoKill: 1
+  relative: 0
+  isLocal: 0
+  isClosedPath: 0
+  pathResolution: 10
+  pathMode: 3
+  lockRotation: 0
+  assignForwardAndUp: 0
+  forwardDirection: {x: 0, y: 0, z: 1}
+  upDirection: {x: 0, y: 1, z: 0}
+  tweenRigidbody: 0
+  wps:
+  - {x: 5.925731, y: 10.012953, z: 78.75}
+  - {x: -3.987187, y: 9.437221, z: 78.75}
+  - {x: -2.2149713, y: 5.0716367, z: 78.75}
+  fullWps: []
+  path:
+    wpLengths:
+    - 0
+    - 5.91408
+    - 10.041199
+    - 5.128197
+    wps:
+    - {x: 9.343825, y: 5.415556, z: 78.75}
+    - {x: 5.925731, y: 10.012953, z: 78.75}
+    - {x: -3.987187, y: 9.437221, z: 78.75}
+    - {x: -2.2149713, y: 5.0716367, z: 78.75}
+    type: 1
+    subdivisionsXSegment: 10
+    subdivisions: 40
+    controlPoints:
+    - a: {x: 5.925731, y: 10.012953, z: 78.75}
+      b: {x: 0, y: 0, z: 0}
+    - a: {x: -0.4427557, y: 0.7060528, z: 78.75}
+      b: {x: 0, y: 0, z: 0}
+    length: 21.091925
+    isFinalized: 1
+    timesTable:
+    - 0.025
+    - 0.05
+    - 0.075
+    - 0.1
+    - 0.125
+    - 0.15
+    - 0.175
+    - 0.2
+    - 0.22500001
+    - 0.25
+    - 0.275
+    - 0.3
+    - 0.32500002
+    - 0.35
+    - 0.375
+    - 0.4
+    - 0.425
+    - 0.45000002
+    - 0.475
+    - 0.5
+    - 0.52500004
+    - 0.55
+    - 0.575
+    - 0.6
+    - 0.625
+    - 0.65000004
+    - 0.675
+    - 0.7
+    - 0.725
+    - 0.75
+    - 0.77500004
+    - 0.8
+    - 0.825
+    - 0.85
+    - 0.875
+    - 0.90000004
+    - 0.925
+    - 0.95
+    - 0.975
+    - 1
+    lengthsTable:
+    - 0.06636153
+    - 0.25383645
+    - 0.54514706
+    - 0.9232378
+    - 1.3713564
+    - 1.8731622
+    - 2.412892
+    - 2.9756136
+    - 3.547609
+    - 4.11699
+    - 4.674669
+    - 5.215864
+    - 5.7422976
+    - 6.2905416
+    - 6.944916
+    - 7.6943583
+    - 8.518584
+    - 9.396211
+    - 10.305315
+    - 11.223704
+    - 12.12907
+    - 12.9991045
+    - 13.811638
+    - 14.544834
+    - 15.177601
+    - 15.69062
+    - 16.07244
+    - 16.369995
+    - 16.640518
+    - 16.927258
+    - 17.253052
+    - 17.623041
+    - 18.032751
+    - 18.473091
+    - 18.932756
+    - 19.399435
+    - 19.860497
+    - 20.303568
+    - 20.717186
+    - 21.091925
+  inspectorMode: 0
+  pathType: 1
+  handlesType: 1
+  livePreview: 1
+  handlesDrawMode: 0
+  perspectiveHandleSize: 0.5
+  showIndexes: 1
+  showWpLength: 0
+  pathColor: {r: 0.21248412, g: 1, b: 0, a: 1}
+  lastSrcPosition: {x: 9.343825, y: 5.415556, z: 78.75}
+  lastSrcRotation: {x: -0, y: -0, z: -0, w: 1}
+  wpsDropdown: 1
+  dropToFloorOffset: 0
 --- !u!1 &927864047
 GameObject:
   m_ObjectHideFlags: 0
