@@ -2750,8 +2750,8 @@ GameObject:
   - component: {fileID: 210919017}
   - component: {fileID: 210919020}
   - component: {fileID: 210919022}
-  - component: {fileID: 210919024}
   - component: {fileID: 210919025}
+  - component: {fileID: 210919026}
   m_Layer: 5
   m_Name: "\u70B9\u51FB\u540E\u5927\u56FE\u6807"
   m_TagString: Untagged
@@ -2862,9 +2862,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 210919024}
-        m_TargetAssemblyTypeName: BaseGameEventRaiser`1[[System.String, mscorlib
-        m_MethodName: Raise
+      - m_Target: {fileID: 210919026}
+        m_TargetAssemblyTypeName: UniversalGameEventRaiser, Assembly-CSharp
+        m_MethodName: RaiseString
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3083,20 +3083,6 @@ MonoBehaviour:
   lastSrcRotation: {x: -0, y: -0, z: -0, w: 1}
   wpsDropdown: 1
   dropToFloorOffset: 0
---- !u!114 &210919024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 210919015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a11366e07ea53ff42899750c2ef1fb9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _event: {fileID: 11400000, guid: a9e9645663bd0344b9343a77a20c3e52, type: 2}
-  _payload: 
 --- !u!114 &210919025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3123,6 +3109,26 @@ MonoBehaviour:
   - panelName: Game Panel
     hoverFeedback: {fileID: 4690531267969931980}
     idleFeedback: {fileID: 7910989515563032651}
+--- !u!114 &210919026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210919015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81a1b32f9ec85b44ebe5aeac7f8f8aab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _eventAsset: {fileID: 11400000, guid: a9e9645663bd0344b9343a77a20c3e52, type: 2}
+  _payloadData:
+    _intValue: 0
+    _floatValue: 0
+    _boolValue: 0
+    _stringValue: 
+    _vector3Value: {x: 0, y: 0, z: 0}
+    _objectValue: {fileID: 0}
 --- !u!1 &219509264
 GameObject:
   m_ObjectHideFlags: 0
@@ -4924,7 +4930,6 @@ GameObject:
   - component: {fileID: 331982936}
   - component: {fileID: 331982939}
   - component: {fileID: 331982940}
-  - component: {fileID: 331982941}
   m_Layer: 0
   m_Name: "\u6682\u505C\u83DC\u5355Canvas"
   m_TagString: Untagged
@@ -5062,9 +5067,9 @@ MonoBehaviour:
     OnPlay:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 331982941}
-          m_TargetAssemblyTypeName: BaseGameEventRaiser`1[[System.Boolean, mscorlib
-          m_MethodName: Raise
+        - m_Target: {fileID: 331982940}
+          m_TargetAssemblyTypeName: UniversalGameEventRaiser, Assembly-CSharp
+          m_MethodName: RaiseBool
           m_Mode: 6
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -5086,9 +5091,9 @@ MonoBehaviour:
     OnComplete:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 331982941}
-          m_TargetAssemblyTypeName: BaseGameEventRaiser`1[[System.Boolean, mscorlib
-          m_MethodName: Raise
+        - m_Target: {fileID: 331982940}
+          m_TargetAssemblyTypeName: UniversalGameEventRaiser, Assembly-CSharp
+          m_MethodName: RaiseBool
           m_Mode: 6
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -5435,39 +5440,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 331982934}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 484fdee424c0d7c498ab21570318b3bf, type: 3}
+  m_Script: {fileID: 11500000, guid: 81a1b32f9ec85b44ebe5aeac7f8f8aab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _event: {fileID: 11400000, guid: a9e9645663bd0344b9343a77a20c3e52, type: 2}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 331982939}
-        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
-        m_MethodName: PlayFeedbacks
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &331982941
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 331982934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 024312265cacd18498103bd6d3573a03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _event: {fileID: 11400000, guid: 30588191326cada4384f411f78eec450, type: 2}
-  _payload: 0
+  _eventAsset: {fileID: 11400000, guid: 30588191326cada4384f411f78eec450, type: 2}
+  _payloadData:
+    _intValue: 0
+    _floatValue: 0
+    _boolValue: 0
+    _stringValue: 
+    _vector3Value: {x: 0, y: 0, z: 0}
+    _objectValue: {fileID: 0}
 --- !u!1 &338841092
 GameObject:
   m_ObjectHideFlags: 0
