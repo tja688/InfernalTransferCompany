@@ -2777,7 +2777,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 1.055, y: -0.672, z: -32.507}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -67.523186, y: -0.000015462727}
+  m_AnchoredPosition: {x: -67.52368, y: -0.0000014305115}
   m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.49999985, y: 0.5}
 --- !u!114 &210919017
@@ -2917,8 +2917,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   delay: 0
-  duration: 0.5
-  easeType: 15
+  duration: 1
+  easeType: 16
   easeCurve:
     serializedVersion: 2
     m_Curve:
@@ -2963,30 +2963,30 @@ MonoBehaviour:
   upDirection: {x: 0, y: 1, z: 0}
   tweenRigidbody: 0
   wps:
-  - {x: 6.5324597, y: 10.012953, z: 78.75}
-  - {x: -4.150823, y: 9.345086, z: 78.75}
+  - {x: 5.925731, y: 10.012953, z: 78.75}
+  - {x: -3.987187, y: 9.437221, z: 78.75}
   - {x: -2.2149713, y: 5.0716367, z: 78.75}
   fullWps: []
   path:
     wpLengths:
     - 0
-    - 5.9506397
-    - 10.806793
-    - 5.1711755
+    - 6.275021
+    - 10.041274
+    - 5.128197
     wps:
-    - {x: 9.965929, y: 5.415556, z: 78.75}
-    - {x: 6.5324597, y: 10.012953, z: 78.75}
-    - {x: -4.150823, y: 9.345086, z: 78.75}
+    - {x: 9.965924, y: 5.415556, z: 78.75}
+    - {x: 5.925731, y: 10.012953, z: 78.75}
+    - {x: -3.987187, y: 9.437221, z: 78.75}
     - {x: -2.2149713, y: 5.0716367, z: 78.75}
     type: 1
     subdivisionsXSegment: 10
     subdivisions: 40
     controlPoints:
-    - a: {x: 6.5324597, y: 10.012953, z: 78.75}
+    - a: {x: 5.925731, y: 10.012953, z: 78.75}
       b: {x: 0, y: 0, z: 0}
-    - a: {x: -0.2791195, y: 0.79818726, z: 78.75}
+    - a: {x: -0.4427557, y: 0.7060528, z: 78.75}
       b: {x: 0, y: 0, z: 0}
-    length: 21.937675
+    length: 21.452599
     isFinalized: 1
     timesTable:
     - 0.025
@@ -3030,46 +3030,46 @@ MonoBehaviour:
     - 0.975
     - 1
     lengthsTable:
-    - 0.06606888
-    - 0.25268006
-    - 0.54259825
-    - 0.91885614
-    - 1.3648419
-    - 1.8644338
-    - 2.4021952
-    - 2.9636667
-    - 3.5358121
-    - 4.1077166
-    - 4.671645
-    - 5.2246156
-    - 5.770489
-    - 6.3485847
-    - 7.0454865
-    - 7.848186
-    - 8.734163
-    - 9.67981
-    - 10.660979
-    - 11.653263
-    - 12.632135
-    - 13.573058
-    - 14.451614
-    - 15.243682
-    - 15.925797
-    - 16.476114
-    - 16.880512
-    - 17.186876
-    - 17.4561
-    - 17.737978
-    - 18.06036
-    - 18.430098
-    - 18.842705
-    - 19.288418
-    - 19.755024
-    - 20.22921
-    - 20.697325
-    - 21.14599
-    - 21.56282
-    - 21.937675
+    - 0.06935224
+    - 0.26561713
+    - 0.5712274
+    - 0.968811
+    - 1.441259
+    - 1.9718188
+    - 2.5442297
+    - 3.142932
+    - 3.7533822
+    - 4.3625474
+    - 4.959702
+    - 5.5376782
+    - 6.0948
+    - 6.664808
+    - 7.3346996
+    - 8.094137
+    - 8.923502
+    - 9.802164
+    - 10.70898
+    - 11.622548
+    - 12.521357
+    - 13.383895
+    - 14.188791
+    - 14.915007
+    - 15.54224
+    - 16.05194
+    - 16.433113
+    - 16.730669
+    - 17.001192
+    - 17.287931
+    - 17.613726
+    - 17.983715
+    - 18.393425
+    - 18.833765
+    - 19.29343
+    - 19.760109
+    - 20.22117
+    - 20.664242
+    - 21.07786
+    - 21.452599
   inspectorMode: 0
   pathType: 1
   handlesType: 1
@@ -3079,7 +3079,7 @@ MonoBehaviour:
   showIndexes: 1
   showWpLength: 0
   pathColor: {r: 0.21248412, g: 1, b: 0, a: 1}
-  lastSrcPosition: {x: 9.965928, y: 5.415556, z: 78.75}
+  lastSrcPosition: {x: 9.965924, y: 5.415556, z: 78.75}
   lastSrcRotation: {x: -0, y: -0, z: -0, w: 1}
   wpsDropdown: 1
   dropToFloorOffset: 0
@@ -3102,7 +3102,7 @@ MonoBehaviour:
   _blockRaycastsDuringLocalTransition: 1
   _autoManageFeedbackPlayers: 1
   _raycastControlEvent: {fileID: 11400000, guid: 30588191326cada4384f411f78eec450, type: 2}
-  _panelChangedEvent: {fileID: 11400000, guid: 8cdd692f9e0cff84e9c3c5f1030da4da, type: 2}
+  _panelChangedEvent: {fileID: 11400000, guid: c9f0fdaae3192b642b9fc9767b57a682, type: 2}
   _usePanelSpecificPresets: 1
   _panelLibrary: {fileID: 11400000, guid: 95e0439e31e261646aa0abbb63165c49, type: 2}
   _panelPresets:
@@ -4930,6 +4930,7 @@ GameObject:
   - component: {fileID: 331982936}
   - component: {fileID: 331982939}
   - component: {fileID: 331982940}
+  - component: {fileID: 331982941}
   m_Layer: 0
   m_Name: "\u6682\u505C\u83DC\u5355Canvas"
   m_TagString: Untagged
@@ -5282,14 +5283,14 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 1
         AnimateScaleTarget: {fileID: 210919016}
-        AnimateScaleDuration: 0.5
-        RemapCurveZero: 1
+        AnimateScaleDuration: 1
+        RemapCurveZero: 0
         RemapCurveOne: 4
         Offset: 0
         AnimateX: 1
         AnimateScaleTweenX:
           MMTweenDefinitionType: 0
-          MMTweenCurve: 5
+          MMTweenCurve: 7
           Curve:
             serializedVersion: 2
             m_Curve:
@@ -5330,7 +5331,7 @@ MonoBehaviour:
         AnimateY: 1
         AnimateScaleTweenY:
           MMTweenDefinitionType: 0
-          MMTweenCurve: 5
+          MMTweenCurve: 7
           Curve:
             serializedVersion: 2
             m_Curve:
@@ -5451,6 +5452,37 @@ MonoBehaviour:
     _stringValue: 
     _vector3Value: {x: 0, y: 0, z: 0}
     _objectValue: {fileID: 0}
+--- !u!114 &331982941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331982934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae95f667afadc6419fc08e1bcc23631, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _panelLibrary: {fileID: 11400000, guid: 95e0439e31e261646aa0abbb63165c49, type: 2}
+  _currentPanel: Game Panel
+  _targetPanel: Pause Panel
+  _panelChangedEvent: {fileID: 11400000, guid: c9f0fdaae3192b642b9fc9767b57a682, type: 2}
+  _onMatchSuccess:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 331982939}
+        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
+        m_MethodName: PlayFeedbacks
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &338841092
 GameObject:
   m_ObjectHideFlags: 0
@@ -17616,7 +17648,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1385796203}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 306d3b907d08d4e479831f73b90039c7, type: 3}
   m_Name: 
@@ -29884,7 +29916,7 @@ MonoBehaviour:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
           ContributeToTotalDuration: 1
-          InitialDelay: 0
+          InitialDelay: 0.1
           CooldownDuration: 0
           InterruptsOnStop: 1
           NumberOfRepeats: 0
@@ -30070,14 +30102,14 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 2
         AnimateScaleTarget: {fileID: 210919016}
-        AnimateScaleDuration: 0.3
+        AnimateScaleDuration: 0.2
         RemapCurveZero: 0
         RemapCurveOne: 1
         Offset: 0
         AnimateX: 1
         AnimateScaleTweenX:
           MMTweenDefinitionType: 0
-          MMTweenCurve: 9
+          MMTweenCurve: 8
           Curve:
             serializedVersion: 2
             m_Curve:
@@ -30118,7 +30150,7 @@ MonoBehaviour:
         AnimateY: 1
         AnimateScaleTweenY:
           MMTweenDefinitionType: 0
-          MMTweenCurve: 8
+          MMTweenCurve: 7
           Curve:
             serializedVersion: 2
             m_Curve:
@@ -30156,7 +30188,7 @@ MonoBehaviour:
           ConditionPropertyName: AnimateY
           EnumConditionPropertyName: 
           EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
-        AnimateZ: 1
+        AnimateZ: 0
         AnimateScaleTweenZ:
           MMTweenDefinitionType: 0
           MMTweenCurve: 8
@@ -30288,7 +30320,7 @@ MonoBehaviour:
         Mode: 2
         Space: 0
         RandomizeRemap: 0
-        AnimatePositionDuration: 0.3
+        AnimatePositionDuration: 0.2
         AnimatePositionTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 9
@@ -30581,7 +30613,7 @@ MonoBehaviour:
         DebugActive: 0
         BoundImage: {fileID: 210919017}
         Mode: 2
-        Duration: 0.3
+        Duration: 0.2
         AllowAdditivePlays: 1
         InstantAlpha: 1
         Curve:
@@ -30816,6 +30848,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8033480967939191897, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: _panelChangedEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: c9f0fdaae3192b642b9fc9767b57a682, type: 2}
     - target: {fileID: 8397303330924351871, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
       propertyPath: m_Name
       value: ITC Panel Manager
@@ -32062,14 +32098,14 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 2
         AnimateScaleTarget: {fileID: 210919016}
-        AnimateScaleDuration: 0.3
+        AnimateScaleDuration: 0.2
         RemapCurveZero: 0
         RemapCurveOne: 1
         Offset: 0
         AnimateX: 1
         AnimateScaleTweenX:
           MMTweenDefinitionType: 0
-          MMTweenCurve: 9
+          MMTweenCurve: 7
           Curve:
             serializedVersion: 2
             m_Curve:
@@ -32110,7 +32146,7 @@ MonoBehaviour:
         AnimateY: 1
         AnimateScaleTweenY:
           MMTweenDefinitionType: 0
-          MMTweenCurve: 8
+          MMTweenCurve: 7
           Curve:
             serializedVersion: 2
             m_Curve:
@@ -32148,7 +32184,7 @@ MonoBehaviour:
           ConditionPropertyName: AnimateY
           EnumConditionPropertyName: 
           EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
-        AnimateZ: 1
+        AnimateZ: 0
         AnimateScaleTweenZ:
           MMTweenDefinitionType: 0
           MMTweenCurve: 8
