@@ -2938,7 +2938,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   delay: 0
-  duration: 1
+  duration: 0.5
   easeType: 15
   easeCurve:
     serializedVersion: 2
@@ -5092,7 +5092,7 @@ MonoBehaviour:
   InScriptDrivenPause: 0
   FeedbacksList:
   - rid: 6282995534276329569
-  - rid: 6282995538351882240
+  - rid: 6282995574172286976
   KeepPlayModeChanges: 0
   PerformanceMode: 0
   StopFeedbacksOnDisable: 0
@@ -5176,13 +5176,13 @@ MonoBehaviour:
         DebugActive: 0
         TargetDOTweenPath: {fileID: 210919022}
         Mode: 0
-    - rid: 6282995538351882240
-      type: {class: MMF_Rotation, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
+    - rid: 6282995574172286976
+      type: {class: MMF_Scale, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
       data:
         Active: 1
-        UniqueID: 1307298100
-        Label: Rotation
-        OriginalLabel: Rotation
+        UniqueID: 951973436
+        Label: Scale
+        OriginalLabel: Scale
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -5191,7 +5191,7 @@ MonoBehaviour:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
           ContributeToTotalDuration: 1
-          InitialDelay: 0.3
+          InitialDelay: 0
           CooldownDuration: 0
           InterruptsOnStop: 1
           NumberOfRepeats: 0
@@ -5250,14 +5250,14 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 331982939}
         DebugActive: 0
-        AnimateRotationTarget: {fileID: 210919016}
         Mode: 2
-        RotationSpace: 0
-        AnimateRotationDuration: 0.2
+        AnimateScaleTarget: {fileID: 210919016}
+        AnimateScaleDuration: 0.5
         RemapCurveZero: 0
-        RemapCurveOne: 360
+        RemapCurveOne: 1
+        Offset: 0
         AnimateX: 1
-        AnimateRotationTweenX:
+        AnimateScaleTweenX:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
           Curve:
@@ -5274,7 +5274,7 @@ MonoBehaviour:
               outWeight: 0
             - serializedVersion: 3
               time: 0.3
-              value: 1
+              value: 1.5
               inSlope: 0
               outSlope: 0
               tangentMode: 0
@@ -5298,7 +5298,7 @@ MonoBehaviour:
           EnumConditionPropertyName: 
           EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
         AnimateY: 1
-        AnimateRotationTweenY:
+        AnimateScaleTweenY:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
           Curve:
@@ -5315,7 +5315,7 @@ MonoBehaviour:
               outWeight: 0
             - serializedVersion: 3
               time: 0.3
-              value: 1
+              value: 1.5
               inSlope: 0
               outSlope: 0
               tangentMode: 0
@@ -5338,8 +5338,8 @@ MonoBehaviour:
           ConditionPropertyName: AnimateY
           EnumConditionPropertyName: 
           EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
-        AnimateZ: 1
-        AnimateRotationTweenZ:
+        AnimateZ: 0
+        AnimateScaleTweenZ:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
           Curve:
@@ -5356,7 +5356,7 @@ MonoBehaviour:
               outWeight: 0
             - serializedVersion: 3
               time: 0.3
-              value: 1
+              value: 1.5
               inSlope: 0
               outSlope: 0
               tangentMode: 0
@@ -5379,60 +5379,23 @@ MonoBehaviour:
           ConditionPropertyName: AnimateZ
           EnumConditionPropertyName: 
           EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
+        UniformScaling: 0
         AllowAdditivePlays: 0
-        DetermineRotationOnPlay: 0
-        ToDestinationSpace: 1
-        DestinationAngles: {x: 0, y: 360, z: 0}
-        ToDestinationTween:
-          MMTweenDefinitionType: 0
-          MMTweenCurve: 10
-          Curve:
-            serializedVersion: 2
-            m_Curve:
-            - serializedVersion: 3
-              time: 0
-              value: 0
-              inSlope: 0
-              outSlope: 0
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0
-              outWeight: 0
-            - serializedVersion: 3
-              time: 1
-              value: 1
-              inSlope: 0
-              outSlope: 0
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0
-              outWeight: 0
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-          Initialized: 0
-          ConditionPropertyName: 
-          EnumConditionPropertyName: Mode
-          EnumConditions: 0000010000000000000000000000000000000000000000000000000000000000
-        AnimateRotationX:
+        DetermineScaleOnPlay: 1
+        DestinationScale: {x: 5, y: 5, z: 5}
+        AnimateScaleX:
           serializedVersion: 2
           m_Curve: []
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        AnimateRotationY:
+        AnimateScaleY:
           serializedVersion: 2
           m_Curve: []
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        AnimateRotationZ:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        ToDestinationCurve:
+        AnimateScaleZ:
           serializedVersion: 2
           m_Curve: []
           m_PreInfinity: 2
@@ -26533,7 +26496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7361969184711311431, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
       propertyPath: m_NormalizedViewPortRect.y
-      value: 0
+      value: 0.04990673
       objectReference: {fileID: 0}
     - target: {fileID: 7361969184711311431, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
@@ -26541,7 +26504,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7361969184711311431, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 1
+      value: 0.90018654
       objectReference: {fileID: 0}
     - target: {fileID: 8568148058401762819, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
       propertyPath: m_Name
