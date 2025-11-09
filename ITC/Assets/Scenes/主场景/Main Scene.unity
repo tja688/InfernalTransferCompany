@@ -2778,7 +2778,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -67.523186, y: -0.000015462727}
-  m_SizeDelta: {x: 135.04663, y: 127.04999}
+  m_SizeDelta: {x: 130, y: 130}
   m_Pivot: {x: 0.49999985, y: 0.5}
 --- !u!114 &210919017
 MonoBehaviour:
@@ -3109,17 +3109,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffdab622715698349b7a592febbf9fb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverFeedback: {fileID: 4690531267969931980}
-  idleFeedback: {fileID: 7910989515563032651}
+  hoverFeedback: {fileID: 0}
+  idleFeedback: {fileID: 0}
   _usePointerEvents: 1
   _manageRaycasts: 1
   _blockRaycastsDuringLocalTransition: 1
   _autoManageFeedbackPlayers: 1
-  _raycastControlEvent: {fileID: 0}
-  _panelChangedEvent: {fileID: 0}
+  _raycastControlEvent: {fileID: 11400000, guid: 30588191326cada4384f411f78eec450, type: 2}
+  _panelChangedEvent: {fileID: 11400000, guid: 8cdd692f9e0cff84e9c3c5f1030da4da, type: 2}
   _usePanelSpecificPresets: 1
   _panelLibrary: {fileID: 11400000, guid: 95e0439e31e261646aa0abbb63165c49, type: 2}
-  _panelPresets: []
+  _panelPresets:
+  - panelName: Game Panel
+    hoverFeedback: {fileID: 4690531267969931980}
+    idleFeedback: {fileID: 7910989515563032651}
 --- !u!1 &219509264
 GameObject:
   m_ObjectHideFlags: 0
@@ -4921,6 +4924,7 @@ GameObject:
   - component: {fileID: 331982936}
   - component: {fileID: 331982939}
   - component: {fileID: 331982940}
+  - component: {fileID: 331982941}
   m_Layer: 0
   m_Name: "\u6682\u505C\u83DC\u5355Canvas"
   m_TagString: Untagged
@@ -5057,7 +5061,19 @@ MonoBehaviour:
     TriggerUnityEvents: 1
     OnPlay:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 331982941}
+          m_TargetAssemblyTypeName: BaseGameEventRaiser`1[[System.Boolean, mscorlib
+          m_MethodName: Raise
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
     OnPause:
       m_PersistentCalls:
         m_Calls: []
@@ -5069,7 +5085,19 @@ MonoBehaviour:
         m_Calls: []
     OnComplete:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 331982941}
+          m_TargetAssemblyTypeName: BaseGameEventRaiser`1[[System.Boolean, mscorlib
+          m_MethodName: Raise
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     OnRestoreInitialValues:
       m_PersistentCalls:
         m_Calls: []
@@ -5247,16 +5275,16 @@ MonoBehaviour:
           ButtonText: 
         Owner: {fileID: 331982939}
         DebugActive: 0
-        Mode: 2
+        Mode: 1
         AnimateScaleTarget: {fileID: 210919016}
         AnimateScaleDuration: 0.5
-        RemapCurveZero: 0
-        RemapCurveOne: 1
+        RemapCurveZero: 1
+        RemapCurveOne: 4
         Offset: 0
         AnimateX: 1
         AnimateScaleTweenX:
-          MMTweenDefinitionType: 1
-          MMTweenCurve: 4
+          MMTweenDefinitionType: 0
+          MMTweenCurve: 5
           Curve:
             serializedVersion: 2
             m_Curve:
@@ -5296,8 +5324,8 @@ MonoBehaviour:
           EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
         AnimateY: 1
         AnimateScaleTweenY:
-          MMTweenDefinitionType: 1
-          MMTweenCurve: 4
+          MMTweenDefinitionType: 0
+          MMTweenCurve: 5
           Curve:
             serializedVersion: 2
             m_Curve:
@@ -5426,6 +5454,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &331982941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331982934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 024312265cacd18498103bd6d3573a03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _event: {fileID: 11400000, guid: 30588191326cada4384f411f78eec450, type: 2}
+  _payload: 0
 --- !u!1 &338841092
 GameObject:
   m_ObjectHideFlags: 0
@@ -17591,7 +17633,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1385796203}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 306d3b907d08d4e479831f73b90039c7, type: 3}
   m_Name: 
@@ -27758,6 +27800,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PSD
       objectReference: {fileID: 0}
+    - target: {fileID: -8653719598885068355, guid: 9b8c6a710be950944939972d9452d10e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -7797758575646890468, guid: 9b8c6a710be950944939972d9452d10e, type: 3}
       propertyPath: m_Color.a
       value: 0.40392157
@@ -30787,22 +30833,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8033480967939191897, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
-      propertyPath: _defaultPanel
-      value: Game Panel
-      objectReference: {fileID: 0}
-    - target: {fileID: 8033480967939191897, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
-      propertyPath: _panelLibrary
-      value: 
-      objectReference: {fileID: 11400000, guid: 95e0439e31e261646aa0abbb63165c49, type: 2}
-    - target: {fileID: 8033480967939191897, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
-      propertyPath: _panelChangedEvent
-      value: 
-      objectReference: {fileID: 11400000, guid: 8cdd692f9e0cff84e9c3c5f1030da4da, type: 2}
-    - target: {fileID: 8033480967939191897, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
-      propertyPath: _requestPanelEvent
-      value: 
-      objectReference: {fileID: 11400000, guid: a9e9645663bd0344b9343a77a20c3e52, type: 2}
     - target: {fileID: 8397303330924351871, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
       propertyPath: m_Name
       value: ITC Panel Manager

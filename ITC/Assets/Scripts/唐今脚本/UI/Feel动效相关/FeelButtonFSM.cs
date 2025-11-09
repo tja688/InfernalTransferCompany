@@ -26,11 +26,11 @@ public class FeelButtonFSM : MonoBehaviour,
         Hover 
     }
 
-    [Header("Feedbacks")]
-    [Tooltip("动效A：当鼠标进入时播放")]
+    [Header("Feedbacks（已弃用）")]
+    [Tooltip("【已弃用】通用动效字段，现在不再使用。请通过面板专属动效预设配置动效。")]
     public MMFeedbacks hoverFeedback;
     
-    [Tooltip("动效B：当鼠标离开时播放")]
+    [Tooltip("【已弃用】通用动效字段，现在不再使用。请通过面板专属动效预设配置动效。")]
     public MMFeedbacks idleFeedback;
 
     [Header("输入选项")]
@@ -62,7 +62,7 @@ public class FeelButtonFSM : MonoBehaviour,
     private PanelChangedGameEvent _panelChangedEvent;
 
     [Header("面板专属动效预设")]
-    [Tooltip("开启后可针对不同面板配置独立的鼠标进入/离开动效。")]
+    [Tooltip("开启后可针对不同面板配置独立的鼠标进入/离开动效。注意：未创建预设时，按钮将无任何鼠标响应动效。")]
     [SerializeField]
     private bool _usePanelSpecificPresets = false;
 
@@ -70,7 +70,7 @@ public class FeelButtonFSM : MonoBehaviour,
     [SerializeField]
     private GamePanelLibrarySO _panelLibrary;
 
-    [Tooltip("面板 -> 动效 预设列表。未匹配到时将使用通用动效。")]
+    [Tooltip("面板 -> 动效 预设列表。未匹配到时将无动效反馈。")]
     [SerializeField]
     private List<PanelFeedbackPreset> _panelPresets = new List<PanelFeedbackPreset>();
 
@@ -203,6 +203,12 @@ public class FeelButtonFSM : MonoBehaviour,
             return; 
         }
 
+        // 检查是否有有效的动效预设，如果没有则忽略鼠标响应
+        if (GetActiveHoverFeedback() == null)
+        {
+            return;
+        }
+
         RequestState(ButtonStates.Hover);
     }
 
@@ -220,6 +226,12 @@ public class FeelButtonFSM : MonoBehaviour,
         if (_isTransitioning || _externalRaycastLocked)
         {
             return; 
+        }
+
+        // 检查是否有有效的动效预设，如果没有则忽略鼠标响应
+        if (GetActiveIdleFeedback() == null)
+        {
+            return;
         }
 
         RequestState(ButtonStates.Idle);
@@ -321,16 +333,25 @@ public class FeelButtonFSM : MonoBehaviour,
             return;
         }
 
+        // 检查是否有有效的动效预设，如果没有则直接返回（不播放任何动效）
+        MMFeedbacks targetFeedback = null;
         switch (newState)
         {
             case ButtonStates.Hover:
-                StartStateTransition(GetActiveHoverFeedback());
+                targetFeedback = GetActiveHoverFeedback();
                 break;
 
             case ButtonStates.Idle:
-                StartStateTransition(GetActiveIdleFeedback());
+                targetFeedback = GetActiveIdleFeedback();
                 break;
         }
+
+        // 仅当存在有效动效时才播放
+        if (targetFeedback != null)
+        {
+            StartStateTransition(targetFeedback);
+        }
+        // 如果没有动效，直接返回，不进行任何转场操作
     }
 
     private void StartStateTransition(MMFeedbacks feedbacks)
@@ -479,6 +500,7 @@ public class FeelButtonFSM : MonoBehaviour,
 
     /// <summary>
     /// 应用指定面板的动效预设。
+    /// 仅在找到有效预设时设置动效，否则设置为 null（无动效反馈）。
     /// </summary>
     private void ApplyPanelPreset(string panelName)
     {
@@ -491,11 +513,13 @@ public class FeelButtonFSM : MonoBehaviour,
         PanelFeedbackPreset preset = FindPreset(panelName);
         if (preset != null)
         {
-            _activeHoverFeedback = preset.hoverFeedback != null ? preset.hoverFeedback : hoverFeedback;
-            _activeIdleFeedback = preset.idleFeedback != null ? preset.idleFeedback : idleFeedback;
+            // 仅当预设中明确配置了动效时才使用，否则设置为 null（无动效反馈）
+            _activeHoverFeedback = preset.hoverFeedback;
+            _activeIdleFeedback = preset.idleFeedback;
         }
         else
         {
+            // 未找到预设时，设置为 null（无动效反馈）
             ResetActiveFeedbacks();
         }
     }
@@ -529,12 +553,22 @@ public class FeelButtonFSM : MonoBehaviour,
     }
 
     /// <summary>
-    /// 重置为通用动效。
+    /// 重置动效：如果未启用面板专属预设，则设置为 null（无动效反馈）。
     /// </summary>
     private void ResetActiveFeedbacks()
     {
-        _activeHoverFeedback = hoverFeedback;
-        _activeIdleFeedback = idleFeedback;
+        if (!_usePanelSpecificPresets)
+        {
+            // 未启用面板专属预设时，不播放任何动效
+            _activeHoverFeedback = null;
+            _activeIdleFeedback = null;
+        }
+        else
+        {
+            // 启用面板专属预设但未找到对应预设时，也不播放动效
+            _activeHoverFeedback = null;
+            _activeIdleFeedback = null;
+        }
     }
 
     /// <summary>

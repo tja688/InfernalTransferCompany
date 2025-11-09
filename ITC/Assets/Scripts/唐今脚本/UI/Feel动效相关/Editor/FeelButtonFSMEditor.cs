@@ -28,7 +28,7 @@ public class FeelButtonFSMEditor : Editor
 
         _presetList = new ReorderableList(serializedObject, _panelPresetsProp, true, true, true, true)
         {
-            drawHeaderCallback = rect => EditorGUI.LabelField(rect, "面板专属动效映射"),
+            drawHeaderCallback = rect => EditorGUI.LabelField(rect, "面板专属动效映射（未匹配时无动效）"),
             drawElementCallback = DrawPresetElement,
             elementHeightCallback = index => GetPresetElementHeight()
         };
@@ -79,13 +79,28 @@ public class FeelButtonFSMEditor : Editor
     {
         serializedObject.Update();
 
-        DrawPropertiesExcluding(serializedObject, "_raycastControlEvent", "_panelChangedEvent", "_usePanelSpecificPresets", "_panelLibrary", "_panelPresets");
+        // 获取通用动效字段属性（用于显示警告）
+        SerializedProperty hoverFeedbackProp = serializedObject.FindProperty("hoverFeedback");
+        SerializedProperty idleFeedbackProp = serializedObject.FindProperty("idleFeedback");
+
+        // 绘制除特定字段外的所有属性
+        DrawPropertiesExcluding(serializedObject, "hoverFeedback", "idleFeedback", "_raycastControlEvent", "_panelChangedEvent", "_usePanelSpecificPresets", "_panelLibrary", "_panelPresets");
+
+        // 显示已弃用的通用动效字段（灰色显示，表示不再使用）
+        EditorGUILayout.Space();
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUILayout.HelpBox("通用动效字段（hoverFeedback / idleFeedback）已弃用，现在不再使用。请通过面板专属动效预设配置动效。", MessageType.Info);
+        EditorGUILayout.PropertyField(hoverFeedbackProp);
+        EditorGUILayout.PropertyField(idleFeedbackProp);
+        EditorGUI.EndDisabledGroup();
 
         EditorGUILayout.Space();
         EditorGUILayout.PropertyField(_raycastControlEventProp);
         EditorGUILayout.PropertyField(_panelChangedEventProp);
 
+        EditorGUILayout.Space();
         EditorGUILayout.PropertyField(_usePanelSpecificPresetsProp);
+        
         if (_usePanelSpecificPresetsProp.boolValue)
         {
             EditorGUI.indentLevel++;
@@ -107,12 +122,28 @@ public class FeelButtonFSMEditor : Editor
                 EditorGUILayout.HelpBox("未指定面板库，将通过手动输入设置面板名称。", MessageType.Info);
             }
 
+            if (_panelPresetsProp.arraySize == 0)
+            {
+                EditorGUILayout.HelpBox("⚠️ 未创建任何预设！按钮将无任何鼠标响应动效。请添加至少一个面板预设并配置动效。", MessageType.Warning);
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("✓ 已创建预设。按钮将根据当前面板匹配预设中的动效。未匹配到预设时无动效反馈。", MessageType.Info);
+            }
+
             _presetList.DoLayoutList();
             EditorGUI.indentLevel--;
         }
-        else if (_panelPresetsProp.arraySize > 0)
+        else
         {
-            EditorGUILayout.HelpBox("面板专属动效预设已禁用，列表内容当前不会生效。", MessageType.Warning);
+            if (_panelPresetsProp.arraySize > 0)
+            {
+                EditorGUILayout.HelpBox("面板专属动效预设已禁用，列表内容当前不会生效。", MessageType.Warning);
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("⚠️ 未启用面板专属动效预设，且未创建任何预设。按钮将无任何鼠标响应动效。", MessageType.Warning);
+            }
         }
 
         serializedObject.ApplyModifiedProperties();
