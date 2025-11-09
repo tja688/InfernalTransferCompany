@@ -1,12 +1,10 @@
-using MoreMountains.Tools; // 用于 MMEventListener
 using UnityEngine;
 
 /// <summary>
 /// 全局面板状态机 (Singleton)。
 /// 负责管理当前激活的面板状态，并通过事件驱动面板切换。
 /// </summary>
-// 确保你继承了 MonoBehaviour 并且 实现了 MMEventListener<RequestPanelChangeEvent>
-public class PanelManager : MonoBehaviour, MMEventListener<RequestPanelChangeEvent>
+public class PanelManager : MonoBehaviour, IGameEventListener<string>
 {
     /// <summary>
     /// 静态单例实例
@@ -21,6 +19,15 @@ public class PanelManager : MonoBehaviour, MMEventListener<RequestPanelChangeEve
     [Tooltip("游戏启动时默认处于的面板状态")]
     [SerializeField]
     private string _defaultPanel = "None"; // 对应库中的 "None"
+
+    [Header("事件系统")]
+    [Tooltip("外部请求切换面板时监听的事件（需要 String 类型参数）")]
+    [SerializeField]
+    private StringGameEvent _requestPanelEvent;
+
+    [Tooltip("当面板成功切换后广播的事件（携带新旧面板名称）")]
+    [SerializeField]
+    private PanelChangedGameEvent _panelChangedEvent;
 
     private string _currentPanel;
     private string _previousPanel;
@@ -64,11 +71,7 @@ public class PanelManager : MonoBehaviour, MMEventListener<RequestPanelChangeEve
     void Start()
     {
         // 在第一帧广播初始状态，以便其他脚本在 Start() 中可以获取到
-        MMEventManager.TriggerEvent(new PanelChangedEvent 
-        { 
-            NewPanelName = _currentPanel, 
-            PreviousPanelName = _previousPanel 
-        });
+        BroadcastPanelChanged(_previousPanel, _currentPanel);
     }
 
     // ----------------------------------------------------------------
@@ -77,22 +80,12 @@ public class PanelManager : MonoBehaviour, MMEventListener<RequestPanelChangeEve
 
     void OnEnable()
     {
-        // 开始监听“请求切换”事件
-        this.MMEventStartListening<RequestPanelChangeEvent>();
+        RegisterForEvents();
     }
 
     void OnDisable()
     {
-        // 停止监听
-        this.MMEventStopListening<RequestPanelChangeEvent>();
-    }
-
-    /// <summary>
-    /// 收到切换请求时的处理函数
-    /// </summary>
-    public void OnMMEvent(RequestPanelChangeEvent e)
-    {
-        ChangePanel(e.TargetPanelName);
+        UnregisterFromEvents();
     }
 
     // ----------------------------------------------------------------
@@ -126,10 +119,45 @@ public class PanelManager : MonoBehaviour, MMEventListener<RequestPanelChangeEve
         Debug.Log($"PanelManager: 面板状态切换: 从 '{_previousPanel}' -> 到 '{_currentPanel}'");
 
         // 4. 广播“切换成功”事件
-        MMEventManager.TriggerEvent(new PanelChangedEvent 
-        { 
-            NewPanelName = _currentPanel, 
-            PreviousPanelName = _previousPanel 
-        });
+        BroadcastPanelChanged(_previousPanel, _currentPanel);
+    }
+
+    /// <summary>
+    /// IGameEventListener 接口实现：响应外部请求事件。
+    /// </summary>
+    public void OnEventRaised(string value)
+    {
+        ChangePanel(value);
+    }
+
+    private void RegisterForEvents()
+    {
+        if (_requestPanelEvent != null)
+        {
+            _requestPanelEvent.RegisterListener(this);
+        }
+        else
+        {
+            Debug.LogWarning("PanelManager: 未配置请求面板切换事件，将无法响应外部切换请求。", this);
+        }
+    }
+
+    private void UnregisterFromEvents()
+    {
+        if (_requestPanelEvent != null)
+        {
+            _requestPanelEvent.UnregisterListener(this);
+        }
+    }
+
+    private void BroadcastPanelChanged(string previousPanel, string newPanel)
+    {
+        if (_panelChangedEvent == null)
+        {
+            return;
+        }
+
+        var payload = new PanelChangedPayload(newPanel, previousPanel);
+        _panelChangedEvent.Raise(payload);
     }
 }

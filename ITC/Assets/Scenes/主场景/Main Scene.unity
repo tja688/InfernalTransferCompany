@@ -2749,9 +2749,9 @@ GameObject:
   - component: {fileID: 210919018}
   - component: {fileID: 210919017}
   - component: {fileID: 210919020}
-  - component: {fileID: 210919021}
-  - component: {fileID: 210919023}
   - component: {fileID: 210919022}
+  - component: {fileID: 210919024}
+  - component: {fileID: 210919025}
   m_Layer: 5
   m_Name: "\u70B9\u51FB\u540E\u5927\u56FE\u6807"
   m_TagString: Untagged
@@ -2862,39 +2862,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 331982939}
-        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
-        m_MethodName: PlayFeedbacks
-        m_Mode: 1
+      - m_Target: {fileID: 210919024}
+        m_TargetAssemblyTypeName: BaseGameEventRaiser`1[[System.String, mscorlib
+        m_MethodName: Raise
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Pause Panel
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &210919021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 210919015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls: []
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls: []
 --- !u!114 &210919022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2995,7 +2974,7 @@ MonoBehaviour:
     - 10.806793
     - 5.1711755
     wps:
-    - {x: 9.965928, y: 5.415556, z: 78.75}
+    - {x: 9.965929, y: 5.415556, z: 78.75}
     - {x: 6.5324597, y: 10.012953, z: 78.75}
     - {x: -4.150823, y: 9.345086, z: 78.75}
     - {x: -2.2149713, y: 5.0716367, z: 78.75}
@@ -3055,27 +3034,27 @@ MonoBehaviour:
     - 0.25268006
     - 0.54259825
     - 0.91885614
-    - 1.3648417
-    - 1.864434
-    - 2.402195
-    - 2.963667
-    - 3.535812
+    - 1.3648419
+    - 1.8644338
+    - 2.4021952
+    - 2.9636667
+    - 3.5358121
     - 4.1077166
     - 4.671645
-    - 5.224616
+    - 5.2246156
     - 5.770489
     - 6.3485847
     - 7.0454865
-    - 7.8481855
+    - 7.848186
     - 8.734163
     - 9.67981
     - 10.660979
     - 11.653263
-    - 12.632134
-    - 13.573057
-    - 14.451613
-    - 15.243681
-    - 15.9257965
+    - 12.632135
+    - 13.573058
+    - 14.451614
+    - 15.243682
+    - 15.925797
     - 16.476114
     - 16.880512
     - 17.186876
@@ -3104,7 +3083,21 @@ MonoBehaviour:
   lastSrcRotation: {x: -0, y: -0, z: -0, w: 1}
   wpsDropdown: 1
   dropToFloorOffset: 0
---- !u!114 &210919023
+--- !u!114 &210919024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210919015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a11366e07ea53ff42899750c2ef1fb9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _event: {fileID: 11400000, guid: a9e9645663bd0344b9343a77a20c3e52, type: 2}
+  _payload: 
+--- !u!114 &210919025
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3121,9 +3114,12 @@ MonoBehaviour:
   _usePointerEvents: 1
   _manageRaycasts: 1
   _blockRaycastsDuringLocalTransition: 1
-  _blockRaycastsOnPanelChanged: 1
-  _panelChangedRaycastBlockDuration: 0.35
   _autoManageFeedbackPlayers: 1
+  _raycastControlEvent: {fileID: 0}
+  _panelChangedEvent: {fileID: 0}
+  _usePanelSpecificPresets: 1
+  _panelLibrary: {fileID: 11400000, guid: 95e0439e31e261646aa0abbb63165c49, type: 2}
+  _panelPresets: []
 --- !u!1 &219509264
 GameObject:
   m_ObjectHideFlags: 0
@@ -4924,6 +4920,7 @@ GameObject:
   - component: {fileID: 331982938}
   - component: {fileID: 331982936}
   - component: {fileID: 331982939}
+  - component: {fileID: 331982940}
   m_Layer: 0
   m_Name: "\u6682\u505C\u83DC\u5355Canvas"
   m_TagString: Untagged
@@ -5401,6 +5398,34 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+--- !u!114 &331982940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331982934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 484fdee424c0d7c498ab21570318b3bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _event: {fileID: 11400000, guid: a9e9645663bd0344b9343a77a20c3e52, type: 2}
+  _response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 331982939}
+        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
+        m_MethodName: PlayFeedbacks
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &338841092
 GameObject:
   m_ObjectHideFlags: 0
@@ -26496,7 +26521,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7361969184711311431, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
       propertyPath: m_NormalizedViewPortRect.y
-      value: 0.04990673
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7361969184711311431, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
@@ -26504,7 +26529,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7361969184711311431, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 0.90018654
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8568148058401762819, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
       propertyPath: m_Name
@@ -30714,6 +30739,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13abb2d46d067d942b10810a3fac903c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &5539606366288078915
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3985423678601933538, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.6791541
+      objectReference: {fileID: 0}
+    - target: {fileID: 3985423678601933538, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.5765986
+      objectReference: {fileID: 0}
+    - target: {fileID: 3985423678601933538, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.0359786
+      objectReference: {fileID: 0}
+    - target: {fileID: 3985423678601933538, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3985423678601933538, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3985423678601933538, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3985423678601933538, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3985423678601933538, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3985423678601933538, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3985423678601933538, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8033480967939191897, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: _defaultPanel
+      value: Game Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8033480967939191897, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: _panelLibrary
+      value: 
+      objectReference: {fileID: 11400000, guid: 95e0439e31e261646aa0abbb63165c49, type: 2}
+    - target: {fileID: 8033480967939191897, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: _panelChangedEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: 8cdd692f9e0cff84e9c3c5f1030da4da, type: 2}
+    - target: {fileID: 8033480967939191897, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: _requestPanelEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: a9e9645663bd0344b9343a77a20c3e52, type: 2}
+    - target: {fileID: 8397303330924351871, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      propertyPath: m_Name
+      value: ITC Panel Manager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
 --- !u!1 &5542746869542711450
 GameObject:
   m_ObjectHideFlags: 0
@@ -33363,6 +33461,7 @@ SceneRoots:
   - {fileID: 971637118}
   - {fileID: 546012625759253649}
   - {fileID: 9009627620498036003}
+  - {fileID: 5539606366288078915}
   - {fileID: 1582724114}
   - {fileID: 956931274}
   - {fileID: 2134474685}

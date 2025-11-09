@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems; // 导入UI事件系统
 using UnityEngine.UI;
@@ -12,9 +13,9 @@ using System.Collections.Generic;
 /// </summary>
 public class FeelButtonFSM : MonoBehaviour, 
     IPointerEnterHandler, 
-    IPointerExitHandler,  
-    MMEventListener<MMStateChangeEvent<FeelButtonFSM.ButtonStates>>,
-    MMEventListener<PanelChangedEvent>
+    IPointerExitHandler,
+    IGameEventListener<bool>,
+    IGameEventListener<PanelChangedPayload>
 {
 /// <summary>
     /// 按钮的两种状态：空闲（鼠标离开）和悬停（鼠标进入）
@@ -38,7 +39,7 @@ public class FeelButtonFSM : MonoBehaviour,
     private bool _usePointerEvents = true;
 
     [Header("射线检测控制")]
-    [Tooltip("是否托管射线检测，在按钮或面板转场期间禁止射线。")]
+    [Tooltip("是否托管射线检测，在按钮转场期间禁止射线。")]
     [SerializeField]
     private bool _manageRaycasts = true;
 
@@ -46,24 +47,37 @@ public class FeelButtonFSM : MonoBehaviour,
     [SerializeField]
     private bool _blockRaycastsDuringLocalTransition = true;
 
-    [Tooltip("收到 PanelChangedEvent 时是否阻止射线。")]
-    [SerializeField]
-    private bool _blockRaycastsOnPanelChanged = true;
-
-    [Tooltip("PanelChangedEvent 发生后阻止射线的持续时间（秒，实时计时）。")]
-    [SerializeField]
-    private float _panelChangedRaycastBlockDuration = 0.35f;
-
     [Header("反馈管理")]
     [Tooltip("记录并管理所有子级 MMF_Player，在转场时将强制停止它们。")]
     [SerializeField]
     private bool _autoManageFeedbackPlayers = true;
 
+    [Header("事件响应")]
+    [Tooltip("布尔类型事件：用于外部控制按钮射线检测的启用/禁用。true=禁用射线检测，false=恢复射线检测。")]
+    [SerializeField]
+    private BoolGameEvent _raycastControlEvent;
+
+    [Tooltip("来自面板系统的切换事件，用于根据当前面板切换动效预设。")]
+    [SerializeField]
+    private PanelChangedGameEvent _panelChangedEvent;
+
+    [Header("面板专属动效预设")]
+    [Tooltip("开启后可针对不同面板配置独立的鼠标进入/离开动效。")]
+    [SerializeField]
+    private bool _usePanelSpecificPresets = false;
+
+    [Tooltip("面板名称库，用于在 Inspector 中提供下拉选择（自动从 PanelManager 获取）。")]
+    [SerializeField]
+    private GamePanelLibrarySO _panelLibrary;
+
+    [Tooltip("面板 -> 动效 预设列表。未匹配到时将使用通用动效。")]
+    [SerializeField]
+    private List<PanelFeedbackPreset> _panelPresets = new List<PanelFeedbackPreset>();
+
     private MMStateMachine<ButtonStates> _stateMachine;
-    private bool _isTransitioning = false; // 关键的“锁”，防止动画播放时再次触发
+    private bool _isTransitioning = false; // 关键的"锁"，防止动画播放时再次触发
     private bool _localTransitionLockedRaycast = false;
     private Coroutine _stateTransitionCoroutine;
-    private Coroutine _panelRaycastCoroutine;
 
     private readonly List<MMF_Player> _managedPlayers = new List<MMF_Player>();
 
@@ -72,6 +86,25 @@ public class FeelButtonFSM : MonoBehaviour,
     private readonly Dictionary<Graphic, bool> _raycastRestoreStates = new Dictionary<Graphic, bool>();
     private bool _canvasGroupRestoreState = true;
     private int _raycastLockCount = 0;
+
+    private bool _externalRaycastLocked = false; // 标记是否被外部事件锁定
+
+    private MMFeedbacks _activeHoverFeedback;
+    private MMFeedbacks _activeIdleFeedback;
+    private string _activePanelName = string.Empty;
+
+    [Serializable]
+    private class PanelFeedbackPreset
+    {
+        [Tooltip("目标面板名称（需与 GamePanelLibrarySO 中的名称一致）。")]
+        public string panelName;
+
+        [Tooltip("当鼠标进入该面板的按钮时使用的动效覆盖。为空时沿用通用动效。")]
+        public MMFeedbacks hoverFeedback;
+
+        [Tooltip("当鼠标离开该面板的按钮时使用的动效覆盖。为空时沿用通用动效。")]
+        public MMFeedbacks idleFeedback;
+    }
 
     /// <summary>
     /// 初始化状态机
@@ -86,15 +119,37 @@ public class FeelButtonFSM : MonoBehaviour,
 
         CacheRaycastTargets();
         RefreshManagedPlayers();
+        AutoFindPanelLibrary();
+        ResetActiveFeedbacks();
     }
 
-    #region 状态机事件监听
-    
-    // 当脚本启用时，开始监听状态变化事件
     void OnEnable()
     {
-        this.MMEventStartListening<MMStateChangeEvent<ButtonStates>>();
-        this.MMEventStartListening<PanelChangedEvent>();
+        // 注册射线检测控制事件
+        if (_raycastControlEvent != null)
+        {
+            _raycastControlEvent.RegisterListener(this);
+        }
+        else if (_manageRaycasts)
+        {
+            Debug.LogWarning($"{name}: 未配置 RaycastControlEvent，将无法响应外部射线检测控制事件。", this);
+        }
+
+        // 注册面板切换事件
+        if (_panelChangedEvent != null)
+        {
+            _panelChangedEvent.RegisterListener(this);
+        }
+        else if (_usePanelSpecificPresets)
+        {
+            Debug.LogWarning($"{name}: 未配置 PanelChangedGameEvent，将无法响应面板切换事件。", this);
+        }
+
+        // 自动查找面板库（运行时）
+        if (_panelLibrary == null)
+        {
+            AutoFindPanelLibrary();
+        }
 
         if (_manageRaycasts)
         {
@@ -105,51 +160,31 @@ public class FeelButtonFSM : MonoBehaviour,
         {
             RefreshManagedPlayers();
         }
+
+        // 应用当前面板的预设
+        if (PanelManager.Instance != null)
+        {
+            _activePanelName = PanelManager.Instance.CurrentPanel;
+            ApplyPanelPreset(_activePanelName);
+        }
     }
 
-    // 当脚本禁用时，停止监听，防止内存泄漏
     void OnDisable()
     {
-        this.MMEventStopListening<MMStateChangeEvent<ButtonStates>>();
-        this.MMEventStopListening<PanelChangedEvent>();
-
-        if (_panelRaycastCoroutine != null)
+        if (_raycastControlEvent != null)
         {
-            StopCoroutine(_panelRaycastCoroutine);
-            _panelRaycastCoroutine = null;
+            _raycastControlEvent.UnregisterListener(this);
+        }
+
+        if (_panelChangedEvent != null)
+        {
+            _panelChangedEvent.UnregisterListener(this);
         }
 
         StopActiveTransition();
         ResetRaycastLocks();
+        _externalRaycastLocked = false;
     }
-
-    /// <summary>
-    /// 这是 Feel 状态机的核心：当状态发生变化时，这个函数会被自动调用
-    /// </summary>
-    public void OnMMEvent(MMStateChangeEvent<ButtonStates> stateChangeEvent)
-    {
-        // 仅在状态转换时播放（这符合你的要求）
-        if (stateChangeEvent.NewState == stateChangeEvent.PreviousState)
-        {
-            return;
-        }
-
-        switch (stateChangeEvent.NewState)
-        {
-            case ButtonStates.Hover:
-                // 播放动效A (Hover)
-                StartStateTransition(hoverFeedback);
-                break;
-                
-            case ButtonStates.Idle:
-                // 播放动效B (Idle)
-                StartStateTransition(idleFeedback);
-                break;
-        }
-    }
-
-    #endregion
-
     #region UI 输入事件
 
     /// <summary>
@@ -162,8 +197,8 @@ public class FeelButtonFSM : MonoBehaviour,
             return;
         }
 
-        // 如果正在播放转场动画，则忽略本次输入
-        if (_isTransitioning)
+        // 如果正在播放转场动画，或外部已锁定射线检测，则忽略本次输入
+        if (_isTransitioning || _externalRaycastLocked)
         {
             return; 
         }
@@ -181,8 +216,8 @@ public class FeelButtonFSM : MonoBehaviour,
             return;
         }
 
-        // 如果正在播放转场动画，则忽略本次输入
-        if (_isTransitioning)
+        // 如果正在播放转场动画，或外部已锁定射线检测，则忽略本次输入
+        if (_isTransitioning || _externalRaycastLocked)
         {
             return; 
         }
@@ -215,24 +250,20 @@ public class FeelButtonFSM : MonoBehaviour,
     }
 
     /// <summary>
-    /// 接收到 PanelChangedEvent 时的处理：阻止射线并终止所有反馈。
+    /// 接收到布尔事件时的处理：根据布尔值控制射线检测的启用/禁用。
+    /// true = 禁用射线检测，false = 恢复射线检测。
     /// </summary>
-    public void OnMMEvent(PanelChangedEvent panelChangedEvent)
+    void IGameEventListener<bool>.OnEventRaised(bool shouldDisableRaycast)
     {
-        if (_blockRaycastsOnPanelChanged)
-        {
-            if (_panelRaycastCoroutine != null)
-            {
-                StopCoroutine(_panelRaycastCoroutine);
-                _panelRaycastCoroutine = null;
-                UnlockRaycast();
-            }
+        HandleRaycastControlEvent(shouldDisableRaycast);
+    }
 
-            _panelRaycastCoroutine = StartCoroutine(PanelRaycastBlockRoutine());
-        }
-
-        StopActiveTransition();
-        StopAllManagedFeedbacks();
+    /// <summary>
+    /// 接收到面板切换事件时的处理：更新动效预设。
+    /// </summary>
+    void IGameEventListener<PanelChangedPayload>.OnEventRaised(PanelChangedPayload payload)
+    {
+        HandlePanelChanged(payload);
     }
 
     /// <summary>
@@ -247,9 +278,11 @@ public class FeelButtonFSM : MonoBehaviour,
             return false;
         }
 
+        ButtonStates previousState = _stateMachine.CurrentState;
+
         if (!force)
         {
-            if (_isTransitioning || _stateMachine.CurrentState == targetState)
+            if (_isTransitioning || previousState == targetState)
             {
                 return false;
             }
@@ -257,9 +290,11 @@ public class FeelButtonFSM : MonoBehaviour,
         else
         {
             StopActiveTransition();
+            previousState = _stateMachine.CurrentState;
         }
 
         _stateMachine.ChangeState(targetState);
+        HandleStateChanged(previousState, targetState);
         return true;
     }
 
@@ -272,6 +307,31 @@ public class FeelButtonFSM : MonoBehaviour,
     /// 是否处于转场中
     /// </summary>
     public bool IsTransitioning => _isTransitioning;
+
+    private void HandleStateChanged(ButtonStates previousState, ButtonStates newState)
+    {
+        if (previousState == newState)
+        {
+            return;
+        }
+
+        // 如果外部已锁定射线检测（面板切换动画期间），则不播放按钮动画
+        if (_externalRaycastLocked)
+        {
+            return;
+        }
+
+        switch (newState)
+        {
+            case ButtonStates.Hover:
+                StartStateTransition(GetActiveHoverFeedback());
+                break;
+
+            case ButtonStates.Idle:
+                StartStateTransition(GetActiveIdleFeedback());
+                break;
+        }
+    }
 
     private void StartStateTransition(MMFeedbacks feedbacks)
     {
@@ -373,22 +433,152 @@ public class FeelButtonFSM : MonoBehaviour,
         }
     }
 
-    private IEnumerator PanelRaycastBlockRoutine()
+    /// <summary>
+    /// 处理外部射线检测控制事件。
+    /// </summary>
+    /// <param name="shouldDisableRaycast">true=禁用射线检测，false=恢复射线检测</param>
+    private void HandleRaycastControlEvent(bool shouldDisableRaycast)
     {
-        LockRaycast();
-
-        float duration = Mathf.Max(0f, _panelChangedRaycastBlockDuration);
-        if (duration > 0f)
+        if (!_manageRaycasts)
         {
-            yield return new WaitForSecondsRealtime(duration);
+            return;
+        }
+
+        if (shouldDisableRaycast)
+        {
+            // 外部请求禁用射线检测
+            if (!_externalRaycastLocked)
+            {
+                LockRaycast();
+                _externalRaycastLocked = true;
+            }
+
+            // 停止当前转场和所有反馈，避免在面板切换动画期间播放按钮动画
+            StopActiveTransition();
+            StopAllManagedFeedbacks();
         }
         else
         {
-            yield return null;
+            // 外部请求恢复射线检测
+            if (_externalRaycastLocked)
+            {
+                UnlockRaycast();
+                _externalRaycastLocked = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 处理面板切换事件：更新动效预设。
+    /// </summary>
+    private void HandlePanelChanged(PanelChangedPayload payload)
+    {
+        _activePanelName = payload.NewPanelName;
+        ApplyPanelPreset(_activePanelName);
+    }
+
+    /// <summary>
+    /// 应用指定面板的动效预设。
+    /// </summary>
+    private void ApplyPanelPreset(string panelName)
+    {
+        if (!_usePanelSpecificPresets)
+        {
+            ResetActiveFeedbacks();
+            return;
         }
 
-        UnlockRaycast();
-        _panelRaycastCoroutine = null;
+        PanelFeedbackPreset preset = FindPreset(panelName);
+        if (preset != null)
+        {
+            _activeHoverFeedback = preset.hoverFeedback != null ? preset.hoverFeedback : hoverFeedback;
+            _activeIdleFeedback = preset.idleFeedback != null ? preset.idleFeedback : idleFeedback;
+        }
+        else
+        {
+            ResetActiveFeedbacks();
+        }
+    }
+
+    /// <summary>
+    /// 查找指定面板名称的预设。
+    /// </summary>
+    private PanelFeedbackPreset FindPreset(string panelName)
+    {
+        if (string.IsNullOrEmpty(panelName))
+        {
+            return null;
+        }
+
+        for (int i = 0; i < _panelPresets.Count; i++)
+        {
+            PanelFeedbackPreset preset = _panelPresets[i];
+            if (preset == null)
+            {
+                continue;
+            }
+
+            if (!string.IsNullOrEmpty(preset.panelName) &&
+                string.Equals(preset.panelName, panelName, StringComparison.Ordinal))
+            {
+                return preset;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// 重置为通用动效。
+    /// </summary>
+    private void ResetActiveFeedbacks()
+    {
+        _activeHoverFeedback = hoverFeedback;
+        _activeIdleFeedback = idleFeedback;
+    }
+
+    /// <summary>
+    /// 自动查找场景中的 PanelManager 并获取其面板库。
+    /// </summary>
+    private void AutoFindPanelLibrary()
+    {
+        if (_panelLibrary != null)
+        {
+            return; // 已手动配置，不自动查找
+        }
+
+        if (PanelManager.Instance != null)
+        {
+            // 通过反射获取 PanelManager 的 _panelLibrary 字段
+            var panelManagerType = typeof(PanelManager);
+            var fieldInfo = panelManagerType.GetField("_panelLibrary", 
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            
+            if (fieldInfo != null)
+            {
+                var library = fieldInfo.GetValue(PanelManager.Instance) as GamePanelLibrarySO;
+                if (library != null)
+                {
+                    _panelLibrary = library;
+                    #if UNITY_EDITOR
+                    if (!Application.isPlaying)
+                    {
+                        UnityEditor.EditorUtility.SetDirty(this);
+                    }
+                    #endif
+                }
+            }
+        }
+    }
+
+    private MMFeedbacks GetActiveHoverFeedback()
+    {
+        return _activeHoverFeedback != null ? _activeHoverFeedback : hoverFeedback;
+    }
+
+    private MMFeedbacks GetActiveIdleFeedback()
+    {
+        return _activeIdleFeedback != null ? _activeIdleFeedback : idleFeedback;
     }
 
     private void CacheRaycastTargets()
@@ -550,11 +740,6 @@ public class FeelButtonFSM : MonoBehaviour,
         {
             CacheRaycastTargets();
             RefreshManagedPlayers();
-        }
-
-        if (_panelChangedRaycastBlockDuration < 0f)
-        {
-            _panelChangedRaycastBlockDuration = 0f;
         }
     }
 #endif
