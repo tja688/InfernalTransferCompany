@@ -15,7 +15,7 @@ public class FeelButtonFSM : MonoBehaviour,
     IPointerEnterHandler, 
     IPointerExitHandler,
     IGameEventListener<bool>,
-    IGameEventListener<PanelChangedPayload>
+    IGameEventListener<string>
 {
 /// <summary>
     /// 按钮的两种状态：空闲（鼠标离开）和悬停（鼠标进入）
@@ -59,7 +59,7 @@ public class FeelButtonFSM : MonoBehaviour,
 
     [Tooltip("来自面板系统的切换事件，用于根据当前面板切换动效预设。")]
     [SerializeField]
-    private PanelChangedGameEvent _panelChangedEvent;
+    private StringGameEvent _panelChangedEvent;
 
     [Header("面板专属动效预设")]
     [Tooltip("开启后可针对不同面板配置独立的鼠标进入/离开动效。注意：未创建预设时，按钮将无任何鼠标响应动效。")]
@@ -142,7 +142,7 @@ public class FeelButtonFSM : MonoBehaviour,
         }
         else if (_usePanelSpecificPresets)
         {
-            Debug.LogWarning($"{name}: 未配置 PanelChangedGameEvent，将无法响应面板切换事件。", this);
+            Debug.LogWarning($"{name}: 未配置 PanelChangedEvent，将无法响应面板切换事件。", this);
         }
 
         // 自动查找面板库（运行时）
@@ -273,9 +273,9 @@ public class FeelButtonFSM : MonoBehaviour,
     /// <summary>
     /// 接收到面板切换事件时的处理：更新动效预设。
     /// </summary>
-    void IGameEventListener<PanelChangedPayload>.OnEventRaised(PanelChangedPayload payload)
+    void IGameEventListener<string>.OnEventRaised(string newPanelName)
     {
-        HandlePanelChanged(payload);
+        HandlePanelChanged(newPanelName);
     }
 
     /// <summary>
@@ -492,9 +492,9 @@ public class FeelButtonFSM : MonoBehaviour,
     /// <summary>
     /// 处理面板切换事件：更新动效预设。
     /// </summary>
-    private void HandlePanelChanged(PanelChangedPayload payload)
+    private void HandlePanelChanged(string newPanelName)
     {
-        _activePanelName = payload.NewPanelName;
+        _activePanelName = newPanelName;
         ApplyPanelPreset(_activePanelName);
     }
 

@@ -25,9 +25,9 @@ public class PanelManager : MonoBehaviour, IGameEventListener<string>
     [SerializeField]
     private StringGameEvent _requestPanelEvent;
 
-    [Tooltip("当面板成功切换后广播的事件（携带新旧面板名称）")]
+    [Tooltip("当面板成功切换后广播的事件（携带新面板名称）")]
     [SerializeField]
-    private PanelChangedGameEvent _panelChangedEvent;
+    private StringGameEvent _panelChangedEvent;
 
     private string _currentPanel;
     private string _previousPanel;
@@ -157,7 +157,7 @@ public class PanelManager : MonoBehaviour, IGameEventListener<string>
             return;
         }
 
-        var payload = new PanelChangedPayload(newPanel, previousPanel);
-        _panelChangedEvent.Raise(payload);
+        // 广播新面板名称（与外部请求的面板切换同步）
+        _panelChangedEvent.Raise(newPanel);
     }
 }
