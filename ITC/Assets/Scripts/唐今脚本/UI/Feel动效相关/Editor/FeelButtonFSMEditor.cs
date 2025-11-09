@@ -86,13 +86,13 @@ public class FeelButtonFSMEditor : Editor
         // 绘制除特定字段外的所有属性
         DrawPropertiesExcluding(serializedObject, "hoverFeedback", "idleFeedback", "_raycastControlEvent", "_panelChangedEvent", "_usePanelSpecificPresets", "_panelLibrary", "_panelPresets");
 
-        // 显示已弃用的通用动效字段（灰色显示，表示不再使用）
-        EditorGUILayout.Space();
-        EditorGUI.BeginDisabledGroup(true);
-        EditorGUILayout.HelpBox("通用动效字段（hoverFeedback / idleFeedback）已弃用，现在不再使用。请通过面板专属动效预设配置动效。", MessageType.Info);
-        EditorGUILayout.PropertyField(hoverFeedbackProp);
-        EditorGUILayout.PropertyField(idleFeedbackProp);
-        EditorGUI.EndDisabledGroup();
+        // // 显示已弃用的通用动效字段（灰色显示，表示不再使用）
+        // EditorGUILayout.Space();
+        // EditorGUI.BeginDisabledGroup(true);
+        // EditorGUILayout.HelpBox("通用动效字段（hoverFeedback / idleFeedback）已弃用，现在不再使用。请通过面板专属动效预设配置动效。", MessageType.Info);
+        // EditorGUILayout.PropertyField(hoverFeedbackProp);
+        // EditorGUILayout.PropertyField(idleFeedbackProp);
+        // EditorGUI.EndDisabledGroup();
 
         EditorGUILayout.Space();
         EditorGUILayout.PropertyField(_raycastControlEventProp);
