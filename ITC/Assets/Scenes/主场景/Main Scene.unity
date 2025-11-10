@@ -18292,6 +18292,15 @@ MonoBehaviour:
   entranceImpulseMultiplier: 100
   exitImpulseSlots: 100
   restoreSnapshotBeforeEntrance: 1
+  enableFocusScaleEffect: 1
+  focusSlotIndexOverride: -1
+  focusScaleMultiplier: {x: 1.5, y: 1.5, z: 1}
+  focusScaleDuration: 0.2
+  focusScaleEase: 24
+  focusRecoverDuration: 0.3
+  focusRecoverEase: 15
+  focusActivationThreshold: 0.2
+  forceScaleResetOnRecycle: 1
   enableDebugDraw: 0
   slotGizmoColor: {r: 0, g: 0.8, b: 1, a: 0.75}
   buttonGizmoColor: {r: 1, g: 0.6, b: 0, a: 0.75}
@@ -34967,10 +34976,6 @@ PrefabInstance:
       propertyPath: managedReferences[6282995601335648434].AnimateScaleTarget
       value: 
       objectReference: {fileID: 388834731}
-    - target: {fileID: 6518464464278455719, guid: 8abcfcca319022543913ede16beccf3e, type: 3}
-      propertyPath: managedReferences[6282995601335648434].AnimateScaleDuration
-      value: 0.2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

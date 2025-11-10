@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -45,6 +46,11 @@ public class SlotMachinePicker : MonoBehaviour
         public RectTransform Rect;
         public float LogicalIndex;
         public float CrossAxisConstant;
+        public Vector3 BaseScale;
+        public Tween ActiveTween;
+        public bool IsFocused;
+        public bool TweeningToFocus;
+        public Vector3 LastTweenTargetScale;
     }
 
     [Serializable]
@@ -116,6 +122,26 @@ public class SlotMachinePicker : MonoBehaviour
     [Tooltip("启用后，PlayEntrance 会从快照恢复到初始状态。")]
     [SerializeField] private bool restoreSnapshotBeforeEntrance = true;
 
+    [Header("聚焦缩放效果")]
+    [Tooltip("启用后，根据指定槽位对按钮执行聚焦缩放动画。")]
+    [SerializeField] private bool enableFocusScaleEffect = false;
+    [Tooltip("聚焦槽位序号。-1 表示自动使用居中槽位（偶数数量时向上取整）。")]
+    [SerializeField] private int focusSlotIndexOverride = -1;
+    [Tooltip("聚焦时相对于初始缩放的倍率。")]
+    [SerializeField] private Vector3 focusScaleMultiplier = new Vector3(1.15f, 1.15f, 1f);
+    [Tooltip("按钮进入聚焦槽位时的缩放持续时间。")]
+    [SerializeField] private float focusScaleDuration = 0.2f;
+    [Tooltip("按钮进入聚焦槽位时的缓动。")]
+    [SerializeField] private Ease focusScaleEase = Ease.OutQuad;
+    [Tooltip("按钮离开聚焦槽位时的缩放持续时间。")]
+    [SerializeField] private float focusRecoverDuration = 0.15f;
+    [Tooltip("按钮离开聚焦槽位时的缓动。")]
+    [SerializeField] private Ease focusRecoverEase = Ease.OutQuad;
+    [Tooltip("触发聚焦缩放所需的距离阈值（单位：槽位）。")]
+    [SerializeField, Range(0.01f, 0.5f)] private float focusActivationThreshold = 0.2f;
+    [Tooltip("在循环复用或退场隐藏之前是否强制重置按钮缩放。")]
+    [SerializeField] private bool forceScaleResetOnRecycle = true;
+
     [Header("调试 & 可视化")]
     [SerializeField] private bool enableDebugDraw = false;
     [SerializeField] private Color slotGizmoColor = new Color(0f, 0.8f, 1f, 0.75f);
@@ -160,6 +186,7 @@ public class SlotMachinePicker : MonoBehaviour
     private float _firstSlotAxisValue;
     private int _slotCount;
     private bool _isHidden = true; // <-- 【新增】状态：控制按钮是否已隐藏
+    private bool _wasFocusEffectEnabled;
 
     private float DeltaTime => useUnscaledDeltaTime ? Time.unscaledDeltaTime : Time.deltaTime;
     private float TimeNow => useUnscaledDeltaTime ? Time.unscaledTime : Time.time;
@@ -193,10 +220,17 @@ public class SlotMachinePicker : MonoBehaviour
     private void OnDisable()
     {
         DisableInputAction();
+        ResetFocusEffectState(true);
     }
 
     private void Update()
     {
+        if (_wasFocusEffectEnabled && !enableFocusScaleEffect)
+        {
+            ResetFocusEffectState(true);
+        }
+        _wasFocusEffectEnabled = enableFocusScaleEffect;
+
         // 【修改】如果隐藏了，就不执行任何操作
         if (_slotCount == 0 || _runtimeButtons.Count == 0 || _isHidden)
         {
@@ -206,6 +240,7 @@ public class SlotMachinePicker : MonoBehaviour
         HandleInput();
         SimulateMotion();
         ManageRecycling();
+        UpdateFocusEffect();
         ApplyPositions();
         DispatchEventsIfNeeded();
     }
@@ -220,6 +255,230 @@ public class SlotMachinePicker : MonoBehaviour
 #if UNITY_EDITOR
         DrawDebugGizmos();
 #endif
+    }
+
+    #endregion
+
+    #region 聚焦缩放效果
+
+    private void UpdateFocusEffect(bool instant = false)
+    {
+        if (!enableFocusScaleEffect || _runtimeButtons.Count == 0 || _slotCount == 0)
+        {
+            return;
+        }
+
+        int focusSlotIndex = GetEffectiveFocusSlotIndex();
+        if (focusSlotIndex < 0)
+        {
+            ResetFocusEffectState(true);
+            return;
+        }
+
+        ButtonRuntime focusedButton = null;
+        float bestDistance = float.MaxValue;
+
+        foreach (var button in _runtimeButtons)
+        {
+            if (button.Rect == null)
+            {
+                continue;
+            }
+
+            if (!button.Rect.gameObject.activeInHierarchy)
+            {
+                AnimateDefocus(button, true);
+                continue;
+            }
+
+            float distance = Mathf.Abs((button.LogicalIndex - _scrollPosition) - focusSlotIndex);
+            if (distance < bestDistance)
+            {
+                bestDistance = distance;
+                focusedButton = button;
+            }
+        }
+
+        bool hasValidFocus = focusedButton != null && bestDistance <= focusActivationThreshold;
+
+        foreach (var button in _runtimeButtons)
+        {
+            if (button.Rect == null)
+            {
+                continue;
+            }
+
+            if (!button.Rect.gameObject.activeInHierarchy)
+            {
+                AnimateDefocus(button, true);
+                continue;
+            }
+
+            if (hasValidFocus && button == focusedButton)
+            {
+                AnimateFocus(button, instant);
+            }
+            else
+            {
+                AnimateDefocus(button, instant);
+            }
+        }
+    }
+
+    private void AnimateFocus(ButtonRuntime button, bool instant)
+    {
+        if (button == null || button.Rect == null)
+        {
+            return;
+        }
+
+        Vector3 targetScale = GetFocusTargetScale(button);
+
+        if (instant || focusScaleDuration <= Mathf.Epsilon)
+        {
+            CompleteTween(button);
+            button.Rect.localScale = targetScale;
+            button.LastTweenTargetScale = targetScale;
+            button.TweeningToFocus = false;
+            button.ActiveTween = null;
+            button.IsFocused = true;
+            return;
+        }
+
+        if (!instant &&
+            button.ActiveTween != null &&
+            button.ActiveTween.IsActive() &&
+            button.TweeningToFocus &&
+            Approximately(button.LastTweenTargetScale, targetScale))
+        {
+            return;
+        }
+
+        if (button.IsFocused)
+        {
+            if (Approximately(button.Rect.localScale, targetScale))
+            {
+                return;
+            }
+        }
+
+        CompleteTween(button);
+        button.ActiveTween = button.Rect.DOScale(targetScale, focusScaleDuration)
+            .SetEase(focusScaleEase)
+            .SetUpdate(useUnscaledDeltaTime)
+            .OnComplete(() =>
+            {
+                button.ActiveTween = null;
+                button.Rect.localScale = targetScale;
+                button.LastTweenTargetScale = targetScale;
+                button.TweeningToFocus = false;
+            });
+        button.LastTweenTargetScale = targetScale;
+        button.TweeningToFocus = true;
+        button.IsFocused = true;
+    }
+
+    private void AnimateDefocus(ButtonRuntime button, bool instant)
+    {
+        if (button == null || button.Rect == null)
+        {
+            return;
+        }
+
+        Vector3 baseScale = button.BaseScale;
+
+        if (instant || focusRecoverDuration <= Mathf.Epsilon)
+        {
+            CompleteTween(button);
+            button.Rect.localScale = baseScale;
+            button.LastTweenTargetScale = baseScale;
+            button.TweeningToFocus = false;
+            button.ActiveTween = null;
+            button.IsFocused = false;
+            return;
+        }
+
+        if (!instant &&
+            button.ActiveTween != null &&
+            button.ActiveTween.IsActive() &&
+            !button.TweeningToFocus &&
+            Approximately(button.LastTweenTargetScale, baseScale))
+        {
+            return;
+        }
+
+        if (!button.IsFocused &&
+            (button.ActiveTween == null || !button.ActiveTween.IsActive()) &&
+            Approximately(button.Rect.localScale, baseScale))
+        {
+            return;
+        }
+
+        CompleteTween(button);
+        button.ActiveTween = button.Rect.DOScale(baseScale, focusRecoverDuration)
+            .SetEase(focusRecoverEase)
+            .SetUpdate(useUnscaledDeltaTime)
+            .OnComplete(() =>
+            {
+                button.ActiveTween = null;
+                button.Rect.localScale = baseScale;
+                button.LastTweenTargetScale = baseScale;
+                button.TweeningToFocus = false;
+            });
+        button.LastTweenTargetScale = baseScale;
+        button.TweeningToFocus = false;
+        button.IsFocused = false;
+    }
+
+    private void ResetFocusEffectState(bool immediate)
+    {
+        if (_runtimeButtons == null)
+        {
+            return;
+        }
+
+        foreach (var button in _runtimeButtons)
+        {
+            AnimateDefocus(button, immediate);
+        }
+    }
+
+    private Vector3 GetFocusTargetScale(ButtonRuntime button)
+    {
+        return Vector3.Scale(button.BaseScale, focusScaleMultiplier);
+    }
+
+    private int GetEffectiveFocusSlotIndex()
+    {
+        if (_slotCount <= 0)
+        {
+            return -1;
+        }
+
+        if (focusSlotIndexOverride >= 0)
+        {
+            return Mathf.Clamp(focusSlotIndexOverride, 0, _slotCount - 1);
+        }
+
+        return Mathf.CeilToInt((_slotCount - 1) * 0.5f);
+    }
+
+    private void CompleteTween(ButtonRuntime button)
+    {
+        if (button.ActiveTween != null)
+        {
+            if (button.ActiveTween.IsActive())
+            {
+                button.ActiveTween.Kill(false);
+            }
+            button.ActiveTween = null;
+        }
+        button.TweeningToFocus = false;
+    }
+
+    private static bool Approximately(Vector3 a, Vector3 b, float tolerance = 0.001f)
+    {
+        return (a - b).sqrMagnitude <= tolerance * tolerance;
     }
 
     #endregion
@@ -261,6 +520,7 @@ public class SlotMachinePicker : MonoBehaviour
             _isSnapping = false;
             _snapTarget = index;
             ApplyPositions();
+            UpdateFocusEffect(true);
             DispatchEventsIfNeeded(true);
         }
         else
@@ -292,6 +552,7 @@ public class SlotMachinePicker : MonoBehaviour
     {
         RestoreSnapshotInternal();
         ApplyPositions();
+        UpdateFocusEffect(true);
     }
 
     /// <summary>
@@ -408,12 +669,20 @@ public class SlotMachinePicker : MonoBehaviour
             {
                 Rect = rect,
                 LogicalIndex = i,
-                CrossAxisConstant = GetCrossAxisValue(rect)
+                CrossAxisConstant = GetCrossAxisValue(rect),
+                BaseScale = rect.localScale,
+                ActiveTween = null,
+                IsFocused = false,
+                TweeningToFocus = false,
+                LastTweenTargetScale = rect.localScale
             };
             _runtimeButtons.Add(runtime);
         }
 
         _runtimeButtons.Sort((a, b) => a.LogicalIndex.CompareTo(b.LogicalIndex));
+
+        ResetFocusEffectState(true);
+        _wasFocusEffectEnabled = enableFocusScaleEffect;
 
         _slotCount = slotAnchors.Count;
         if (_slotCount == 0)
@@ -513,7 +782,11 @@ public class SlotMachinePicker : MonoBehaviour
         {
             foreach (var button in _runtimeButtons)
             {
-                if (button.Rect) button.Rect.gameObject.SetActive(true);
+                if (button.Rect)
+                {
+                    AnimateDefocus(button, true);
+                    button.Rect.gameObject.SetActive(true);
+                }
             }
             _isHidden = false; // 标记为可见
         }
@@ -563,6 +836,12 @@ public class SlotMachinePicker : MonoBehaviour
         snapSpeed = Mathf.Max(0.1f, snapSpeed);
         snapThreshold = Mathf.Max(0.0001f, snapThreshold);
         recyclePadding = Mathf.Max(0f, recyclePadding);
+        focusScaleDuration = Mathf.Max(0f, focusScaleDuration);
+        focusRecoverDuration = Mathf.Max(0f, focusRecoverDuration);
+        focusActivationThreshold = Mathf.Clamp(focusActivationThreshold, 0.01f, 0.5f);
+        focusScaleMultiplier.x = Mathf.Max(0f, focusScaleMultiplier.x);
+        focusScaleMultiplier.y = Mathf.Max(0f, focusScaleMultiplier.y);
+        focusScaleMultiplier.z = Mathf.Max(0f, focusScaleMultiplier.z);
     }
 
     #endregion
@@ -697,6 +976,8 @@ public class SlotMachinePicker : MonoBehaviour
         float wrapSpan = _runtimeButtons.Count > 0 ? _runtimeButtons.Count : _slotCount;
 
         bool allHidden = _exitPlaying; // 仅在退场模式下检查是否全部隐藏
+        bool focusEffectActive = enableFocusScaleEffect;
+        bool forceResetScale = focusEffectActive && forceScaleResetOnRecycle;
 
         foreach (var button in _runtimeButtons)
         {
@@ -707,6 +988,10 @@ public class SlotMachinePicker : MonoBehaviour
                 // 【退场逻辑】: 不循环，只隐藏
                 if (relative < forwardThreshold || relative > backwardThreshold)
                 {
+                    if (focusEffectActive)
+                    {
+                        AnimateDefocus(button, forceResetScale);
+                    }
                     if (button.Rect && button.Rect.gameObject.activeSelf)
                     {
                         button.Rect.gameObject.SetActive(false);
@@ -722,10 +1007,18 @@ public class SlotMachinePicker : MonoBehaviour
                 // 【正常循环逻辑】
                 if (relative < forwardThreshold)
                 {
+                    if (focusEffectActive)
+                    {
+                        AnimateDefocus(button, forceResetScale);
+                    }
                     button.LogicalIndex += wrapSpan;
                 }
                 else if (relative > backwardThreshold)
                 {
+                    if (focusEffectActive)
+                    {
+                        AnimateDefocus(button, forceResetScale);
+                    }
                     button.LogicalIndex -= wrapSpan;
                 }
             }
@@ -886,6 +1179,7 @@ public class SlotMachinePicker : MonoBehaviour
         if (_runtimeButtons == null) return;
         foreach (var button in _runtimeButtons)
         {
+            AnimateDefocus(button, true);
             if (button.Rect) button.Rect.gameObject.SetActive(false);
         }
         _isHidden = true;
