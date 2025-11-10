@@ -2892,6 +2892,7 @@ RectTransform:
   m_Children:
   - {fileID: 5976761007914266938}
   - {fileID: 9088508288259984317}
+  - {fileID: 2083902024}
   m_Father: {fileID: 924940029}
   m_LocalEulerAnglesHint: {x: 1.055, y: -0.672, z: -32.507}
   m_AnchorMin: {x: 1, y: 0.5}
@@ -2995,7 +2996,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1258028092}
         m_TargetAssemblyTypeName: SlotMachinePicker, Assembly-CSharp
-        m_MethodName: InjectImpulse
+        m_MethodName: PlayEntrance
         m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12820,28 +12821,28 @@ MonoBehaviour:
   wps:
   - {x: 8.18281, y: 9.517979, z: 78.75}
   - {x: -3.9079914, y: 9.298628, z: 78.75}
-  - {x: -2.2149713, y: 5.0716367, z: 78.75}
+  - {x: -2.2149713, y: 4.680546, z: 78.75}
   fullWps: []
   path:
     wpLengths:
     - 0
     - 4.729147
-    - 12.170788
-    - 5.1599207
+    - 12.178566
+    - 5.489574
     wps:
     - {x: 9.343825, y: 5.415556, z: 78.75}
     - {x: 8.18281, y: 9.517979, z: 78.75}
     - {x: -3.9079914, y: 9.298628, z: 78.75}
-    - {x: -2.2149713, y: 5.0716367, z: 78.75}
+    - {x: -2.2149713, y: 4.680546, z: 78.75}
     type: 1
     subdivisionsXSegment: 10
     subdivisions: 40
     controlPoints:
     - a: {x: 8.18281, y: 9.517979, z: 78.75}
       b: {x: 0, y: 0, z: 0}
-    - a: {x: -0.5219512, y: 0.8446455, z: 78.75}
+    - a: {x: -0.5219512, y: 0.06246376, z: 78.75}
       b: {x: 0, y: 0, z: 0}
-    length: 22.071259
+    length: 22.40872
     isFinalized: 1
     timesTable:
     - 0.025
@@ -12898,33 +12899,33 @@ MonoBehaviour:
     - 3.6719072
     - 4.100901
     - 4.5650997
-    - 5.1183543
-    - 5.83597
-    - 6.6973186
-    - 7.6732016
-    - 8.733493
-    - 9.847659
-    - 10.984985
-    - 12.114687
-    - 13.205994
-    - 14.22826
-    - 15.151103
-    - 15.94473
-    - 16.5808
-    - 17.039337
-    - 17.374723
-    - 17.650991
-    - 17.92573
-    - 18.237139
-    - 18.59742
-    - 19.003551
-    - 19.445543
-    - 19.910278
-    - 20.383282
-    - 20.849663
-    - 21.294865
-    - 21.705555
-    - 22.071259
+    - 5.1184764
+    - 5.836451
+    - 6.6981816
+    - 7.6743727
+    - 8.734859
+    - 9.849105
+    - 10.986411
+    - 12.116034
+    - 13.207271
+    - 14.229586
+    - 15.1527815
+    - 15.947394
+    - 16.585747
+    - 17.049477
+    - 17.396109
+    - 17.691631
+    - 17.991425
+    - 18.32994
+    - 18.717634
+    - 19.151052
+    - 19.620173
+    - 20.111937
+    - 20.611933
+    - 21.105335
+    - 21.577652
+    - 22.01561
+    - 22.40872
   inspectorMode: 0
   pathType: 1
   handlesType: 1
@@ -16932,7 +16933,7 @@ MonoBehaviour:
   recyclePadding: 0.75
   extraRecycleRange: 0
   entranceImpulseMultiplier: 100
-  exitImpulseSlots: 2
+  exitImpulseSlots: 100
   restoreSnapshotBeforeEntrance: 1
   enableDebugDraw: 0
   slotGizmoColor: {r: 0, g: 0.8, b: 1, a: 0.75}
@@ -21131,9 +21132,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -125.74921, y: 37.444824}
-  m_SizeDelta: {x: 38.5016, y: 1.8896}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -280.50003, y: -65}
+  m_SizeDelta: {x: 700, y: 30}
+  m_Pivot: {x: 0.00000002514571, y: 0.5}
 --- !u!114 &1547583155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21147,7 +21148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -28716,6 +28717,149 @@ Font:
   m_FontRenderingMode: 0
   m_UseLegacyBoundsCalculation: 0
   m_ShouldRoundAdvanceValue: 1
+--- !u!1 &2083902023
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2083902024}
+  - component: {fileID: 2083902025}
+  m_Layer: 5
+  m_Name: "\u6682\u505C\u83DC\u5355\u56FE\u6807\u6EDA\u52A8"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2083902024
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083902023}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 210919016}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2083902025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083902023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Feedbacks: []
+  InitializationMode: 2
+  AutoInitialization: 1
+  SafeMode: 3
+  Direction: 0
+  AutoChangeDirectionOnEnd: 0
+  AutoPlayOnStart: 0
+  AutoPlayOnEnable: 0
+  ForceTimescaleMode: 0
+  ForcedTimescaleMode: 1
+  DurationMultiplier: 1
+  TimescaleMultiplier: 1
+  RandomizeDuration: 0
+  RandomDurationMultiplier: {x: 0.5, y: 1.5}
+  DisplayFullDurationDetails: 0
+  PlayerTimescaleMode: 1
+  OnlyPlayIfWithinRange: 0
+  RangeCenter: {fileID: 0}
+  RangeDistance: 5
+  UseRangeFalloff: 0
+  RangeFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RemapRangeFalloff: {x: 0, y: 1}
+  IgnoreRangeEvents: 0
+  CooldownDuration: 0
+  InitialDelay: 0
+  CanPlay: 1
+  CanPlayWhileAlreadyPlaying: 1
+  ChanceToPlay: 100
+  FeedbacksIntensity: 1
+  Events:
+    TriggerMMFeedbacksEvents: 0
+    TriggerUnityEvents: 1
+    OnPlay:
+      m_PersistentCalls:
+        m_Calls: []
+    OnPause:
+      m_PersistentCalls:
+        m_Calls: []
+    OnResume:
+      m_PersistentCalls:
+        m_Calls: []
+    OnChangeDirection:
+      m_PersistentCalls:
+        m_Calls: []
+    OnComplete:
+      m_PersistentCalls:
+        m_Calls: []
+    OnRestoreInitialValues:
+      m_PersistentCalls:
+        m_Calls: []
+    OnSkipToTheEnd:
+      m_PersistentCalls:
+        m_Calls: []
+    OnInitializationComplete:
+      m_PersistentCalls:
+        m_Calls: []
+    OnEnable:
+      m_PersistentCalls:
+        m_Calls: []
+    OnDisable:
+      m_PersistentCalls:
+        m_Calls: []
+  DebugActive: 0
+  InScriptDrivenPause: 0
+  FeedbacksList: []
+  KeepPlayModeChanges: 0
+  PerformanceMode: 0
+  StopFeedbacksOnDisable: 0
+  PlayCount: 0
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &2084423272
 GameObject:
   m_ObjectHideFlags: 0
