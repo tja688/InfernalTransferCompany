@@ -80,6 +80,7 @@ public class SlotMachinePickerEditor : Editor
 
         EditorGUILayout.Space();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("onSnappedToIndex"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("onSnappedWithDirection")); // <--- 【新增】
         EditorGUILayout.PropertyField(serializedObject.FindProperty("onEntranceCompleted"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("onExitCompleted"));
 

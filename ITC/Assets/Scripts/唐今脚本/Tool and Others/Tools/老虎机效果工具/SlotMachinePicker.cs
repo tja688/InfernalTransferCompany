@@ -4,6 +4,14 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
+// 【新增】定义吸附方向
+public enum SnapDirection
+{
+    Neutral, // 中立（例如：通过 SnapToIndex 强制指定，或没有移动）
+    Forward, // 正向（与 Default Scroll Direction 一致）
+    Backward // 反向（与 Default Scroll Direction 相反）
+}
+
 /// <summary>
 /// 老虎机/滚轮式选择器驱动器。
 /// 支持惯性滚动、步进吸附、按钮复用、外部冲量注入与入场/退场控制。
@@ -26,6 +34,10 @@ public class SlotMachinePicker : MonoBehaviour
 
     [Serializable]
     public class IndexEvent : UnityEvent<int> { }
+
+    // 【新增】定义一个可以传递"索引"和"方向"的新事件类型
+    [Serializable]
+    public class SnapEvent : UnityEvent<int, SnapDirection> { }
 
     [Serializable]
     private class ButtonRuntime
@@ -112,6 +124,7 @@ public class SlotMachinePicker : MonoBehaviour
 
     [Header("事件回调")]
     public IndexEvent onSnappedToIndex = new IndexEvent();
+    public SnapEvent onSnappedWithDirection = new SnapEvent(); // <--- 【新增】
     public UnityEvent onEntranceCompleted;
     public UnityEvent onExitCompleted;
 
@@ -753,8 +766,29 @@ public class SlotMachinePicker : MonoBehaviour
         int index = CurrentIndex;
         if (force || index != _lastDispatchedIndex)
         {
-            _lastDispatchedIndex = index;
+            // 【修改】计算方向
+            SnapDirection direction = SnapDirection.Neutral;
+            int oldIndex = _lastDispatchedIndex; // 存储旧索引
+            
+            _lastDispatchedIndex = index; // 更新索引
+
+            if (!force)
+            {
+                if (index > oldIndex)
+                {
+                    direction = SnapDirection.Forward;
+                }
+                else if (index < oldIndex)
+                {
+                    direction = SnapDirection.Backward;
+                }
+            }
+            
+            // 触发旧事件（保持兼容性）
             onSnappedToIndex?.Invoke(index);
+            
+            // 【新增】触发带方向的新事件
+            onSnappedWithDirection?.Invoke(index, direction);
         }
     }
 
