@@ -612,7 +612,7 @@ public class SlotMachinePicker : MonoBehaviour
 
         float extra = Mathf.Max(0f, _runtimeButtons.Count - _slotCount);
         extra += extraRecycleRange;
-        float forwardThreshold = -1f - recyclePadding - extra;
+        float forwardThreshold = -recyclePadding - extra;
         float backwardThreshold = (_slotCount - 1f) + recyclePadding + extra;
         float wrapSpan = _runtimeButtons.Count > 0 ? _runtimeButtons.Count : _slotCount;
 
