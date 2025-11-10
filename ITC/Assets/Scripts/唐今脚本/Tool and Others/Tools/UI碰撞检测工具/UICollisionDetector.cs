@@ -56,6 +56,11 @@ public class UIDetector : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        CheckCollisions();
+    }
+    
     /// <summary>
     /// **核心：手动调用此方法来执行一次碰撞检测**
     /// </summary>

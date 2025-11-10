@@ -2155,17 +2155,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5084335969755182173, guid: 8abcfcca319022543913ede16beccf3e, type: 3}
   m_PrefabInstance: {fileID: 6663651852763689461}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &155135790 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6518464464278455719, guid: 8abcfcca319022543913ede16beccf3e, type: 3}
-  m_PrefabInstance: {fileID: 6663651852763689461}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &156598508
 GameObject:
   m_ObjectHideFlags: 0
@@ -2597,7 +2586,6 @@ GameObject:
   - component: {fileID: 195974308}
   - component: {fileID: 195974307}
   - component: {fileID: 195974312}
-  - component: {fileID: 195974313}
   m_Layer: 5
   m_Name: "\u89D2\u8272"
   m_TagString: Untagged
@@ -2707,55 +2695,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &195974313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 195974305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dea3945c9d4fad4ca259a9842307def, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvasCamera: {fileID: 1565471608}
-  targetsToDetect:
-  - {fileID: 1547583161}
-  targetsParent: {fileID: 1547583154}
-  OnTargetEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1034245989}
-        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
-        m_MethodName: PlayFeedbacks
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTargetStay:
-    m_PersistentCalls:
-      m_Calls: []
-  OnTargetExit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1034245989}
-        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
-        m_MethodName: PlayFeedbacksInReverse
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &196383082
 GameObject:
   m_ObjectHideFlags: 0
@@ -7178,7 +7117,6 @@ GameObject:
   - component: {fileID: 388834733}
   - component: {fileID: 388834732}
   - component: {fileID: 388834734}
-  - component: {fileID: 388834735}
   m_Layer: 5
   m_Name: "\u5B58\u50A8"
   m_TagString: Untagged
@@ -7288,55 +7226,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &388834735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 388834730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dea3945c9d4fad4ca259a9842307def, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvasCamera: {fileID: 1565471608}
-  targetsToDetect:
-  - {fileID: 1547583161}
-  targetsParent: {fileID: 1547583154}
-  OnTargetEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 155135790}
-        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
-        m_MethodName: PlayFeedbacks
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTargetStay:
-    m_PersistentCalls:
-      m_Calls: []
-  OnTargetExit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 155135790}
-        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
-        m_MethodName: PlayFeedbacksInReverse
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &402679518
 GameObject:
   m_ObjectHideFlags: 0
@@ -11440,7 +11329,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 791581934}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
   m_Name: 
@@ -11453,7 +11342,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 791581934}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -14984,7 +14873,6 @@ GameObject:
   - component: {fileID: 986504110}
   - component: {fileID: 986504109}
   - component: {fileID: 986504114}
-  - component: {fileID: 986504115}
   m_Layer: 5
   m_Name: "\u8BBE\u7F6E"
   m_TagString: Untagged
@@ -15094,55 +14982,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &986504115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 986504107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dea3945c9d4fad4ca259a9842307def, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvasCamera: {fileID: 1565471608}
-  targetsToDetect:
-  - {fileID: 1547583161}
-  targetsParent: {fileID: 1547583154}
-  OnTargetEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1034245989}
-        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
-        m_MethodName: PlayFeedbacks
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTargetStay:
-    m_PersistentCalls:
-      m_Calls: []
-  OnTargetExit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1034245989}
-        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
-        m_MethodName: PlayFeedbacksInReverse
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &994365241
 GameObject:
   m_ObjectHideFlags: 0
@@ -15741,17 +15580,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5084335969755182173, guid: 8abcfcca319022543913ede16beccf3e, type: 3}
   m_PrefabInstance: {fileID: 1034245987}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1034245989 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6518464464278455719, guid: 8abcfcca319022543913ede16beccf3e, type: 3}
-  m_PrefabInstance: {fileID: 1034245987}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1045732369
 GameObject:
   m_ObjectHideFlags: 0
@@ -18052,7 +17880,6 @@ GameObject:
   - component: {fileID: 1232613346}
   - component: {fileID: 1232613345}
   - component: {fileID: 1232613347}
-  - component: {fileID: 1232613348}
   m_Layer: 5
   m_Name: "\u52A0\u8F7D"
   m_TagString: Untagged
@@ -18162,55 +17989,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1232613348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1232613343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dea3945c9d4fad4ca259a9842307def, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvasCamera: {fileID: 1565471608}
-  targetsToDetect:
-  - {fileID: 1547583161}
-  targetsParent: {fileID: 1547583154}
-  OnTargetEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1034245989}
-        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
-        m_MethodName: PlayFeedbacks
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTargetStay:
-    m_PersistentCalls:
-      m_Calls: []
-  OnTargetExit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1034245989}
-        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
-        m_MethodName: PlayFeedbacksInReverse
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &1241706879
 GameObject:
   m_ObjectHideFlags: 0
@@ -22961,7 +22739,6 @@ GameObject:
   - component: {fileID: 1547583156}
   - component: {fileID: 1547583155}
   - component: {fileID: 1547583160}
-  - component: {fileID: 1547583161}
   m_Layer: 5
   m_Name: "\u9009\u62E9\u6307\u9488"
   m_TagString: Untagged
@@ -23070,19 +22847,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1547583161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1547583153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47d00924c1258214eb88d6c33f1a20e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rectTransform: {fileID: 0}
 --- !u!1 &1556630696
 GameObject:
   m_ObjectHideFlags: 0
@@ -25020,7 +24784,6 @@ GameObject:
   - component: {fileID: 1691546864}
   - component: {fileID: 1691546863}
   - component: {fileID: 1691546868}
-  - component: {fileID: 1691546869}
   m_Layer: 5
   m_Name: "\u8FD4\u56DE\u521D\u59CB\u754C\u9762"
   m_TagString: Untagged
@@ -25130,55 +24893,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1691546869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1691546861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dea3945c9d4fad4ca259a9842307def, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvasCamera: {fileID: 1565471608}
-  targetsToDetect:
-  - {fileID: 1547583161}
-  targetsParent: {fileID: 1547583154}
-  OnTargetEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1034245989}
-        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
-        m_MethodName: PlayFeedbacks
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTargetStay:
-    m_PersistentCalls:
-      m_Calls: []
-  OnTargetExit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1034245989}
-        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
-        m_MethodName: PlayFeedbacksInReverse
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &1701833263
 GameObject:
   m_ObjectHideFlags: 0
@@ -25885,7 +25599,6 @@ GameObject:
   - component: {fileID: 1725409553}
   - component: {fileID: 1725409552}
   - component: {fileID: 1725409557}
-  - component: {fileID: 1725409558}
   m_Layer: 5
   m_Name: "\u8BCD\u5E93"
   m_TagString: Untagged
@@ -25995,55 +25708,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1725409558
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1725409550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dea3945c9d4fad4ca259a9842307def, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvasCamera: {fileID: 1565471608}
-  targetsToDetect:
-  - {fileID: 1547583161}
-  targetsParent: {fileID: 1547583154}
-  OnTargetEnter:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1034245989}
-        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
-        m_MethodName: PlayFeedbacks
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTargetStay:
-    m_PersistentCalls:
-      m_Calls: []
-  OnTargetExit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1034245989}
-        m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
-        m_MethodName: PlayFeedbacksInReverse
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &1730540763
 GameObject:
   m_ObjectHideFlags: 0
@@ -35305,7 +34969,7 @@ PrefabInstance:
       objectReference: {fileID: 388834731}
     - target: {fileID: 6518464464278455719, guid: 8abcfcca319022543913ede16beccf3e, type: 3}
       propertyPath: managedReferences[6282995601335648434].AnimateScaleDuration
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
