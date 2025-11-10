@@ -146,6 +146,7 @@ public class SlotMachinePicker : MonoBehaviour
     private float _slotStep;
     private float _firstSlotAxisValue;
     private int _slotCount;
+    private bool _isHidden = true; // <-- 【新增】状态：控制按钮是否已隐藏
 
     private float DeltaTime => useUnscaledDeltaTime ? Time.unscaledDeltaTime : Time.deltaTime;
     private float TimeNow => useUnscaledDeltaTime ? Time.unscaledTime : Time.time;
@@ -162,14 +163,18 @@ public class SlotMachinePicker : MonoBehaviour
     private void Awake()
     {
         BuildRuntimeState();
+        HideAllButtons(); // <-- 【修改】启动时立即隐藏
     }
 
     private void OnEnable()
     {
         EnsureInputAction();
         EnableInputAction();
-        BuildRuntimeState();
-        RestoreSnapshotInternal();
+        // 【修改】如果仍处于隐藏状态，确保再次隐藏（以防在编辑器中 OnDisable）
+        if (_isHidden)
+        {
+            HideAllButtons();
+        }
     }
 
     private void OnDisable()
@@ -179,7 +184,8 @@ public class SlotMachinePicker : MonoBehaviour
 
     private void Update()
     {
-        if (_slotCount == 0 || _runtimeButtons.Count == 0)
+        // 【修改】如果隐藏了，就不执行任何操作
+        if (_slotCount == 0 || _runtimeButtons.Count == 0 || _isHidden)
         {
             return;
         }
@@ -229,6 +235,12 @@ public class SlotMachinePicker : MonoBehaviour
     /// </summary>
     public void SnapToIndex(int index, bool instant = false)
     {
+        // 【新增】如果隐藏了，先激活
+        if (_isHidden)
+        {
+            RestoreSnapshotInternal(); // 会自动激活
+        }
+        
         _velocity = 0f;
         if (instant)
         {
@@ -279,18 +291,57 @@ public class SlotMachinePicker : MonoBehaviour
             return;
         }
 
-        if (restoreSnapshotBeforeEntrance)
+        if (_isHidden)
         {
+            // 1. 准备：恢复快照或重置索引
+            if (restoreSnapshotBeforeEntrance)
+            {
+                RestoreSnapshotInternal(); // RestoreSnapshotInternal 会自动激活按钮并设置 _isHidden = false
+            }
+            else
+            {
+                // 手动重置按钮的逻辑索引
+                for (int i = 0; i < _runtimeButtons.Count; i++)
+                {
+                    _runtimeButtons[i].LogicalIndex = i;
+                }
+
+                // 激活所有按钮实体
+                foreach (var button in _runtimeButtons)
+                {
+                    if (button.Rect) button.Rect.gameObject.SetActive(true);
+                }
+                _isHidden = false;
+            }
+
+            // 2. 将所有按钮“预置”到屏幕外（“第-1个槽”之前）
+            // 我们将滚动位置设置为一个负值，这样按钮就都在“上方”
+            _scrollPosition = -_runtimeButtons.Count - recyclePadding;
+            _velocity = 0f;
+            _isSnapping = false;
+
+            // 3. 立即应用一次位置，让它们“瞬移”到屏幕外的起始点
+            ApplyPositions();
+        }
+        else if (restoreSnapshotBeforeEntrance)
+        {
+            // 如果不是隐藏状态（例如连续调用），但设置了 restore，依然恢复
             RestoreSnapshotInternal();
         }
 
         _entrancePlaying = true;
         _exitPlaying = false;
 
-        // 从上方（或左侧）起始，使第一个元素最终落在最后一个槽位。
+        // 4. 注入冲量
         float desiredTravel = Mathf.Max(1f, _slotCount - 1f);
         float multiplier = impulseMultiplierOverride > 0f ? impulseMultiplierOverride : entranceImpulseMultiplier;
         float impulse = desiredTravel * Mathf.Max(0.5f, multiplier);
+
+        // 【新增】确保冲量足够大，能让所有预置的按钮都滚进来
+        // 这个冲量需要大到足以覆盖从“预置点”(-N)到“槽位”(0~slotCount)的距离
+        float entranceBaseImpulse = _runtimeButtons.Count + _slotCount + 10f; // 10f 作为额外缓冲
+        impulse = Mathf.Max(entranceBaseImpulse, impulse); // 取你计算的冲量和基础冲量中较大的一个
+
         AddImpulseInternal(impulse);
     }
 
@@ -299,7 +350,8 @@ public class SlotMachinePicker : MonoBehaviour
     /// </summary>
     public void PlayExit(float impulseMultiplierOverride = 1f)
     {
-        if (_slotCount == 0)
+        // 【修改】如果已隐藏，则不执行
+        if (_slotCount == 0 || _isHidden)
         {
             return;
         }
@@ -309,7 +361,7 @@ public class SlotMachinePicker : MonoBehaviour
 
         float impulse = Mathf.Max(exitImpulseSlots, _slotCount);
         impulse *= Mathf.Max(0.1f, impulseMultiplierOverride);
-        AddImpulseInternal(-impulse);
+        AddImpulseInternal(-impulse); // 给予负向冲量
     }
 
     #endregion
@@ -378,7 +430,7 @@ public class SlotMachinePicker : MonoBehaviour
         if (_runtimeButtons.Count > 0)
         {
             CaptureSnapshot();
-            ApplyPositions();
+            // ApplyPositions(); // <--- 【修改】不在此时应用位置，等待 HideAllButtons
             DispatchEventsIfNeeded(true);
         }
     }
@@ -441,6 +493,16 @@ public class SlotMachinePicker : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             _runtimeButtons[i].LogicalIndex = source[i];
+        }
+
+        // 【新增】恢复快照时，要确保按钮是可见的
+        if (_runtimeButtons.Count > 0)
+        {
+            foreach (var button in _runtimeButtons)
+            {
+                if (button.Rect) button.Rect.gameObject.SetActive(true);
+            }
+            _isHidden = false; // 标记为可见
         }
     }
 
@@ -558,11 +620,12 @@ public class SlotMachinePicker : MonoBehaviour
                     _entrancePlaying = false;
                     onEntranceCompleted?.Invoke();
                 }
-                if (_exitPlaying)
-                {
-                    _exitPlaying = false;
-                    onExitCompleted?.Invoke();
-                }
+                // 【修改】退场完成的事件回调移至 ManageRecycling
+                // if (_exitPlaying)
+                // {
+                //     _exitPlaying = false;
+                //     onExitCompleted?.Invoke();
+                // }
             }
             return;
         }
@@ -573,13 +636,15 @@ public class SlotMachinePicker : MonoBehaviour
             float newVelocity = Mathf.MoveTowards(_velocity, 0f, friction * dt);
             _velocity = Mathf.Clamp(newVelocity, -maxVelocity, maxVelocity);
 
-            if (Mathf.Abs(_velocity) <= minVelocityForSnap)
+            // 【修改】退场时禁止自动吸附
+            if (Mathf.Abs(_velocity) <= minVelocityForSnap && !_exitPlaying)
             {
                 _velocity = 0f;
                 StartSnap(Mathf.Round(_scrollPosition));
             }
         }
-        else
+        // 【修改】退场时禁止空闲吸附
+        else if (!_exitPlaying)
         {
             float nearest = Mathf.Round(_scrollPosition);
             if (Mathf.Abs(nearest - _scrollPosition) > snapThreshold * 0.5f)
@@ -594,13 +659,15 @@ public class SlotMachinePicker : MonoBehaviour
                     _entrancePlaying = false;
                     onEntranceCompleted?.Invoke();
                 }
-                if (_exitPlaying)
-                {
-                    _exitPlaying = false;
-                    onExitCompleted?.Invoke();
-                }
+                // 【修改】退场完成的事件回调移至 ManageRecycling
+                // if (_exitPlaying)
+                // {
+                //     _exitPlaying = false;
+                //     onExitCompleted?.Invoke();
+                // }
             }
         }
+        // 如果正在退场且速度为0，_exitPlaying 会在 ManageRecycling 中被处理
     }
 
     private void ManageRecycling()
@@ -612,21 +679,52 @@ public class SlotMachinePicker : MonoBehaviour
 
         float extra = Mathf.Max(0f, _runtimeButtons.Count - _slotCount);
         extra += extraRecycleRange;
-        float forwardThreshold = -recyclePadding - extra;
+        float forwardThreshold = -recyclePadding - extra; // <--- 使用我们上次修复的阈值
         float backwardThreshold = (_slotCount - 1f) + recyclePadding + extra;
         float wrapSpan = _runtimeButtons.Count > 0 ? _runtimeButtons.Count : _slotCount;
+
+        bool allHidden = _exitPlaying; // 仅在退场模式下检查是否全部隐藏
 
         foreach (var button in _runtimeButtons)
         {
             float relative = button.LogicalIndex - _scrollPosition;
-            if (relative < forwardThreshold)
+
+            if (_exitPlaying)
             {
-                button.LogicalIndex += wrapSpan;
+                // 【退场逻辑】: 不循环，只隐藏
+                if (relative < forwardThreshold || relative > backwardThreshold)
+                {
+                    if (button.Rect && button.Rect.gameObject.activeSelf)
+                    {
+                        button.Rect.gameObject.SetActive(false);
+                    }
+                }
+                else if (button.Rect && button.Rect.gameObject.activeSelf)
+                {
+                    allHidden = false; // 只要有一个还在屏幕内（且激活），就没退完
+                }
             }
-            else if (relative > backwardThreshold)
+            else
             {
-                button.LogicalIndex -= wrapSpan;
+                // 【正常循环逻辑】
+                if (relative < forwardThreshold)
+                {
+                    button.LogicalIndex += wrapSpan;
+                }
+                else if (relative > backwardThreshold)
+                {
+                    button.LogicalIndex -= wrapSpan;
+                }
             }
+        }
+
+        if (_exitPlaying && allHidden)
+        {
+            // 【退场完成】
+            _exitPlaying = false;
+            _isHidden = true; // 标记为已隐藏
+            _velocity = 0f;
+            onExitCompleted?.Invoke(); // 在这里回调
         }
     }
 
@@ -747,6 +845,17 @@ public class SlotMachinePicker : MonoBehaviour
 
         rect.anchoredPosition = pos;
     }
+    
+    // 【新增】辅助函数，用于隐藏所有按钮并设置状态
+    private void HideAllButtons()
+    {
+        if (_runtimeButtons == null) return;
+        foreach (var button in _runtimeButtons)
+        {
+            if (button.Rect) button.Rect.gameObject.SetActive(false);
+        }
+        _isHidden = true;
+    }
 
     #endregion
 
@@ -788,4 +897,3 @@ public class SlotMachinePicker : MonoBehaviour
 
     #endregion
 }
-
