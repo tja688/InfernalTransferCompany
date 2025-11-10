@@ -10,6 +10,15 @@ public class SlotMachinePickerEditor : Editor
     private SerializedProperty slotAnchorsProp;
     private SerializedProperty buttonItemsProp;
     private SerializedProperty enableDebugDrawProp;
+    private SerializedProperty enableFocusScaleEffectProp;
+    private SerializedProperty focusSlotIndexOverrideProp;
+    private SerializedProperty focusScaleMultiplierProp;
+    private SerializedProperty focusScaleDurationProp;
+    private SerializedProperty focusScaleEaseProp;
+    private SerializedProperty focusRecoverDurationProp;
+    private SerializedProperty focusRecoverEaseProp;
+    private SerializedProperty focusActivationThresholdProp;
+    private SerializedProperty forceScaleResetOnRecycleProp;
 
     private void OnEnable()
     {
@@ -19,6 +28,15 @@ public class SlotMachinePickerEditor : Editor
         slotAnchorsProp = serializedObject.FindProperty("slotAnchors");
         buttonItemsProp = serializedObject.FindProperty("buttonItems");
         enableDebugDrawProp = serializedObject.FindProperty("enableDebugDraw");
+        enableFocusScaleEffectProp = serializedObject.FindProperty("enableFocusScaleEffect");
+        focusSlotIndexOverrideProp = serializedObject.FindProperty("focusSlotIndexOverride");
+        focusScaleMultiplierProp = serializedObject.FindProperty("focusScaleMultiplier");
+        focusScaleDurationProp = serializedObject.FindProperty("focusScaleDuration");
+        focusScaleEaseProp = serializedObject.FindProperty("focusScaleEase");
+        focusRecoverDurationProp = serializedObject.FindProperty("focusRecoverDuration");
+        focusRecoverEaseProp = serializedObject.FindProperty("focusRecoverEase");
+        focusActivationThresholdProp = serializedObject.FindProperty("focusActivationThreshold");
+        forceScaleResetOnRecycleProp = serializedObject.FindProperty("forceScaleResetOnRecycle");
     }
 
     public override void OnInspectorGUI()
@@ -68,6 +86,21 @@ public class SlotMachinePickerEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("entranceImpulseMultiplier"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("exitImpulseSlots"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("restoreSnapshotBeforeEntrance"));
+
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("聚焦缩放效果", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(enableFocusScaleEffectProp);
+        using (new EditorGUI.DisabledScope(!enableFocusScaleEffectProp.boolValue))
+        {
+            EditorGUILayout.PropertyField(focusSlotIndexOverrideProp);
+            EditorGUILayout.PropertyField(focusScaleMultiplierProp);
+            EditorGUILayout.PropertyField(focusScaleDurationProp);
+            EditorGUILayout.PropertyField(focusScaleEaseProp);
+            EditorGUILayout.PropertyField(focusRecoverDurationProp);
+            EditorGUILayout.PropertyField(focusRecoverEaseProp);
+            EditorGUILayout.PropertyField(focusActivationThresholdProp);
+            EditorGUILayout.PropertyField(forceScaleResetOnRecycleProp);
+        }
 
         EditorGUILayout.Space();
         EditorGUILayout.PropertyField(enableDebugDrawProp);
