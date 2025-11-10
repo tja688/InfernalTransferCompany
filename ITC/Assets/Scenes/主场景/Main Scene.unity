@@ -2480,11 +2480,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 304332301}
+  m_Father: {fileID: 1598091362}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 348.5, y: 895.5}
+  m_AnchoredPosition: {x: 318, y: -229.49988}
   m_SizeDelta: {x: 187, y: 91}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &195974307
@@ -3987,12 +3987,7 @@ RectTransform:
   - {fileID: 583028970}
   - {fileID: 1547583154}
   - {fileID: 1679115680}
-  - {fileID: 388834731}
-  - {fileID: 1232613344}
-  - {fileID: 986504108}
-  - {fileID: 1725409551}
-  - {fileID: 195974306}
-  - {fileID: 1691546862}
+  - {fileID: 1598091362}
   - {fileID: 924940029}
   - {fileID: 293818454}
   m_Father: {fileID: 331982935}
@@ -5154,73 +5149,55 @@ MonoBehaviour:
             serializedVersion: 2
             m_Curve:
             - serializedVersion: 3
-              time: 0.0025634766
-              value: 2.0033264
-              inSlope: -10.92031
-              outSlope: -10.92031
+              time: 0.0017700195
+              value: 2.0173645
+              inSlope: -5.1945534
+              outSlope: -5.1945534
               tangentMode: 34
               weightedMode: 0
               inWeight: 0
               outWeight: 0.33333334
             - serializedVersion: 3
-              time: 0.04779525
-              value: 1.5093814
-              inSlope: -5.5488763
-              outSlope: -5.5488763
-              tangentMode: 34
+              time: 0.099512234
+              value: 1.5096374
+              inSlope: -10.678399
+              outSlope: -10.678399
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0.32461888
+              outWeight: 0.055784266
+            - serializedVersion: 3
+              time: 0.40159574
+              value: 0.49859762
+              inSlope: -9.947452
+              outSlope: -9.947452
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0.068717785
+              outWeight: 0.33333334
+            - serializedVersion: 3
+              time: 0.5552351
+              value: 1.0167804
+              inSlope: 1.5352843
+              outSlope: 1.5352843
+              tangentMode: 0
               weightedMode: 0
               inWeight: 0.33333334
+              outWeight: 0.27466512
+            - serializedVersion: 3
+              time: 0.75011605
+              value: 4.001685
+              inSlope: 27.004509
+              outSlope: 27.004509
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0.052171238
               outWeight: 0.33333334
             - serializedVersion: 3
-              time: 0.14603004
-              value: 1.4919504
-              inSlope: 0.31049576
-              outSlope: 0.31049576
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0.1808047
-              outWeight: 0.057664674
-            - serializedVersion: 3
-              time: 0.34089985
-              value: 1.4948468
-              inSlope: -0.483476
-              outSlope: -0.483476
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0.33333334
-              outWeight: 0.33333334
-            - serializedVersion: 3
-              time: 0.45493436
-              value: 1.0389074
-              inSlope: -2.65364
-              outSlope: -2.65364
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0.8853802
-              outWeight: 0.33333334
-            - serializedVersion: 3
-              time: 0.5483236
-              value: 1.515579
-              inSlope: 10.521535
-              outSlope: 10.521535
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0.29673988
-              outWeight: 0.055514213
-            - serializedVersion: 3
-              time: 0.6838027
-              value: 4.0195503
-              inSlope: 3.8324654
-              outSlope: 3.8324654
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0.22937924
-              outWeight: 0.062174227
-            - serializedVersion: 3
-              time: 0.9943825
-              value: 4.0098114
-              inSlope: -0.031357232
-              outSlope: -0.031357232
+              time: 0.99823
+              value: 3.996582
+              inSlope: -0.020567613
+              outSlope: -0.020567613
               tangentMode: 34
               weightedMode: 0
               inWeight: 0.33333334
@@ -6519,11 +6496,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 304332301}
+  m_Father: {fileID: 1598091362}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 372.5, y: 1509}
+  m_AnchoredPosition: {x: 342.00003, y: 384}
   m_SizeDelta: {x: 143, y: 88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &388834732
@@ -13682,11 +13659,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 304332301}
+  m_Father: {fileID: 1598091362}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 371.5, y: 1203}
+  m_AnchoredPosition: {x: 341, y: 78}
   m_SizeDelta: {x: 143, y: 88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &986504109
@@ -16062,11 +16039,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 304332301}
+  m_Father: {fileID: 1598091362}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 371.5, y: 1356}
+  m_AnchoredPosition: {x: 341, y: 231.00012}
   m_SizeDelta: {x: 143, y: 88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1232613345
@@ -21054,6 +21031,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1591851371}
   m_CullTransparentMesh: 1
+--- !u!1 &1598091361
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1598091362}
+  m_Layer: 5
+  m_Name: "\u6682\u505C\u83DC\u5355\u6309\u94AE\u96C6\u5408"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1598091362
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598091361}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 388834731}
+  - {fileID: 1232613344}
+  - {fileID: 986504108}
+  - {fileID: 1725409551}
+  - {fileID: 195974306}
+  - {fileID: 1691546862}
+  m_Father: {fileID: 304332301}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 1098}
+  m_SizeDelta: {x: 827, y: 856}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1606866278
 GameObject:
   m_ObjectHideFlags: 0
@@ -22045,11 +22063,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 304332301}
+  m_Father: {fileID: 1598091362}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 220.5, y: 741}
+  m_AnchoredPosition: {x: 190, y: -383.99988}
   m_SizeDelta: {x: 443, y: 88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1691546863
@@ -22859,11 +22877,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 304332301}
+  m_Father: {fileID: 1598091362}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 371.5, y: 1050}
+  m_AnchoredPosition: {x: 341, y: -74.99988}
   m_SizeDelta: {x: 143, y: 88}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1725409552
