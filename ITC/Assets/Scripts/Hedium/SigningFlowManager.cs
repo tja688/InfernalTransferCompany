@@ -379,11 +379,9 @@ public class RuneInputManager : IContractStage
         // 正确获取 CopperRuneSelectorGameObject 的 transform
         if (uiManager != null )
         {
-            InitPoistion();
-            SpawnRuneArrows(0.5f);
-           
-           
-
+            //等待动画完毕
+           SlotCenter.Instance.add_listener(HeEventNames.OnIsReadyTypeWriter, OnTypeWriterIsReady);
+           SlotCenter.Instance.trigger_event(HeEventNames.LetStartTypeWriter);
         }
         else
         {
@@ -436,6 +434,8 @@ public class RuneInputManager : IContractStage
             Debug.Log("符文输入错误次数过多，视为一次签约失败");
             context.AddFailure();
             failed = true;
+            ///这里理论要等待动画结束再操作为签约失败或者成功
+            SlotCenter.Instance.trigger_event(HeEventNames.LetStopTypeWriter);
         }
         else if (invaild == 2)
         {
@@ -454,10 +454,13 @@ public class RuneInputManager : IContractStage
 
      
     }
-    private void RuneInputSuccess()
+    private void RuneInputAllSuccess()
     {
+        ///这里理论要等待动画结束再操作为签约失败或者成功
+        SlotCenter.Instance.trigger_event(HeEventNames.LetStopTypeWriter);
         Debug.Log($"符文成功一轮，剩余轮数{tuneCount}");
-      
+        SlotCenter.Instance.add_listener(HeEventNames.OnTypeWriterEndType, () => completed = true);
+
     }
     private void OnArrowFadeOutDelete()
     {
@@ -471,22 +474,19 @@ public class RuneInputManager : IContractStage
     public void InitPoistion()
     {
         invaild = 0;
-        SlotCenter.Instance.add_listener(HeEventNames.ArrowFadeOutDelete, OnArrowFadeOutDelete);
         inputRunes = new List<int>();
 
         uiManager.OnMoveAction += OnChoseRune;
-
-
-        //uiManager.interactAction.action.performed +=  OnChoseRune;
-
-
         inputRunes.Clear();
         ArrowObject =null;
        
         uiManager.EnableMoveAction();
 
-        SlotCenter.Instance.add_listener(HeEventNames.EnableChooseRuneEvent, OnEnableChoseRune);
 
+
+        SlotCenter.Instance.add_listener(HeEventNames.ArrowFadeOutDelete, OnArrowFadeOutDelete);
+        SlotCenter.Instance.add_listener(HeEventNames.EnableChooseRuneEvent, OnEnableChoseRune);
+        SlotCenter.Instance.remove_listener(HeEventNames.OnIsReadyTypeWriter, OnTypeWriterIsReady);
     }
 
     public void DeletePoistion()
@@ -528,6 +528,7 @@ public class RuneInputManager : IContractStage
         Debug.Log("=== 符文输入阶段结束 ===");
 
         DeletePoistion();
+  
     }
 
     private void GenerateRequiredRunes()
@@ -566,7 +567,13 @@ public class RuneInputManager : IContractStage
 
     }
 
+    private void OnTypeWriterIsReady()
+    {
+        InitPoistion();
 
+        SpawnRuneArrows(0.5f);
+
+    }
     private void OnEnableChoseRune()
     {
         enableChose = true;
@@ -684,14 +691,14 @@ public class RuneInputManager : IContractStage
       if (isCorrect)
         {
             Debug.Log("符文输入完成!");
-            RuneInputSuccess();
             if (tuneCount == 0)
             {
                 if (SigningFlowManager.ProbabilityDetermine(30))
                 {
                     //TODO:突发 符文核对
                 }
-                completed = true;
+                RuneInputAllSuccess();
+
             }
             /**************Loop_Entry****************/
 

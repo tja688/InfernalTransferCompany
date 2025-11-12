@@ -5,7 +5,20 @@
     using UnityEngine;
     using UnityEngine.Events;
     using System;
-
+public enum HeEventNamesOption
+{
+    DeliverDocumentEvent,
+    EndDragEvent,
+    DocumentErrorChosen,
+    EnableChooseRuneEvent,
+    ArrowFadeOutDelete,
+    OnChargingSth,
+    ChosenStampType,
+    LetStopTypeWriter,
+    LetStartTypeWriter,
+    OnIsReadyTypeWriter,
+    OnTypeWriterEndType,
+}
 public static class HeEventNames
 {
     public const string DeliverDocumentEvent = "DeliverDocumentEvent";
@@ -15,14 +28,25 @@ public static class HeEventNames
     public const string ArrowFadeOutDelete = "ArrowFadeOutDelete";
     public const string OnChargingSth = "OnChargingSth";//
     public const string ChosenStampType = "ChosenStampType";//StampType
+    public const string LetStopTypeWriter = "LetStopTypeWriter";//
+    public const string LetStartTypeWriter = "LetStartTypeWriter";//
+    public const string OnIsReadyTypeWriter = "OnIsReadyTypeWriter";
+    public const string OnTypeWriterEndType = "OnTypeWriterEndType";//
 }
 
 public class SlotCenter : MonoBehaviour
 {
-    // 保留原有的 pending 集合（等待补注册时记录）
+
+    [Header("选择 HeEventNames 常量触发")]
+    public HeEventNamesOption selectedEvent = HeEventNamesOption.DeliverDocumentEvent;
+
+    [Header("输入自定义字符串触发")]
+    public string customEventName;
+
+
+
     private HashSet<string> slot_table_reverse = new();
 
-    // 存储事件委托（可以是不同 Action<T> 类型的委托）
     private Dictionary<string, Delegate> slot_table = new();
 
     public static SlotCenter Instance { get; private set; }
@@ -32,14 +56,35 @@ public class SlotCenter : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
     }
+    // Inspector 按钮触发选择的常量事件
+    [ContextMenu("Trigger Selected Const Event")]
+    public void TriggerSelectedConstEvent()
+    {
+        string eventName = selectedEvent.ToString();
+        Debug.Log($"[Inspector Debug] 触发 HeEventNames 常量事件: {eventName}");
+        SlotCenter.Instance?.trigger_event(eventName);
+    }
 
+    // Inspector 按钮触发自定义字符串事件
+    [ContextMenu("Trigger Custom String Event")]
+    public void TriggerCustomStringEvent()
+    {
+        if (!string.IsNullOrEmpty(customEventName))
+        {
+            Debug.Log($"[Inspector Debug] 触发自定义事件: {customEventName}");
+            SlotCenter.Instance?.trigger_event(customEventName);
+        }
+        else
+        {
+            Debug.LogWarning("CustomEventName 为空！");
+        }
+    }
     public void add_listener(string name, Action ev)
     {
         Debug.Log($"添加listener:{name}");
@@ -193,7 +238,6 @@ public class SlotCenter : MonoBehaviour
         }
     }
 
-    // 无参触发：推荐使用此方法（不使用 DynamicInvoke）
     public bool trigger_event(string name)
     {
         if (slot_table.TryGetValue(name, out var d))

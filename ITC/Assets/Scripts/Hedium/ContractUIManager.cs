@@ -43,21 +43,21 @@ public class HeContractUIManager : MonoBehaviour
     public event System.Action<bool> OnPlayerDecisionMade;
     [Header("=== 触发设置 ===")]
 
-    public SkeletonGraphic circularRunaSkeleton;       // 圆形符文（骨骼UI）
-    public SkeletonGraphic diamondRunaSkeleton;        // 菱形符文
-    public SkeletonGraphic triangularRunaSkeleton;     // 三角形符文
-    public SkeletonGraphic sphericalRunaSkeleton;      // 球形符文
+    public GameObject circularRunaSkeleton;       // 圆形符文（骨骼UI）
+    public GameObject diamondRunaSkeleton;        // 菱形符文
+    public GameObject triangularRunaSkeleton;     // 三角形符文
+    public GameObject sphericalRunaSkeleton;      // 球形符文
 
 
-    public SkeletonGraphic pneumaticChannelSkeleton;   // 气动通道
-    public SkeletonGraphic copperRuneSelectorSkeleton; // 符文选择器
+    public GameObject pneumaticChannelSkeleton;   // 气动通道
+    public GameObject copperRuneSelectorSkeleton; // 符文选择器
 
     // 可交互的骨骼UI（需绑定点击事件，结合Button组件）
-    public SkeletonGraphic leftBookSkeleton;           // 左书
-    public SkeletonGraphic rightBookSkeleton;          // 右书
-    public SkeletonGraphic typewriterSkeleton;         // 打字机
-    public SkeletonGraphic telephoneSkeleton;          // 电话
-    public SkeletonGraphic canSkeleton;                // 罐子
+    public GameObject leftBookSkeleton;           // 左书
+    public GameObject rightBookSkeleton;          // 右书
+    public GameObject typewriterSkeleton;         // 打字机
+    public GameObject telephoneSkeleton;          // 电话
+    public GameObject canSkeleton;                // 罐子
     public Image contractDocumentsImage;  // 合同文档
     public Image arrowImage;              // 箭头提示
     public Image roleImage;
@@ -276,8 +276,8 @@ public class HeContractUIManager : MonoBehaviour
     {
 
         if (pneumaticChannelAnimatorOpen) return;
-
-        var trackEntry = pneumaticChannelSkeleton.AnimationState.SetAnimation(0, "A开门", false);
+        SkeletonGraphic animate = pneumaticChannelSkeleton.GetComponent<SkeletonGraphic>();
+        var trackEntry = animate.AnimationState.SetAnimation(0, "A开门", false);
         trackEntry.Complete += OnOpenAnimationComplete;
         pneumaticChannelAnimatorOpen = true;
 
@@ -305,8 +305,8 @@ public class HeContractUIManager : MonoBehaviour
     public void OnClosePneumaticChannel()
     {
         if (!pneumaticChannelAnimatorOpen) return;
-
-        var trackEntry = pneumaticChannelSkeleton.AnimationState.SetAnimation(0, "B关门", false);
+        SkeletonGraphic animate = pneumaticChannelSkeleton.GetComponent<SkeletonGraphic>();
+        var trackEntry = animate.AnimationState.SetAnimation(0, "B关门", false);
 
        
         trackEntry.Complete += OnCloseAnimationComplete;

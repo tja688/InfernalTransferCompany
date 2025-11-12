@@ -1993,17 +1993,17 @@ MonoBehaviour:
   moveAction: {fileID: -1412686185753986710, guid: 223da5f3e9640004fb90d28561bf1ac9, type: 3}
   interactAction: {fileID: 628884908304310996, guid: 223da5f3e9640004fb90d28561bf1ac9, type: 3}
   gameCanvas: {fileID: 2057023471}
-  circularRunaSkeleton: {fileID: 1783584880}
-  diamondRunaSkeleton: {fileID: 2075403266}
-  triangularRunaSkeleton: {fileID: 484988894}
-  sphericalRunaSkeleton: {fileID: 125450538}
-  pneumaticChannelSkeleton: {fileID: 965413463}
+  circularRunaSkeleton: {fileID: 1783584878}
+  diamondRunaSkeleton: {fileID: 2075403264}
+  triangularRunaSkeleton: {fileID: 484988892}
+  sphericalRunaSkeleton: {fileID: 125450536}
+  pneumaticChannelSkeleton: {fileID: 965413461}
   copperRuneSelectorSkeleton: {fileID: 0}
-  leftBookSkeleton: {fileID: 0}
-  rightBookSkeleton: {fileID: 0}
-  typewriterSkeleton: {fileID: 2057589597}
-  telephoneSkeleton: {fileID: 0}
-  canSkeleton: {fileID: 0}
+  leftBookSkeleton: {fileID: 891321084}
+  rightBookSkeleton: {fileID: 624740893}
+  typewriterSkeleton: {fileID: 2057589595}
+  telephoneSkeleton: {fileID: 1281696105}
+  canSkeleton: {fileID: 2037636552}
   contractDocumentsImage: {fileID: 405607739}
   arrowImage: {fileID: 0}
   roleImage: {fileID: 1155682647}
@@ -2041,6 +2041,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f61df77e19a6b46a9d40eef21f0f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedEvent: 0
+  customEventName: 
 --- !u!1 &748542554 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8568148058401762819, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
@@ -3060,6 +3062,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1185858286}
   - component: {fileID: 1185858285}
+  - component: {fileID: 1185858287}
   m_Layer: 0
   m_Name: "\u542F\u52A8\u5BF9\u8BDD"
   m_TagString: Untagged
@@ -3101,6 +3104,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1185858287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1185858284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abef3c196b634641a240cb1806424b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playFlow: 1
+  tracks: []
+  useUnscaledIntervals: 1
+  enableDebugLog: 0
 --- !u!1 &1195148810
 GameObject:
   m_ObjectHideFlags: 0
@@ -3719,6 +3738,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1214863069}
   m_Mesh: {fileID: 0}
+--- !u!1 &1220515305 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5044348496059430201, guid: 3985d691ee602dd47b681b7b1db7ffe3, type: 3}
+  m_PrefabInstance: {fileID: 2048525664}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1281696105
 GameObject:
   m_ObjectHideFlags: 0
@@ -4869,18 +4893,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78ca602b76a4322429a8aa29063bed29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startKey: 112
-  endKey: 115
-  scrollMotion: {fileID: 1066639158}
-  contractMotion: {fileID: 1355302155}
-  inspectorArea: {fileID: 0}
-  stampPrefab: {fileID: 7810642173232134801, guid: a5ff1ba2dce7ba449bd4a3d58be1c38b, type: 3}
-  worldCamera: {fileID: 1798426030}
-  followSmoothTime: 0.06
-  stampOffset: {x: 0, y: 0, z: 0}
-  followUseUnscaledTime: 1
-  autoControlInspectorEnable: 1
-  hideScrollWhenContractIn: 1
 --- !u!1 &1844986416
 GameObject:
   m_ObjectHideFlags: 0
@@ -5636,6 +5648,9 @@ GameObject:
   - component: {fileID: 2057589598}
   - component: {fileID: 2057589597}
   - component: {fileID: 2057589599}
+  - component: {fileID: 2057589600}
+  - component: {fileID: 2057589602}
+  - component: {fileID: 2057589601}
   m_Layer: 0
   m_Name: "SkeletonGraphic (\u6253\u5B57\u673A)"
   m_TagString: Untagged
@@ -5659,8 +5674,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.799988, y: 0}
-  m_SizeDelta: {x: 470.1984, y: 302.4}
+  m_AnchoredPosition: {x: -5.76, y: 35}
+  m_SizeDelta: {x: 634.81, y: 408.27}
   m_Pivot: {x: 0.50032145, y: 1}
 --- !u!114 &2057589597
 MonoBehaviour:
@@ -5686,7 +5701,7 @@ MonoBehaviour:
   initialSkinName: default
   initialFlipX: 0
   initialFlipY: 0
-  startingAnimation: 
+  startingAnimation: "AA\u5F85\u673A"
   startingLoop: 1
   timeScale: 1
   freeze: 0
@@ -5730,8 +5745,89 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventName: EndDragUpThePneumaticChannelSkeleton
   error: 2
-  mat: {fileID: 0}
+  mat: {fileID: 2100000, guid: 0d38c7d194285e743b69cb38d6430c20, type: 2}
   targetType: DocumentJudge
+--- !u!320 &2057589600
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057589595}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: c8d399390ba167e409034962c8a2efd7, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 4359072538833811627, guid: c8d399390ba167e409034962c8a2efd7, type: 2}
+    value: {fileID: 2057589597}
+  - key: {fileID: 3925641877041614144, guid: c8d399390ba167e409034962c8a2efd7, type: 2}
+    value: {fileID: 2057589601}
+  m_ExposedReferences:
+    m_References:
+    - ec694206e5e8a1d4fa7b31ceed053b95: {fileID: 1220515305}
+--- !u!114 &2057589601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057589595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 041d9a917ad2d234ba83a0a61a95fc84, type: 2}
+    - {fileID: 11400000, guid: e8e6add4742fd2241b868c68167b3a86, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2057589602}
+          m_TargetAssemblyTypeName: TimelineLoopControllerTypeWriter, Assembly-CSharp
+          m_MethodName: OnCycleEndSignal
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2057589602}
+          m_TargetAssemblyTypeName: TimelineLoopControllerTypeWriter, Assembly-CSharp
+          m_MethodName: EmitIsReadyTypeWriter
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &2057589602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057589595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 411074e8fdeb23145b36609f331404b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EndAnimation: {fileID: 11400000, guid: fb0c51d86120158429410a2f43a35001, type: 2}
+  loop: 1
 --- !u!1 &2075403264
 GameObject:
   m_ObjectHideFlags: 0
