@@ -341,8 +341,8 @@ public class HeContractUIManager : MonoBehaviour
         var typewriter = typewriterSkeleton.GetComponent<SkeletonGraphicHighLightDragHover>();
         var role  = roleImage.GetComponent<ImageHighLightDragHover>();
         // 监听事件,可拖拽才能触发事件
-        SlotCenter.Instance.add_listener<DocumentError>(typewriter.eventName, OnDragEndToChooseDocumentAction);
-        SlotCenter.Instance.add_listener<DocumentError>(role.eventName, OnDragEndToChooseDocumentAction);
+        SlotCenter.Instance.add_listener<DocumentError>(typewriter.eventName, OnDragEndToChooseDocumentAction,true);
+        SlotCenter.Instance.add_listener<DocumentError>(role.eventName, OnDragEndToChooseDocumentAction,true);
     }
     private void OnDragEndToChooseDocumentAction(DocumentError err)
     {

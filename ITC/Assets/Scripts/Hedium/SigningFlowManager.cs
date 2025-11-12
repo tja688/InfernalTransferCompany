@@ -96,7 +96,7 @@ public class DocumentVerifier : IContractStage
         Debug.Log("=== 开始文书核验阶段 ===");
         
         // 显示文书核验UI
-        uiManager?.ShowDocumentVerification(ctx);
+        //uiManager?.ShowDocumentVerification(ctx);
         initRes();
         // 执行核验逻辑
         PerformDocumentVerification();
@@ -125,7 +125,7 @@ public class DocumentVerifier : IContractStage
         button.onClick.AddListener(uiManager.OnOpenPneumaticChannelClick);
 
         button.interactable = true;
-        SlotCenter.Instance.add_listener<DocumentError>(HeEventNames.DocumentErrorChosen, DocumentJudgeProsses);
+        SlotCenter.Instance.add_listener<DocumentError>(HeEventNames.DocumentErrorChosen, DocumentJudgeProsses,true);
         var Hover = uiManager.pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>();
 
         //Hover.SetHighLight();
@@ -380,7 +380,7 @@ public class RuneInputManager : IContractStage
         if (uiManager != null )
         {
             //等待动画完毕
-           SlotCenter.Instance.add_listener(HeEventNames.OnIsReadyTypeWriter, OnTypeWriterIsReady);
+           SlotCenter.Instance.add_listener(HeEventNames.OnIsReadyTypeWriter, OnTypeWriterIsReady,true);
            SlotCenter.Instance.trigger_event(HeEventNames.LetStartTypeWriter);
         }
         else
@@ -459,7 +459,7 @@ public class RuneInputManager : IContractStage
         ///这里理论要等待动画结束再操作为签约失败或者成功
         SlotCenter.Instance.trigger_event(HeEventNames.LetStopTypeWriter);
         Debug.Log($"符文成功一轮，剩余轮数{tuneCount}");
-        SlotCenter.Instance.add_listener(HeEventNames.OnTypeWriterEndType, () => completed = true);
+        SlotCenter.Instance.add_listener(HeEventNames.OnTypeWriterEndType, () => completed = true,true);
 
     }
     private void OnArrowFadeOutDelete()
@@ -486,7 +486,6 @@ public class RuneInputManager : IContractStage
 
         SlotCenter.Instance.add_listener(HeEventNames.ArrowFadeOutDelete, OnArrowFadeOutDelete);
         SlotCenter.Instance.add_listener(HeEventNames.EnableChooseRuneEvent, OnEnableChoseRune);
-        SlotCenter.Instance.remove_listener(HeEventNames.OnIsReadyTypeWriter, OnTypeWriterIsReady);
     }
 
     public void DeletePoistion()
@@ -500,6 +499,7 @@ public class RuneInputManager : IContractStage
         requiredRunes.Clear();
         uiManager.DisableMoveAction();
         SlotCenter.Instance.remove_listener(HeEventNames.EnableChooseRuneEvent, OnEnableChoseRune);
+        SlotCenter.Instance.remove_listener(HeEventNames.ArrowFadeOutDelete, OnArrowFadeOutDelete);
     }
 
 
