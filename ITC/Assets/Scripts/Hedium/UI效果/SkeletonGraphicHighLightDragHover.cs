@@ -25,20 +25,65 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
 
     public string targetType = "DocumentJudge";
 
+
+
+
+
+
+
     // 标记当前是否有匹配的拖拽对象在目标上
     private bool isMatchedDraggingOver = false;
 
+
+
+
+
+
+
+
+
+    public bool HoverEnlarge = false;
+    public Vector2 EnlargeScale = new Vector2(2f, 2f);
+
+    public Vector2 PrimitiveScale= new Vector2(1f, 1f);
+    public Vector3 TargetRotation = new Vector3(0f, 0f, 0f);
+    public RectTransform targetUI;
     private void Awake()
     {
 
         skeleton = GetComponent<SkeletonGraphic>();
-        
+        targetUI = GetComponent<RectTransform>();
+    
     }
     void Start()
     {
      
+
+
+
+
+
      SlotCenter.Instance.add_listener(HeEventNames.EndDragEvent, OnRemotgeEndDrag);
     }
+
+    public void ScaleAndRotateObj()
+    {
+       
+
+
+
+    }
+    public void RestoreScaleAndRotateObj()
+    {
+   
+
+
+
+
+
+    }
+
+
     /// <summary>
     /// 拖拽对象进入目标区域时触发（仅拖拽状态下）
     /// </summary>
