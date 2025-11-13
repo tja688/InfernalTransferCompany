@@ -32,7 +32,7 @@ Shader "Custom/UI/MetallicScan"
 		_ScanSpeed ("ScanSpeed", Float) = 0.1
         _ScanPosXYMIN ("ScanPosXYMIN", Vector) = (-9.7799, -4.43, 0, 0)
         _ScanPosXYMAX ("ScanPosXYMAX", Vector) = (-6.499928, -1.429978, 0, 0)
-		_TransparentDegree("TransparentDegree",Float) = 0.5
+		_TransparentDegree("TransparentDegree",Float) = 0.4
 		 _UseScan("Use Scan", Float) = 1.0 
 		 _GoldColor ("Gold Color", Color) = (1, 0.84, 0, 1)
 		 _ColorThreshold ("ColorThreshold", float) = 0.5

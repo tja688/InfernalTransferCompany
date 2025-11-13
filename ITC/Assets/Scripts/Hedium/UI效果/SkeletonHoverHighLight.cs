@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using Spine.Unity;
 using System;
 using System.Collections;
@@ -14,6 +15,7 @@ public class SkeletonHoverHighLight : MonoBehaviour,
 {
     private SkeletonGraphic skeleton;
     private Color originalColor;
+ 
     [SerializeField]
     private Material mat; 
 
@@ -21,11 +23,57 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     [NonSerialized]
     public bool enableHighLightOnHover=false;
     private MeshRenderer _mR;
+
+
+
+
+    public MMF_Player HoverEffect;
+    private bool isDirect = true;
+    public bool EnableScale = true;
+    private void ChangeDirect()
+    {
+        HoverEffect.ChangeDirection();
+        isDirect ^= true;
+    }
+    public void ScaleAndRotateObj()
+    {
+        if (!EnableScale)
+        {
+            return;
+        }
+
+        if (isDirect)
+        {
+
+        }
+        else
+        {
+            ChangeDirect();
+        }
+        HoverEffect?.PlayFeedbacks();
+
+    }
+    public void RestoreScaleAndRotateObj()
+    {
+        if (!EnableScale)
+        {
+            return;
+        }
+        if (!isDirect)
+        {
+        }
+        else
+        {
+            ChangeDirect();
+        }
+        HoverEffect?.PlayFeedbacks();
+    }
+
+
     private void Awake()
     {
 
         skeleton = GetComponent<SkeletonGraphic>();
-        mat = skeleton.material;
     }
     void Start()
     {
@@ -38,7 +86,10 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     public void SetHighLight()
     {
 
-
+        if(mat == null)
+        {
+            return;
+        }
         if (mat.HasProperty("_EnableHighLight "))
         {
             mat.SetFloat("_EnableHighLight", 1f);
@@ -50,7 +101,10 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     }
     public void UnSetHighLight()
     {
-
+        if (mat == null)
+        {
+            return;
+        }
         if (mat.HasProperty("_EnableHighLight "))
         {
             mat.SetFloat("_EnableHighLight", 0f);
@@ -66,6 +120,7 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
+        ScaleAndRotateObj();
         if (enableHighLightOnHover)
         {
             SetHighLight();
@@ -79,6 +134,7 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
+        RestoreScaleAndRotateObj();
         UnSetHighLight();
     }
 
