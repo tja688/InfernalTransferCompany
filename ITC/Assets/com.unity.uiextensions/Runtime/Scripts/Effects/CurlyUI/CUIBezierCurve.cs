@@ -44,6 +44,7 @@ namespace UnityEngine.UI.Extensions
 #if UNITY_EDITOR
         protected void OnValidate()
         {
+            ReportSet();
             Refresh();
         }
 #endif
@@ -88,7 +89,7 @@ namespace UnityEngine.UI.Extensions
 
         public void ReportSet()
         {
-            if (controlPoints == null)
+            if (controlPoints == null || controlPoints.Length != CUIBezierCurve.CubicBezierCurvePtNum)
             {
                 controlPoints = new Vector3[CUIBezierCurve.CubicBezierCurvePtNum];
                 controlPoints[0] = new Vector3(0, 0, 0);
@@ -96,10 +97,6 @@ namespace UnityEngine.UI.Extensions
                 controlPoints[2] = new Vector3(1, 1, 0);
                 controlPoints[3] = new Vector3(1, 0, 0);
             }
-
-            bool isPointsReady = true;
-
-            isPointsReady = isPointsReady & controlPoints.Length == CUIBezierCurve.CubicBezierCurvePtNum;
         }
         #endregion
 
