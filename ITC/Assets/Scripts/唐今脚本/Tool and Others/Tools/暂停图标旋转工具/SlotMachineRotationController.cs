@@ -69,6 +69,16 @@ public class SlotMachineRotationController : MonoBehaviour
     /// <param name="direction">滚动方向</param>
     private void OnSnappedWithDirection(int index, SnapDirection direction)
     {
+        // 【修复】退场模式下不播放旋转反馈
+        if (slotMachinePicker != null && slotMachinePicker.IsExiting)
+        {
+            if (enableDebugLog)
+            {
+                Debug.Log($"[SlotMachineRotationController] 退场模式中，跳过旋转反馈", this);
+            }
+            return;
+        }
+
         if (enableDebugLog)
         {
             Debug.Log($"[SlotMachineRotationController] 吸附到索引 {index}，方向: {direction}", this);
