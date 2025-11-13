@@ -488,16 +488,36 @@ public class FeelButtonFSM : MonoBehaviour,
             }
         }
     }
-
+    
     /// <summary>
     /// 处理面板切换事件：更新动效预设。
     /// </summary>
     private void HandlePanelChanged(string newPanelName)
     {
+        // --- 这是您要求添加的新规则 ---
+
+        // 1. 立即停止当前正在播放的任何（Hover/Idle）转场动画
+        StopActiveTransition();
+
+        // 2. 立即停止所有受管理的 MMF_Player
+        //    (这会强制停止卡住的动效，并将视觉效果重置回初始状态)
+        StopAllManagedFeedbacks();
+
+        // 3. 强行将状态机重置为 Idle 状态。
+        //    这只是更改内部状态，并不会触发 HandleStateChanged，
+        //    因此完美符合您“不触发任何feedback”的要求。
+        if (_stateMachine != null)
+        {
+            _stateMachine.ChangeState(ButtonStates.Idle);
+        }
+        
+        // --- 新规则结束 ---
+
+        // 4. (原有逻辑) 更新面板名称并应用新的动效预设
         _activePanelName = newPanelName;
         ApplyPanelPreset(_activePanelName);
     }
-
+    
     /// <summary>
     /// 应用指定面板的动效预设。
     /// 仅在找到有效预设时设置动效，否则设置为 null（无动效反馈）。

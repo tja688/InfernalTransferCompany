@@ -11117,7 +11117,7 @@ MonoBehaviour:
       conditionPriority: 2
       outgoingLinks: []
       conditionsString: 
-      userScript: 
+      userScript: Variable["DAY"] = Variable["DAY"] - 1
       onExecute:
         m_PersistentCalls:
           m_Calls: []
