@@ -33,7 +33,8 @@ namespace UnityEngine.UI.Extensions
                     EditorGUILayout.HelpBox("Although CUI components are generalized. It is recommended that for Text, use CUIText", MessageType.Warning);
                 }
 
-                EditorGUILayout.HelpBox("Now that CUI is ready, change the control points of the top and bottom bezier curves to curve/morph the UI. Improve resolution when the UI seems to look poorly when curved/morphed should help.", MessageType.Info);
+                string curveHint = script.Orientation == CUIGraphic.CurveOrientation.Horizontal ? "top and bottom" : "left and right";
+                EditorGUILayout.HelpBox($"Now that CUI is ready, change the control points of the {curveHint} bezier curves to curve/morph the UI. Improve resolution when the UI seems to look poorly when curved/morphed should help.", MessageType.Info);
 
             }
 
@@ -44,7 +45,8 @@ namespace UnityEngine.UI.Extensions
             if (isCurveGpFold)
             {
                 EditorGUI.indentLevel++;
-                EditorGUILayout.LabelField("Top Curve");
+                string upperLabel = script.Orientation == CUIGraphic.CurveOrientation.Horizontal ? "Top Curve" : "Right Curve";
+                EditorGUILayout.LabelField(upperLabel);
                 EditorGUI.indentLevel++;
                 Vector3[] controlPoints = script.RefCurvesControlRatioPoints[1].array;
 
@@ -63,7 +65,8 @@ namespace UnityEngine.UI.Extensions
                     script.UpdateCurveControlPointPositions();
                 }
                 EditorGUI.indentLevel--;
-                EditorGUILayout.LabelField("Bottom Curve");
+                string lowerLabel = script.Orientation == CUIGraphic.CurveOrientation.Horizontal ? "Bottom Curve" : "Left Curve";
+                EditorGUILayout.LabelField(lowerLabel);
                 EditorGUI.indentLevel++;
                 controlPoints = script.RefCurvesControlRatioPoints[0].array;
 

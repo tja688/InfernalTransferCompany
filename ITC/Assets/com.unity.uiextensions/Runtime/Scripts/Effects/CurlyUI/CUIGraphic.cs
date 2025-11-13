@@ -22,6 +22,12 @@ namespace UnityEngine.UI.Extensions
         readonly public static int bottomCurveIdx = 0;
         readonly public static int topCurveIdx = 1;
 
+        public enum CurveOrientation
+        {
+            Horizontal = 0,
+            Vertical = 1
+        }
+
         #endregion
 
         /// <summary>
@@ -48,6 +54,21 @@ namespace UnityEngine.UI.Extensions
             get
             {
                 return isLockWithRatio;
+            }
+        }
+
+        [Tooltip("Choose how the reference curves are aligned. Horizontal uses Top/Bottom curves, Vertical uses Left/Right curves.")]
+        [SerializeField]
+        protected CurveOrientation curveOrientation = CurveOrientation.Horizontal;
+        public CurveOrientation Orientation
+        {
+            get
+            {
+                return curveOrientation;
+            }
+            set
+            {
+                curveOrientation = value;
             }
         }
 
@@ -136,6 +157,10 @@ namespace UnityEngine.UI.Extensions
 #endif
 
         #endregion
+
+        [HideInInspector]
+        [SerializeField]
+        protected CurveOrientation appliedOrientation = CurveOrientation.Horizontal;
 
         // Methods that are used often.
         #region Reuse
@@ -426,6 +451,99 @@ namespace UnityEngine.UI.Extensions
             {
                 refCurves[c].OnRefresh = Refresh;
             }
+
+            ApplyOrientationIfNeeded(false);
+        }
+
+        void ApplyOrientationIfNeeded(bool forceReset)
+        {
+            if (refCurves == null)
+            {
+                return;
+            }
+
+            bool orientationChanged = appliedOrientation != curveOrientation;
+
+            if (orientationChanged || forceReset)
+            {
+                ResetCurvesForOrientation();
+                appliedOrientation = curveOrientation;
+            }
+
+            RenameCurveGameObjects();
+        }
+
+        void RenameCurveGameObjects()
+        {
+            if (refCurves == null)
+            {
+                return;
+            }
+
+            for (int c = 0; c < refCurves.Length; c++)
+            {
+                if (refCurves[c] == null)
+                {
+                    continue;
+                }
+
+                if (curveOrientation == CurveOrientation.Horizontal)
+                {
+                    refCurves[c].name = c == bottomCurveIdx ? "BottomRefCurve" : "TopRefCurve";
+                }
+                else
+                {
+                    refCurves[c].name = c == bottomCurveIdx ? "LeftRefCurve" : "RightRefCurve";
+                }
+            }
+        }
+
+        void ResetCurvesForOrientation()
+        {
+            if (refCurves == null)
+            {
+                return;
+            }
+
+            for (int c = 0; c < refCurves.Length; c++)
+            {
+                CUIBezierCurve curve = refCurves[c];
+
+                if (curve == null || curve.ControlPoints == null)
+                {
+                    continue;
+                }
+
+                Vector3[] controlPoints = curve.ControlPoints;
+
+                for (int p = 0; p < CUIBezierCurve.CubicBezierCurvePtNum; p++)
+                {
+                    if (curveOrientation == CurveOrientation.Horizontal)
+                    {
+                        controlPoints[p].y = c == bottomCurveIdx ? -rectTrans.rect.height * rectTrans.pivot.y : rectTrans.rect.height - rectTrans.rect.height * rectTrans.pivot.y;
+                        controlPoints[p].x = rectTrans.rect.width * p / (CUIBezierCurve.CubicBezierCurvePtNum - 1);
+                        controlPoints[p].x -= rectTrans.rect.width * rectTrans.pivot.x;
+                    }
+                    else
+                    {
+                        controlPoints[p].x = c == bottomCurveIdx ? -rectTrans.rect.width * rectTrans.pivot.x : rectTrans.rect.width - rectTrans.rect.width * rectTrans.pivot.x;
+                        controlPoints[p].y = rectTrans.rect.height * p / (CUIBezierCurve.CubicBezierCurvePtNum - 1);
+                        controlPoints[p].y -= rectTrans.rect.height * rectTrans.pivot.y;
+                    }
+
+                    controlPoints[p].z = 0;
+
+                    if (refCurvesControlRatioPoints != null && refCurvesControlRatioPoints.Length > c && refCurvesControlRatioPoints[c].array != null && refCurvesControlRatioPoints[c].array.Length > p)
+                    {
+                        Vector3 ratioPoint = controlPoints[p];
+                        ratioPoint.x = (ratioPoint.x + rectTrans.rect.width * rectTrans.pivot.x) / rectTrans.rect.width;
+                        ratioPoint.y = (ratioPoint.y + rectTrans.rect.height * rectTrans.pivot.y) / rectTrans.rect.height;
+                        refCurvesControlRatioPoints[c][p] = ratioPoint;
+                    }
+                }
+            }
+
+            Refresh();
         }
 
         public void FixTextToRectTrans()
@@ -440,22 +558,41 @@ namespace UnityEngine.UI.Extensions
                     {
                         Vector3[] controlPoints = curve.ControlPoints;
 
-                        if (c == 0)
+                        if (curveOrientation == CurveOrientation.Horizontal)
                         {
-                            controlPoints[p].y = -rectTrans.rect.height * rectTrans.pivot.y;
+                            if (c == bottomCurveIdx)
+                            {
+                                controlPoints[p].y = -rectTrans.rect.height * rectTrans.pivot.y;
+                            }
+                            else
+                            {
+                                controlPoints[p].y = rectTrans.rect.height - rectTrans.rect.height * rectTrans.pivot.y;
+                            }
+
+                            controlPoints[p].x = rectTrans.rect.width * p / (CUIBezierCurve.CubicBezierCurvePtNum - 1);
+                            controlPoints[p].x -= rectTrans.rect.width * rectTrans.pivot.x;
                         }
                         else
                         {
-                            controlPoints[p].y = rectTrans.rect.height - rectTrans.rect.height * rectTrans.pivot.y;
-                        }
+                            if (c == bottomCurveIdx)
+                            {
+                                controlPoints[p].x = -rectTrans.rect.width * rectTrans.pivot.x;
+                            }
+                            else
+                            {
+                                controlPoints[p].x = rectTrans.rect.width - rectTrans.rect.width * rectTrans.pivot.x;
+                            }
 
-                        controlPoints[p].x = rectTrans.rect.width * p / (CUIBezierCurve.CubicBezierCurvePtNum - 1);
-                        controlPoints[p].x -= rectTrans.rect.width * rectTrans.pivot.x;
+                            controlPoints[p].y = rectTrans.rect.height * p / (CUIBezierCurve.CubicBezierCurvePtNum - 1);
+                            controlPoints[p].y -= rectTrans.rect.height * rectTrans.pivot.y;
+                        }
 
                         controlPoints[p].z = 0;
                     }
                 }
             }
+
+            ApplyOrientationIfNeeded(true);
         }
 
         public void ReferenceCUIForBCurves()
@@ -471,44 +608,48 @@ namespace UnityEngine.UI.Extensions
             Vector3 bottomLeftPosRatio = new Vector3(posDeltaBetweenBottomLeftCorner.x / refCUIGraphic.RectTrans.rect.width, posDeltaBetweenBottomLeftCorner.y / refCUIGraphic.RectTrans.rect.height, posDeltaBetweenBottomLeftCorner.z);
             Vector3 topRightPosRatio = new Vector3((posDeltaBetweenBottomLeftCorner.x + rectTrans.rect.width) / refCUIGraphic.RectTrans.rect.width, (posDeltaBetweenBottomLeftCorner.y + rectTrans.rect.height) / refCUIGraphic.RectTrans.rect.height, posDeltaBetweenBottomLeftCorner.z);
 
-            refCurves[0].ControlPoints[0] = refCUIGraphic.GetBCurveSandwichSpacePoint(bottomLeftPosRatio.x, bottomLeftPosRatio.y) - rectTrans.localPosition;
-            refCurves[0].ControlPoints[3] = refCUIGraphic.GetBCurveSandwichSpacePoint(topRightPosRatio.x, bottomLeftPosRatio.y) - rectTrans.localPosition;
+            float primaryStart = curveOrientation == CurveOrientation.Horizontal ? bottomLeftPosRatio.x : bottomLeftPosRatio.y;
+            float primaryEnd = curveOrientation == CurveOrientation.Horizontal ? topRightPosRatio.x : topRightPosRatio.y;
+            float secondaryStart = curveOrientation == CurveOrientation.Horizontal ? bottomLeftPosRatio.y : bottomLeftPosRatio.x;
+            float secondaryEnd = curveOrientation == CurveOrientation.Horizontal ? topRightPosRatio.y : topRightPosRatio.x;
 
-            refCurves[1].ControlPoints[0] = refCUIGraphic.GetBCurveSandwichSpacePoint(bottomLeftPosRatio.x, topRightPosRatio.y) - rectTrans.localPosition;
-            refCurves[1].ControlPoints[3] = refCUIGraphic.GetBCurveSandwichSpacePoint(topRightPosRatio.x, topRightPosRatio.y) - rectTrans.localPosition;
-
-            // use two sample points from the reference curves to find the second and third controls points for this curves
             for (int c = 0; c < refCurves.Length; c++)
             {
                 CUIBezierCurve curve = refCurves[c];
 
-                float yTime = c == 0 ? bottomLeftPosRatio.y : topRightPosRatio.y;
+                float secondaryRatio = c == bottomCurveIdx ? secondaryStart : secondaryEnd;
 
-                Vector3 leftPoint = refCUIGraphic.GetBCurveSandwichSpacePoint(bottomLeftPosRatio.x, yTime);
-                Vector3 rightPoint = refCUIGraphic.GetBCurveSandwichSpacePoint(topRightPosRatio.x, yTime);
+                Vector3 startPoint = refCUIGraphic.GetBCurveSandwichSpacePoint(primaryStart, secondaryRatio);
+                Vector3 endPoint = refCUIGraphic.GetBCurveSandwichSpacePoint(primaryEnd, secondaryRatio);
 
-                float quarter = 0.25f,
-                threeQuarter = 0.75f;
+                curve.ControlPoints[0] = startPoint - rectTrans.localPosition;
+                curve.ControlPoints[3] = endPoint - rectTrans.localPosition;
 
-                Vector3 quarterPoint = refCUIGraphic.GetBCurveSandwichSpacePoint((bottomLeftPosRatio.x * 0.75f + topRightPosRatio.x * 0.25f) / 1.0f, yTime);
-                Vector3 threeQuaterPoint = refCUIGraphic.GetBCurveSandwichSpacePoint((bottomLeftPosRatio.x * 0.25f + topRightPosRatio.x * 0.75f) / 1.0f, yTime);
+                float quarter = 0.25f;
+                float threeQuarter = 0.75f;
+                float quarterPrimary = Mathf.Lerp(primaryStart, primaryEnd, quarter);
+                float threeQuarterPrimary = Mathf.Lerp(primaryStart, primaryEnd, threeQuarter);
 
-                float x_1 = 3 * threeQuarter * threeQuarter * quarter, // (1 - t)(1 - t)t
-                    y_1 = 3 * threeQuarter * quarter * quarter,
-                  x_2 = 3 * quarter * quarter * threeQuarter,
-                  y_2 = 3 * quarter * threeQuarter * threeQuarter;
+                Vector3 quarterPoint = refCUIGraphic.GetBCurveSandwichSpacePoint(quarterPrimary, secondaryRatio);
+                Vector3 threeQuarterPoint = refCUIGraphic.GetBCurveSandwichSpacePoint(threeQuarterPrimary, secondaryRatio);
 
-                Vector3 contant_1 = quarterPoint - Mathf.Pow(threeQuarter, 3) * leftPoint - Mathf.Pow(quarter, 3) * rightPoint,
-                contant_2 = threeQuaterPoint - Mathf.Pow(quarter, 3) * leftPoint - Mathf.Pow(threeQuarter, 3) * rightPoint,
-                p1,
-                p2;
+                float x_1 = 3 * threeQuarter * threeQuarter * quarter;
+                float y_1 = 3 * threeQuarter * quarter * quarter;
+                float x_2 = 3 * quarter * quarter * threeQuarter;
+                float y_2 = 3 * quarter * threeQuarter * threeQuarter;
+
+                Vector3 contant_1 = quarterPoint - Mathf.Pow(threeQuarter, 3) * startPoint - Mathf.Pow(quarter, 3) * endPoint;
+                Vector3 contant_2 = threeQuarterPoint - Mathf.Pow(quarter, 3) * startPoint - Mathf.Pow(threeQuarter, 3) * endPoint;
+                Vector3 p1,
+                        p2;
 
                 solveDoubleEquationWithVector(x_1, y_1, x_2, y_2, contant_1, contant_2, out p1, out p2);
 
                 curve.ControlPoints[1] = p1 - rectTrans.localPosition;
                 curve.ControlPoints[2] = p2 - rectTrans.localPosition;
-
             }
+
+            ApplyOrientationIfNeeded(false);
             // use tangent and start and end time to derive control point 2 and 3
         }
 
@@ -562,7 +703,9 @@ namespace UnityEngine.UI.Extensions
                 float verRatio = (uiVertex.position.y + rectTrans.rect.height * rectTrans.pivot.y) / rectTrans.rect.height;
 
                 //Vector3 pos = Vector3.Lerp(refCurves[0].GetPoint(horRatio), refCurves[1].GetPoint(horRatio), verRatio);
-                Vector3 pos = GetBCurveSandwichSpacePoint(horRatio, verRatio);
+                Vector3 pos = curveOrientation == CurveOrientation.Horizontal
+                    ? GetBCurveSandwichSpacePoint(horRatio, verRatio)
+                    : GetBCurveSandwichSpacePoint(verRatio, horRatio);
 
                 uiVertex.position.x = pos.x;
                 uiVertex.position.y = pos.y;
