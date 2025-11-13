@@ -156,6 +156,7 @@ public class SlotMachinePicker : MonoBehaviour
 
     public int CurrentIndex => Mathf.RoundToInt(_scrollPosition);
     public float CurrentVelocity => _velocity;
+    public bool IsExiting => _exitPlaying; // 【新增】暴露退场状态，供外部组件检查
 
     public bool MouseInputEnabled
     {
@@ -850,6 +851,12 @@ public class SlotMachinePicker : MonoBehaviour
 
     private void HandleInput()
     {
+        // 【修复】退场模式下禁用所有滚轮输入
+        if (_exitPlaying)
+        {
+            return;
+        }
+
         if (!enableMouseScroll || _runtimeScrollAction == null)
         {
             return;
