@@ -97,6 +97,7 @@ public class ImageHighLightDragHover : MonoBehaviour,
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
+
         if (isMatchedDraggingOver)
         {
             isMatchedDraggingOver = false;

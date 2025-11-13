@@ -32,7 +32,7 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
     {
 
         skeleton = GetComponent<SkeletonGraphic>();
-        mat = skeleton.material;
+        
     }
     void Start()
     {
