@@ -187,7 +187,6 @@ namespace UnityEngine.UI.Extensions
                     // 绘制位置句柄
                     Vector3 newPt = Handles.FreeMoveHandle(
                         worldPoint,
-                        handleRotation,
                         handleSizeValue,
                         Vector3.zero,
                         Handles.DotHandleCap
