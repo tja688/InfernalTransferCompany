@@ -6,7 +6,7 @@ using UnityEditor;
 namespace UnityEngine.UI.Extensions
 {
     [CustomEditor(typeof(CUIBezierCurve))]
-    [CanEditMultipleObjects]
+    //[CanEditMultipleObjects]
     public class CUIBezierCurveEditor : Editor
     {
         public override void OnInspectorGUI()
@@ -18,10 +18,16 @@ namespace UnityEngine.UI.Extensions
         {
             CUIBezierCurve script = (CUIBezierCurve)this.target;
 
-            if (script.ControlPoints != null)
-            {
-                Vector3[] controlPoints = script.ControlPoints;
+            Vector3[] controlPoints = script.ControlPoints;
 
+            if (controlPoints == null || controlPoints.Length != CUIBezierCurve.CubicBezierCurvePtNum)
+            {
+                script.ReportSet();
+                controlPoints = script.ControlPoints;
+            }
+
+            if (controlPoints != null && controlPoints.Length == CUIBezierCurve.CubicBezierCurvePtNum)
+            {
                 Transform handleTransform = script.transform;
                 Quaternion handleRotation = script.transform.rotation;
 
