@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
+using MoreMountains.Feedbacks;
 /// <summary>
 /// 仅在拖拽时，且类型匹配才显示高亮的组件（挂载到目标对象，如打字机）
 /// </summary>
@@ -16,34 +16,108 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
 
 {
     public string eventName = "EndDragUpThePneumaticChannelSkeleton";
-
+    public MMF_Player HoverEffect;
     public DocumentError error= DocumentError.Stub;
     //public DocumentError error = DocumentError.NoPassStub;
     private SkeletonGraphic skeleton;
-    [SerializeField]
-    private Material mat;
 
+    private Material mat;
     public string targetType = "DocumentJudge";
+
+    
+
+
+
+
 
     // 标记当前是否有匹配的拖拽对象在目标上
     private bool isMatchedDraggingOver = false;
+
+
+
+
+
+
+
+
+
+
+
+    private bool isDirect = true;
+
+    public bool EnableScale = true;
+
+
+
+
+
+
+
+
 
     private void Awake()
     {
 
         skeleton = GetComponent<SkeletonGraphic>();
+       
         
     }
     void Start()
     {
      
+
+
+
+
+
      SlotCenter.Instance.add_listener(HeEventNames.EndDragEvent, OnRemotgeEndDrag);
     }
+    private void ChangeDirect()
+    {
+        isDirect ^= true;
+    }
+    public void ScaleAndRotateObj()
+    {
+        if (!EnableScale)
+        {
+            return;
+        }
+
+        if (isDirect)
+        {
+           
+        }
+        else
+        {
+            ChangeDirect();
+        }
+
+    }
+    public void RestoreScaleAndRotateObj()
+    {
+        if (!EnableScale)
+        {
+            return;
+        }
+        if (!isDirect)
+        {
+        }
+        else
+        {
+            ChangeDirect();
+        }
+    }
+
+
     /// <summary>
     /// 拖拽对象进入目标区域时触发（仅拖拽状态下）
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
+
+
+       
+        ScaleAndRotateObj();
         if (eventData.pointerDrag == null)
             return;
 
@@ -67,7 +141,10 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
 
     private void SetHighLight()
     {
-
+        if (mat == null)
+        {
+            return;
+        }
 
         if (mat.HasProperty("_EnableHighLight "))
         {
@@ -80,7 +157,10 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
     }
     private void UnSetHighLight()
     {
-
+        if(mat == null)
+        {
+            return; 
+        }
         if (mat.HasProperty("_EnableHighLight "))
         {
             mat.SetFloat("_EnableHighLight", 0f);
@@ -95,7 +175,8 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
-      
+
+        RestoreScaleAndRotateObj();
         Debug.Log("Pointer exited the target area.");
         if (isMatchedDraggingOver)
         {
