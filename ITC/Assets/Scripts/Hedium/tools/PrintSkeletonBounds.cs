@@ -3,21 +3,25 @@ using System.Linq;
 using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class PrintSkeletonBounds : MonoBehaviour
 {
-    public SkeletonGraphic skeletonGraphic;
+    public SkeletonGraphic sk;
     public Image image;
     public RectTransform rectTrans;
-    public Canvas canvas;
+
+
     [ContextMenu("Print Skeleton Bounds")]
     void PrintBounds()
     {
 
 
-
-        if ((skeletonGraphic == null || skeletonGraphic.Skeleton == null)
+       
+        if ((sk == null || sk.Skeleton == null)
             &&
             (image == null || image.sprite == null)
+            &&
+            (rectTrans == null)
             )
         {
             Debug.LogError("请确保已初始化或者类型正确与否！");
@@ -51,15 +55,30 @@ public class PrintSkeletonBounds : MonoBehaviour
 
 
         }
-        else
+        else if (sk != null && sk.Skeleton != null)
         {
-            var skeleton = skeletonGraphic.Skeleton;
+            var skeleton = sk.Skeleton;
 
             float x, y, width, height;
             float[] vertexBuffer = null; // 先给 null，Spine 内部会处理
             skeleton.GetBounds(out x, out y, out width, out height, ref vertexBuffer);
 
             Debug.Log($"Skeleton Bounds: MinX={x}, MinY={y}, Width={width}, Height={height}, MaxX={x + width}, MaxY={y + height}");
+
+        }
+        else if (rectTrans != null)
+        {
+
+            Vector3[] worldCorners = new Vector3[4];
+            rectTrans.GetWorldCorners(worldCorners);
+
+
+            Debug.Log($"Skeleton TransformPosition Corner: ");
+
+            foreach (var i in worldCorners)
+            {
+                print($"{i},");
+            }
         }
 
 
