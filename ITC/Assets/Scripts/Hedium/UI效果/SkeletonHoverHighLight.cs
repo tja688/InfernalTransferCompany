@@ -28,8 +28,15 @@ public class SkeletonHoverHighLight : MonoBehaviour,
 
 
     public MMF_Player HoverEffect;
+    public MMF_Player HoverEffectRestore;
     private bool isDirect = true;
     public bool EnableScale = true;
+    public void DisableScale()
+    {
+        RestoreScaleAndRotateObj();
+        EnableScale = false;
+
+    }
     private void ChangeDirect()
     {
         HoverEffect.ChangeDirection();
@@ -48,7 +55,8 @@ public class SkeletonHoverHighLight : MonoBehaviour,
         }
         else
         {
-            ChangeDirect();
+            return;
+            //ChangeDirect();
         }
         HoverEffect?.PlayFeedbacks();
 
@@ -64,9 +72,10 @@ public class SkeletonHoverHighLight : MonoBehaviour,
         }
         else
         {
-            ChangeDirect();
+            return;
+            //ChangeDirect();
         }
-        HoverEffect?.PlayFeedbacks();
+        HoverEffectRestore?.PlayFeedbacks();
     }
 
 
@@ -101,6 +110,8 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     }
     public void UnSetHighLight()
     {
+
+        RestoreScaleAndRotateObj();
         if (mat == null)
         {
             return;
@@ -134,7 +145,6 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
-        RestoreScaleAndRotateObj();
         UnSetHighLight();
     }
 

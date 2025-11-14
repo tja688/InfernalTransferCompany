@@ -322,15 +322,15 @@ public class HeContractUIManager : MonoBehaviour
     private void OnCloseAnimationComplete(Spine.TrackEntry trackEntry)
     {
 
-        var entryAnimation = contractDocumentsImage.GetComponent<EntryAnimation>();
-        var track =  entryAnimation.PlayEntryAnimation();
-        track.OnComplete(OncontractDocumentsImagePlayEntryAnimationEnd);
+        contractDocumentsImage.GetComponent<EntryAnimation>();
+        //var track =  entryAnimation.PlayEntryAnimation();
+        //track.OnComplete(OncontractDocumentsImagePlayEntryAnimationEnd);
         
         
 
 
     }
-    private void OncontractDocumentsImagePlayEntryAnimationEnd()
+    public void OncontractDocumentsImagePlayEntryAnimationEnd()
     {
         //打开可拖拽
         var draggable = contractDocumentsImage.GetComponent<DraggableUI>();
