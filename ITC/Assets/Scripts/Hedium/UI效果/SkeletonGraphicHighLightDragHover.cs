@@ -74,7 +74,6 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
     }
     private void ChangeDirect()
     {
-        HoverEffect.ChangeDirection();
         isDirect ^= true;
     }
     public void ScaleAndRotateObj()
@@ -92,7 +91,6 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
         {
             ChangeDirect();
         }
-        HoverEffect?.PlayFeedbacks();
 
     }
     public void RestoreScaleAndRotateObj()
@@ -108,7 +106,6 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
         {
             ChangeDirect();
         }
-        HoverEffect?.PlayFeedbacks();
     }
 
 

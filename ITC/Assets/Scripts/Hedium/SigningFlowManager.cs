@@ -118,13 +118,40 @@ public class DocumentVerifier : IContractStage
         context.documentVerified = true;
         completed = true;
     }
+
+
+    private void pneumaticAuxiliaryHook()
+    {
+
+
+        uiManager.OnOpenPneumaticChannelClick();
+        uiManager.pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>().EnableScale = false;
+    }
     public void initRes()
     {
+
+
+
+
+
+
+
+
+
+        uiManager.pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>().EnableScale = true;
+        Debug.Log("初始化气动辅助钩按钮事件");
         Button button = uiManager.pneumaticChannelSkeleton.GetComponent<Button>();
         button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(uiManager.OnOpenPneumaticChannelClick);
+        button.onClick.AddListener(
+           pneumaticAuxiliaryHook
+            );
 
         button.interactable = true;
+
+
+
+
+
         SlotCenter.Instance.add_listener<DocumentError>(HeEventNames.DocumentErrorChosen, DocumentJudgeProsses,true);
         var Hover = uiManager.pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>();
 
