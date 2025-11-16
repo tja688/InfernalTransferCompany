@@ -1,22 +1,30 @@
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(PanelTransitionFilter))]
 public class PanelTransitionFilterEditor : Editor
 {
+    private const int kMaxMaskOptionCount = 31;
+
     private SerializedProperty _panelLibraryProp;
-    private SerializedProperty _currentPanelProp;
-    private SerializedProperty _targetPanelProp;
+    private SerializedProperty _currentPanelSelectionsProp;
+    private SerializedProperty _targetPanelSelectionsProp;
+    private SerializedProperty _legacyCurrentPanelProp;
+    private SerializedProperty _legacyTargetPanelProp;
     private SerializedProperty _panelChangedEventProp;
     private SerializedProperty _onMatchSuccessProp;
     private string[] _panelOptions = new string[0];
+    private string[] _panelMaskOptions = new string[0];
 
     private void OnEnable()
     {
         _panelLibraryProp = serializedObject.FindProperty("_panelLibrary");
-        _currentPanelProp = serializedObject.FindProperty("_currentPanel");
-        _targetPanelProp = serializedObject.FindProperty("_targetPanel");
+        _currentPanelSelectionsProp = serializedObject.FindProperty("_currentPanelSelections");
+        _targetPanelSelectionsProp = serializedObject.FindProperty("_targetPanelSelections");
+        _legacyCurrentPanelProp = serializedObject.FindProperty("_legacyCurrentPanel");
+        _legacyTargetPanelProp = serializedObject.FindProperty("_legacyTargetPanel");
         _panelChangedEventProp = serializedObject.FindProperty("_panelChangedEvent");
         _onMatchSuccessProp = serializedObject.FindProperty("_onMatchSuccess");
         RefreshPanelOptions();
@@ -49,11 +57,8 @@ public class PanelTransitionFilterEditor : Editor
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("过滤配置", EditorStyles.boldLabel);
         
-        // 当前面板下拉选择
-        DrawPanelSelector(_currentPanelProp, "当前面板");
-        
-        // 目标变换面板下拉选择
-        DrawPanelSelector(_targetPanelProp, "目标变换面板");
+        DrawPanelMaskSelector(_currentPanelSelectionsProp, _legacyCurrentPanelProp, "允许的来源面板");
+        DrawPanelMaskSelector(_targetPanelSelectionsProp, _legacyTargetPanelProp, "允许的目标面板");
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("事件配置", EditorStyles.boldLabel);
@@ -90,19 +95,228 @@ public class PanelTransitionFilterEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 
-    private void DrawPanelSelector(SerializedProperty panelProp, string label)
+    private void DrawPanelMaskSelector(SerializedProperty selectionProp, SerializedProperty legacyProp, string label)
     {
-        int currentIndex = System.Array.IndexOf(_panelOptions, panelProp.stringValue);
-        if (currentIndex < 0) currentIndex = 0; // 默认为 "None"
+        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+        EditorGUILayout.LabelField(label, EditorStyles.boldLabel);
 
-        using (new EditorGUI.DisabledScope(_panelOptions.Length <= 1))
+        if (selectionProp == null)
         {
-            int newIndex = EditorGUILayout.Popup(label, currentIndex, _panelOptions);
-            if (newIndex != currentIndex)
+            EditorGUILayout.HelpBox("未找到序列化的面板集合字段。", MessageType.Error);
+            EditorGUILayout.EndVertical();
+            return;
+        }
+
+        if (legacyProp == null)
+        {
+            EditorGUILayout.HelpBox("未找到旧版本面板字段。", MessageType.Error);
+            EditorGUILayout.EndVertical();
+            return;
+        }
+
+        MigrateLegacySelection(selectionProp, legacyProp);
+
+        if (_panelMaskOptions.Length == 0)
+        {
+            EditorGUILayout.HelpBox("当前没有可用的面板选项，无法配置过滤。", MessageType.Info);
+            EditorGUILayout.EndVertical();
+            return;
+        }
+
+        using (new EditorGUI.DisabledScope(_panelMaskOptions.Length <= 0))
+        {
+            if (_panelMaskOptions.Length <= kMaxMaskOptionCount)
             {
-                panelProp.stringValue = _panelOptions[newIndex];
+                DrawMaskField(selectionProp);
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("面板数量超过 31，将使用逐条勾选模式。", MessageType.Warning);
+                DrawToggleList(selectionProp);
+            }
+
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("全选"))
+            {
+                SelectAll(selectionProp);
+            }
+            if (GUILayout.Button("清空（通配）"))
+            {
+                ClearSelection(selectionProp);
+            }
+            EditorGUILayout.EndHorizontal();
+
+            DrawSelectionSummary(selectionProp);
+            if (selectionProp.arraySize == 0)
+            {
+                EditorGUILayout.HelpBox("当前未选择任何面板，表示接受任意面板。", MessageType.None);
             }
         }
+
+        EditorGUILayout.EndVertical();
+    }
+
+    private void DrawMaskField(SerializedProperty selectionProp)
+    {
+        int currentMask = BuildMaskFromSelection(selectionProp);
+        EditorGUI.BeginChangeCheck();
+        int newMask = EditorGUILayout.MaskField("面板集合", currentMask, _panelMaskOptions);
+        if (EditorGUI.EndChangeCheck())
+        {
+            ApplyMaskToSelection(selectionProp, newMask);
+        }
+    }
+
+    private void DrawToggleList(SerializedProperty selectionProp)
+    {
+        var selected = BuildSelectedSet(selectionProp);
+        for (int i = 0; i < _panelMaskOptions.Length; i++)
+        {
+            string option = _panelMaskOptions[i];
+            bool isSelected = selected.Contains(option);
+            bool newValue = EditorGUILayout.ToggleLeft(option, isSelected);
+            if (newValue != isSelected)
+            {
+                if (newValue)
+                {
+                    AddPanel(selectionProp, option);
+                }
+                else
+                {
+                    RemovePanel(selectionProp, option);
+                }
+            }
+        }
+    }
+
+    private void DrawSelectionSummary(SerializedProperty selectionProp)
+    {
+        if (selectionProp.arraySize == 0)
+        {
+            return;
+        }
+
+        var summary = new System.Text.StringBuilder();
+        for (int i = 0; i < selectionProp.arraySize; i++)
+        {
+            if (i > 0) summary.Append("，");
+            summary.Append(selectionProp.GetArrayElementAtIndex(i).stringValue);
+        }
+
+        EditorGUILayout.HelpBox($"已选择：{summary}", MessageType.None);
+    }
+
+    private int BuildMaskFromSelection(SerializedProperty selectionProp)
+    {
+        int mask = 0;
+        for (int i = 0; i < selectionProp.arraySize; i++)
+        {
+            string panelName = selectionProp.GetArrayElementAtIndex(i).stringValue;
+            int optionIndex = System.Array.IndexOf(_panelMaskOptions, panelName);
+            if (optionIndex >= 0)
+            {
+                mask |= 1 << optionIndex;
+            }
+        }
+        return mask;
+    }
+
+    private void ApplyMaskToSelection(SerializedProperty selectionProp, int mask)
+    {
+        ClearSelection(selectionProp);
+
+        for (int i = 0; i < _panelMaskOptions.Length; i++)
+        {
+            bool isSet = (mask & (1 << i)) != 0;
+            if (isSet)
+            {
+                AddPanel(selectionProp, _panelMaskOptions[i]);
+            }
+        }
+    }
+
+    private void SelectAll(SerializedProperty selectionProp)
+    {
+        ClearSelection(selectionProp);
+        for (int i = 0; i < _panelMaskOptions.Length; i++)
+        {
+            AddPanel(selectionProp, _panelMaskOptions[i]);
+        }
+    }
+
+    private void ClearSelection(SerializedProperty selectionProp)
+    {
+        for (int i = selectionProp.arraySize - 1; i >= 0; i--)
+        {
+            selectionProp.DeleteArrayElementAtIndex(i);
+        }
+    }
+
+    private void AddPanel(SerializedProperty selectionProp, string panelName)
+    {
+        if (string.IsNullOrEmpty(panelName) || panelName == "None" || IsPanelSelected(selectionProp, panelName))
+        {
+            return;
+        }
+
+        int newIndex = selectionProp.arraySize;
+        selectionProp.arraySize++;
+        selectionProp.GetArrayElementAtIndex(newIndex).stringValue = panelName;
+    }
+
+    private void RemovePanel(SerializedProperty selectionProp, string panelName)
+    {
+        for (int i = selectionProp.arraySize - 1; i >= 0; i--)
+        {
+            var element = selectionProp.GetArrayElementAtIndex(i);
+            if (element.stringValue == panelName)
+            {
+                selectionProp.DeleteArrayElementAtIndex(i);
+            }
+        }
+    }
+
+    private bool IsPanelSelected(SerializedProperty selectionProp, string panelName)
+    {
+        for (int i = 0; i < selectionProp.arraySize; i++)
+        {
+            if (selectionProp.GetArrayElementAtIndex(i).stringValue == panelName)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private HashSet<string> BuildSelectedSet(SerializedProperty selectionProp)
+    {
+        var set = new HashSet<string>(System.StringComparer.Ordinal);
+        for (int i = 0; i < selectionProp.arraySize; i++)
+        {
+            var value = selectionProp.GetArrayElementAtIndex(i).stringValue;
+            if (!string.IsNullOrEmpty(value) && value != "None")
+            {
+                set.Add(value);
+            }
+        }
+        return set;
+    }
+
+    private void MigrateLegacySelection(SerializedProperty selectionProp, SerializedProperty legacyProp)
+    {
+        if (selectionProp.arraySize > 0)
+        {
+            return;
+        }
+
+        var legacyValue = legacyProp.stringValue;
+        if (string.IsNullOrEmpty(legacyValue) || legacyValue == "None")
+        {
+            return;
+        }
+
+        AddPanel(selectionProp, legacyValue);
+        legacyProp.stringValue = "None";
     }
 
     private void RefreshPanelOptions()
@@ -142,10 +356,12 @@ public class PanelTransitionFilterEditor : Editor
                 }
             }
             _panelOptions = optionsList.ToArray();
+            _panelMaskOptions = optionsList.FindAll(option => option != "None").ToArray();
         }
         else
         {
             _panelOptions = new string[] { "None" };
+            _panelMaskOptions = System.Array.Empty<string>();
         }
     }
 }
