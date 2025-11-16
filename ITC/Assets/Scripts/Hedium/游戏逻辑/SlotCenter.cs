@@ -10,8 +10,8 @@ public enum HeEventNamesOption
     DeliverDocumentEvent,
     EndDragEvent,
     DocumentErrorChosen,
-    EnableChooseRuneEvent,
-    ArrowFadeOutDelete,
+    //EnableChooseRuneEvent,
+    OnSpawnRuneArrowsEnd,
     OnChargingSth,
     ChosenStampType,
     LetStopTypeWriter,
@@ -24,8 +24,8 @@ public static class HeEventNames
     public const string DeliverDocumentEvent = "DeliverDocumentEvent";
     public const string EndDragEvent = "EndDragEvent";
     public const string DocumentErrorChosen = "DocumentErrorChosen";//DocumentError
-    public const string EnableChooseRuneEvent = "EnableChooseRuneEvent";
-    public const string ArrowFadeOutDelete = "ArrowFadeOutDelete";
+    //public const string EnableChooseRuneEvent = "EnableChooseRuneEvent";
+    public const string OnSpawnRuneArrowsEnd = "OnSpawnRuneArrowsEnd";
     public const string OnChargingSth = "OnChargingSth";//
     public const string ChosenStampType = "ChosenStampType";//StampType
     public const string LetStopTypeWriter = "LetStopTypeWriter";//
