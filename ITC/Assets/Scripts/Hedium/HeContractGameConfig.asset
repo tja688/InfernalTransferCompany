@@ -16,6 +16,10 @@ MonoBehaviour:
   maxFailCount: 3
   minSatisfaction: 1
   runeInputTimeLimit: 10
+  runeInputCountMaxLimit: 5
+  runeInputCountMinLimit: 5
+  runeShowTimeLimit: 5
+  runeGameTuneCount: 5
   maxRuneErrors: 3
   runeErrorSatisfactionThreshold: 2
   runeVerificationTime: 5
@@ -32,5 +36,3 @@ MonoBehaviour:
   eventQuickResponseTime: 2
   runeConfigs: []
   HeContractTypeConfigs: []
-  difficultyPreset: 1
-  applyDifficultyPreset: 0
