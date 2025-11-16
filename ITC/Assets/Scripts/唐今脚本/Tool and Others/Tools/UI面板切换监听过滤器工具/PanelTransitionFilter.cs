@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// 面板切换过滤器工具。
@@ -12,13 +14,21 @@ public class PanelTransitionFilter : MonoBehaviour, IGameEventListener<string>
     [SerializeField]
     private GamePanelLibrarySO _panelLibrary;
 
-    [Tooltip("当前面板名称（从下拉菜单选择）。")]
+    [Tooltip("允许匹配的当前面板集合（留空视为通配）。")]
     [SerializeField]
-    private string _currentPanel = "None";
+    private List<string> _currentPanelSelections = new List<string>();
 
-    [Tooltip("目标变换面板名称（从下拉菜单选择）。")]
+    [Tooltip("允许匹配的目标面板集合（留空视为通配）。")]
     [SerializeField]
-    private string _targetPanel = "None";
+    private List<string> _targetPanelSelections = new List<string>();
+
+    [FormerlySerializedAs("_currentPanel")]
+    [SerializeField, HideInInspector]
+    private string _legacyCurrentPanel = "None";
+
+    [FormerlySerializedAs("_targetPanel")]
+    [SerializeField, HideInInspector]
+    private string _legacyTargetPanel = "None";
 
     [Header("事件")]
     [Tooltip("监听的面板切换事件。")]
@@ -37,6 +47,7 @@ public class PanelTransitionFilter : MonoBehaviour, IGameEventListener<string>
 
     void Awake()
     {
+        EnsureSelectionListsInitialized();
         AutoFindPanelLibrary();
         
         // 初始化内部当前面板状态
@@ -52,6 +63,7 @@ public class PanelTransitionFilter : MonoBehaviour, IGameEventListener<string>
 
     void OnEnable()
     {
+        EnsureSelectionListsInitialized();
         // 注册面板切换事件
         if (_panelChangedEvent != null)
         {
@@ -96,18 +108,14 @@ public class PanelTransitionFilter : MonoBehaviour, IGameEventListener<string>
     /// </summary>
     private void HandlePanelChanged(string newPanelName)
     {
+        EnsureSelectionListsInitialized();
         // 更新内部维护的当前面板状态
         string previousPanel = _internalCurrentPanel;
         _internalCurrentPanel = newPanelName;
 
         // 检查是否匹配配置的转换
-        // "None" 或空字符串被视为通配符，匹配任何面板
-        bool matchesCurrentPanel = string.IsNullOrEmpty(_currentPanel) || 
-                                   _currentPanel == "None" ||
-                                   string.Equals(_currentPanel, previousPanel, System.StringComparison.Ordinal);
-        bool matchesTargetPanel = string.IsNullOrEmpty(_targetPanel) || 
-                                 _targetPanel == "None" ||
-                                 string.Equals(_targetPanel, newPanelName, System.StringComparison.Ordinal);
+        bool matchesCurrentPanel = MatchesPanelSelection(_currentPanelSelections, _legacyCurrentPanel, previousPanel);
+        bool matchesTargetPanel = MatchesPanelSelection(_targetPanelSelections, _legacyTargetPanel, newPanelName);
 
         // 如果匹配成功，触发事件
         if (matchesCurrentPanel && matchesTargetPanel)
@@ -148,6 +156,77 @@ public class PanelTransitionFilter : MonoBehaviour, IGameEventListener<string>
                     #endif
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// 判定指定面板名称是否匹配选择集合。
+    /// </summary>
+    private static bool MatchesPanelSelection(List<string> selections, string legacySinglePanel, string panelToCheck)
+    {
+        if (IsWildcardSelection(selections, legacySinglePanel))
+        {
+            return true;
+        }
+
+        if (selections != null)
+        {
+            for (int i = 0; i < selections.Count; i++)
+            {
+                var candidate = selections[i];
+                if (string.IsNullOrEmpty(candidate) || candidate == "None")
+                {
+                    continue;
+                }
+
+                if (string.Equals(candidate, panelToCheck, System.StringComparison.Ordinal))
+                {
+                    return true;
+                }
+            }
+        }
+
+        if (!string.IsNullOrEmpty(legacySinglePanel) && legacySinglePanel != "None")
+        {
+            return string.Equals(legacySinglePanel, panelToCheck, System.StringComparison.Ordinal);
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 判断当前选择是否表示通配。
+    /// </summary>
+    private static bool IsWildcardSelection(List<string> selections, string legacySinglePanel)
+    {
+        if (selections != null && selections.Count > 0)
+        {
+            for (int i = 0; i < selections.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(selections[i]) && selections[i] != "None")
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return string.IsNullOrEmpty(legacySinglePanel) || legacySinglePanel == "None";
+    }
+
+    /// <summary>
+    /// 确保序列化列表被初始化。
+    /// </summary>
+    private void EnsureSelectionListsInitialized()
+    {
+        if (_currentPanelSelections == null)
+        {
+            _currentPanelSelections = new List<string>();
+        }
+
+        if (_targetPanelSelections == null)
+        {
+            _targetPanelSelections = new List<string>();
         }
     }
 }
