@@ -38308,14 +38308,14 @@ Canvas:
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
-  m_OverrideSorting: 0
+  m_OverrideSorting: 1
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: -1596609345
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!212 &1850130591355151129
 SpriteRenderer:
@@ -42861,7 +42861,7 @@ PrefabInstance:
       objectReference: {fileID: 1806561334362864572}
     - target: {fileID: 1243267610864866983, guid: 1614e049ce7f093449163c9d79766943, type: 3}
       propertyPath: displaySettings.subtitleSettings.continueButton
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4445829322434996680, guid: 1614e049ce7f093449163c9d79766943, type: 3}
       propertyPath: m_parent
