@@ -383,6 +383,7 @@ public class RuneInputManager : IContractStage
         runeShowDuration = gameConfig.runeShowTimeLimit;
         ArrowMaxCount = gameConfig.runeInputCountMaxLimit;
         ArrowMinCount = gameConfig.runeInputCountMinLimit;
+        var targetTuneCount = gameConfig.runeGameTuneCount;
         Debug.Log("=== 开始符文输入阶段 ===");
        
   
@@ -390,8 +391,10 @@ public class RuneInputManager : IContractStage
 
         if (uiManager != null )
         {
-
+           uiManager.ArrowGroupGameObject.GetComponent<Rhythmgame>()
+                .SetHandle(  new RhythmgameHandle(targetTuneCount,ArrowMaxCount,ArrowMaxCount));
            SlotCenter.Instance.trigger_event(HeEventNames.LetStartTypeWriter);
+           SlotCenter.Instance.add_listener<HeSuccessLayer>(HeEventNames.OnRythmGameEnd,OnRythmGameEnd);
         }
         else
         {
@@ -412,39 +415,47 @@ public class RuneInputManager : IContractStage
         return;
 
     }
+    private  void ToEnd()
+    {
+        completed = true;
+
+
+    }
+    private void OnRythmGameEnd(HeSuccessLayer success)
+    {
+        switch (success)
+        {
+            case HeSuccessLayer.BigSuccess:
+                Debug.Log("游戏大成功!");
+                break;
+            case HeSuccessLayer.Success:
+                Debug.Log("游戏成功!");
+                break;
+            case HeSuccessLayer.Normal:
+                Debug.Log("游戏普通完成!");
+                break;
+            case HeSuccessLayer.Fail:
+                Debug.Log("游戏失败!");
+                break;
+            case HeSuccessLayer.BigFail:
+                Debug.Log("游戏大失败!");
+                break;
+            default:
+                Debug.Log("未知游戏结果!");
+                break;
+        }
+        return;
+    }
+    private void ProcessGameResult()
+    {
+
+    }
 
 
 
 
 
-
-  
-
- 
-  
-
-   
-
-
-    //private void OnChoseRune(int directIndex)
-    //{
-    //    if (enableChose == false) return;
-    //    enableChose = false;
-    //    Debug.Log($"玩家选择了符文方向: {directIndex}");
-  
-    //    ProcessRuneInput();
-
-
-    //    enableChose = true;
-
-
-    //}
-
-
-
-
-
-}
+    }
 #endregion
 /// <summary>
 /// 特殊事件系统
