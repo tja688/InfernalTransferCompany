@@ -1,23 +1,53 @@
-using QFramework;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
+public enum HeSuccessLayer {
+    BigSuccess,
+    Success,
+    Normal,
+    Fail,
+    BigFail,
+}
 
 
 public class Rhythmgame : MonoBehaviour
 {
 
-    public static float radius = 182f;
+   
+    public  RhythmgameHandle handle  { get; private set; }
+    public static float radius = 300f;
     public static float startAngle = 135f;
     public static float endAngle = 45f;
-    public static float fadeDuration = 1f;
-    public static float startDelay = 0f;
-    private bool enableInput= false;
-    public List<GameObject> spawnedItems = new List<GameObject>();
+
+
+
+
+
+
+
+
+
+
+    public int index = 0;
+    private bool enableInput = false;
+    private List<int> requiredRunes;
+    private List<int> inputRunes;
+
+
+
+
+
+
+
+    private List<GameObject> spawnedItems = new List<GameObject>();
+
+
+
+
+
+
+
     private static Dictionary<int, float> arrowKeyMap = new Dictionary<int, float>()
     {
         {0,0f},   // 上
@@ -27,8 +57,6 @@ public class Rhythmgame : MonoBehaviour
     };
 
 
-    private List<int> requiredRunes;
-    private List<int> inputRunes;
     private static Dictionary<int, KeyCode> runeKeyMap = new Dictionary<int, KeyCode>()
     {
         {0, KeyCode.W}, // 上
@@ -36,6 +64,30 @@ public class Rhythmgame : MonoBehaviour
         {2, KeyCode.A}, // 左
         {3, KeyCode.D}  // 右
     };
+    public void OnStartGame() {
+        EnableKeyInput();
+
+
+    }
+    public void ClearStates()
+    {
+        inputRunes =null;
+        requiredRunes = null;
+        index = 0;
+        return;
+    }
+    public void SetHandle(RhythmgameHandle handle1)
+    {
+        handle = handle1;
+        handle1.rhythGame = this;
+        return;
+    }
+    public void ClearHandle()
+    {
+        handle = null;
+        return;
+    }
+
 
     public GameObject ArrowGroupGamePrefab;
     private static Dictionary<int, String> runeStringMap = new Dictionary<int, String>()
@@ -49,6 +101,7 @@ public class Rhythmgame : MonoBehaviour
     private void Start()
     {
         HeKeyInput.Instance.OnMoveAction += ProcessRuneInput;
+        
 
     }
     private  void ArrangeInArc_A(List<int> list)
@@ -98,11 +151,8 @@ public class Rhythmgame : MonoBehaviour
     /// </summary>
     private void SpawnRuneArrows()
     {
-        ArrangeInArc_A(requiredRunes);
 
-
-
-
+        //ArrangeInArc_A(requiredRunes);
     }
 
     private void EnableKeyInput()
@@ -116,20 +166,63 @@ public class Rhythmgame : MonoBehaviour
 
     private void ProcessRuneInput(int directIndex)
     {
+        if (!enableInput)
+        {
+            return;
+        }
+        var targetCount  =  requiredRunes.Count;
+
+        var curIndex = inputRunes.Count;
+
+        if (curIndex >= targetCount)
+        {
+            Debug.LogError("当前输入数量已达上限，Unreachable");
+            return;
+        }
+        else
+        {
+            inputRunes.Add(directIndex);
+            if (inputRunes[curIndex] == requiredRunes[curIndex])
+            {
+                //处理单次成功
+                if(inputRunes.Count == requiredRunes.Count)
+                {
+                    ToSuccess();
+                }
+            }
+            else
+            {
+                ToFaild();
+
+
+
+
+
+            }
+        }
+    }
+    private void ToFaild()
+    {
+
+
+
 
 
     }
 
+    private void ToSuccess()
+    {
 
 
 
+    }
 
     private bool OneTuneRhythmGame()
     {
 
         SpawnRuneArrows();
 
-        SlotCenter.Instance.add_listener("OnSpawnRuneArrowsEnd", EnableKeyInput);
+        SlotCenter.Instance.add_listener("OnSpawnRuneArrowsEnd", OnStartGame);
 
 
 
@@ -138,7 +231,11 @@ public class Rhythmgame : MonoBehaviour
     }
     public bool playOneTuneRhythmGame(int maxArrowCount, int minArrowCount)
     {
-        var random = UnityEngine.Random.Range(maxArrowCount, minArrowCount);
+
+
+
+        ClearStates();
+        var random = UnityEngine.Random.Range(minArrowCount, maxArrowCount+1);
         GenerateRequiredRunes(random);
 
 
@@ -152,13 +249,15 @@ public class Rhythmgame : MonoBehaviour
 
     private void GenerateRequiredRunes(int count)
     {
-        requiredRunes = new List<int>();
-        for (int i = 0; i < requiredRunes.Count; i++)
+
+        requiredRunes = new List<int>(count);
+        for (int i = 0; i < count; i++)
         {
-            requiredRunes.Add(UnityEngine.Random.Range(0, count));
+            requiredRunes.Add(UnityEngine.Random.Range(0, 4));
         }
 
-        UnityEngine.Debug.Log($"需要输入符文序列: {string.Join(", ", requiredRunes)}");
+        var runeNames = requiredRunes.ConvertAll(r => runeStringMap[r]);
+        Debug.Log("生成符文箭头序列: " + string.Join(", ", runeNames)+$"长度: {requiredRunes.Count}");
     }
 
 }
@@ -172,7 +271,6 @@ public class RhythmgameHandle
         public int TuneCount { get; set; }
         public int MaxArrowCount { get; set; }
         public int MinArrowCount { get; set; }
-
         public Config(int tuneCount, int maxArrowCount, int minArrowCount)
         {
 
@@ -183,34 +281,50 @@ public class RhythmgameHandle
     public int TuneCount { get; set; }
     public int MaxArrowCount { get; set; }
     public int MinArrowCount { get; set; }
-    Rhythmgame handle;
+    public int TuneCountCurrent { get; set; }
+    HeSuccessLayer SuccessLayer = HeSuccessLayer.Normal;
+    public Rhythmgame rhythGame;
     public RhythmgameHandle(int tuneCount, int maxArrowCount, int minArrowCount)
     {
         SlotCenter.Instance.add_listener(HeEventNames.OnIsReadyTypeWriter, OnTypeWriterIsReady, true);
+
+
+
+        SlotCenter.Instance.add_listener("NextTuneRhygame", OnTypeWriterIsReady);
         TuneCount = tuneCount;
         MaxArrowCount = maxArrowCount;
         MinArrowCount = minArrowCount;
+        TuneCountCurrent = 0;
+
+
     }
 
+    ~RhythmgameHandle()
+    {
+        if (SlotCenter.Instance != null)
+        {
+            SlotCenter.Instance.remove_listener(HeEventNames.OnIsReadyTypeWriter, OnTypeWriterIsReady);
+            SlotCenter.Instance.remove_listener(HeEventNames.NextTuneRhygame, OnTypeWriterIsReady);
+        }
+        rhythGame?.ClearHandle();
 
+    }
     private void OnTypeWriterIsReady()
     {
-        for (int i = 0; i < TuneCount; i++)
+
+
+        if (TuneCountCurrent == TuneCount)
         {
-            if (!handle.playOneTuneRhythmGame(MaxArrowCount, MinArrowCount))
-            {
-                SlotCenter.Instance.trigger_event<bool>("OnEndRhythmgame", false);
+            SlotCenter.Instance.trigger_event<HeSuccessLayer>(HeEventNames.OnRythmGameEnd, HeSuccessLayer.Success);
 
-            }
 
-            SlotCenter.Instance.trigger_event<bool>("OnEndRhythmgame", true);
-
+            return;
         }
-
-
-
-
-
+        else if(TuneCountCurrent > TuneCount)
+        {
+            Debug.LogError("当前轮数大于总轮数");
+        }
+        var a=  rhythGame.playOneTuneRhythmGame(MaxArrowCount, MinArrowCount);
     }
 
 }

@@ -18,20 +18,48 @@ public enum HeEventNamesOption
     LetStartTypeWriter,
     OnIsReadyTypeWriter,
     OnTypeWriterEndType,
+    OnRythmGameEnd,
+    NextTuneRhygame,
+    LetContinueTypeWriter,
 }
 public static class HeEventNames
 {
     public const string DeliverDocumentEvent = "DeliverDocumentEvent";
     public const string EndDragEvent = "EndDragEvent";
-    public const string DocumentErrorChosen = "DocumentErrorChosen";//DocumentError
+    public const string DocumentErrorChosen = "DocumentErrorChosen";//enum DocumentError
     //public const string EnableChooseRuneEvent = "EnableChooseRuneEvent";
     public const string OnSpawnRuneArrowsEnd = "OnSpawnRuneArrowsEnd";
     public const string OnChargingSth = "OnChargingSth";//
-    public const string ChosenStampType = "ChosenStampType";//StampType
+    public const string ChosenStampType = "ChosenStampType";//enum StampType
+
+    public const string OnRythmGameEnd = "OnRythmGameEnd";//enum HeSuccessLayer
+    public const string NextTuneRhygame = "NextTuneRhygame";
+
+
+
+
+
+
+
+
+
+    public const string LetContinueTypeWriter = "LetContinueTypeWriter";//
     public const string LetStopTypeWriter = "LetStopTypeWriter";//
     public const string LetStartTypeWriter = "LetStartTypeWriter";//
     public const string OnIsReadyTypeWriter = "OnIsReadyTypeWriter";
     public const string OnTypeWriterEndType = "OnTypeWriterEndType";//
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 public class SlotCenter : MonoBehaviour
@@ -187,7 +215,10 @@ public class SlotCenter : MonoBehaviour
 
         // 复制列表，避免触发中修改列表导致循环异常
         var listCopy = new List<EventListenerInfo>(list);
-
+        if(listCopy.Count == 0)
+        {
+            Debug.Log($"无对应{name}事件");
+        }
         foreach (var info in listCopy)
         {
             try
@@ -236,7 +267,10 @@ public class SlotCenter : MonoBehaviour
         Debug.Log($"{name}事件触发,参数类型为:{param.GetType().Name}");
 
         var listCopy = new List<EventListenerInfo>(list);
-
+        if (listCopy.Count == 0)
+        {
+            Debug.Log($"无对应{name}事件");
+        }
         foreach (var info in listCopy)
         {
             try
