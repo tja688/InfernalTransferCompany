@@ -13,6 +13,8 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
     public AnimationReferenceAsset EndAnimation;
     public bool loop = true;
     public float loopPoint = 4.0333f;
+    public bool thisTurnIsNotBlock = false;
+
     private SkeletonGraphic skeletonGraphic;
     private void Awake()
     {
@@ -59,6 +61,7 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
         if (director != null && director.state == PlayState.Playing)
         {
             director.Pause();
+
         }
         else
         {

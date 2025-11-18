@@ -183,10 +183,13 @@ public class Rhythmgame : MonoBehaviour
 
     private void ProcessRuneInput(int directIndex)
     {
+
         if (!enableInput)
         {
             return;
         }
+
+       
         var targetCount  =  requiredRunes.Count;
 
         var curIndex = inputRunes.Count;
@@ -218,11 +221,12 @@ public class Rhythmgame : MonoBehaviour
     {
 
         var curIndex = inputRunes.Count-1;
-        var obj  = spawnedItems[curIndex];
 
     
         for (int i = curIndex; i < spawnedItems.Count; i++)
         {
+            var obj = spawnedItems[i];
+
             if (i == curIndex)
             {
                 var handle = obj.GetComponent<MMFPlayerHandleArrow>();
@@ -256,10 +260,11 @@ public class Rhythmgame : MonoBehaviour
     private void ToSuccess()
     {
         var curIndex = inputRunes.Count - 1;
+
         var obj = spawnedItems[curIndex];
 
         var handle = obj.GetComponent<MMFPlayerHandleArrow>();
-        Debug.Log($"第{curIndex}个key触发退出效果 ");
+        //Debug.Log($"第{curIndex}个key触发退出效果 ");
 
         handle.SuccessFade();
     }
@@ -339,11 +344,16 @@ public class RhythmgameHandle
 
     }
     Config config;
+    public int MaxFailCount = 3;
+
     public int TuneCount { get; set; }
     public int MaxArrowCount { get; set; }
     public int MinArrowCount { get; set; }
     public int TuneCountCurrent { get; set; }
-    HeSuccessLayer SuccessLayer = HeSuccessLayer.Normal;
+
+
+    private int FailCountCurrent;
+HeSuccessLayer SuccessLayer = HeSuccessLayer.Normal;
     public Rhythmgame rhythGame;
     public RhythmgameHandle(int tuneCount, int maxArrowCount, int minArrowCount)
     {
@@ -402,9 +412,15 @@ public class RhythmgameHandle
          
             case HeSuccessLayer.Fail:
                 // 处理 Success
+                FailCountCurrent++;
+                Debug.Log($"当前失败次数: {FailCountCurrent} / {MaxFailCount}");
+                if (FailCountCurrent==MaxFailCount)
                 SlotCenter.Instance.trigger_event<HeSuccessLayer>(HeEventNames.OnRythmGameEnd, HeSuccessLayer.Fail);
-                
+                      else
+                {
+                    OnTypeWriterIsReady();
 
+                }
 
                 break;
     
