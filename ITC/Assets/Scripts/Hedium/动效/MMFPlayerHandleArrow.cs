@@ -113,12 +113,15 @@ public class MMFPlayerHandleArrow : MonoBehaviour
 
     public void SuccessFade()
     {
+        StopBreath();
         PlayExit();
 
     }
 
     public void FaildFade()
     {
+        StopBreath();
+
         PlayFail();
     }
 }

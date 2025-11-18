@@ -6522,11 +6522,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7361969184711311431, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
       propertyPath: m_NormalizedViewPortRect.y
-      value: 0.000356853
+      value: 0.0003078878
       objectReference: {fileID: 0}
     - target: {fileID: 7361969184711311431, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 0.9992863
+      value: 0.9993842
       objectReference: {fileID: 0}
     - target: {fileID: 8568148058401762819, guid: e3d114076b6be0642b4df303c7bc5730, type: 3}
       propertyPath: m_Name
@@ -8080,6 +8080,7 @@ MonoBehaviour:
   EndAnimation: {fileID: 11400000, guid: fb0c51d86120158429410a2f43a35001, type: 2}
   loop: 1
   loopPoint: 4.0333
+  thisTurnIsNotBlock: 0
 --- !u!1 &2075403264
 GameObject:
   m_ObjectHideFlags: 0
@@ -10416,6 +10417,34 @@ PrefabInstance:
     - target: {fileID: 1898237394005733388, guid: bf5d70d198825574e807f3d1a4467def, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4595832275404767145, guid: bf5d70d198825574e807f3d1a4467def, type: 3}
+      propertyPath: managedReferences[283540271975628954].RelativePosition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4595832275404767145, guid: bf5d70d198825574e807f3d1a4467def, type: 3}
+      propertyPath: managedReferences[283540271975628954].DestinationPosition.y
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4595832275404767145, guid: bf5d70d198825574e807f3d1a4467def, type: 3}
+      propertyPath: managedReferences[283540271975628954].AnimatePositionDuration
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4595832275404767145, guid: bf5d70d198825574e807f3d1a4467def, type: 3}
+      propertyPath: managedReferences[283540271975628952].Curve.Curve.m_Curve.Array.data[1].time
+      value: 0.25250393
+      objectReference: {fileID: 0}
+    - target: {fileID: 4595832275404767145, guid: bf5d70d198825574e807f3d1a4467def, type: 3}
+      propertyPath: managedReferences[283540271975628952].Curve.Curve.m_Curve.Array.data[1].value
+      value: 0.62686807
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771712825601555760, guid: bf5d70d198825574e807f3d1a4467def, type: 3}
+      propertyPath: managedReferences[283540271975628964].Curve.Curve.m_Curve.Array.data[1].time
+      value: 0.25250393
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771712825601555760, guid: bf5d70d198825574e807f3d1a4467def, type: 3}
+      propertyPath: managedReferences[283540271975628964].Curve.Curve.m_Curve.Array.data[1].value
+      value: 0.62686807
       objectReference: {fileID: 0}
     - target: {fileID: 8112220498247392542, guid: bf5d70d198825574e807f3d1a4467def, type: 3}
       propertyPath: m_Name
