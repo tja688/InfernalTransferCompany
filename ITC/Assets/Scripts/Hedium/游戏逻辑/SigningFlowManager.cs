@@ -4,9 +4,43 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;   
+using UnityEngine.UI;
 
+public class DebugStage : IContractStage
+{
+    public bool IsCompleted => false;
 
+    public bool HasFailed => false;
+
+    public string StageName => "";
+
+    private void Updata()
+    {
+
+    }
+
+    private void Exit()
+    {
+    }
+    private void Enter()
+    {
+    }
+
+    public void Enter(HeContractContext ctx)
+    {
+    }
+
+    public void Update()
+    {
+    }
+
+    void IContractStage.Exit()
+    {
+        Exit();
+    }
+}
+
+   
 public static class HeCoroutineUtil
 {
     public static IEnumerator Run(System.Func<IEnumerator> coroutine)
@@ -430,12 +464,22 @@ public class RuneInputManager : IContractStage
                 break;
             case HeSuccessLayer.Success:
                 Debug.Log("游戏成功!");
+
+
+                ToEnd();
                 break;
             case HeSuccessLayer.Normal:
                 Debug.Log("游戏普通完成!");
+
+
+
+
                 break;
             case HeSuccessLayer.Fail:
                 Debug.Log("游戏失败!");
+
+
+
                 break;
             case HeSuccessLayer.BigFail:
                 Debug.Log("游戏大失败!");
@@ -681,7 +725,7 @@ public class StampSystem : IContractStage
         uiManager.InitRingPrefab();
         uiManager.InitStampToolTemp();
 
-        SlotCenter.Instance.add_listener<SuccessType>(HeEventNames.OnChargingSth, OnHandCharginSth);
+        SlotCenter.Instance.add_listener<HeSuccessLayer>(HeEventNames.OnChargingSth, OnHandCharginSth);
 
         InitHandleStampSelection();
 
@@ -748,27 +792,26 @@ public class StampSystem : IContractStage
     }
 
  
-    private void OnHandCharginSth(SuccessType type)
+    private void OnHandCharginSth(HeSuccessLayer type)
     {
     switch (type)
     {
-        // 这里可以根据 SuccessType 枚举的不同值进行处理
-        case SuccessType.BigSuccess:
+        case HeSuccessLayer.BigSuccess:
                 Debug.Log("盖章大成功!");
                 // 处理大成功
                 break;
-        case SuccessType.MediaSuccess:
-            // 处理中成功
+        case HeSuccessLayer.Normal:
+            // 处理占位符
             break;
-        case SuccessType.SmallSuccess:
+        case HeSuccessLayer.Success:
             Debug.Log("盖章成功!");
-                // 处理小成功
+                // 处理成功
                 break;
-        case SuccessType.Faild:
+        case HeSuccessLayer.Fail:
                 Debug.Log("盖章失败!");
                 // 处理失败
                 break;
-        case SuccessType.BigFailed:
+        case HeSuccessLayer.BigFail:
                 // 处理大失败
                 Debug.Log("盖章大失败!");
                 break;
@@ -1086,6 +1129,7 @@ public class SigningFlowManager : MonoBehaviour
     private void SetupStages()
     {
         stages = new Queue<IContractStage>(new IContractStage[] {
+            //new DebugStage(),
             //new DocumentVerifier(),
             new RuneInputManager(),
             new SpecialEventSystem(),

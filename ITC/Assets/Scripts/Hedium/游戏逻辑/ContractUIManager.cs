@@ -424,9 +424,9 @@ public class HeContractUIManager : MonoBehaviour
 
 
     }
-    public void OnTabChargeEnd(bool success, SuccessType type)
+    public void OnTabChargeEnd(bool success, HeSuccessLayer type)
     {
-        SlotCenter.Instance.trigger_event< SuccessType>(HeEventNames.OnChargingSth, type);   
+        SlotCenter.Instance.trigger_event<HeSuccessLayer>(HeEventNames.OnChargingSth, type);   
     }
    
 

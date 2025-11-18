@@ -8,13 +8,7 @@ using UnityEngine.EventSystems;
 
 using UnityEngine.UI;
 using static MoreMountains.Tools.ShaderController;
-public enum SuccessType { 
-    BigSuccess,
-    MediaSuccess,
-    SmallSuccess,
-    Faild,
-    BigFailed,
-}
+
 
 public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
     IPointerExitHandler
@@ -40,7 +34,7 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
     public float greenThresholdSuccessSmall = 0.8f;
 
     private Image ringImage; // 圆环图像
-    public delegate void OnJudgeResult(bool isSuccess, SuccessType type);
+    public delegate void OnJudgeResult(bool isSuccess, HeSuccessLayer type);
     public OnJudgeResult onJudgeResult;
 
     public bool lockOnce = false;
@@ -93,7 +87,7 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
             if (animationTime >= totalDuration)
             {
                 isAnimating = false;
-                JudgeResult(false, "超时（蓝色阶段结束）", SuccessType.Faild);
+                JudgeResult(false, "超时（蓝色阶段结束）", HeSuccessLayer.Fail);
                 return;
             }
 
@@ -167,7 +161,7 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
             // 检查当前动画阶段，判断结果
             if (animationTime >= totalDuration)
             {
-                JudgeResult(false, "超时（拖拽结束时已过蓝色阶段）",SuccessType.Faild);
+                JudgeResult(false, "超时（拖拽结束时已过蓝色阶段）", HeSuccessLayer.Fail);
             }
             else if (animationTime <= phase1Duration)
             {
@@ -175,21 +169,21 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
                 float t1 = animationTime / phase1Duration;
                 if (t1 >= greenThreshold)
                 {
-                    JudgeResult(true, "时机正确（接近绿色区域）", SuccessType.BigSuccess);
+                    JudgeResult(true, "时机正确（接近绿色区域）", HeSuccessLayer.BigSuccess);
                 }
                 else if (t1 >= greenThresholdSuccessSmall)
                 {
-                    JudgeResult(true, "时机较好（接近绿色区域）", SuccessType.SmallSuccess);
+                    JudgeResult(true, "时机较好（接近绿色区域）", HeSuccessLayer.Success);
                 }
                 else
                 {
-                    JudgeResult(false, "时机过早（未接近绿色区域）", SuccessType.Faild);
+                    JudgeResult(false, "时机过早（未接近绿色区域）", HeSuccessLayer.Fail);
                 }
             }
             else
             {
                 // 阶段2：已过绿色区域
-                JudgeResult(false, "时机过晚（已进入蓝色区域）", SuccessType.Faild);
+                JudgeResult(false, "时机过晚（已进入蓝色区域）", HeSuccessLayer.Fail);
             }
         }
     }
@@ -222,7 +216,7 @@ public class RingChangeColor : MonoBehaviour, IPointerEnterHandler,
     /// <summary>
     /// 判定结果并触发回调
     /// </summary>
-    private void JudgeResult(bool success, string reason,SuccessType type)
+    private void JudgeResult(bool success, string reason, HeSuccessLayer type)
     {
         isTriggered = true;
         // 视觉反馈

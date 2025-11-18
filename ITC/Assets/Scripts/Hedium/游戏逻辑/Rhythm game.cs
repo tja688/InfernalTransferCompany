@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,16 +17,17 @@ public class Rhythmgame : MonoBehaviour
 
    
     public  RhythmgameHandle handle  { get; private set; }
-    public static float radius = 300f;
+    public static float radius = 30f;
     public static float startAngle = 135f;
     public static float endAngle = 45f;
 
 
+    public static float burrDegree = 25f;
 
+    public static float scaleFactor = 0.1f;
 
-
-
-
+    // 每一轮间隔时间
+    public float TuneIntervalTime = 1f;
 
 
 
@@ -33,7 +35,6 @@ public class Rhythmgame : MonoBehaviour
     private bool enableInput = false;
     private List<int> requiredRunes;
     private List<int> inputRunes;
-
 
 
 
@@ -64,16 +65,18 @@ public class Rhythmgame : MonoBehaviour
         {2, KeyCode.A}, // 左
         {3, KeyCode.D}  // 右
     };
-    public void OnStartGame() {
-        EnableKeyInput();
-
-
-    }
+ 
     public void ClearStates()
     {
-        inputRunes =null;
-        requiredRunes = null;
+        inputRunes?.Clear();
+        requiredRunes?.Clear() ;
         index = 0;
+        foreach (var item in spawnedItems)
+        {
+            if (item != null)
+                Destroy(item);
+        }
+        spawnedItems.Clear();
         return;
     }
     public void SetHandle(RhythmgameHandle handle1)
@@ -87,7 +90,7 @@ public class Rhythmgame : MonoBehaviour
         handle = null;
         return;
     }
-
+    
 
     public GameObject ArrowGroupGamePrefab;
     private static Dictionary<int, String> runeStringMap = new Dictionary<int, String>()
@@ -104,14 +107,19 @@ public class Rhythmgame : MonoBehaviour
         
 
     }
+    private void EnterAnimationFlow(GameObject obj)
+    {
+        var handle= obj.GetComponent<MMFPlayerHandleArrow>();
+
+
+        handle.Play();
+    }
+
+
     private  void ArrangeInArc_A(List<int> list)
     {
         // 清除现有元素
-        foreach (var item in spawnedItems)
-        {
-            if (item != null)
-                Destroy(item);
-        }
+
         spawnedItems.Clear();
 
         var itemCount = list.Count;
@@ -124,6 +132,14 @@ public class Rhythmgame : MonoBehaviour
 
         for (int i = 0; i < itemCount; i++)
         {
+            // 计算对称缩放
+            float mid = (float)(itemCount-1) / 2;
+            float dis = Math.Abs(i - mid);
+            dis*= scaleFactor;
+            float targetScale = 1f - dis;
+
+
+
             // 计算位置角度
             float currentAngle = startAngle + (i * angleStep);
             float rad = currentAngle * Mathf.Deg2Rad;
@@ -138,12 +154,13 @@ public class Rhythmgame : MonoBehaviour
             RectTransform itemRect = item.GetComponent<RectTransform>();
             if (itemRect != null)
             {
-                itemRect.anchoredPosition = pos;
-                itemRect.localEulerAngles = new Vector3(0, 0, arrowKeyMap[list[i]]);
+                itemRect.localEulerAngles = new Vector3(0, 0, arrowKeyMap[list[i]]+UnityEngine.Random.Range(-burrDegree, burrDegree));
             }
+            var handle = item.GetComponent<MMFPlayerHandleArrow>();
 
-
+            handle.SetEnterPosition( pos,Vector3.zero, targetScale);
             spawnedItems.Add(item);
+
         }
     }
     /// <summary>
@@ -152,7 +169,7 @@ public class Rhythmgame : MonoBehaviour
     private void SpawnRuneArrows()
     {
 
-        //ArrangeInArc_A(requiredRunes);
+        ArrangeInArc_A(requiredRunes);
     }
 
     private void EnableKeyInput()
@@ -184,57 +201,103 @@ public class Rhythmgame : MonoBehaviour
             inputRunes.Add(directIndex);
             if (inputRunes[curIndex] == requiredRunes[curIndex])
             {
-                //处理单次成功
-                if(inputRunes.Count == requiredRunes.Count)
+                ToSuccess();
+
+                if (inputRunes.Count == requiredRunes.Count)
                 {
-                    ToSuccess();
+                    OnceGameEnd(HeSuccessLayer.Normal);
                 }
             }
             else
             {
                 ToFaild();
-
-
-
-
-
             }
         }
     }
     private void ToFaild()
     {
 
+        var curIndex = inputRunes.Count-1;
+        var obj  = spawnedItems[curIndex];
 
-
+    
+        for (int i = curIndex; i < spawnedItems.Count; i++)
+        {
+            if (i == curIndex)
+            {
+                var handle = obj.GetComponent<MMFPlayerHandleArrow>();
+                handle.FaildFade();
+            }
+            else
+            {
+                var handle = obj.GetComponent<MMFPlayerHandleArrow>();
+                handle.SuccessFade();
+            }
+        }
+        OnceGameEnd(HeSuccessLayer.Fail);
 
 
     }
+    private void OnceGameEnd(HeSuccessLayer type)
+    {
+        DisableKeyInput();
 
+        StartCoroutine(HeCoroutineUtil.Run(() => {
+            return Inner();
+            System.Collections.IEnumerator Inner()
+            {
+                yield return new WaitForSeconds(TuneIntervalTime);
+                handle.GameScheduling(type);
+            }
+        }));
+
+
+    }
     private void ToSuccess()
     {
+        var curIndex = inputRunes.Count - 1;
+        var obj = spawnedItems[curIndex];
 
+        var handle = obj.GetComponent<MMFPlayerHandleArrow>();
+        Debug.Log($"第{curIndex}个key触发退出效果 ");
 
-
+        handle.SuccessFade();
     }
 
     private bool OneTuneRhythmGame()
     {
 
         SpawnRuneArrows();
+        
+        Debug.Log($"debug:{spawnedItems.Count} " );
+        foreach (var item in spawnedItems)
+        {
+            EnterAnimationFlow(item);
+        }
 
-        SlotCenter.Instance.add_listener("OnSpawnRuneArrowsEnd", OnStartGame);
+
+
+        SlotCenter.Instance.add_listener("OnSpawnRuneArrowsEnd", EnableKeyInput,true);
 
 
 
         return true;
 
     }
-    public bool playOneTuneRhythmGame(int maxArrowCount, int minArrowCount)
+
+    /// <summary>
+    /// 初始化一场游戏并且开始
+    /// </summary>
+    /// <param name="MaxArrowCount"></param>
+    /// <param name="MinArrowCount"></param>
+    /// <returns></returns>
+    public void playOneTuneRhythmGame(int maxArrowCount, int minArrowCount)
     {
 
 
-
         ClearStates();
+        requiredRunes ??= new List<int>();
+        inputRunes ??= new List<int>();
         var random = UnityEngine.Random.Range(minArrowCount, maxArrowCount+1);
         GenerateRequiredRunes(random);
 
@@ -243,14 +306,12 @@ public class Rhythmgame : MonoBehaviour
 
 
 
-        requiredRunes = null;
-        return true;
     }
 
     private void GenerateRequiredRunes(int count)
     {
 
-        requiredRunes = new List<int>(count);
+        
         for (int i = 0; i < count; i++)
         {
             requiredRunes.Add(UnityEngine.Random.Range(0, 4));
@@ -309,22 +370,63 @@ public class RhythmgameHandle
         rhythGame?.ClearHandle();
 
     }
+    /// <summary>
+    /// 第一轮
+    /// </summary>
     private void OnTypeWriterIsReady()
     {
 
 
-        if (TuneCountCurrent == TuneCount)
-        {
-            SlotCenter.Instance.trigger_event<HeSuccessLayer>(HeEventNames.OnRythmGameEnd, HeSuccessLayer.Success);
-
-
-            return;
-        }
-        else if(TuneCountCurrent > TuneCount)
+     
+        if(TuneCountCurrent > TuneCount)
         {
             Debug.LogError("当前轮数大于总轮数");
         }
-        var a=  rhythGame.playOneTuneRhythmGame(MaxArrowCount, MinArrowCount);
+        else
+        if (rhythGame == null)
+        {
+            Debug.LogError("句柄未绑定游戏实例");
+        }
+        else
+        {
+            Debug.Log($"第 {TuneCountCurrent + 1} 轮游戏开始");
+            rhythGame.playOneTuneRhythmGame(MaxArrowCount, MinArrowCount);
+        }
+       
     }
+
+    public void GameScheduling(HeSuccessLayer type)
+    {
+        switch (type)
+        {
+         
+            case HeSuccessLayer.Fail:
+                // 处理 Success
+                SlotCenter.Instance.trigger_event<HeSuccessLayer>(HeEventNames.OnRythmGameEnd, HeSuccessLayer.Fail);
+                
+
+
+                break;
+    
+            case HeSuccessLayer.Normal:
+                TuneCountCurrent++;
+                if(TuneCountCurrent == TuneCount)
+                {
+                    SlotCenter.Instance.trigger_event<HeSuccessLayer>(HeEventNames.OnRythmGameEnd, HeSuccessLayer.Success);
+                }
+                else
+                {
+                    OnTypeWriterIsReady();
+                }
+
+
+                    break;
+            default:
+                // 处理未知类型
+                Debug.LogError("奇怪的游戏结果枚举: " + type);
+                break;
+        }
+    }
+
 
 }

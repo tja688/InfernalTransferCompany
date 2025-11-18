@@ -31,7 +31,7 @@ Shader "Custom/UI/ShaderSkeletonEdgeLight"
 		[HDR]_OutlineColor_1 ("Outline Color_1", Color) = (1,1,1,1)
 		_GlowSpeed ("Glow Speed", Range(0,10)) = 2
 		_OutLineWidth ("Outline Width", Range(0,25)) = 1
-		_Overall_Alpha ("_Overall_Alpha", float) = 1
+		_Overall_Alpha ("_Overall_Alpha", Range(0,1)) = 1
 		_OutlineMinAlpha ("Outline Min Alpha", Range(0,0.5)) = 0.1
         _OutlineMaxAlpha ("Outline Max Alpha", Range(0,2)) = 0.3
 		[Toggle] _EnableHighLight ("Enable HighLight", float) = 1
@@ -130,10 +130,7 @@ Shader "Custom/UI/ShaderSkeletonEdgeLight"
 			{
 			float4 col = tex2D(_MainTex, IN.texcoord);
 
-						#if defined(_STRAIGHT_ALPHA_INPUT)
-						col.rgb *= texColor.a;
-						#endif
-				 col = (col + _TextureSampleAdd) * IN.color;
+		
 			if (_EnableHighLight)
 			{
 			float Alpha = col.a;
@@ -158,7 +155,11 @@ Shader "Custom/UI/ShaderSkeletonEdgeLight"
 
 
 
-	
+				#if defined(_STRAIGHT_ALPHA_INPUT)
+						col.rgb *= texColor.a;
+						col.a = texColor.a;
+				#endif
+				 col = (col + _TextureSampleAdd) * IN.color;
    				 col *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
    				 #ifdef UNITY_UI_ALPHACLIP
   					  clip(col.a - 0.001);
