@@ -159,6 +159,7 @@ public class Rhythmgame : MonoBehaviour
             var handle = item.GetComponent<MMFPlayerHandleArrow>();
 
             handle.SetEnterPosition( pos,Vector3.zero, targetScale);
+            item.SetActive(true);
             spawnedItems.Add(item);
 
         }
@@ -267,6 +268,8 @@ public class Rhythmgame : MonoBehaviour
         //Debug.Log($"第{curIndex}个key触发退出效果 ");
 
         handle.SuccessFade();
+        SlotCenter.Instance.trigger_event(HeEventNames.LetContinueTypeWriter);
+
     }
 
     private bool OneTuneRhythmGame()
@@ -304,6 +307,7 @@ public class Rhythmgame : MonoBehaviour
         requiredRunes ??= new List<int>();
         inputRunes ??= new List<int>();
         var random = UnityEngine.Random.Range(minArrowCount, maxArrowCount+1);
+        Debug.Log($"本轮符文箭头数量: {random}，最小箭头数量:{minArrowCount},最大:{maxArrowCount}");
         GenerateRequiredRunes(random);
 
 
@@ -355,8 +359,13 @@ public class RhythmgameHandle
     private int FailCountCurrent;
 HeSuccessLayer SuccessLayer = HeSuccessLayer.Normal;
     public Rhythmgame rhythGame;
-    public RhythmgameHandle(int tuneCount, int maxArrowCount, int minArrowCount)
+    public RhythmgameHandle(int tuneCount, int minArrowCount, int maxArrowCount)
     {
+        if (maxArrowCount < minArrowCount)
+        {
+            Debug.LogError("最大箭头数量小于最小箭头数量，参数错误");
+        }
+        Debug.Log($"RhythmgameHandle创建 参数:tuneCount:{tuneCount},maxArrowCount:{maxArrowCount},minArrowCount{minArrowCount}");
         SlotCenter.Instance.add_listener(HeEventNames.OnIsReadyTypeWriter, OnTypeWriterIsReady, true);
 
 
@@ -415,9 +424,17 @@ HeSuccessLayer SuccessLayer = HeSuccessLayer.Normal;
                 FailCountCurrent++;
                 Debug.Log($"当前失败次数: {FailCountCurrent} / {MaxFailCount}");
                 if (FailCountCurrent==MaxFailCount)
-                SlotCenter.Instance.trigger_event<HeSuccessLayer>(HeEventNames.OnRythmGameEnd, HeSuccessLayer.Fail);
+               { 
+                    
+                    
+                    SlotCenter.Instance.trigger_event<HeSuccessLayer>(HeEventNames.OnRythmGameEnd, HeSuccessLayer.Fail); 
+                    SlotCenter.Instance.trigger_event(HeEventNames.LetStopTypeWriter);
+
+
+                }
                       else
                 {
+                    SlotCenter.Instance.trigger_event(HeEventNames.LetLineBreakTypeWriter);
                     OnTypeWriterIsReady();
 
                 }
@@ -429,10 +446,19 @@ HeSuccessLayer SuccessLayer = HeSuccessLayer.Normal;
                 if(TuneCountCurrent == TuneCount)
                 {
                     SlotCenter.Instance.trigger_event<HeSuccessLayer>(HeEventNames.OnRythmGameEnd, HeSuccessLayer.Success);
+                    SlotCenter.Instance.trigger_event(HeEventNames.LetStopTypeWriter);
+
+
+
+
+
                 }
                 else
                 {
                     OnTypeWriterIsReady();
+
+
+
                 }
 
 

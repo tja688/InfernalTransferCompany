@@ -36,7 +36,6 @@ Shader "Custom/UI/BloomImage"
 		[HDR]_OutlineColor_1 ("Outline Color_1", Color) = (1,1,1,1)
 		_Edge ("Edge", Range(0, 0.5)) = 0.1
 		_EdgeColor ("EdgeColor", Color) = (1, 1, 1, 1)
-		_MainTex ("MainTex", 2D) = "white" {}
 		_UVScale ("UVScale", Range(0, 30)) = 0.13
 		_Intensity ("Intensity", Range(0, 3)) = 1.86
 

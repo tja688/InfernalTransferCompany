@@ -14,8 +14,10 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
     public bool loop = true;
     public float loopPoint = 4.0333f;
     public bool thisTurnIsNotBlock = false;
-
+    public float LineBreakPoint = 5.133333f;
     private SkeletonGraphic skeletonGraphic;
+    public bool enablePause = true;
+    private bool disablePauseOnce = false;
     private void Awake()
     {
         skeletonGraphic = GetComponent<SkeletonGraphic>();
@@ -24,18 +26,36 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
     }
     private void Start()
     {
-        
+
         SlotCenter.Instance.add_listener(HeEventNames.LetStopTypeWriter, StopLoop);
         SlotCenter.Instance.add_listener(HeEventNames.LetStartTypeWriter, StartLoop);
         SlotCenter.Instance.add_listener(HeEventNames.LetContinueTypeWriter, ContinueLoop);
-        SlotCenter.Instance.add_listener(HeEventNames.LetContinueTypeWriter, PauseLoop);
+        SlotCenter.Instance.add_listener(HeEventNames.LetLineBreakTypeWriter, LineBreak);
 
 
     }
 
+    public void LineBreak()
+    {
 
+        if (loop)
+        {
+            //director.time = LineBreakPoint;
+
+
+
+
+            disablePauseOnce = true;
+
+
+
+
+            director.Play();
+        }
+    }
     public void OnPausePoint()
     {
+        if(enablePause&& !disablePauseOnce)
         PauseLoop();
     }
     private void OnTypeWriterEndType(TrackEntry entry)
@@ -49,7 +69,7 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
     }
     public void OnCycleEndSignal()
     {
-        
+        disablePauseOnce = false;
         if (loop)
         {
             director.time = loopPoint;  
