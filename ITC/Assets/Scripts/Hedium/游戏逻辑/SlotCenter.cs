@@ -21,6 +21,7 @@ public enum HeEventNamesOption
     OnRythmGameEnd,
     NextTuneRhygame,
     LetContinueTypeWriter,
+    LetLineBreakTypeWriter,
 }
 public static class HeEventNames
 {
@@ -42,13 +43,12 @@ public static class HeEventNames
 
 
 
-
+    public const string LetLineBreakTypeWriter = "LetLineBreakTypeWriter";//
     public const string LetContinueTypeWriter = "LetContinueTypeWriter";//
     public const string LetStopTypeWriter = "LetStopTypeWriter";//
     public const string LetStartTypeWriter = "LetStartTypeWriter";//
     public const string OnIsReadyTypeWriter = "OnIsReadyTypeWriter";
     public const string OnTypeWriterEndType = "OnTypeWriterEndType";//
-
 
 
 
