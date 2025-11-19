@@ -12,6 +12,9 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
     private PlayableDirector director;
     public AnimationReferenceAsset EndAnimation;
     public bool loop = true;
+    public float loopPoint = 4.0333f;
+    public bool thisTurnIsNotBlock = false;
+
     private SkeletonGraphic skeletonGraphic;
     private void Awake()
     {
@@ -24,6 +27,16 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
         
         SlotCenter.Instance.add_listener(HeEventNames.LetStopTypeWriter, StopLoop);
         SlotCenter.Instance.add_listener(HeEventNames.LetStartTypeWriter, StartLoop);
+        SlotCenter.Instance.add_listener(HeEventNames.LetContinueTypeWriter, ContinueLoop);
+        SlotCenter.Instance.add_listener(HeEventNames.LetContinueTypeWriter, PauseLoop);
+
+
+    }
+
+
+    public void OnPausePoint()
+    {
+        PauseLoop();
     }
     private void OnTypeWriterEndType(TrackEntry entry)
     {
@@ -39,11 +52,32 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
         
         if (loop)
         {
-            director.time = 5.9334;  
+            director.time = loopPoint;  
             director.Play();  
         }
     }
+    private void PauseLoop()
+    {
+        if (director != null && director.state == PlayState.Playing)
+        {
+            director.Pause();
 
+        }
+        else
+        {
+            Debug.LogWarning("PlayableDirector is null or not playing.");
+        }
+    }
+    /// <summary>
+    /// 暂停后继续播放下一个动画
+    /// </summary>
+    private void ContinueLoop()
+    {
+        if (director != null && director.state == PlayState.Paused&&loop)
+        {
+            director.Play();
+        }
+    }
     private void StopLoop()
     {
         if (director != null && director.state == PlayState.Playing)

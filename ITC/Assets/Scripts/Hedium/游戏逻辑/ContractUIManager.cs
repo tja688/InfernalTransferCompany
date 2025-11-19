@@ -21,11 +21,7 @@ public class HeContractUIManager : MonoBehaviour
 {
 
 
-    [Header("输入配置")]
-    [SerializeField]
-    private InputActionReference moveAction;
-    [SerializeField]
-    private InputActionReference interactAction;
+
 
 
 
@@ -94,8 +90,7 @@ public class HeContractUIManager : MonoBehaviour
 
 
 
-    public event System.Action<int> OnMoveAction;
-    public event System.Action OnInteractAction;
+
     private void Awake()
     {
 
@@ -429,9 +424,9 @@ public class HeContractUIManager : MonoBehaviour
 
 
     }
-    public void OnTabChargeEnd(bool success, SuccessType type)
+    public void OnTabChargeEnd(bool success, HeSuccessLayer type)
     {
-        SlotCenter.Instance.trigger_event< SuccessType>(HeEventNames.OnChargingSth, type);   
+        SlotCenter.Instance.trigger_event<HeSuccessLayer>(HeEventNames.OnChargingSth, type);   
     }
    
 
@@ -623,180 +618,9 @@ public class HeContractUIManager : MonoBehaviour
     }
 
 
-    private Dictionary<GameObject, Coroutine> fadeCoroutines = new Dictionary<GameObject, Coroutine>();
-    private float fadeOutDuration = 0.8f;
-    public void FadeOutArrow(GameObject spawnedArrows, float waitTime)
-    {
-        StartCoroutine(FadeOutArrowCoroutine(spawnedArrows, waitTime));
-        
-    }
-    public void ShakeArrow(GameObject spawnedArrows)
-    {
-        StartCoroutine(ShakeArrowCoroutine(spawnedArrows));
-    }
-    /// <summary>
-    /// 箭头碎裂淡出效果
-    /// </summary>
-    private System.Collections.IEnumerator FadeOutArrowCoroutine(GameObject arrow, float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime); // 等待一段时间后开始淡出
 
-        if (arrow == null) {
-            Debug.Log("FadeOutArrowCoroutine接收参数为null");
-            yield break; 
-        }
 
-        // 获取渲染组件
-        Renderer renderer = arrow.GetComponent<Renderer>();
-        CanvasGroup canvasGroup = arrow.GetComponent<CanvasGroup>();
 
-        float elapsedTime = 0f;
-        Vector3 originalScale = arrow.transform.localScale;
-
-        // 碎裂效果：先稍微放大然后缩小并分裂
-        while (elapsedTime < fadeOutDuration)
-        {
-            if (arrow == null) yield break;
-
-            float progress = elapsedTime / fadeOutDuration;
-
-            // 碎裂效果：随机偏移位置和旋转
-            Vector3 randomOffset = new Vector3(
-                UnityEngine.Random.Range(-0.1f, 0.1f) * progress,
-                UnityEngine.Random.Range(-0.1f, 0.1f) * progress,
-                0
-            );
-
-            arrow.transform.localPosition += randomOffset;
-            arrow.transform.localEulerAngles += new Vector3(0, 0, UnityEngine.Random.Range(-5f, 5f) * progress);
-
-            // 淡出和缩放
-            float scale = Mathf.Lerp(1f, 0f, progress);
-            arrow.transform.localScale = originalScale * scale;
-
-            // 透明度淡出
-            if (renderer != null)
-            {
-                Color color = renderer.material.color;
-                color.a = 1f - progress;
-                renderer.material.color = color;
-            }
-            else if (canvasGroup != null)
-            {
-                canvasGroup.alpha = 1f - progress;
-            }
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        // 最终销毁对象
-        if (arrow != null)
-        {
-            GameObject.Destroy(arrow);
-        }
-        SlotCenter.Instance.trigger_event(HeEventNames.ArrowFadeOutDelete);
-    }
-    /// <summary>
-    /// 输入错误时的箭头震动效果
-    /// </summary>
-    private System.Collections.IEnumerator ShakeArrowCoroutine(GameObject arrow)
-    {
-        if (arrow == null) yield break;
-
-        RectTransform rt = arrow.GetComponent<RectTransform>();
-        if (rt == null) yield break;
-
- 
-        Image arrowImage = arrow.GetComponent<Image>();
-        Color originalColor = Color.white; 
-        if (arrowImage != null)
-        {
-            originalColor = arrowImage.color;
-        
-            arrowImage.color = Color.red;
-        }
-
-        Vector2 originalAnchoredPosition = rt.anchoredPosition;
-        float shakeDuration = 0.3f;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < shakeDuration)
-        {
-            if (arrow == null) yield break;
-
-            float shakeAmount = 10f * (1f - elapsedTime / shakeDuration);
-            Vector2 shakeOffset = new Vector2(
-               UnityEngine.Random.Range(-shakeAmount, shakeAmount),
-               UnityEngine.Random.Range(-shakeAmount, shakeAmount)
-            );
-
-            rt.anchoredPosition = originalAnchoredPosition + shakeOffset;
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        if (arrow != null && rt != null)
-        {
-            rt.anchoredPosition = originalAnchoredPosition;
-        }
-
-        // 恢复原色
-        if (arrowImage != null)
-        {
-            arrowImage.color = originalColor;
-        }
-        yield return new WaitForSeconds(0.5f);
-        yield return StartCoroutine( FadeOutArrowCoroutine(arrow,0));
-    }
-    public void EnableMoveAction()
-    {
-        moveAction.action.performed += OnMovePerformed;
-        moveAction?.action.Enable();
-    }
-    public void DisableMoveAction()
-    {
-        moveAction.action.performed -= OnMovePerformed;
-        moveAction.action.Disable();
-    }
-
-    public void EnableInteractAction()
-    {
-        interactAction.action.canceled += OnInteractPerformed;
-        interactAction?.action.Enable();
-    }
-
-    public void DisableInteractAction()
-    {
-        interactAction.action.canceled -= OnInteractPerformed;
-        interactAction?.action.Disable();
-    }
-    private void OnMovePerformed(InputAction.CallbackContext context)
-    {
-        Vector2 moveInput = context.ReadValue<Vector2>();
-        string keyName = context.control.name.ToLower();
-
-        // 映射为索引（W=0, A=1, S=2, D=3）
-        var currentKeyIndex = keyName switch
-        {
-            "w" => 0,
-            "s" => 1,
-            "a" => 2,
-            "d" => 3,
-            _ => -1, // 其他按键不改变当前索引（如同时按多个键时保持优先）
-        };
-
-        Debug.Log($"移动输入（回调）：X={moveInput.x}, Y={moveInput.y},keyName={keyName},directIndex={currentKeyIndex}");
-        OnMoveAction?.Invoke(currentKeyIndex);
-    }
-
-    private void OnInteractPerformed(InputAction.CallbackContext context)
-    {
-        Debug.Log("交互按键按下（回调）");
-
-        OnInteractAction?.Invoke();
-    }
 
     #endregion
 }

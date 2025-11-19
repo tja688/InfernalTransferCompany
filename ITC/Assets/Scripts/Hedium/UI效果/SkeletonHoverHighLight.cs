@@ -29,37 +29,47 @@ public class SkeletonHoverHighLight : MonoBehaviour,
 
     public MMF_Player HoverEffect;
     public MMF_Player HoverEffectRestore;
-    private bool isDirect = true;
+    private bool isLastTimeDirect = false;
     public bool EnableScale = true;
+
+
+  
+
+
     public void DisableScale()
     {
         RestoreScaleAndRotateObj();
         EnableScale = false;
 
     }
-    private void ChangeDirect()
-    {
-        HoverEffect.ChangeDirection();
-        isDirect ^= true;
-    }
+
     public void ScaleAndRotateObj()
     {
         if (!EnableScale)
         {
             return;
         }
-
-        if (isDirect)
+        if (!isLastTimeDirect)
         {
+            isLastTimeDirect = true;
+            _playFeedBack();
+        }
+ 
 
-        }
-        else
-        {
-            return;
-            //ChangeDirect();
-        }
+    }
+
+
+    private void _playFeedBack()
+    {
+        
         HoverEffect?.PlayFeedbacks();
+        HoverEffectRestore?.StopFeedbacks(); 
 
+    }
+    private void _playRestoreFeedBack()
+    {
+        HoverEffect.StopFeedbacks(); 
+        HoverEffectRestore?.PlayFeedbacks();
     }
     public void RestoreScaleAndRotateObj()
     {
@@ -67,15 +77,11 @@ public class SkeletonHoverHighLight : MonoBehaviour,
         {
             return;
         }
-        if (!isDirect)
+        if (isLastTimeDirect)
         {
+            isLastTimeDirect = false;
+            _playRestoreFeedBack();
         }
-        else
-        {
-            return;
-            //ChangeDirect();
-        }
-        HoverEffectRestore?.PlayFeedbacks();
     }
 
 
@@ -145,6 +151,7 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
+        Debug.Log("OnPointerExit");
         UnSetHighLight();
     }
 
