@@ -197,14 +197,14 @@ public class StageManager : MonoBehaviour
 
         if (onComplete != null)
         {
-            playerInstance.Events.OnComplete.AddListener((p) => onComplete.Invoke());
+            playerInstance.Events.OnComplete.AddListener(() => onComplete.Invoke());
         }
 
         // Auto destroy after playing
         // MMF_Player doesn't have built-in auto-destroy on complete in the base settings easily accessible via code without modifying the prefab settings usually.
         // But we can destroy it manually after duration.
         // Or better, use the OnComplete event to destroy it.
-        playerInstance.Events.OnComplete.AddListener((p) => Destroy(playerInstance.gameObject));
+        playerInstance.Events.OnComplete.AddListener(() => Destroy(playerInstance.gameObject));
 
         playerInstance.PlayFeedbacks();
     }
@@ -239,8 +239,6 @@ public class StageManager : MonoBehaviour
                 "BoundGameObject"
             };
 
-            bool set = false;
-
             foreach (var propName in targetPropertyNames)
             {
                 var field = type.GetField(propName, flags);
@@ -249,17 +247,14 @@ public class StageManager : MonoBehaviour
                     if (field.FieldType == typeof(Transform))
                     {
                         field.SetValue(feedback, target);
-                        set = true;
                     }
                     else if (field.FieldType == typeof(GameObject))
                     {
                         field.SetValue(feedback, target.gameObject);
-                        set = true;
                     }
                     else if (field.FieldType == typeof(RectTransform) && target is RectTransform rt)
                     {
                         field.SetValue(feedback, rt);
-                        set = true;
                     }
                 }
 
@@ -269,17 +264,14 @@ public class StageManager : MonoBehaviour
                     if (prop.PropertyType == typeof(Transform))
                     {
                         prop.SetValue(feedback, target);
-                        set = true;
                     }
                     else if (prop.PropertyType == typeof(GameObject))
                     {
                         prop.SetValue(feedback, target.gameObject);
-                        set = true;
                     }
                     else if (prop.PropertyType == typeof(RectTransform) && target is RectTransform rt)
                     {
                         prop.SetValue(feedback, rt);
-                        set = true;
                     }
                 }
             }

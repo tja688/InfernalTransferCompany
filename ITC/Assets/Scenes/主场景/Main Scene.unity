@@ -40389,6 +40389,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1126602398883665540}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &5155930223151078679
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 285391435116116723, guid: 4eb7a628c46a0fc4b9253d120ed0d25a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.6791541
+      objectReference: {fileID: 0}
+    - target: {fileID: 285391435116116723, guid: 4eb7a628c46a0fc4b9253d120ed0d25a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.5765986
+      objectReference: {fileID: 0}
+    - target: {fileID: 285391435116116723, guid: 4eb7a628c46a0fc4b9253d120ed0d25a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.0359786
+      objectReference: {fileID: 0}
+    - target: {fileID: 285391435116116723, guid: 4eb7a628c46a0fc4b9253d120ed0d25a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 285391435116116723, guid: 4eb7a628c46a0fc4b9253d120ed0d25a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 285391435116116723, guid: 4eb7a628c46a0fc4b9253d120ed0d25a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 285391435116116723, guid: 4eb7a628c46a0fc4b9253d120ed0d25a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 285391435116116723, guid: 4eb7a628c46a0fc4b9253d120ed0d25a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 285391435116116723, guid: 4eb7a628c46a0fc4b9253d120ed0d25a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 285391435116116723, guid: 4eb7a628c46a0fc4b9253d120ed0d25a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061491980290646941, guid: 4eb7a628c46a0fc4b9253d120ed0d25a, type: 3}
+      propertyPath: m_Name
+      value: ITC Stage Manager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4eb7a628c46a0fc4b9253d120ed0d25a, type: 3}
 --- !u!1 &5157315898378226911
 GameObject:
   m_ObjectHideFlags: 0
@@ -43362,6 +43419,7 @@ SceneRoots:
   - {fileID: 2086310737}
   - {fileID: 971637118}
   - {fileID: 9009627620498036003}
+  - {fileID: 5155930223151078679}
   - {fileID: 5539606366288078915}
   - {fileID: 1582724114}
   - {fileID: 956931274}
