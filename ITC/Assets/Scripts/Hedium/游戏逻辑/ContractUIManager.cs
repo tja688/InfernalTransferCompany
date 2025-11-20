@@ -360,17 +360,17 @@ public class HeContractUIManager : MonoBehaviour
 
     public void EnableAllStamp()
     {
-        sphericalRunaSkeleton.GetComponent<SkeletonClick>().enableClick = true;
-        diamondRunaSkeleton.GetComponent<SkeletonClick>().enableClick = true;
-        triangularRunaSkeleton.GetComponent<SkeletonClick>().enableClick = true;
-        circularRunaSkeleton.GetComponent<SkeletonClick>().enableClick = true;
+        sphericalRunaSkeleton.GetComponent<SkeletonClick>().enableOnceClick = true;
+        diamondRunaSkeleton.GetComponent<SkeletonClick>().enableOnceClick = true;
+        triangularRunaSkeleton.GetComponent<SkeletonClick>().enableOnceClick = true;
+        circularRunaSkeleton.GetComponent<SkeletonClick>().enableOnceClick = true;
     }
     public void DisableAllStamp()
     {
-        sphericalRunaSkeleton.GetComponent<SkeletonClick>().enableClick = false;
-        diamondRunaSkeleton.GetComponent<SkeletonClick>().enableClick = false;
-        triangularRunaSkeleton.GetComponent<SkeletonClick>().enableClick = false;
-        circularRunaSkeleton.GetComponent<SkeletonClick>().enableClick = false;
+        sphericalRunaSkeleton.GetComponent<SkeletonClick>().enableOnceClick = false;
+        diamondRunaSkeleton.GetComponent<SkeletonClick>().enableOnceClick = false;
+        triangularRunaSkeleton.GetComponent<SkeletonClick>().enableOnceClick = false;
+        circularRunaSkeleton.GetComponent<SkeletonClick>().enableOnceClick = false;
     }
 
     /// <summary>
