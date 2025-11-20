@@ -159,20 +159,11 @@ public class DocumentVerifier : IContractStage
 
 
         uiManager.OnOpenPneumaticChannelClick();
-        uiManager.pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>().EnableScale = false;
+        uiManager.pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>().effectTurn.EnableAllEffect = false;
     }
     public void initRes()
     {
-
-
-
-
-
-
-
-
-
-        uiManager.pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>().EnableScale = true;
+        uiManager.pneumaticChannelSkeleton.GetComponent<SkeletonHoverHighLight>().effectTurn.EnableAllEffect = true;
         Debug.Log("初始化气动辅助钩按钮事件");
         Button button = uiManager.pneumaticChannelSkeleton.GetComponent<Button>();
         button.onClick.RemoveAllListeners();
@@ -1130,7 +1121,7 @@ public class SigningFlowManager : MonoBehaviour
     {
         stages = new Queue<IContractStage>(new IContractStage[] {
             //new DebugStage(),
-            //new DocumentVerifier(),
+            new DocumentVerifier(),
             new RuneInputManager(),
             new SpecialEventSystem(),
             new StampSystem(),

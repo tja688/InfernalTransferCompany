@@ -5,12 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using MoreMountains;
 using MoreMountains.Feedbacks;
+using System;
 [RequireComponent(typeof(Image))]
 public class EntryAnimation : MonoBehaviour
 {
     public MMF_Player Enter; 
     public MMF_Player Exit;
-    
+    public Action OnEntryComplete;
+    public Action OnExitComplete;
 
     private void Awake()
     {
@@ -30,6 +32,11 @@ public class EntryAnimation : MonoBehaviour
     public void PlayEntryAnimation()
     {
         Enter?.PlayFeedbacks();
+
+        Enter?.Events.OnComplete.AddListener(() =>
+        {
+            OnEntryComplete?.Invoke();
+        });
     }
 
     /// <summary>
@@ -38,5 +45,9 @@ public class EntryAnimation : MonoBehaviour
     public void PlayExitAnimation()
     {
         Exit?.PlayFeedbacks();
+        Exit?.Events.OnComplete.AddListener(() =>
+        {
+            OnExitComplete?.Invoke();
+        });
     }
 }

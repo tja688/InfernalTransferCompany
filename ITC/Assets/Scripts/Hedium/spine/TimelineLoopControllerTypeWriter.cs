@@ -17,7 +17,8 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
     public float LineBreakPoint = 5.133333f;
     private SkeletonGraphic skeletonGraphic;
     public bool enablePause = true;
-    private bool disablePauseOnce = false;
+
+    private uint disablePauseCount = 0;
     private void Awake()
     {
         skeletonGraphic = GetComponent<SkeletonGraphic>();
@@ -32,31 +33,15 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
         SlotCenter.Instance.add_listener(HeEventNames.LetContinueTypeWriter, ContinueLoop);
         SlotCenter.Instance.add_listener(HeEventNames.LetLineBreakTypeWriter, LineBreak);
 
-
-    }
-
-    public void LineBreak()
-    {
-
-        if (loop)
-        {
-            //director.time = LineBreakPoint;
-
-
-
-
-            disablePauseOnce = true;
-
-
-
-
-            director.Play();
-        }
     }
     public void OnPausePoint()
     {
-        if(enablePause&& !disablePauseOnce)
-        PauseLoop();
+        if (enablePause && disablePauseCount == 0)
+            PauseLoop();
+        if (disablePauseCount != 0)
+        {
+            disablePauseCount--;
+        }
     }
     private void OnTypeWriterEndType(TrackEntry entry)
     {
@@ -69,13 +54,37 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
     }
     public void OnCycleEndSignal()
     {
-        disablePauseOnce = false;
+        disablePauseCount = 0;
         if (loop)
         {
-            director.time = loopPoint;  
-            director.Play();  
+            director.time = loopPoint;
+            director.Play();
         }
     }
+    public void OnReadyForBreakLine()
+    {
+        SlotCenter.Instance.trigger_event(HeEventNames.OnReadyForBreakLine);
+
+    }
+    public void LineBreak()
+    {
+
+        if (loop)
+        {
+            //director.time = LineBreakPoint;
+
+
+
+
+            //disablePauseCount = 5;
+
+            if(director.time<LineBreakPoint )
+            director.time = LineBreakPoint;
+
+            director.Play();
+        }
+    }
+
     private void PauseLoop()
     {
         if (director != null && director.state == PlayState.Playing)
@@ -93,11 +102,18 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
     /// </summary>
     private void ContinueLoop()
     {
-        if (director != null && director.state == PlayState.Paused&&loop)
+        if (director != null && director.state == PlayState.Paused && loop)
         {
             director.Play();
         }
+        else if(director.state != PlayState.Paused)
+        {
+            disablePauseCount++;
+
+        }
+
     }
+ 
     private void StopLoop()
     {
         if (director != null && director.state == PlayState.Playing)
