@@ -91,7 +91,7 @@ public class MMFPlayerHandleArrow : MonoBehaviour
 
     public void Play()
     {
-
+        //Enter.Initialization();
         PlayEnter();
         
 
@@ -106,6 +106,9 @@ public class MMFPlayerHandleArrow : MonoBehaviour
     public void OnEnterCompeleted()
     {
         PlayBreath();
+        //Breath.Initialization();
+        //Fail.Initialization();
+        //Exit.Initialization();
         SlotCenter.Instance.trigger_event(HeEventNames.OnSpawnRuneArrowsEnd);
 
     }

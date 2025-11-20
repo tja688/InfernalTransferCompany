@@ -1,13 +1,11 @@
 using Spine.Unity;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using static Spine.AnimationState;
+using MoreMountains.Feedbacks;
 public class SkeletonClick : MonoBehaviour,
-    IPointerDownHandler
-    
+    IPointerDownHandler,
+    IPointerUpHandler
+
 {
     // Start is called before the first frame update 
     [SerializeField]
@@ -15,8 +13,13 @@ public class SkeletonClick : MonoBehaviour,
     [SerializeField]
     private string animationNameRelease;
     [SerializeField]
-    public bool enableClick=true;
+    public bool enableOnceClick=true;
+    [SerializeField]
+    public MMF_Player clickMMf;
 
+    [SerializeField]
+    public MMF_Player clickMMfRestore;
+    public bool IsStamp = true;
     StampType type;
 
 
@@ -28,43 +31,54 @@ public class SkeletonClick : MonoBehaviour,
             return;
             
         }
-        if (enableClick == false)
+        if (enableOnceClick == false)
         {
             return;
         }
-        //Debug.Log("animationNameClick");    
-        GetComponent<SkeletonGraphic>().AnimationState.SetAnimation(0, animationNameClick, false);
-        var track = GetComponent<SkeletonGraphic>().AnimationState.AddAnimation(0, animationNameRelease, false, 0);
 
 
-        enableClick = false;
+        if(IsStamp)
+       { //Debug.Log("animationNameClick");    
+            GetComponent<SkeletonGraphic>().AnimationState.SetAnimation(0, animationNameClick, false);
+            var track = GetComponent<SkeletonGraphic>().AnimationState.AddAnimation(0, animationNameRelease, false, 0);
+            track.Complete += OnAnimationComplete;
+
+        }
+        else
+        {
+            clickMMf.PlayFeedbacks();
+        }
+
+        enableOnceClick = false;
         isClicking = true;
 
-        track.Complete += OnAnimationComplete;
     }
 
  
 
     void OnAnimationComplete(Spine.TrackEntry trackEntry)
     {
+        if(IsStamp)
         SlotCenter.Instance.trigger_event<StampType>(HeEventNames.ChosenStampType, type);
     }
-    //void IPointerUpHandler.OnPointerUp(PointerEventData eventData)
-    //{
+    void IPointerUpHandler.OnPointerUp(PointerEventData eventData)
+    {
+        if(!IsStamp)
+        if (isClicking == true)
+        {
+            isClicking = false;
+            clickMMfRestore.PlayFeedbacks();
 
-    //    if (isClicking == true)
-    //    {
-    //        isClicking = false;
-    //    }
 
-    //    if(enableRelease)
-    //    if (eventData.button == PointerEventData.InputButton.Left)
-    //    {
-    //        enableRelease = false;
-    //            Debug.Log("animationNameRelease");
-    //            GetComponent<SkeletonGraphic>().AnimationState.SetAnimation(0, animationNameRelease, false);
-    //     }
-    //}
+
+
+            }
+            else
+        {
+            Debug.Log("Not Clicked");
+        }
+     
+    }
 
 
 

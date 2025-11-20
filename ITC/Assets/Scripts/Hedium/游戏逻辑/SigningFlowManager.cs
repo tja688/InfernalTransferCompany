@@ -426,7 +426,7 @@ public class RuneInputManager : IContractStage
         if (uiManager != null )
         {
            uiManager.ArrowGroupGameObject.GetComponent<Rhythmgame>()
-                .SetHandle(  new RhythmgameHandle(targetTuneCount,ArrowMaxCount,ArrowMaxCount));
+                .SetHandle(  new RhythmgameHandle(targetTuneCount,ArrowMinCount,ArrowMaxCount));
            SlotCenter.Instance.trigger_event(HeEventNames.LetStartTypeWriter);
            SlotCenter.Instance.add_listener<HeSuccessLayer>(HeEventNames.OnRythmGameEnd,OnRythmGameEnd);
         }
