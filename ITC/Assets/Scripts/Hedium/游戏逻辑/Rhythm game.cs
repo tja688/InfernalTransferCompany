@@ -22,7 +22,7 @@ public class Rhythmgame : MonoBehaviour
     public static float endAngle = 45f;
 
 
-    public static float burrDegree = 25f;
+    public static float burrDegree = 15f;
 
     public static float scaleFactor = 0.1f;
 
@@ -36,8 +36,8 @@ public class Rhythmgame : MonoBehaviour
     private List<int> requiredRunes;
     private List<int> inputRunes;
 
-
-
+    //不需要传递复杂成功判定，暂时不使用
+    private HeSuccessLayer successLayer = HeSuccessLayer.Normal;
 
 
 
@@ -69,7 +69,8 @@ public class Rhythmgame : MonoBehaviour
     public void ClearStates()
     {
         inputRunes?.Clear();
-        requiredRunes?.Clear() ;
+        requiredRunes?.Clear();
+        successLayer=HeSuccessLayer.Normal;
         index = 0;
         foreach (var item in spawnedItems)
         {
@@ -389,10 +390,19 @@ HeSuccessLayer SuccessLayer = HeSuccessLayer.Normal;
         rhythGame?.ClearHandle();
 
     }
+    private void OnTypeWriterIsReady()
+    {
+        if (rhythGame == null)
+        {
+            Debug.LogError("句柄未绑定游戏实例");
+        }
+        else
+            onReadyForBreakLine();
+    }
     /// <summary>
     /// 第一轮
     /// </summary>
-    private void OnTypeWriterIsReady()
+    private void NextTune()
     {
 
 
@@ -409,9 +419,15 @@ HeSuccessLayer SuccessLayer = HeSuccessLayer.Normal;
         else
         {
             Debug.Log($"第 {TuneCountCurrent + 1} 轮游戏开始");
-            rhythGame.playOneTuneRhythmGame(MaxArrowCount, MinArrowCount);
+            SlotCenter.Instance.add_listener(HeEventNames.OnReadyForBreakLine, onReadyForBreakLine, true);
         }
-       
+
+    }
+    private void onReadyForBreakLine()
+    {
+
+        rhythGame.playOneTuneRhythmGame(MaxArrowCount, MinArrowCount);
+
     }
 
     public void GameScheduling(HeSuccessLayer type)
@@ -435,7 +451,7 @@ HeSuccessLayer SuccessLayer = HeSuccessLayer.Normal;
                       else
                 {
                     SlotCenter.Instance.trigger_event(HeEventNames.LetLineBreakTypeWriter);
-                    OnTypeWriterIsReady();
+                    NextTune();
 
                 }
 
@@ -455,14 +471,15 @@ HeSuccessLayer SuccessLayer = HeSuccessLayer.Normal;
                 }
                 else
                 {
-                    OnTypeWriterIsReady();
+                    SlotCenter.Instance.trigger_event(HeEventNames.LetLineBreakTypeWriter);
+                    NextTune();
 
 
 
                 }
 
 
-                    break;
+                break;
             default:
                 // 处理未知类型
                 Debug.LogError("奇怪的游戏结果枚举: " + type);

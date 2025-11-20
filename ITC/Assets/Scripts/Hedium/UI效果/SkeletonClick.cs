@@ -46,7 +46,12 @@ public class SkeletonClick : MonoBehaviour,
         }
         else
         {
+            if(clickMMf)
             clickMMf.PlayFeedbacks();
+            else
+            {
+                Debug.LogWarning("clickMMf is not assigned!");
+            }
         }
 
         enableOnceClick = false;
@@ -67,7 +72,12 @@ public class SkeletonClick : MonoBehaviour,
         if (isClicking == true)
         {
             isClicking = false;
-            clickMMfRestore.PlayFeedbacks();
+                if (clickMMfRestore != null)
+                {
+                    clickMMf.StopFeedbacks();
+                    clickMMfRestore.PlayFeedbacks();
+
+                }
 
 
 

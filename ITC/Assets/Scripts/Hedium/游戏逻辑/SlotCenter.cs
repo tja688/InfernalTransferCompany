@@ -22,6 +22,8 @@ public enum HeEventNamesOption
     NextTuneRhygame,
     LetContinueTypeWriter,
     LetLineBreakTypeWriter,
+    OnReadyForBreakLine,
+    OnMatchedDraggingOver,
 }
 public static class HeEventNames
 {
@@ -35,6 +37,8 @@ public static class HeEventNames
 
     public const string OnRythmGameEnd = "OnRythmGameEnd";//enum HeSuccessLayer
     public const string NextTuneRhygame = "NextTuneRhygame";
+    public const string OnReadyForBreakLine = "OnReadyForBreakLine";
+    public const string OnMatchedDraggingOver = "OnMatchedDraggingOver";
 
 
 
