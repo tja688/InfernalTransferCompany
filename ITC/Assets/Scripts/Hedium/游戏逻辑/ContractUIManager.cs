@@ -317,11 +317,15 @@ public class HeContractUIManager : MonoBehaviour
     private void OnCloseAnimationComplete(Spine.TrackEntry trackEntry)
     {
 
-        contractDocumentsImage.GetComponent<EntryAnimation>();
+       var entrt =  contractDocumentsImage.GetComponent<EntryAnimation>();
+        entrt.PlayEntryAnimation();
+        entrt.OnEntryComplete+= OncontractDocumentsImagePlayEntryAnimationEnd;
+
+
         //var track =  entryAnimation.PlayEntryAnimation();
         //track.OnComplete(OncontractDocumentsImagePlayEntryAnimationEnd);
-        
-        
+
+
 
 
     }

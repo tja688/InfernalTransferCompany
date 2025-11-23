@@ -1,10 +1,11 @@
-﻿using QFramework;
+﻿using MoreMountains.Feedbacks;
+using QFramework;
 using Spine.Unity;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using MoreMountains.Feedbacks;
+using static EffectToolManager;
 /// <summary>
 /// 仅在拖拽时，且类型匹配才显示高亮的组件（挂载到目标对象，如打字机）
 /// </summary>
@@ -16,7 +17,14 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
 
 {
     public string eventName = "EndDragUpThePneumaticChannelSkeleton";
+    [SerializeField]
+
     public MMF_Player HoverEffect;
+    [SerializeField]
+
+    public MMF_Player HoverRestoreEffect;
+    
+
     public DocumentError error= DocumentError.Stub;
     //public DocumentError error = DocumentError.NoPassStub;
     private SkeletonGraphic skeleton;
@@ -33,7 +41,7 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
     // 标记当前是否有匹配的拖拽对象在目标上
     private bool isMatchedDraggingOver = false;
 
-
+    public EffectToolManager.EffectTurn effectTurn;
 
 
 
@@ -57,57 +65,15 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
 
     private void Awake()
     {
-
+        effectTurn= new EffectToolManager.EffectTurn(HoverEffect, HoverRestoreEffect);
         skeleton = GetComponent<SkeletonGraphic>();
        
         
     }
     void Start()
     {
-     
-
-
-
-
-
      SlotCenter.Instance.add_listener(HeEventNames.EndDragEvent, OnRemotgeEndDrag);
     }
-    private void ChangeDirect()
-    {
-        isDirect ^= true;
-    }
-    public void ScaleAndRotateObj()
-    {
-        if (!EnableScale)
-        {
-            return;
-        }
-
-        if (isDirect)
-        {
-           
-        }
-        else
-        {
-            ChangeDirect();
-        }
-
-    }
-    public void RestoreScaleAndRotateObj()
-    {
-        if (!EnableScale)
-        {
-            return;
-        }
-        if (!isDirect)
-        {
-        }
-        else
-        {
-            ChangeDirect();
-        }
-    }
-
 
     /// <summary>
     /// 拖拽对象进入目标区域时触发（仅拖拽状态下）
@@ -117,7 +83,6 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
 
 
        
-        ScaleAndRotateObj();
         if (eventData.pointerDrag == null)
             return;
 
@@ -129,7 +94,8 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
         if (draggable.targetType == targetType)
         {
             isMatchedDraggingOver = true;
-            SetHighLight();
+            SlotCenter.Instance.trigger_event(HeEventNames.OnMatchedDraggingOver);
+            SetEffect();
         }
         else
         {
@@ -139,26 +105,43 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
         }
     }
 
-    private void SetHighLight()
+    private void SetEffect()
     {
-        if (mat == null)
+        if (mat != null)
         {
+
+            Debug.Log("Setting highlight effect via Material.");
+
+            if (mat.HasProperty("_EnableHighLight "))
+            {
+                mat.SetFloat("_EnableHighLight", 1f);
+            }
+            else
+            {
+                Debug.LogWarning("_EnableHighLight property not found in material.");
+            }
+
+
+
             return;
         }
-
-        if (mat.HasProperty("_EnableHighLight "))
+        else if (HoverEffect!=null)
         {
-            mat.SetFloat("_EnableHighLight", 1f);
+
+            effectTurn.TurnOn();
+            Debug.Log("Setting highlight effect via HoverEffect.");
         }
         else
         {
-            Debug.LogWarning("_EnableHighLight property not found in material.");
+            Debug.LogWarning("Both material and HoverEffect are null. Cannot set highlight effect.");
         }
+      
     }
-    private void UnSetHighLight()
+    private void UnSetEffect()
     {
         if(mat == null)
         {
+            effectTurn.TurnOff();
             return; 
         }
         if (mat.HasProperty("_EnableHighLight "))
@@ -176,12 +159,11 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
     public void OnPointerExit(PointerEventData eventData)
     {
 
-        RestoreScaleAndRotateObj();
         Debug.Log("Pointer exited the target area.");
         if (isMatchedDraggingOver)
         {
             isMatchedDraggingOver = false;
-            UnSetHighLight();
+            UnSetEffect();
         }
         else
         {
@@ -198,7 +180,7 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
         if (isMatchedDraggingOver)
         {
             isMatchedDraggingOver = false;
-            UnSetHighLight();
+            UnSetEffect();
             SlotCenter.Instance.trigger_event<DocumentError>(eventName, error);
         }
         else

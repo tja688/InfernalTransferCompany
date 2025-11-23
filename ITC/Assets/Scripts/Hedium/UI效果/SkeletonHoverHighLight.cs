@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static EffectToolManager;
 /// </summary>
 [RequireComponent(typeof(SkeletonGraphic), typeof(RectTransform))]
 
@@ -29,65 +30,25 @@ public class SkeletonHoverHighLight : MonoBehaviour,
 
     public MMF_Player HoverEffect;
     public MMF_Player HoverEffectRestore;
-    private bool isLastTimeDirect = false;
-    public bool EnableScale = true;
-
+    public EffectToolManager.EffectTurn effectTurn;
 
   
 
 
-    public void DisableScale()
-    {
-        RestoreScaleAndRotateObj();
-        EnableScale = false;
-
-    }
-
-    public void ScaleAndRotateObj()
-    {
-        if (!EnableScale)
-        {
-            return;
-        }
-        if (!isLastTimeDirect)
-        {
-            isLastTimeDirect = true;
-            _playFeedBack();
-        }
- 
-
-    }
 
 
-    private void _playFeedBack()
-    {
-        
-        HoverEffect?.PlayFeedbacks();
-        HoverEffectRestore?.StopFeedbacks(); 
 
-    }
-    private void _playRestoreFeedBack()
-    {
-        HoverEffect.StopFeedbacks(); 
-        HoverEffectRestore?.PlayFeedbacks();
-    }
-    public void RestoreScaleAndRotateObj()
-    {
-        if (!EnableScale)
-        {
-            return;
-        }
-        if (isLastTimeDirect)
-        {
-            isLastTimeDirect = false;
-            _playRestoreFeedBack();
-        }
-    }
+
+   
 
 
     private void Awake()
     {
-
+        effectTurn = new EffectTurn
+        (HoverEffect,
+            HoverEffectRestore);
+          
+       
         skeleton = GetComponent<SkeletonGraphic>();
     }
     void Start()
@@ -117,7 +78,7 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     public void UnSetHighLight()
     {
 
-        RestoreScaleAndRotateObj();
+        effectTurn.TurnOff();
         if (mat == null)
         {
             return;
@@ -137,7 +98,7 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
-        ScaleAndRotateObj();
+        effectTurn.TurnOn();
         if (enableHighLightOnHover)
         {
             SetHighLight();

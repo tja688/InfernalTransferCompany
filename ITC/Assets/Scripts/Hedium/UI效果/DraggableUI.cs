@@ -1,4 +1,5 @@
-﻿using Spine.Unity;
+﻿using MoreMountains.Feedbacks;
+using Spine.Unity;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,22 +11,24 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 {
     [Tooltip("拖动时显示的临时预览")]
     public GameObject dragPreviewPrefab;
-
+    [NonSerialized]
     public bool isDraggable=false;
     private RectTransform _rectTransform; 
     private Canvas canvas;
     private GameObject dragPreview; // 拖动时的临时显示对象
     private bool isDragging = false;
-
+    [SerializeField]
+    MMF_Player MMFreset;
     private Vector2 dragOffset;
     public string targetType = "None";
     public string animationAName = "";
     public string animationBName = "";
-    private RectTransform rectTransform;
-  
+
+    private bool isMatchedDraggingOver=false;
+    public RectTransform rectTransform;
+
     void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>(); // 获取父级Canvas
     }
     void Start()
@@ -54,8 +57,9 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         if (dragPreviewPrefab != null)
         {
             dragPreview = Instantiate(dragPreviewPrefab, canvas.transform);
-            var previewRect = dragPreview.GetComponent<RectTransform>();
+            isMatchedDraggingOver = false;
 
+            var previewRect = dragPreview.GetComponent<RectTransform>();
             // 关键步骤2：预览对象的初始位置 = 鼠标位置 - 偏移量（确保点击点对齐）
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 canvas.GetComponent<RectTransform>(),
@@ -141,12 +145,25 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             skeleton.enabled = true;
         }
+
+
+
+        if (dragPreview != null)
         {
+            rectTransform.position = dragPreview.GetComponent<RectTransform>().position;
+            Debug.Log($"Set position to target transform Position{rectTransform.position}");
 
+
+            if (MMFreset != null&& !isMatchedDraggingOver)
+        {
+            MMFreset.PlayFeedbacks();
+            Debug.Log("Play reset feedback");
         }
-           
-       
-
+        else if(isMatchedDraggingOver)
+        {
+            GetComponent<EntryAnimation>().PlayExitAnimation();
+        }
+        }
         if (dragPreview != null)
         {
             Destroy(dragPreview);

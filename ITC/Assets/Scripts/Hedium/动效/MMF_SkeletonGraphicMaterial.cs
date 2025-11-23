@@ -32,8 +32,6 @@ namespace MoreMountains.Feedbacks
         [Tooltip("the material to apply")]
         public Material Material;
 
-        protected Material _initialMaterial;
-        protected bool _initialized = false;
 
         protected override void CustomInitialization(MMF_Player owner)
         {
@@ -46,7 +44,6 @@ namespace MoreMountains.Feedbacks
             }
 
             // 保存初始材质
-            _initialMaterial = TargetSkeletonGraphic.material;
             _initialized = true;
         }
 
@@ -70,7 +67,6 @@ namespace MoreMountains.Feedbacks
             // 确保已经初始化
             if (!_initialized)
             {
-                _initialMaterial = TargetSkeletonGraphic.material;
                 _initialized = true;
             }
 
@@ -90,7 +86,6 @@ namespace MoreMountains.Feedbacks
 
             if (TargetSkeletonGraphic != null && _initialized)
             {
-                TargetSkeletonGraphic.material = _initialMaterial;
                 TargetSkeletonGraphic.UpdateMesh();
             }
         }
@@ -104,8 +99,7 @@ namespace MoreMountains.Feedbacks
 
             if (TargetSkeletonGraphic != null && _initialized)
             {
-                TargetSkeletonGraphic.material = _initialMaterial;
-                TargetSkeletonGraphic.UpdateMesh();
+
             }
         }
     }
