@@ -168,7 +168,7 @@ public class DraggableUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         {
             Destroy(dragPreview);
         }
-        SlotCenter.Instance.trigger_event(HeEventNames.EndDragEvent);
+        SlotCenter.Instance.trigger_event(HeEventNames.EndDragEvent,eventData);
 
     }
 }

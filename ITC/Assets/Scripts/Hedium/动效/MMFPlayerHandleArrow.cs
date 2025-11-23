@@ -16,7 +16,8 @@ public class MMFPlayerHandleArrow : MonoBehaviour
     private MMF_Player Breath;
     [SerializeField]
     private MMF_Player Fail;
-
+    [SerializeField]
+    private MMF_Player ExitSlow;
 
 
 
@@ -27,7 +28,7 @@ public class MMFPlayerHandleArrow : MonoBehaviour
 
 
         Enter.GetFeedbackOfType<MMF_Scale>().RemapCurveOne = TargetScale;
-
+     
     }
     void PlayEnter()
     {
@@ -64,7 +65,26 @@ public class MMFPlayerHandleArrow : MonoBehaviour
 
 
     }
+    void PlayFadeSlowly()
+    {
+        if (ExitSlow)
+        {
+            var posFeedback = Exit.GetFeedbackOfType<MMF_Rotation>();
+            if (posFeedback != null)
+            {
+                if (UnityEngine.Random.value < 0.5f)
+                {
+                    posFeedback.RemapCurveOne *= -1;
+                }
+            }
+            ExitSlow.PlayFeedbacks();
+        }
+        else
+        {
+            Debug.LogError("No Exit Feedbacks assigned");
+        }
 
+    }
 
     void PlayFail()
     {
@@ -126,5 +146,12 @@ public class MMFPlayerHandleArrow : MonoBehaviour
         StopBreath();
 
         PlayFail();
+    }
+
+
+    public void FadeSlowly()
+    {
+        StopBreath();
+        PlayFadeSlowly();
     }
 }

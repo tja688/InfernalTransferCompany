@@ -47,6 +47,8 @@ public class HeContractUIManager : MonoBehaviour
 
     public GameObject pneumaticChannelSkeleton;   // 气动通道
     public GameObject copperRuneSelectorSkeleton; // 符文选择器
+    public GameObject ArrowGroupGameObject;
+    public GameObject ChargingGroupGameObject;
 
     // 可交互的骨骼UI（需绑定点击事件，结合Button组件）
     public GameObject leftBookSkeleton;           // 左书
@@ -57,11 +59,7 @@ public class HeContractUIManager : MonoBehaviour
     public Image contractDocumentsImage;  // 合同文档
     public Image arrowImage;              // 箭头提示
     public Image roleImage;
-    public GameObject ArrowGroupGameObject;
-    public GameObject RingTempPrefab;
-    public GameObject StampToolPrefab;
-    private GameObject _ringTempInstance;
-    private GameObject _stampToolInstance;
+
 
     [Header("=== 动画设置 ===")]
     public float panelTransitionTime = 0.5f;
@@ -72,7 +70,6 @@ public class HeContractUIManager : MonoBehaviour
     public bool useSkeletonGraphicForPneumatic = true;
     [Tooltip("当使用 Spine 动画时，估算的打开动画持续时间（秒）")]
     public float pneumaticOpenDuration = 2.0f;
-
 
     // 私有变量 
     private HeContractContext currentContext;
@@ -415,128 +412,6 @@ public class HeContractUIManager : MonoBehaviour
 
     #region 盖章UI
 
-    /// <summary>
-    /// 显示盖章界面
-    /// </summary>
-    public void ShowStampSelection(HeContractType requiredType)
-    {
-        SwitchPanel(UIState.StampSelection);
-    }
-
-    private void HighlightCorrectStamp(HeContractType correctType)
-    {
-
-
-    }
-    public void OnTabChargeEnd(bool success, HeSuccessLayer type)
-    {
-        SlotCenter.Instance.trigger_event<HeSuccessLayer>(HeEventNames.OnChargingSth, type);   
-    }
-   
-
-    public void InitRingPrefab()
-    {
-        if (RingTempPrefab == null)
-        {
-            Debug.LogError("InitRingPrefab: RingTempPrefab 未设置");
-            return;
-        }
-
-       
-
-        // 实例化预制体
-        _ringTempInstance = GameObject.Instantiate(RingTempPrefab, gameCanvas.transform);
-        RingChangeColor rg = _ringTempInstance.GetComponent<RingChangeColor>();
-        rg.onJudgeResult+= OnTabChargeEnd;
-        if (_ringTempInstance == null)
-        {
-            Debug.LogError("InitRingPrefab: 实例化失败");
-            return;
-        }
-
-        // 确保是 UI 元素时重置 RectTransform，否则设置为本地原点
-        RectTransform rt = _ringTempInstance.GetComponent<RectTransform>();
-        if (rt != null)
-        {
-            rt.SetAsLastSibling();
-            rt.localScale = Vector3.one;
-            rt.anchoredPosition = new Vector2(0, -192.5f);
-            rt.localRotation = Quaternion.identity;
-    
-        }
-    
-
-
-    }
-
- 
-    public void DestroyRingPrefab()
-    {
-
-
-       
-        
-        if (_ringTempInstance != null)
-        {
-            RingChangeColor rg =  _ringTempInstance.GetComponent<RingChangeColor>();
-            rg.onJudgeResult -= OnTabChargeEnd;
-            GameObject.Destroy(_ringTempInstance);
-            _ringTempInstance = null;
-           
-        }
-    }
-    public void DestroyStampToolTemp()
-    {
-        if (_stampToolInstance != null)
-        {
-
-            GameObject.Destroy(_stampToolInstance);
-            _ringTempInstance = null;
-
-        }
-    }
-
-
-    public void InitStampToolTemp()
-    {
-        if(StampToolPrefab == null)
-        {
-            Debug.LogError("InitStampToolTemp: StampToolPrefab 未设置");
-            return;
-        }
-
-
-        // 实例化预制体
-        _stampToolInstance = GameObject.Instantiate(StampToolPrefab, gameCanvas.transform);
-
-        RectTransform rt = _stampToolInstance.GetComponent<RectTransform>();
-        rt.SetAsLastSibling();
-        rt.localScale = Vector3.one;
-        rt.anchoredPosition =new Vector2(-103f, -212.1f);
-        rt.localRotation = Quaternion.identity;
-      
-        DraggableUI db = _stampToolInstance.GetComponent<DraggableUI>();
-        db.isDraggable = true; 
-
-    }
-
-    // 业务侧调用的UI启动方法（原uiManager?.StartStampCharging()）
-    //目前实现为拖拽进入自动触发
-    public void StartStampCharging(HeContractGameConfig gameConfig)
-    {
-
-        if (_stampToolInstance)
-        {
-            Debug.LogError("StartStampCharging: 盖章工具未初始化");
-            return;
-
-        }
-
-
-        //RingChangeColor ringChangeColor = _stampToolInstance.GetComponent<RingChangeColor>();
-        //ringChangeColor.StartAnimation();
-
-    }
 
 
 
