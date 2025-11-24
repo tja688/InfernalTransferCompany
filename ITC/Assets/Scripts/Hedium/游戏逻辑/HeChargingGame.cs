@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,34 +10,31 @@ public class HeChargingGame : MonoBehaviour
     private GameObject JudgmentGroupArea;
     [SerializeField]
     private GameObject JudgmentImagePrefab;
-
+    [SerializeField]
+    private GameObject StampTool;
+    [SerializeField]
+    private MMF_Player player;
 
 
 
 
     private void EnterAnimation()
     {
+        player.PlayFeedbacks();
 
     }
     private void InitChargingGame()
     {
         EnterAnimation();
-
-
-
-
         Instantiate(JudgmentImagePrefab, JudgmentGroupArea.transform);
+
     }
 
     private void StartChargingGame()
     {
 
-
-
-
-
+        InitChargingGame();
         SlotCenter.Instance.add_listener<PointerEventData>(HeEventNames.EndDragEvent, OnEndDragEvent);
-
         Debug.Log("HeChargingGame StartChargingGame");
     }
 
@@ -52,9 +50,6 @@ public class HeChargingGame : MonoBehaviour
     public void SetHandle(HeChargingGameHandler handler)
     {
         handle = handler;
-
-
-
         StartChargingGame();
     }
 
