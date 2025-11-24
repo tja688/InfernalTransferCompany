@@ -7193,7 +7193,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 404467781}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
@@ -16753,6 +16753,25 @@ MonoBehaviour:
     _stringValue: 
     _vector3Value: {x: 0, y: 0, z: 0}
     _objectValue: {fileID: 0}
+--- !u!1 &944996846 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8397303330924351871, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+  m_PrefabInstance: {fileID: 5539606366288078915}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &944996849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 944996846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2dc509de2004d34889afdca72690fd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _panelSwitchEvent: {fileID: 11400000, guid: a9e9645663bd0344b9343a77a20c3e52, type: 2}
+  _targetPanelName: Game Panel
 --- !u!1 &946688414
 GameObject:
   m_ObjectHideFlags: 0
@@ -41371,6 +41390,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ITC Stage Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 2061491980290646941, guid: 4eb7a628c46a0fc4b9253d120ed0d25a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4953062807238567072, guid: 4eb7a628c46a0fc4b9253d120ed0d25a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -41466,7 +41493,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8397303330924351871, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 944996849}
   m_SourcePrefab: {fileID: 100100000, guid: dc4b667648281dc46b356e1ef2a665ff, type: 3}
 --- !u!1 &5542746869542711450
 GameObject:
@@ -42311,6 +42341,14 @@ PrefabInstance:
     - target: {fileID: 3802040846696236809, guid: ceba633568b3e18408a41d392973523c, type: 3}
       propertyPath: m_Name
       value: ITC Game Flow Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3802040846696236809, guid: ceba633568b3e18408a41d392973523c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5227927703946619251, guid: ceba633568b3e18408a41d392973523c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
