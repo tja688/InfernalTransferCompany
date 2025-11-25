@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Reflection;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -303,8 +304,9 @@ public class SpritePivotAdjuster : MonoBehaviour
             : transform.position;
 
         var previousRuntime = runtimeSprite;
+        SpriteMeshType meshType = GetSpriteMeshType(reference);
         runtimeSprite = Sprite.Create(reference.texture, reference.rect, targetPivot,
-                                      reference.pixelsPerUnit, 0, reference.meshType, reference.border);
+                                      reference.pixelsPerUnit, 0, meshType, reference.border);
         runtimeSprite.name = $"{reference.name}_pivot_{targetPivot.x:0.000}_{targetPivot.y:0.000}";
         runtimeSprite.hideFlags = HideFlags.HideAndDontSave;
 
@@ -390,6 +392,27 @@ public class SpritePivotAdjuster : MonoBehaviour
         Vector2 deltaPixels = new Vector2(local.x * ppu, local.y * ppu);
         Vector2 targetPixels = currentPivotPixels + deltaPixels;
         return new Vector2(targetPixels.x / rectSize.x, targetPixels.y / rectSize.y);
+    }
+
+    /// <summary>
+    /// 通过反射获取 Sprite 的 meshType，如果无法获取则返回默认值 SpriteMeshType.Tight。
+    /// </summary>
+    static SpriteMeshType GetSpriteMeshType(Sprite sprite)
+    {
+        if (sprite == null)
+            return SpriteMeshType.Tight;
+
+        // 尝试通过反射获取 meshType 属性
+        PropertyInfo meshTypeProperty = typeof(Sprite).GetProperty("meshType", BindingFlags.Public | BindingFlags.Instance);
+        if (meshTypeProperty != null)
+        {
+            object meshTypeValue = meshTypeProperty.GetValue(sprite);
+            if (meshTypeValue is SpriteMeshType)
+                return (SpriteMeshType)meshTypeValue;
+        }
+
+        // 如果反射失败，返回默认值
+        return SpriteMeshType.Tight;
     }
 }
 
