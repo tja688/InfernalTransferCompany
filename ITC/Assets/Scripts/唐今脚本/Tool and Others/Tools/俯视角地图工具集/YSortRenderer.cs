@@ -45,7 +45,7 @@ public class YSortRenderer : MonoBehaviour
     public string overrideSortingLayer = string.Empty;
 
     [Tooltip("基础排序偏移。可用于不同楼层、区域的整体前后关系控制。")]
-    public int baseOrder = 650;
+    public int baseOrder = 0;
 
     [Tooltip("每 1 世界单位对应的排序层级数量。数值越大，切换越平滑。")]
     public int orderPerUnit = 100;
