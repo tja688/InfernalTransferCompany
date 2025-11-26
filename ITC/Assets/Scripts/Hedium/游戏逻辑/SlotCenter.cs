@@ -1,10 +1,11 @@
 ﻿
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics.Tracing;
+using System.Reflection;
     using Unity.VisualScripting;
     using UnityEngine;
     using UnityEngine.Events;
-    using System;
 public enum HeEventNamesOption
 {
     DeliverDocumentEvent,
@@ -24,6 +25,7 @@ public enum HeEventNamesOption
     LetLineBreakTypeWriter,
     OnReadyForBreakLine,
     OnMatchedDraggingOver,
+    OnChargingGameEnd,
 }
 public static class HeEventNames
 {
@@ -32,18 +34,13 @@ public static class HeEventNames
     public const string DocumentErrorChosen = "DocumentErrorChosen";//enum DocumentError
     //public const string EnableChooseRuneEvent = "EnableChooseRuneEvent";
     public const string OnSpawnRuneArrowsEnd = "OnSpawnRuneArrowsEnd";
-    public const string OnChargingSth = "OnChargingSth";//
+    public const string OnChargingGameEnd = "OnChargingGameEnd";//
     public const string ChosenStampType = "ChosenStampType";//enum StampType
 
     public const string OnRythmGameEnd = "OnRythmGameEnd";//enum HeSuccessLayer
     public const string NextTuneRhygame = "NextTuneRhygame";
     public const string OnReadyForBreakLine = "OnReadyForBreakLine";
     public const string OnMatchedDraggingOver = "OnMatchedDraggingOver";
-
-
-
-
-
 
 
 
@@ -75,19 +72,44 @@ public class SlotCenter : MonoBehaviour
     [Header("输入自定义字符串触发")]
     public string customEventName;
 
-
-
-    private HashSet<string> slot_table_reverse = new();
-
-    private Dictionary<string, Delegate> slot_table = new();
     private class EventListenerInfo
     {
         public Delegate ListenerDelegate;
         public bool IsOnce;
+        public String DelegateFuncName;
+        public int ParamCount { get; private set; } // 参数数量（0=无参，1=1个参数，n=多个参数）
+        public Type[] ParamTypes { get; private set; } // 参数类型数组（如 [typeof(int)]）
+        public bool HasReturnValue { get; private set; } // 是否有返回值（Func<> 有返回值，Action<> 无）
         public EventListenerInfo(Delegate listenerDelegate, bool isOnce)
         {
             ListenerDelegate = listenerDelegate;
             IsOnce = isOnce;
+            ResolveMethodInfo(listenerDelegate.Method);
+
+
+
+
+        }
+        private void ResolveMethodInfo(System.Reflection.MethodInfo methodInfo)
+        {
+            if (methodInfo == null)
+            {
+                ParamCount = 0;
+                ParamTypes = Type.EmptyTypes;
+                HasReturnValue = false;
+                Debug.LogWarning("MethodInfo 为空，无法解析委托签名");
+                return;
+            }
+            var parameters = methodInfo.GetParameters();
+            ParameterInfo[] paramInfos = methodInfo.GetParameters();
+            ParamCount = paramInfos.Length;
+            ParamTypes = new Type[ParamCount];
+            for (int i = 0; i < ParamCount; i++)
+            {
+                ParamTypes[i] = paramInfos[i].ParameterType;
+            }
+
+            HasReturnValue = methodInfo.ReturnType != typeof(void);
         }
     }
 
@@ -160,7 +182,9 @@ public class SlotCenter : MonoBehaviour
         eventTable[name].Add(info);
         reverseLookup[ev] = info;
 
-        Debug.Log($"添加listener: {name}, IsOnce={isOnce}");
+        string paramDesc = info.ParamCount == 0 ? "无参" : $"参数数量：{info.ParamCount}，类型：{string.Join(",", (IEnumerable<Type>) info.ParamTypes)}";
+        string returnDesc = info.HasReturnValue ? "有返回值" : "无返回值";
+        Debug.Log($"添加listener: {name}, IsOnce={isOnce} | {paramDesc} | {returnDesc}");
     }
 
 
@@ -231,8 +255,10 @@ public class SlotCenter : MonoBehaviour
                 {
                     case Action a:
                         a.Invoke();
+                        Debug.Log($"事件{name}的处理器成功调用{info.DelegateFuncName},是否为一次性事件{info.IsOnce}");
                         break;
                     case MulticastDelegate md:
+                        Debug.Log("触发多播，似乎不符合预期");
                         md.DynamicInvoke();
                         break;
                     default:
@@ -279,18 +305,34 @@ public class SlotCenter : MonoBehaviour
         {
             try
             {
-                switch (info.ListenerDelegate)
-                {
+                //if (info.ParamCount == 0)
+                //{
+                //    switch (info.ListenerDelegate)
+                //    {
+                //        case Action<T> a:
+                //            a.Invoke();
+                //            break;
+                //        case MulticastDelegate md:
+                //            md.DynamicInvoke();
+                //            break;
+                //        default:
+                //            Debug.LogWarning($"事件{name}调用失败，签名不支持");
+                //            break;
+                //    }
+                //}
+                //else
+                    switch (info.ListenerDelegate)
+                    {
+                    case Action a:
+                            a.Invoke();
+                            break;
                     case Action<T> a:
-                        a.Invoke(param);
-                        break;
-                    case MulticastDelegate md:
-                        md.DynamicInvoke(param);
-                        break;
+                            a.Invoke(param);
+                            break;
                     default:
-                        Debug.LogWarning($"事件{name}调用失败，签名不支持");
-                        break;
-                }
+                            Debug.LogWarning($"事件{name}调用失败，签名不支持");
+                            break;
+                    }
             }
             catch (Exception ex)
             {

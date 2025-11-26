@@ -76,12 +76,19 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
 
 
 
-            //disablePauseCount = 5;
+            disablePauseCount = 5;
 
-            if(director.time<LineBreakPoint )
-            director.time = LineBreakPoint;
+            if (director.time<LineBreakPoint )
+          { 
+                director.time = LineBreakPoint; 
+            Debug.Log("LineBreak Set Time to :"+ LineBreakPoint);
+            }
+            else
+            {
+                Debug.Log("LineBreak Skip Set Time ");
+            }
 
-            director.Play();
+                director.Play();
         }
     }
 
