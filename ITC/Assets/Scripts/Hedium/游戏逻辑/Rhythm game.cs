@@ -11,7 +11,6 @@ public enum HeSuccessLayer {
     BigFail,
 }
 
-
 public class Rhythmgame : MonoBehaviour
 {
 

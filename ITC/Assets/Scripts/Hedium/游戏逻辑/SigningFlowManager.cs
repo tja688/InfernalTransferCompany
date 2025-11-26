@@ -1,11 +1,10 @@
-﻿using NUnit.Framework;
-using PrimeTween;
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+#region DebugStage
 public class DebugStage : IContractStage
 {
     public bool IsCompleted => false;
@@ -40,7 +39,10 @@ public class DebugStage : IContractStage
     }
 }
 
-   
+#endregion
+
+
+#region Utility Classes
 public static class HeCoroutineUtil
 {
     public static IEnumerator Run(System.Func<IEnumerator> coroutine)
@@ -48,7 +50,15 @@ public static class HeCoroutineUtil
         return coroutine();
     }
 }
-
+[Serializable]
+enum StampType
+{
+    Circular,
+    Diamond,
+    Triangular,
+    Spherical,
+    None
+}
 [SerializeField]
 /// <summary>
 /// 文书错误类型枚举
@@ -99,6 +109,8 @@ public enum DocumentError
     /// <summary>危险人物 - 克洛克达尔帮成员或其他危险人物</summary>
     DangerousCustomer
 }
+#endregion 
+
 #region Contract Stages
 #region DocumentVerifier Stages
 /// <summary>
@@ -492,6 +504,9 @@ public class RuneInputManager : IContractStage
 
     }
 #endregion
+
+
+#region SpecialEventSystem Stages
 /// <summary>
 /// 特殊事件系统
 /// </summary>
@@ -676,15 +691,7 @@ public class SpecialEventSystem : IContractStage
 #region StampSystem Stages
 
 
-[Serializable]
-enum StampType
-{
-    Circular,
-    Diamond,
-    Triangular,
-    Spherical,
-    None
-}
+
 
 /// <summary>
 /// 盖章系统
@@ -705,7 +712,7 @@ public class StampSystem : IContractStage
     public bool IsCompleted => completed;
     public bool HasFailed => failed;
     public string StageName => "契约盖印";
-    private StampType stampType = StampType.None; 
+    private StampType stampType = StampType.None;
     public void Enter(HeContractContext ctx)
     {
         context = ctx;
@@ -713,62 +720,30 @@ public class StampSystem : IContractStage
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
         neededStampType = HeContractType.Event; // TODO: 根据契约类型设置需要的印章类型
         Debug.Log("=== 开始契约盖印阶段 ===");
-        uiManager.InitRingPrefab();
-        uiManager.InitStampToolTemp();
 
-        SlotCenter.Instance.add_listener<HeSuccessLayer>(HeEventNames.OnChargingSth, OnHandCharginSth);
 
-        InitHandleStampSelection();
+        SlotCenter.Instance.add_listener<HeSuccessLayer>(HeEventNames.OnChargingGameEnd, OnHandCharginSth);
 
+        uiManager.ChargingGroupGameObject.GetComponent<HeChargingGame>()
+            .SetHandle(new HeChargingGameHandler());
 
 
     }
-    
+
     public void Update()
     {
         if (completed || failed) return;
-        
+
         if (!stampSelected)
         {
-            
+
         }
         else if (isCharging)
         {
-        
+
         }
     }
 
-    public void InitHandleStampSelection()
-    {
-        uiManager.EnableAllStamp();
-        SlotCenter.Instance.add_listener<StampType>(HeEventNames.ChosenStampType, OnHandleStampSelection);
-
-
-    }
-    public void DisableHandleStampSelection()
-    {
-
-        uiManager.DisableAllStamp();
-
-        SlotCenter.Instance.remove_listener<StampType>(HeEventNames.ChosenStampType, OnHandleStampSelection);
-
-    }
-    private void OnHandleStampSelection(StampType type)
-    {
-       Debug.Log($"选择了印章类型: {type}");
-        stampType = type;
-        InitChargingStampSelection();
-        StartStampCharging();
-    }
-    private void InitChargingStampSelection()
-    {
-        
-    }
-    private void DisableChargingStampSelection()
-    {
-
-
-    }
 
 
 
@@ -776,103 +751,43 @@ public class StampSystem : IContractStage
     public void Exit()
     {
         Debug.Log("=== 契约盖印阶段结束 ===");
-        DisableHandleStampSelection();
-        uiManager.DestroyRingPrefab();
-        uiManager.DestroyStampToolTemp();
-     ;
+
+        ;
     }
 
- 
+
     private void OnHandCharginSth(HeSuccessLayer type)
     {
-    switch (type)
-    {
-        case HeSuccessLayer.BigSuccess:
+        switch (type)
+        {
+            case HeSuccessLayer.BigSuccess:
                 Debug.Log("盖章大成功!");
                 // 处理大成功
                 break;
-        case HeSuccessLayer.Normal:
-            // 处理占位符
-            break;
-        case HeSuccessLayer.Success:
-            Debug.Log("盖章成功!");
+            case HeSuccessLayer.Normal:
+                // 处理占位符
+                break;
+            case HeSuccessLayer.Success:
+                Debug.Log("盖章成功!");
                 // 处理成功
                 break;
-        case HeSuccessLayer.Fail:
+            case HeSuccessLayer.Fail:
                 Debug.Log("盖章失败!");
                 // 处理失败
                 break;
-        case HeSuccessLayer.BigFail:
+            case HeSuccessLayer.BigFail:
                 // 处理大失败
                 Debug.Log("盖章大失败!");
                 break;
-        default:
-            // 处理未知类型
-            break;
-    }
-    }
-    private void StartStampCharging()
-    {
-        Debug.Log("开始盖印仪式，符文开始发光...");
-        isCharging = true;
-        chargeTime = 0f;
-       
-        // 通知UI
-        uiManager?.StartStampCharging(GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig);
-    }
-
-    private void OnHandleStampCharging()
-    {
-        chargeTime += Time.deltaTime;
-        
-        float maxChargeTime = gameConfig?.stampChargeTime ?? 3f;
-        
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            // 检查蓄力时机
-            float optimalTiming = gameConfig?.stampOptimalTiming ?? 0.8f;
-            float optimalTime = maxChargeTime * optimalTiming;
-            float timeDiff = Mathf.Abs(chargeTime - optimalTime);
-            float tolerance = gameConfig?.stampAccuracyTolerance ?? 0.1f;
-            
-            if (timeDiff < tolerance)
-            {
-             
-                Debug.Log("完美盖章! 顾客满意度提升");
-                context.IncreaseSatisfaction();
-                completed = true;
-                context.stampApplied = true;
-            }
-            else
-            {
-                context.stampAttempts++;
-                Debug.Log($"盖章时机不准确，尝试次数: {context.stampAttempts}");
-                
-                int maxAttempts = gameConfig?.maxStampAttempts ?? 3;
-                if (context.stampAttempts >= maxAttempts)
-                {
-                    Debug.Log("盖章失败次数过多，顾客满意度下降");
-                    context.DecreaseSatisfaction();
-                    failed = true;
-                }
-                else
-                {
-                    // 重新开始蓄力
-                    chargeTime = 0f;
-                    uiManager?.StartStampCharging(GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig);
-                }
-            }
-        }
-        
-        // 蓄力超时
-        if (chargeTime > maxChargeTime * 1.2f)
-        {
-            Debug.Log("蓄力超时，需要重新开始");
-            chargeTime = 0f;
-            context.stampAttempts++;
+            default:
+                // 处理未知类型
+                break;
         }
     }
 }
+#endregion
+
+
 #region SoulHarvestSystem Stages
 /// <summary>
 /// 灵魂收取系统
@@ -978,6 +893,8 @@ public class SoulHarvestSystem : IContractStage
 }
 
 #endregion
+#endregion
+
 
 #region Main Manager
 
@@ -1121,9 +1038,9 @@ public class SigningFlowManager : MonoBehaviour
     {
         stages = new Queue<IContractStage>(new IContractStage[] {
             //new DebugStage(),
-            new DocumentVerifier(),
-            new RuneInputManager(),
-            new SpecialEventSystem(),
+            //new DocumentVerifier(),
+            //new RuneInputManager(),
+            //new SpecialEventSystem(),
             new StampSystem(),
             new SoulHarvestSystem()
         });
@@ -1380,4 +1297,4 @@ public class SigningFlowManager : MonoBehaviour
     }
 }
 #endregion
-#endregion
+
