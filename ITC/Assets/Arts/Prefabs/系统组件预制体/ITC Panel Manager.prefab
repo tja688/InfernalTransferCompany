@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3985423678601933538}
   - component: {fileID: 8033480967939191897}
+  - component: {fileID: 7950359229767970958}
   m_Layer: 0
   m_Name: ITC Panel Manager
   m_TagString: Untagged
@@ -48,3 +49,17 @@ MonoBehaviour:
   _defaultPanel: Main Panel
   _requestPanelEvent: {fileID: 11400000, guid: a9e9645663bd0344b9343a77a20c3e52, type: 2}
   _panelChangedEvent: {fileID: 11400000, guid: c9f0fdaae3192b642b9fc9767b57a682, type: 2}
+--- !u!114 &7950359229767970958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8397303330924351871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2dc509de2004d34889afdca72690fd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _panelSwitchEvent: {fileID: 11400000, guid: a9e9645663bd0344b9343a77a20c3e52, type: 2}
+  _targetPanelName: Game Panel
