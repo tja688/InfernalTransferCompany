@@ -116,5 +116,24 @@ namespace ITC.Core.GameFlow
         {
             OnStateChanged?.Invoke(state);
         }
+
+        /// <summary>
+        /// Restores the game flow state from saved data.
+        /// </summary>
+        /// <param name="state">The saved game state.</param>
+        /// <param name="day">The saved day.</param>
+        /// <param name="finished">Whether the game is finished.</param>
+        public void SetStateData(GameState state, int day, bool finished)
+        {
+            currentState = state;
+            currentDay = day;
+            isGameFinished = finished;
+
+            // Notify listeners of the restored state
+            NotifyStateChange(currentState);
+            OnDayChanged?.Invoke(currentDay);
+
+            Debug.Log($"[GameFlowManager] State Restored: {currentState}, Day: {currentDay}, Finished: {isGameFinished}");
+        }
     }
 }
