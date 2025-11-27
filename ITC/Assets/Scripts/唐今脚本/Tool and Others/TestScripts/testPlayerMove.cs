@@ -2,85 +2,201 @@ using UnityEngine;
 using PixelCrushers.DialogueSystem;
 
 /// <summary>
-/// 控制2D对象的上下左右移动
+/// 通用移动测试器 - 支持2D、3D和UI对象的移动控制
 /// </summary>
 public class PlayerMovement : MonoBehaviour
 {
+    /// <summary>
+    /// 对象类型枚举
+    /// </summary>
+    public enum ObjectType
+    {
+        Auto,   // 自动检测
+        Object2D,   // 2D对象（使用Rigidbody2D）
+        Object3D,   // 3D对象（使用Rigidbody）
+        UI      // UI对象（使用RectTransform）
+    }
+
+    [Header("对象类型设置")]
+    [Tooltip("选择对象类型，或选择Auto自动检测")]
+    public ObjectType objectType = ObjectType.Auto;
+
     [Header("移动速度")]
-    [Tooltip("控制角色的移动速度")]
-    public float moveSpeed = 5f; // 你可以在Unity编辑器中随时调整这个数值
+    [Tooltip("控制对象的移动速度")]
+    public float moveSpeed = 5f;
 
-    private Rigidbody2D rb; // 用于物理移动
+    [Header("UI移动设置（仅UI对象有效）")]
+    [Tooltip("UI对象是否使用世界坐标移动（false则使用本地坐标）")]
+    public bool useWorldSpace = false;
 
-    // Start is called before the first frame update
+    // 2D物理组件
+    private Rigidbody2D rb2D;
+    // 3D物理组件
+    private Rigidbody rb3D;
+    // UI组件
+    private RectTransform rectTransform;
+    // 检测到的对象类型
+    private ObjectType detectedType;
+
     void Start()
     {
-        // 获取附加到同一个游戏对象上的Rigidbody2D组件
-        // Rigidbody2D是实现物理移动所必需的
-        rb = GetComponent<Rigidbody2D>();
+        // 自动检测对象类型
+        DetectObjectType();
+        
+        // 根据类型初始化相应的组件
+        InitializeComponents();
+    }
 
-        // 检查是否成功获取了Rigidbody2D组件
-        if (rb == null)
+    /// <summary>
+    /// 自动检测对象类型
+    /// </summary>
+    void DetectObjectType()
+    {
+        if (objectType != ObjectType.Auto)
         {
-            Debug.LogError("在对象 " + gameObject.name + " 上没有找到 Rigidbody2D 组件！请添加一个。");
+            detectedType = objectType;
+            return;
+        }
+
+        // 优先检测UI对象
+        rectTransform = GetComponent<RectTransform>();
+        if (rectTransform != null)
+        {
+            detectedType = ObjectType.UI;
+            return;
+        }
+
+        // 检测2D对象
+        rb2D = GetComponent<Rigidbody2D>();
+        if (rb2D != null)
+        {
+            detectedType = ObjectType.Object2D;
+            return;
+        }
+
+        // 检测3D对象
+        rb3D = GetComponent<Rigidbody>();
+        if (rb3D != null)
+        {
+            detectedType = ObjectType.Object3D;
+            return;
+        }
+
+        // 如果都没有，默认使用Transform移动（无物理）
+        detectedType = ObjectType.Object3D;
+        Debug.LogWarning("在对象 " + gameObject.name + " 上没有找到 Rigidbody2D、Rigidbody 或 RectTransform 组件！将使用Transform移动（无物理效果）。");
+    }
+
+    /// <summary>
+    /// 初始化相应的组件
+    /// </summary>
+    void InitializeComponents()
+    {
+        switch (detectedType)
+        {
+            case ObjectType.Object2D:
+                if (rb2D == null)
+                    rb2D = GetComponent<Rigidbody2D>();
+                if (rb2D == null)
+                    Debug.LogError("在对象 " + gameObject.name + " 上未找到 Rigidbody2D 组件！");
+                break;
+
+            case ObjectType.Object3D:
+                if (rb3D == null)
+                    rb3D = GetComponent<Rigidbody>();
+                // 3D对象如果没有Rigidbody，仍然可以使用Transform移动
+                break;
+
+            case ObjectType.UI:
+                if (rectTransform == null)
+                    rectTransform = GetComponent<RectTransform>();
+                if (rectTransform == null)
+                    Debug.LogError("在对象 " + gameObject.name + " 上未找到 RectTransform 组件！");
+                break;
         }
     }
 
-    // Update is called once per frame
-    // 我们在Update中检测输入，但在FixedUpdate中应用物理效果
     void Update()
     {
-        // 这个脚本非常基础，我们也可以直接在Update中处理移动逻辑
-        // 对于更复杂的物理交互，建议在FixedUpdate中处理
+        // UI对象在Update中移动，因为UI更新在Update阶段
+        if (detectedType == ObjectType.UI)
+        {
+            MoveUI();
+        }
     }
 
-    // FixedUpdate is called at a fixed interval and is used for physics-based calculations
     void FixedUpdate()
     {
-        // 如果没有Rigidbody2D，则不执行任何操作
-        if (rb == null) return;
-        
-        // --- 方法一：使用 transform.Translate (简单，但可能穿透碰撞体) ---
-        // 这是最直接的移动方式，它会直接改变对象的位置。
-        // 这种方法不依赖于物理引擎，因此在某些情况下可能会导致角色穿透墙壁。
-        /*
-        float moveX = 0f;
-        float moveY = 0f;
-
-        if (Input.GetKey(KeyCode.W))
+        // 物理对象在FixedUpdate中移动
+        switch (detectedType)
         {
-            moveY = 1f;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            moveY = -1f;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            moveX = -1f;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            moveX = 1f;
-        }
+            case ObjectType.Object2D:
+                Move2D();
+                break;
 
-        Vector3 moveDirection = new Vector3(moveX, moveY).normalized;
-        transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
-        */
+            case ObjectType.Object3D:
+                Move3D();
+                break;
+        }
+    }
 
+    /// <summary>
+    /// 2D对象移动（使用Rigidbody2D）
+    /// </summary>
+    void Move2D()
+    {
+        if (rb2D == null) return;
 
-        // --- 方法二：使用 Rigidbody2D.velocity (推荐，物理效果更佳) ---
-        // 这是推荐的2D移动方式，因为它利用了Unity的物理引擎。
-        // 这种方式可以更好地处理碰撞。
-        float moveHorizontal = Input.GetAxisRaw("Horizontal"); // 获取A、D键或左右方向键的输入 (-1, 0, 1)
-        float moveVertical = Input.GetAxisRaw("Vertical");     // 获取W、S键或上下方向键的输入 (-1, 0, 1)
+        float moveHorizontal = Input.GetAxisRaw("Horizontal");
+        float moveVertical = Input.GetAxisRaw("Vertical");
 
-        // 创建一个移动向量
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
+        rb2D.velocity = movement.normalized * moveSpeed;
+    }
 
-        // 为了防止斜向移动速度过快（例如同时按住W和D），我们需要将向量归一化
-        // .normalized 会将向量的长度变为1，但保持其方向
-        // 然后乘以速度和时间，得到最终的位移
-        rb.velocity = movement.normalized * moveSpeed;
+    /// <summary>
+    /// 3D对象移动（使用Rigidbody或Transform）
+    /// </summary>
+    void Move3D()
+    {
+        float moveHorizontal = Input.GetAxisRaw("Horizontal");
+        float moveVertical = Input.GetAxisRaw("Vertical");
+
+        Vector3 movement = new Vector3(moveHorizontal, 0f, moveVertical).normalized * moveSpeed;
+
+        if (rb3D != null)
+        {
+            // 使用物理移动（推荐，支持碰撞）
+            rb3D.velocity = new Vector3(movement.x, rb3D.velocity.y, movement.z);
+        }
+        else
+        {
+            // 使用Transform移动（无物理效果，可能穿透碰撞体）
+            transform.Translate(movement * Time.fixedDeltaTime, Space.World);
+        }
+    }
+
+    /// <summary>
+    /// UI对象移动（使用RectTransform）
+    /// </summary>
+    void MoveUI()
+    {
+        if (rectTransform == null) return;
+
+        float moveHorizontal = Input.GetAxisRaw("Horizontal");
+        float moveVertical = Input.GetAxisRaw("Vertical");
+
+        Vector2 movement = new Vector2(moveHorizontal, moveVertical).normalized * moveSpeed * Time.deltaTime;
+
+        if (useWorldSpace)
+        {
+            // 世界坐标移动
+            rectTransform.position += new Vector3(movement.x, movement.y, 0f);
+        }
+        else
+        {
+            // 本地坐标移动（相对于父对象）
+            rectTransform.anchoredPosition += movement;
+        }
     }
 }
