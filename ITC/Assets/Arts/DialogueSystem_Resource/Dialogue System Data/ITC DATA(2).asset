@@ -44859,7 +44859,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Sequence
-        value: 
+        value: StageElementIn(Blue,BlueIn)
         type: 0
         typeString: 
       conversationID: 7
@@ -44924,7 +44924,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 7
+        originDialogueID: 2
+        destinationConversationID: 8
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -44937,8 +44943,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 82}
-    canvasZoom: 1
+    canvasScrollPosition: {x: 0, y: 3.4146729}
+    canvasZoom: 0.8200002
   - id: 8
     fields:
     - title: Title
@@ -45202,7 +45208,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 495.6
-        y: 131.60002
+        y: 130.62437
         width: 160
         height: 30
     - id: 4
@@ -45232,7 +45238,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Sequence
-        value: 
+        value: 'SetDialoguePanel(false);
+
+          SetDialoguePanel(true)@Message(MiniGameDone);
+
+          Continue()@Message(MiniGameDone);'
         type: 0
         typeString: 
       conversationID: 8
@@ -45256,8 +45266,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 483.60007
-        y: 218.8
+        x: 488.9659
+        y: 218.31215
         width: 160
         height: 30
     - id: 5
@@ -45352,7 +45362,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 8
+        originDialogueID: 6
+        destinationConversationID: 9
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -45365,7 +45381,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 68.80708}
+    canvasScrollPosition: {x: 0, y: 0.026626587}
     canvasZoom: 0.8200002
   - id: 9
     fields:
@@ -45534,11 +45550,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 1
+        value: 2
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 2
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -45595,11 +45611,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
+        value: 2
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -45621,7 +45637,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 9
+        originDialogueID: 3
+        destinationConversationID: 7
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -45629,8 +45651,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 425.59998
-        y: 306
+        x: 476.7392
+        y: 361.18982
         width: 160
         height: 30
     - id: 4
@@ -45644,11 +45666,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
+        value: 2
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -45670,7 +45692,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 9
+        originDialogueID: 4
+        destinationConversationID: 11
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -45678,13 +45706,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 182.64278
+        x: 178.0858
         y: 355.91064
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 1.5506287}
-    canvasZoom: 0.7900002
+    canvasScrollPosition: {x: 40.57141, y: 0}
+    canvasZoom: 0.7000003
   - id: 10
     fields:
     - title: Title
@@ -45813,7 +45841,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Sequence
-        value: 
+        value: StageElementIn(Red,RedIn)
         type: 0
         typeString: 
       conversationID: 10
@@ -45893,7 +45921,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 322.8
-        y: 217.2
+        y: 219.32765
         width: 160
         height: 30
     - id: 3
@@ -45933,7 +45961,13 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks: []
+      outgoingLinks:
+      - originConversationID: 10
+        originDialogueID: 3
+        destinationConversationID: 7
+        destinationDialogueID: 0
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -46205,12 +46239,12 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 371.60004
-        y: 293.2
+        y: 294.02475
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1
+    canvasScrollPosition: {x: 0, y: 9.056349}
+    canvasZoom: 0.8200002
   syncInfo:
     syncActors: 0
     syncItems: 0
