@@ -11,7 +11,7 @@ public class StageManager : MonoBehaviour
     public static StageManager Instance { get; private set; }
 
     [Header("Configuration")]
-    public StageFeelPlayerStore PlayerStore;
+    public StageSceneEffectStore PlayerStore;
 
     [Serializable]
     public class ScenePerformance
