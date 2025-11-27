@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: "\u56FE\u7247\u53D1\u5149"
+  m_Shader: {fileID: 4800000, guid: f1f909f917d8689428bca859605dad75, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _ENABLEHIGHLIGHT_ON
+  - _USE8NEIGHBOURHOOD_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: d7e502810f4413c4eb8420a213587a04, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SubTex:
+        m_Texture: {fileID: 2800000, guid: 320df9c2878126a4ea0bf417cc25d3bc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _BlurSamples: 3
+    - _BlurSize: 1
+    - _EdgeSoftness: 0
+    - _EdgeThreshold: 0.2
+    - _GlowIntensity: 1
+    - _GlowSaturation: 1.3
+    - _GlowSpread: 3
+    - _LightDegree: 0.64
+    m_Colors:
+    - _LightColor: {r: 0.4245283, g: 0.06608224, b: 0.06608224, a: 1}
+    - _TargetColor: {r: 0.41960788, g: 0.043137256, b: 0.023529414, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
