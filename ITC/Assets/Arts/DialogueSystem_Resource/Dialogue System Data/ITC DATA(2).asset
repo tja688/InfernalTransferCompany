@@ -44883,8 +44883,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 286.8
-        y: 169.59999
+        x: 288
+        y: 171.2
         width: 160
         height: 30
     - id: 2
@@ -44924,13 +44924,7 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 7
-        originDialogueID: 2
-        destinationConversationID: 8
-        destinationDialogueID: 0
-        isConnector: 0
-        priority: 2
+      outgoingLinks: []
       conditionsString: 
       userScript: 
       onExecute:
@@ -45358,13 +45352,7 @@ MonoBehaviour:
       delaySimStatus: 0
       falseConditionAction: Block
       conditionPriority: 2
-      outgoingLinks:
-      - originConversationID: 8
-        originDialogueID: 6
-        destinationConversationID: 9
-        destinationDialogueID: 0
-        isConnector: 0
-        priority: 2
+      outgoingLinks: []
       conditionsString: 
       userScript: 
       onExecute:
@@ -45373,7 +45361,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 407.61765
-        y: 370.9319
+        y: 371.41968
         width: 160
         height: 30
     entryGroups: []
@@ -45460,7 +45448,7 @@ MonoBehaviour:
       isGroup: 0
       nodeColor: 
       delaySimStatus: 0
-      falseConditionAction: 
+      falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
       - originConversationID: 9
@@ -45476,7 +45464,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 160
+        x: 160.50635
         y: 30
         width: 160
         height: 30
@@ -45690,13 +45678,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 185.17442
-        y: 355.4043
+        x: 182.64278
+        y: 355.91064
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 2.1276855, y: 55.319153}
-    canvasZoom: 0.94000006
+    canvasScrollPosition: {x: 0, y: 1.5506287}
+    canvasZoom: 0.7900002
   - id: 10
     fields:
     - title: Title
