@@ -3,6 +3,7 @@
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -41,6 +42,7 @@ namespace PixelCrushers.DialogueSystem
         /// <param name="startingEntryID">Entry started, or -1 for beginning of conversation.</param>
         /// <param name="numContinues">Number of nodes to continue past.</param>
         /// <returns></returns>
+        [Obsolete("Obsolete")]
         private static void GetDialogueEntry(string conversationTitle, int startingEntryID, int numContinues,
             out DialogueEntry entry, out bool isPlayer)
         {
