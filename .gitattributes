@@ -1,3 +1,4 @@
+*.riv binary
 ITC/Assets/**/*.psd filter=lfs diff=lfs merge=lfs -text
 ITC/Assets/**/*.psb filter=lfs diff=lfs merge=lfs -text
 ITC/Assets/**/*.png filter=lfs diff=lfs merge=lfs -text
