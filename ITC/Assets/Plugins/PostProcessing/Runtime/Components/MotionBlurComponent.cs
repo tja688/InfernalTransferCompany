@@ -1,3 +1,4 @@
+using System;
 using UnityEngine.Rendering;
 
 namespace UnityEngine.PostProcessing
@@ -339,7 +340,8 @@ namespace UnityEngine.PostProcessing
         }
 
         bool m_FirstFrame = true;
-
+        
+        [Obsolete("Obsolete")]
         public override bool active
         {
             get
