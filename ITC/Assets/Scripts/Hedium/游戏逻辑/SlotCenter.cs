@@ -26,6 +26,13 @@ public enum HeEventNamesOption
     OnReadyForBreakLine,
     OnMatchedDraggingOver,
     OnChargingGameEnd,
+
+    TriggerDebugStage,
+    TriggerRuneInputStage,
+    TriggerStampStage,
+    TriggerSoulHarvestStage,
+    TriggerSpecialEventStage,
+    TriggerDocumentVerifierStage,
 }
 public static class HeEventNames
 {
@@ -52,7 +59,12 @@ public static class HeEventNames
     public const string OnTypeWriterEndType = "OnTypeWriterEndType";//
 
 
-
+    public const string TriggerDebugStage = "TriggerDebugStage";    
+    public const string TriggerRuneInputStage = "TriggerRuneInputStage";
+    public const string TriggerStampStage = "TriggerStampStage";
+    public const string TriggerSoulHarvestStage = "TriggerSoulHarvestStage";
+    public const string TriggerSpecialEventStage = "TriggerSpecialEventStage";
+    public const string TriggerDocumentVerifierStage = "TriggerDocumentVerifierStage";
 
 
 
