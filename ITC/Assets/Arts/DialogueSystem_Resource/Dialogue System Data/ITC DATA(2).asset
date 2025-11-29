@@ -45841,7 +45841,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Sequence
-        value: 
+        value: StageElementPlay(RedIn)
         type: 0
         typeString: 
       conversationID: 10
@@ -45896,7 +45896,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Sequence
-        value: 
+        value: StageElementPlay(BlueIn)
         type: 0
         typeString: 
       conversationID: 10
@@ -45951,7 +45951,9 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Sequence
-        value: FSMNext()
+        value: 'FSMNext();
+
+          StageElementPlay(AllOut)'
         type: 0
         typeString: 
       conversationID: 10
@@ -45975,7 +45977,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 458.02554
+        x: 457.49924
         y: 308.82553
         width: 160
         height: 30
