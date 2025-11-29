@@ -148,10 +148,11 @@ public class Rhythmgame : MonoBehaviour
             float x = radius * Mathf.Cos(rad);
             float y = radius * Mathf.Sin(rad);
             Vector2 pos = centerPos + new Vector2(x, y);
+            pos *= 10;
 
             // 实例化UI元素
             GameObject item = Instantiate(ArrowGroupGamePrefab, transform);
-            RectTransform itemRect = item.GetComponent<RectTransform>();
+            RectTransform itemRect = item.transform.Find("箭头Model").GetComponent<RectTransform>();
             if (itemRect != null)
             {
                 itemRect.localEulerAngles = new Vector3(0, 0, arrowKeyMap[list[i]]+UnityEngine.Random.Range(-burrDegree, burrDegree));
