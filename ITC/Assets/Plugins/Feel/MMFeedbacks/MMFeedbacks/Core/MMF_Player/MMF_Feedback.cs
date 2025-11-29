@@ -686,6 +686,7 @@ namespace MoreMountains.Feedbacks
 		{
 			Timing.PlayCount++;
 			_lastPlayTimestamp = FeedbackTime;
+			OnBeforeDriveTarget(position, intensity);
 			CustomPlayFeedback(position, intensity);
 		}
 
@@ -1178,6 +1179,23 @@ namespace MoreMountains.Feedbacks
 		/// This method describes what happens when the feedback gets reset
 		/// </summary>
 		protected virtual void CustomReset() { }
+
+		/// <summary>
+		/// This method is called before CustomPlayFeedback, allowing feedbacks to notify about target driving.
+		/// Override this method in your feedback to broadcast events when you're about to drive a target.
+		/// For example, you can broadcast: "I'm about to drive target GameObject X" or "I'm about to drive target Component Y"
+		/// </summary>
+		/// <param name="position">The position at which the feedback is playing</param>
+		/// <param name="feedbacksIntensity">The intensity of the feedback</param>
+		protected virtual void OnBeforeDriveTarget(Vector3 position, float feedbacksIntensity = 1.0f)
+		{
+			// 默认实现为空，子类可以重写此方法来广播目标驱动事件
+			// 例如：
+			// if (TargetGameObject != null)
+			// {
+			//     YourCustomEventSystem.BroadcastTargetDrive(this, TargetGameObject);
+			// }
+		}
 
 		/// <summary>
 		/// Use this method to initialize any custom attributes you may have
