@@ -1,4 +1,5 @@
-﻿using QFramework;
+﻿using MoreMountains.Feedbacks;
+using QFramework;
 using Spine.Unity;
 using System;
 using System.Collections;
@@ -46,6 +47,7 @@ public class HeContractUIManager : MonoBehaviour
 
 
     public GameObject pneumaticChannelSkeleton;   // 气动通道
+    public GameObject pneumaticChannelGameObject;   // 气动通道
     public GameObject copperRuneSelectorSkeleton; // 符文选择器
     public GameObject ArrowGroupGameObject;
     public GameObject ChargingGroupGameObject;
@@ -54,8 +56,11 @@ public class HeContractUIManager : MonoBehaviour
     public GameObject leftBookSkeleton;           // 左书
     public GameObject rightBookSkeleton;          // 右书
     public GameObject typewriterSkeleton;         // 打字机
+    public GameObject typewriterGameObject;
+
     public GameObject telephoneSkeleton;          // 电话
     public GameObject canSkeleton;                // 罐子
+    public GameObject contractDocumentsGameObject;
     public Image contractDocumentsImage;  // 合同文档
     public Image arrowImage;              // 箭头提示
     public Image roleImage;
@@ -114,6 +119,81 @@ public class HeContractUIManager : MonoBehaviour
     {
       
     }
+    /// <summary>
+    /// 
+    /// 恢复打字机入场 
+    /// </summary>
+    public void RestoreTypeWriterGameObject()
+    {
+        Debug.Log("恢复打字机入场动画");
+        if (contractDocumentsGameObject.activeSelf)
+        {
+            var player = contractDocumentsGameObject.transform.Find("MMF_Exit").GetComponent<MMF_Player>();
+            if (player)
+            {
+                  
+                player.PlayFeedbacks();
+            }
+            else
+            {
+                Debug.LogError("MMF_Player 入场动画丢失");
+            }
+        }
+
+    if (!typewriterGameObject.activeSelf)
+    {
+       typewriterGameObject.SetActive(true);
+        var player = typewriterGameObject.transform.Find("MMF_Enter").GetComponent<MMF_Player>();
+        if (player)
+        {
+            player.PlayFeedbacks();
+        }
+        else
+        {
+            Debug.LogError("MMF_Player 入场动画丢失");
+        }
+    }
+        
+
+
+    }
+
+    public void ResotreContractDocumentsGameObject()
+    {
+        if (!contractDocumentsGameObject.activeSelf)
+        {
+
+            var player = contractDocumentsGameObject.transform.Find("MMF_Enter").GetComponent<MMF_Player>();
+            contractDocumentsGameObject.SetActive(true);
+            if (player)
+            {
+
+                player.PlayFeedbacks();
+            }
+            else
+            {
+                Debug.LogError("MMF_Player 入场动画丢失");
+            }
+        }
+
+        if (typewriterGameObject.activeSelf)
+        {
+            var player = typewriterGameObject.transform.Find("MMF_Exit").GetComponent<MMF_Player>();
+            if (player)
+            {
+                player.PlayFeedbacks();
+            }
+            else
+            {
+                Debug.LogError("MMF_Player 入场动画丢失");
+            }
+        }
+
+    }
+
+
+
+
 
     /// <summary>
     /// 文书判断判定，这个最后绑定到签约书的点击事件上

@@ -1,9 +1,15 @@
 ﻿
+using MoreMountains.Feedbacks;
+using QFramework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
+
+
+
 #region DebugStage
 public class DebugStage : IContractStage
 {
@@ -21,14 +27,8 @@ public class DebugStage : IContractStage
     private void Exit()
     {
     }
-    private void Enter()
-    {
-    }
 
-    public void Enter(HeContractContext ctx)
-    {
-    }
-
+    
     public void Update()
     {
     }
@@ -36,6 +36,11 @@ public class DebugStage : IContractStage
     void IContractStage.Exit()
     {
         Exit();
+    }
+
+    public void Enter()
+    {
+        throw new NotImplementedException();
     }
 }
 
@@ -134,11 +139,11 @@ public class DocumentVerifier : IContractStage
 
 
   
-    public void Enter(HeContractContext ctx)
+    public void Enter()
     {
-        context = ctx;
+        context = GameObject.FindFirstObjectByType<SigningFlowManager>()?.ctx;
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
-        
+        uiManager.RestoreTypeWriterGameObject();
         Debug.Log("=== 开始文书核验阶段 ===");
         
         // 显示文书核验UI
@@ -410,12 +415,19 @@ public class RuneInputManager : IContractStage
     private int ArrowMinCount;
     int deleteArrowCount = 0;
     bool enableProcessedKey = false;
-    public void Enter(HeContractContext ctx)
+    public void Enter()
     {
         detailsFillCompleted = false;
 
-        context = ctx;
+        context =  GameObject.FindFirstObjectByType<SigningFlowManager>()?.ctx; ;
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
+        uiManager.RestoreTypeWriterGameObject();
+
+
+
+
+
+
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
         runeShowDuration = gameConfig.runeShowTimeLimit;
         ArrowMaxCount = gameConfig.runeInputCountMaxLimit;
@@ -445,7 +457,7 @@ public class RuneInputManager : IContractStage
 
     public void Exit()
     {
-
+   
     }
     public void Update()
     {
@@ -524,10 +536,12 @@ public class SpecialEventSystem : IContractStage
     public bool HasFailed => failed;
     public string StageName => "特殊事件";
 
-    public void Enter(HeContractContext ctx)
+    public void Enter()
     {
-        context = ctx;
+        context = GameObject.FindFirstObjectByType<SigningFlowManager>()?.ctx;
+
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
+        //uiManager.ResotreContractDocumentsGameObject();
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
         
         Debug.Log("=== 开始特殊事件阶段 ===");
@@ -713,10 +727,12 @@ public class StampSystem : IContractStage
     public bool HasFailed => failed;
     public string StageName => "契约盖印";
     private StampType stampType = StampType.None;
-    public void Enter(HeContractContext ctx)
+    public void Enter()
     {
-        context = ctx;
+        context = GameObject.FindFirstObjectByType<SigningFlowManager>()?.ctx;
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
+     
+        uiManager.ResotreContractDocumentsGameObject();
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
         neededStampType = HeContractType.Event; // TODO: 根据契约类型设置需要的印章类型
         Debug.Log("=== 开始契约盖印阶段 ===");
@@ -808,9 +824,10 @@ public class SoulHarvestSystem : IContractStage
     public bool HasFailed => failed;
     public string StageName => "灵魂收取";
 
-    public void Enter(HeContractContext ctx)
+    public void Enter()
     {
-        context = ctx;
+        context = GameObject.FindFirstObjectByType<SigningFlowManager>()?.ctx;
+
         uiManager = GameObject.FindFirstObjectByType<HeContractUIManager>();
         gameConfig = GameObject.FindFirstObjectByType<SigningFlowManager>()?.gameConfig;
         
@@ -899,12 +916,75 @@ public class SoulHarvestSystem : IContractStage
 #region Main Manager
 
 /// <summary>
-/// 签约流程管理器 - 游戏主控制器
+/// 签约流程管理器 - 
 /// </summary>
 public class SigningFlowManager : MonoBehaviour
 {
- 
 
+
+    public void DebugStageStart()
+    {
+        currentStage?.Exit();
+        debugStage.Enter();
+        currentStage = debugStage;
+    }
+
+    public void RuneInputStageStart()
+    {
+        currentStage?.Exit();
+        runeInputStage.Enter();
+        currentStage = runeInputStage;
+    }
+    public void SpecialEventSystem()
+    {
+        currentStage?.Exit();
+        specialEventStage.Enter();
+        currentStage = specialEventStage;
+    }
+    public void StampStageStart()
+    {
+        currentStage?.Exit();
+        stampStage.Enter();
+        currentStage = stampStage;
+    }
+    public void SoulHarvestStageStart()
+    {
+        currentStage?.Exit();
+        soulHarvestSystem.Enter();
+        currentStage = soulHarvestSystem;
+    }
+    public void DocumentVerifierStageStart()
+    {
+        currentStage?.Exit();
+        documentVerifierStage.Enter();
+        currentStage = documentVerifierStage;
+    }
+    /// <summary>
+    /// 初始化设置
+    /// 传入天数[0,n]
+    /// </summary>
+    public void UpdataConfig(int day)
+    {
+        if (gameConfig == null)
+        {
+            Debug.LogWarning("未设置 HeContractGameConfig，将使用默认设置");
+
+
+            gameConfig = ScriptableObject.CreateInstance<HeContractGameConfig>();
+            if (fallbackConfig != null)
+            {
+
+                gameConfig.initialSatisfaction = fallbackConfig.initialSatisfaction;
+                gameConfig.maxFailCount = fallbackConfig.maxFailCount;
+                gameConfig.runeInputTimeLimit = fallbackConfig.runeInputTimeLimit;
+
+            }
+
+            gameConfig.ResetToDefault();
+        }
+
+        Debug.Log($"游戏配置已初始化 - 初始满意度: {gameConfig.initialSatisfaction}, 最大失败次数: {gameConfig.maxFailCount}");
+    }
     [Header("=== 游戏配置 ===")]
     [Tooltip("游戏配置资源 (建议使用ScriptableObject)")]
     public HeContractGameConfig gameConfig;
@@ -935,48 +1015,45 @@ public class SigningFlowManager : MonoBehaviour
     public HeContractContext ctx;
     private HeContractUIManager uiManager;
 
+
+
+
+
+    private DebugStage debugStage = new DebugStage();
+    private DocumentVerifier documentVerifierStage = new DocumentVerifier();
+    private RuneInputManager runeInputStage = new RuneInputManager();
+    private SpecialEventSystem specialEventStage = new SpecialEventSystem();
+    private  StampSystem stampStage = new StampSystem();
+    private SoulHarvestSystem soulHarvestSystem= new SoulHarvestSystem();
+
     void Start()
     {
         // 获取UI管理器
         uiManager = FindFirstObjectByType<HeContractUIManager>();
         
         // 初始化配置
-        InitializeConfig();
+        UpdataConfig(0);
         
         // 初始化契约
         InitializeContract();
-        
-        // 设置流程阶段
-        SetupStages();
-        
-        // 开始第一个阶段
-        NextStage();
-    }
-    
-    void Update()
-    {
-        if (currentStage == null) return;
-        
-        currentStage.Update();
-        
-        // 更新UI状态
-        uiManager?.UpdateContext(ctx);
-       // uiManager?.UpdateCurrentStage(currentStage.StageName);
-        
-        if (currentStage.IsCompleted)
+
+        var st = SlotCenter.Instance;
+        if (st != null)
         {
-            // 检查失败条件
-            int maxFailCount = gameConfig?.maxFailCount ?? fallbackConfig?.maxFailCount ?? 3;
-            int minSatisfaction = gameConfig?.minSatisfaction ?? fallbackConfig?.minSatisfaction ?? 1;
-            
-            if (currentStage.HasFailed || ctx.failCount >= maxFailCount || ctx.satisfaction <= minSatisfaction)
-            {
-                EndGame(false);
-                return;
-            }
-            NextStage();
+            st.add_listener(HeEventNames.TriggerDebugStage, DebugStageStart);
+            st.add_listener(HeEventNames.TriggerRuneInputStage, RuneInputStageStart);
+            st.add_listener(HeEventNames.TriggerStampStage, StampStageStart);   
+            st.add_listener(HeEventNames.TriggerSoulHarvestStage, SoulHarvestStageStart);   
+            st.add_listener(HeEventNames.TriggerSpecialEventStage, SpecialEventSystem);
+            st.add_listener(HeEventNames.TriggerDocumentVerifierStage,DocumentVerifierStageStart);
+        }
+        else
+        {
+            Debug.LogError("SlotCenter实例未找到，事件系统可能无法正常工作");
         }
     }
+    
+
     /// <summary>
     /// 概率判定rcx=0-100
     /// </summary>
@@ -986,31 +1063,7 @@ public class SigningFlowManager : MonoBehaviour
     {
         return UnityEngine.Random.Range(1, 101) > s;
     }
-    /// <summary>
-    /// 初始化配置
-    /// </summary>
-    private void InitializeConfig()
-    {
-        if (gameConfig == null)
-        {
-            Debug.LogWarning("未设置 HeContractGameConfig，将使用默认设置");
-            
-           
-            gameConfig = ScriptableObject.CreateInstance<HeContractGameConfig>();
-            if (fallbackConfig != null)
-            {
-              
-                gameConfig.initialSatisfaction = fallbackConfig.initialSatisfaction;
-                gameConfig.maxFailCount = fallbackConfig.maxFailCount;
-                gameConfig.runeInputTimeLimit = fallbackConfig.runeInputTimeLimit;
-               
-            }
-            
-            gameConfig.ResetToDefault();
-        }
-        
-        Debug.Log($"游戏配置已初始化 - 初始满意度: {gameConfig.initialSatisfaction}, 最大失败次数: {gameConfig.maxFailCount}");
-    }
+  
 
 
     private void InitializeContract()
@@ -1034,44 +1087,39 @@ public class SigningFlowManager : MonoBehaviour
         Debug.Log($"契约初始化完成 - 顾客: {ctx.customer.name}, 契约类型: {ctx.document.HeContractType}");
     }
 
-    private void SetupStages()
-    {
-        stages = new Queue<IContractStage>(new IContractStage[] {
-            //new DebugStage(),
-            //new DocumentVerifier(),
-            //new RuneInputManager(),
-            //new SpecialEventSystem(),
-            new StampSystem(),
-            new SoulHarvestSystem()
-        });
+    //private void SetupStages()
+    //{
+    //    stages = new Queue<IContractStage>(new IContractStage[] {
+         
+    //    });
         
-        Debug.Log($"签约流程已设置，共{stages.Count}个阶段");
-    }
+    //    Debug.Log($"签约流程已设置，共{stages.Count}个阶段");
+    //}
 
-    void NextStage()
-    {
-        if (stages.Count == 0) 
-        { 
-            EndGame(true); 
-            return; 
-        }
+    //void NextStage()
+    //{
+    //    if (stages.Count == 0) 
+    //    { 
+    //        EndGame(true); 
+    //        return; 
+    //    }
         
-        currentStage?.Exit();
-        currentStage = stages.Dequeue();
-        Debug.Log($"进入阶段: {currentStage.StageName}");
-        StartCoroutine(HeCoroutineUtil.Run(() => {
-            return Inner();
-            System.Collections.IEnumerator Inner()
-            {
-                yield return new WaitForSeconds(1f);
-                currentStage.Enter(ctx);
-            }
-        }));
+    //    currentStage?.Exit();
+    //    currentStage = stages.Dequeue();
+    //    Debug.Log($"进入阶段: {currentStage.StageName}");
+    //    StartCoroutine(HeCoroutineUtil.Run(() => {
+    //        return Inner();
+    //        System.Collections.IEnumerator Inner()
+    //        {
+    //            yield return new WaitForSeconds(1f);
+    //            currentStage.Enter();
+    //        }
+    //    }));
 
 
 
 
-    }
+    //}
 
     public void EndGame(bool success)
     {
