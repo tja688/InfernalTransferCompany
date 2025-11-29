@@ -1,14 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using MoreMountains.Feedbacks;
 using PixelCrushers;
-
-// 为了让单文件分析的代码检查器识别监控类型，这里声明一个空的 partial 壳。
-// 真正的实现位于 StagePerformanceMonitor.cs 中。
-public partial class StagePerformanceMonitor { }
 
 public class StageManager : MonoBehaviour
 {
@@ -17,287 +11,412 @@ public class StageManager : MonoBehaviour
     [Header("Configuration")]
     public StageSceneEffectStore PlayerStore;
 
-    private Dictionary<string, StageElement> _elements = new Dictionary<string, StageElement>();
+    [Header("Stage Simulation")]
+    [Tooltip("舞台的世界空间 Bounds。中心与尺寸均使用世界坐标。")]
+    public Bounds StageBounds = new Bounds(Vector3.zero, new Vector3(10f, 5f, 10f));
+
+    [Tooltip("舞台外沿的缓冲距离，用于离场判定的迟滞处理。")]
+    [Min(0f)]
+    public float ExitHysteresis = 1f;
+
+    [Tooltip("舞台检测的帧间隔。1 表示每帧检测。")]
+    [Min(1)]
+    public int SimulationIntervalFrames = 1;
+
+    [Tooltip("若为 true，当检测到无效引用时将重新扫描所有 StageElement。")]
+    public bool AutoRefreshOnNullEntries = true;
+
+    [SerializeField]
+    private List<StageElement> _allElements = new List<StageElement>();
+
+    private readonly Dictionary<string, StageElement> _elementsById = new Dictionary<string, StageElement>();
+    private Bounds _bufferedStageBounds;
+    private int _simulationFrameTicker;
+
+    public IReadOnlyList<StageElement> AllElements => _allElements;
+
+    private void Reset()
+    {
+        StageBounds = new Bounds(transform.position, new Vector3(10f, 5f, 10f));
+        ExitHysteresis = 1f;
+        SimulationIntervalFrames = 1;
+    }
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
 
+        Instance = this;
+
         if (PlayerStore != null)
         {
             PlayerStore.Initialize();
         }
+
+        RefreshElementCache();
+        UpdateBufferedBounds();
     }
 
-    public void RegisterElement(StageElement element)
+    private void OnValidate()
     {
-        if (element == null || string.IsNullOrEmpty(element.StageElementID)) return;
+        ExitHysteresis = Mathf.Max(0f, ExitHysteresis);
+        SimulationIntervalFrames = Mathf.Max(1, SimulationIntervalFrames);
+        EnsureBoundsValid();
+        UpdateBufferedBounds();
+    }
 
-        if (!_elements.ContainsKey(element.StageElementID))
+    private void Update()
+    {
+        if (_allElements == null || _allElements.Count == 0)
         {
-            _elements.Add(element.StageElementID, element);
+            return;
         }
-        else
+
+        if (SimulationIntervalFrames > 1)
         {
-            Debug.LogWarning($"[StageManager] Duplicate StageElementID: {element.StageElementID}");
+            _simulationFrameTicker++;
+            if (_simulationFrameTicker % SimulationIntervalFrames != 0)
+            {
+                return;
+            }
+        }
+
+        RunSimulationStep();
+    }
+
+    #region Stage Element Tracking
+
+    public void RefreshElementCache()
+    {
+        _allElements.Clear();
+        _elementsById.Clear();
+
+        var elements = Resources.FindObjectsOfTypeAll<StageElement>();
+        foreach (var element in elements)
+        {
+            if (!IsSceneElement(element))
+            {
+                continue;
+            }
+
+            if (!_allElements.Contains(element))
+            {
+                _allElements.Add(element);
+            }
+
+            if (string.IsNullOrEmpty(element.StageElementID))
+            {
+                continue;
+            }
+
+            if (_elementsById.TryGetValue(element.StageElementID, out var existing) && existing != null && existing != element)
+            {
+                Debug.LogWarning($"[StageManager] Duplicate StageElementID detected: {element.StageElementID}", element);
+                continue;
+            }
+
+            _elementsById[element.StageElementID] = element;
         }
     }
 
-    public void UnregisterElement(StageElement element)
+#if UNITY_EDITOR
+    [ContextMenu("Refresh Stage Elements")]
+    private void ContextRefreshElements()
     {
-        if (element == null || string.IsNullOrEmpty(element.StageElementID)) return;
+        RefreshElementCache();
+    }
+#endif
 
-        if (_elements.ContainsKey(element.StageElementID))
+    internal void HandleElementDestroyed(StageElement element)
+    {
+        if (element == null)
         {
-            _elements.Remove(element.StageElementID);
+            return;
+        }
+
+        _allElements.Remove(element);
+
+        if (!string.IsNullOrEmpty(element.StageElementID) &&
+            _elementsById.TryGetValue(element.StageElementID, out var existing) &&
+            existing == element)
+        {
+            _elementsById.Remove(element.StageElementID);
         }
     }
 
     public StageElement GetElement(string elementID)
     {
-        if (_elements.TryGetValue(elementID, out var element))
+        if (string.IsNullOrEmpty(elementID))
+        {
+            return null;
+        }
+
+        if (_elementsById.TryGetValue(elementID, out var element))
         {
             return element;
         }
+
         return null;
     }
 
+    #endregion
+
+    #region Simulation
+
+    private void RunSimulationStep()
+    {
+        bool hasNullReference = false;
+
+        foreach (var element in _allElements)
+        {
+            if (element == null)
+            {
+                hasNullReference = true;
+                continue;
+            }
+
+            var elementTransform = element.StageTransform;
+            if (elementTransform == null)
+            {
+                hasNullReference = true;
+                continue;
+            }
+
+            var position = elementTransform.position;
+            bool isInsideCoreBounds = StageBounds.Contains(position);
+            bool isInsideBufferedBounds = _bufferedStageBounds.Contains(position);
+            bool isActive = element.gameObject.activeSelf;
+
+            if (!isActive && isInsideCoreBounds)
+            {
+                ActivateElement(element);
+            }
+            else if (isActive && !isInsideBufferedBounds)
+            {
+                DeactivateElement(element);
+            }
+        }
+
+        if (hasNullReference)
+        {
+            if (AutoRefreshOnNullEntries)
+            {
+                RefreshElementCache();
+            }
+            else
+            {
+                CleanupElementCache();
+            }
+        }
+    }
+
+    private void ActivateElement(StageElement element)
+    {
+        element.gameObject.SetActive(true);
+        element.OnStageEnter();
+    }
+
+    private void DeactivateElement(StageElement element)
+    {
+        element.OnStageExit();
+        element.gameObject.SetActive(false);
+    }
+
+    private void ForceRemoveElement(StageElement element)
+    {
+        if (element == null)
+        {
+            return;
+        }
+
+        if (element.gameObject.activeSelf)
+        {
+            element.OnStageExit();
+            element.gameObject.SetActive(false);
+        }
+        else
+        {
+            element.ApplyState(StageElement.ElementState.OutsideStage);
+            element.RestoreSubStateSnapshot(StageElementSubStates.Outside);
+        }
+    }
+
+    private void ForcePlaceElement(StageElement element, StageStateData.ElementData elementData)
+    {
+        if (element == null || elementData == null)
+        {
+            return;
+        }
+
+        var elementTransform = element.StageTransform;
+        elementTransform.position = elementData.Position;
+        elementTransform.rotation = elementData.Rotation;
+        elementTransform.localScale = elementData.Scale;
+
+        if (!element.gameObject.activeSelf)
+        {
+            element.gameObject.SetActive(true);
+        }
+
+        element.OnStageEnter();
+    }
+
+    private void CleanupElementCache()
+    {
+        _allElements.RemoveAll(e => e == null || !IsSceneElement(e));
+        RebuildLookupDictionary();
+    }
+
+    private void RebuildLookupDictionary()
+    {
+        _elementsById.Clear();
+        foreach (var element in _allElements)
+        {
+            if (element == null) continue;
+            if (string.IsNullOrEmpty(element.StageElementID)) continue;
+
+            if (_elementsById.TryGetValue(element.StageElementID, out var existing) && existing != element)
+            {
+                continue;
+            }
+
+            _elementsById[element.StageElementID] = element;
+        }
+    }
+
+    private static bool IsSceneElement(StageElement element)
+    {
+        if (element == null)
+        {
+            return false;
+        }
+
+        var go = element.gameObject;
+        if (go == null)
+        {
+            return false;
+        }
+
+        return go.scene.IsValid();
+    }
+
+    private void EnsureBoundsValid()
+    {
+        var bounds = StageBounds;
+        var size = bounds.size;
+        const float minSize = 0.01f;
+        size.x = Mathf.Max(minSize, size.x);
+        size.y = Mathf.Max(minSize, size.y);
+        size.z = Mathf.Max(minSize, size.z);
+        bounds.size = size;
+        StageBounds = bounds;
+    }
+
+    private void UpdateBufferedBounds()
+    {
+        _bufferedStageBounds = StageBounds;
+        if (ExitHysteresis > 0f)
+        {
+            _bufferedStageBounds.Expand(ExitHysteresis * 2f);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(StageBounds.center, StageBounds.size);
+
+        if (ExitHysteresis > 0f)
+        {
+            var buffered = StageBounds;
+            buffered.Expand(ExitHysteresis * 2f);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(buffered.center, buffered.size);
+        }
+    }
+
+    #endregion
+
     #region Public Methods
 
-    public void StageElementIn(string elementID, string playerID)
+    public void StageElementPlay(string playerID, bool forceSimulationSync = true)
     {
-        var element = GetElement(elementID);
-        if (element == null)
+        if (string.IsNullOrEmpty(playerID))
         {
-            Debug.LogError($"[StageManager] StageElementIn: Element not found {elementID}");
+            Debug.LogWarning("[StageManager] StageElementPlay: playerID is empty.");
             return;
         }
 
-        var playerPrefab = PlayerStore != null ? PlayerStore.GetPlayerPrefab(playerID) : null;
-        if (playerPrefab == null)
+        if (PlayerStore == null)
         {
-            Debug.LogError($"[StageManager] StageElementIn: Player not found {playerID}");
+            Debug.LogError("[StageManager] StageElementPlay: PlayerStore is null.");
             return;
         }
 
-        PlayFeedbackOnElement(element, playerPrefab, () =>
+        if (forceSimulationSync)
         {
-            element.SetState(StageElement.ElementState.OnStage);
-        }, null);
-    }
-
-    public void StageElementOut(string elementID, string playerID)
-    {
-        var element = GetElement(elementID);
-        if (element == null)
-        {
-            Debug.LogError($"[StageManager] StageElementOut: Element not found {elementID}");
-            return;
+            RunSimulationStep();
         }
 
-        var playerPrefab = PlayerStore != null ? PlayerStore.GetPlayerPrefab(playerID) : null;
-        if (playerPrefab == null)
-        {
-            Debug.LogError($"[StageManager] StageElementOut: Player not found {playerID}");
-            return;
-        }
-
-        PlayFeedbackOnElement(element, playerPrefab, null, () =>
-        {
-            element.SetState(StageElement.ElementState.OutsideStage);
-        });
-    }
-
-    public void StageElementPlay(string elementID, string playerID)
-    {
-        var element = GetElement(elementID);
-        if (element == null)
-        {
-            Debug.LogError($"[StageManager] StageElementPlay: Element not found {elementID}");
-            return;
-        }
-
-        if (element.CurrentState == StageElement.ElementState.OutsideStage)
-        {
-            Debug.LogError($"[StageManager] StageElementPlay: Element {elementID} is OutsideStage. Cannot play.");
-            return;
-        }
-
-        var playerPrefab = PlayerStore != null ? PlayerStore.GetPlayerPrefab(playerID) : null;
-        if (playerPrefab == null)
+        var sourcePlayer = PlayerStore.GetPlayerPrefab(playerID);
+        if (sourcePlayer == null)
         {
             Debug.LogError($"[StageManager] StageElementPlay: Player not found {playerID}");
             return;
         }
 
-        PlayFeedbackOnElement(element, playerPrefab, null, null);
-    }
-
-    public void StagePerformance(string performanceID)
-    {
-        if (PlayerStore == null)
+        var playerInstance = CreatePlayerInstance(sourcePlayer, out bool isRuntimeInstance);
+        if (playerInstance == null)
         {
-            Debug.LogError("[StageManager] StagePerformance: PlayerStore is null.");
+            Debug.LogError($"[StageManager] StageElementPlay: Failed to create player instance for {playerID}");
             return;
         }
 
-        var player = PlayerStore.GetPlayerPrefab(performanceID);
-        if (player == null)
+        if (isRuntimeInstance)
         {
-            Debug.LogError($"[StageManager] StagePerformance: Performance ID not found {performanceID}");
-            return;
+            playerInstance.Events.OnComplete.AddListener(() =>
+            {
+                if (playerInstance != null)
+                {
+                    Destroy(playerInstance.gameObject);
+                }
+            });
         }
 
-        // 调试用合法性监控：不会阻止真正的播放
-        TryInvokePerformanceMonitor(performanceID, player);
-
-        // 这里假定 PlayerStore 中配置的是场景中的现成 MMF_Player（或统一的“库”对象），
-        // 直接调用其 PlayFeedbacks 即可，不再做 Instantiate。
-        player.PlayFeedbacks();
+        playerInstance.PlayFeedbacks();
     }
 
-    /// <summary>
-    /// 通过反射调用 StagePerformanceMonitor（如果存在且实现了对应静态方法）。
-    /// 这样可以在仅分析当前文件的代码检查器下避免编译错误，同时在实际运行时正常生效。
-    /// </summary>
-    private void TryInvokePerformanceMonitor(string performanceID, MMF_Player player)
+    public void ForceSimulationStep()
     {
-        var monitorType = typeof(StagePerformanceMonitor);
-        if (monitorType == null) return;
-
-        var method = monitorType.GetMethod(
-            "CheckPerformance",
-            BindingFlags.Public | BindingFlags.Static,
-            null,
-            new System.Type[] { typeof(string), typeof(MMF_Player) },
-            null);
-
-        if (method == null) return;
-
-        try
-        {
-            method.Invoke(null, new object[] { performanceID, player });
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogWarning($"[StageManager] StagePerformanceMonitor.CheckPerformance 调用失败（仅影响调试）：{e.Message}");
-        }
+        RunSimulationStep();
     }
 
     #endregion
 
     #region Helper Methods
 
-    private void PlayFeedbackOnElement(StageElement element, MMF_Player prefab, Action onStart, Action onComplete)
+    private MMF_Player CreatePlayerInstance(MMF_Player source, out bool isRuntimeInstance)
     {
-        // Instantiate the player
-        var playerInstance = Instantiate(prefab, element.transform.position, Quaternion.identity);
-        playerInstance.transform.SetParent(transform); // Keep it under StageManager or null?
-        playerInstance.name = $"{prefab.name}_{element.name}";
+        isRuntimeInstance = false;
 
-        // Set Targets
-        SetTargets(playerInstance, element.transform);
-
-        // Setup events
-        if (onStart != null)
+        if (source == null)
         {
-            onStart.Invoke();
+            return null;
         }
 
-        if (onComplete != null)
+        if (source.gameObject.scene.IsValid())
         {
-            playerInstance.Events.OnComplete.AddListener(() => onComplete.Invoke());
+            return source;
         }
 
-        // Auto destroy after playing
-        // MMF_Player doesn't have built-in auto-destroy on complete in the base settings easily accessible via code without modifying the prefab settings usually.
-        // But we can destroy it manually after duration.
-        // Or better, use the OnComplete event to destroy it.
-        playerInstance.Events.OnComplete.AddListener(() => Destroy(playerInstance.gameObject));
-
-        playerInstance.PlayFeedbacks();
-    }
-
-    private void SetTargets(MMF_Player player, Transform target)
-    {
-        foreach (var feedback in player.FeedbacksList)
-        {
-            if (feedback == null) continue;
-
-            // Try to find "Target", "TargetTransform", "AnimatePositionTarget", etc.
-            // Common ones in Feel:
-            // MMF_Position: AnimatePositionTarget
-            // MMF_Scale: AnimateScaleTarget
-            // MMF_Rotation: AnimateRotationTarget
-            // MMF_FloatingText: TargetTransform
-
-            // We use reflection to find any field or property that looks like a target and is of type Transform or GameObject.
-
-            var type = feedback.GetType();
-            var flags = BindingFlags.Public | BindingFlags.Instance;
-
-            // Check for specific known properties first for safety/speed if needed, but generic reflection is requested.
-
-            // Properties to look for:
-            string[] targetPropertyNames = new string[] {
-                "Target",
-                "TargetTransform",
-                "AnimatePositionTarget",
-                "AnimateScaleTarget",
-                "AnimateRotationTarget",
-                "BoundGameObject"
-            };
-
-            foreach (var propName in targetPropertyNames)
-            {
-                var field = type.GetField(propName, flags);
-                if (field != null)
-                {
-                    if (field.FieldType == typeof(Transform))
-                    {
-                        field.SetValue(feedback, target);
-                    }
-                    else if (field.FieldType == typeof(GameObject))
-                    {
-                        field.SetValue(feedback, target.gameObject);
-                    }
-                    else if (field.FieldType == typeof(RectTransform) && target is RectTransform rt)
-                    {
-                        field.SetValue(feedback, rt);
-                    }
-                }
-
-                var prop = type.GetProperty(propName, flags);
-                if (prop != null && prop.CanWrite)
-                {
-                    if (prop.PropertyType == typeof(Transform))
-                    {
-                        prop.SetValue(feedback, target);
-                    }
-                    else if (prop.PropertyType == typeof(GameObject))
-                    {
-                        prop.SetValue(feedback, target.gameObject);
-                    }
-                    else if (prop.PropertyType == typeof(RectTransform) && target is RectTransform rt)
-                    {
-                        prop.SetValue(feedback, rt);
-                    }
-                }
-            }
-
-            // Also check for "AutomateTargetAcquisition" related things if needed, but usually setting the field is enough.
-        }
-
-        // Refresh cache to ensure changes are picked up if needed
-        player.RefreshCache();
+        var instance = Instantiate(source, transform, false);
+        instance.name = $"{source.name}_Runtime";
+        isRuntimeInstance = true;
+        return instance;
     }
 
     #endregion
@@ -307,21 +426,20 @@ public class StageManager : MonoBehaviour
     public string RecordData()
     {
         var data = new StageStateData();
-        foreach (var kvp in _elements)
+        foreach (var element in _allElements)
         {
-            var element = kvp.Value;
-            if (element != null)
+            if (element == null) continue;
+            if (string.IsNullOrEmpty(element.StageElementID)) continue;
+            if (!element.gameObject.activeSelf) continue;
+
+            var elementData = new StageStateData.ElementData
             {
-                var elementData = new StageStateData.ElementData
-                {
-                    ID = element.StageElementID,
-                    State = element.CurrentState,
-                    Position = element.transform.position,
-                    Rotation = element.transform.rotation,
-                    Scale = element.transform.localScale
-                };
-                data.Elements.Add(elementData);
-            }
+                ID = element.StageElementID,
+                Position = element.StageTransform.position,
+                Rotation = element.StageTransform.rotation,
+                Scale = element.StageTransform.localScale
+            };
+            data.Elements.Add(elementData);
         }
         return SaveSystem.Serialize(data);
     }
@@ -332,17 +450,20 @@ public class StageManager : MonoBehaviour
         var data = SaveSystem.Deserialize<StageStateData>(s);
         if (data == null || data.Elements == null) return;
 
+        foreach (var element in _allElements)
+        {
+            ForceRemoveElement(element);
+        }
+
         foreach (var elementData in data.Elements)
         {
             var element = GetElement(elementData.ID);
-            if (element != null)
-            {
-                element.transform.position = elementData.Position;
-                element.transform.rotation = elementData.Rotation;
-                element.transform.localScale = elementData.Scale;
-                element.SetState(elementData.State);
-            }
+            if (element == null) continue;
+
+            ForcePlaceElement(element, elementData);
         }
+
+        RunSimulationStep();
     }
 
     #endregion
@@ -355,7 +476,6 @@ public class StageStateData
     public class ElementData
     {
         public string ID;
-        public StageElement.ElementState State;
         public Vector3 Position;
         public Quaternion Rotation;
         public Vector3 Scale;
