@@ -4,7 +4,7 @@
 public interface IContractStage
 {
 
-    void Enter(HeContractContext ctx);
+    void Enter();
     void Update();
     void Exit();
     bool IsCompleted { get; }
