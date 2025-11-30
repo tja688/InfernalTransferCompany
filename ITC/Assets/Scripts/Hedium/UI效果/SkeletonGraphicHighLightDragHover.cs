@@ -133,7 +133,7 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
         }
         else
         {
-            Debug.LogWarning("Both material and HoverEffect are null. Cannot set highlight effect.");
+            Debug.Log("Both material and HoverEffect are null. Cannot set highlight effect.暂时不用管");
         }
       
     }
@@ -150,7 +150,7 @@ public class SkeletonGraphicHighLightDragHover : MonoBehaviour,
         }
         else
         {
-            Debug.LogWarning("_EnableHighLight property not found in material.");
+            Debug.Log("_EnableHighLight property not found in material.");
         }
     }
     /// <summary>
