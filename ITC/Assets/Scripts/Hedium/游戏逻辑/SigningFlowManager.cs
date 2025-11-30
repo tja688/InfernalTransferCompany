@@ -1,5 +1,6 @@
 ﻿
 using MoreMountains.Feedbacks;
+using PixelCrushers.DialogueSystem;
 using QFramework;
 using System;
 using System.Collections;
@@ -168,6 +169,8 @@ public class DocumentVerifier : IContractStage
     {
         context.documentVerified = true;
         completed = true;
+        // 向 Sequencer 发送小游戏完成消息
+        Sequencer.Message("DocumentVerifierGameDone");
     }
 
 
@@ -467,8 +470,8 @@ public class RuneInputManager : IContractStage
     private  void ToEnd()
     {
         completed = true;
-
-
+        // 向 Sequencer 发送小游戏完成消息
+        Sequencer.Message("RuneInputGameDone");
     }
     private void OnRythmGameEnd(HeSuccessLayer success)
     {
@@ -476,6 +479,7 @@ public class RuneInputManager : IContractStage
         {
             case HeSuccessLayer.BigSuccess:
                 Debug.Log("游戏大成功!");
+                ToEnd();
                 break;
             case HeSuccessLayer.Success:
                 Debug.Log("游戏成功!");
@@ -485,22 +489,19 @@ public class RuneInputManager : IContractStage
                 break;
             case HeSuccessLayer.Normal:
                 Debug.Log("游戏普通完成!");
-
-
-
-
+                ToEnd();
                 break;
             case HeSuccessLayer.Fail:
                 Debug.Log("游戏失败!");
-
-
-
+                ToEnd();
                 break;
             case HeSuccessLayer.BigFail:
                 Debug.Log("游戏大失败!");
+                ToEnd();
                 break;
             default:
                 Debug.Log("未知游戏结果!");
+                ToEnd();
                 break;
         }
         return;
@@ -557,6 +558,8 @@ public class SpecialEventSystem : IContractStage
             // 没有事件，直接完成
             completed = true;
             context.eventHandled = true;
+            // 向 Sequencer 发送小游戏完成消息
+            Sequencer.Message("SpecialEventGameDone");
         }
     }
 
@@ -575,6 +578,11 @@ public class SpecialEventSystem : IContractStage
             Debug.Log("特殊事件处理超时");
             currentEvent.OnFail?.Invoke(context);
             failed = true;
+            // 如果 OnFail 回调中没有发送消息，这里发送
+            if (!completed && failed)
+            {
+                Sequencer.Message("SpecialEventGameDone");
+            }
         }
     }
 
@@ -607,8 +615,8 @@ public class SpecialEventSystem : IContractStage
                     type = ContractEventType.Phone,
                     description = "电话突然响起，需要接听",
                     duration = 5f,
-                    OnResolve = (ctx) => { Debug.Log("成功接听电话"); completed = true; ctx.eventHandled = true; },
-                    OnFail = (ctx) => { Debug.Log("未能及时接听电话"); ctx.DecreaseSatisfaction(); }
+                    OnResolve = (ctx) => { Debug.Log("成功接听电话"); completed = true; ctx.eventHandled = true; Sequencer.Message("SpecialEventGameDone"); },
+                    OnFail = (ctx) => { Debug.Log("未能及时接听电话"); ctx.DecreaseSatisfaction(); failed = true; Sequencer.Message("SpecialEventGameDone"); }
                 };
                 
             case ContractEventType.Gun:
@@ -617,8 +625,8 @@ public class SpecialEventSystem : IContractStage
                     type = ContractEventType.Gun,
                     description = "顾客突然拔枪，需要迅速应对!",
                     duration = 3f,
-                    OnResolve = (ctx) => { Debug.Log("成功化解枪械威胁"); completed = true; ctx.eventHandled = true; ctx.IncreaseSatisfaction(); },
-                    OnFail = (ctx) => { Debug.Log("未能应对枪械威胁"); ctx.AddFailure(); }
+                    OnResolve = (ctx) => { Debug.Log("成功化解枪械威胁"); completed = true; ctx.eventHandled = true; ctx.IncreaseSatisfaction(); Sequencer.Message("SpecialEventGameDone"); },
+                    OnFail = (ctx) => { Debug.Log("未能应对枪械威胁"); ctx.AddFailure(); failed = true; Sequencer.Message("SpecialEventGameDone"); }
                 };
                 
             case ContractEventType.Epilepsy:
@@ -627,8 +635,8 @@ public class SpecialEventSystem : IContractStage
                     type = ContractEventType.Epilepsy,
                     description = "顾客突然癫痫发作，需要紧急救助",
                     duration = 8f,
-                    OnResolve = (ctx) => { Debug.Log("成功救助癫痫顾客"); completed = true; ctx.eventHandled = true; },
-                    OnFail = (ctx) => { Debug.Log("未能及时救助"); ctx.DecreaseSatisfaction(); }
+                    OnResolve = (ctx) => { Debug.Log("成功救助癫痫顾客"); completed = true; ctx.eventHandled = true; Sequencer.Message("SpecialEventGameDone"); },
+                    OnFail = (ctx) => { Debug.Log("未能及时救助"); ctx.DecreaseSatisfaction(); failed = true; Sequencer.Message("SpecialEventGameDone"); }
                 };
                 
             case ContractEventType.Transform:
@@ -637,8 +645,8 @@ public class SpecialEventSystem : IContractStage
                     type = ContractEventType.Transform,
                     description = "顾客显露非人类特征，正在变形!",
                     duration = 4f,
-                    OnResolve = (ctx) => { Debug.Log("镇定应对非人类顾客"); completed = true; ctx.eventHandled = true; },
-                    OnFail = (ctx) => { Debug.Log("被非人类特征吓到"); ctx.DecreaseSatisfaction(2); }
+                    OnResolve = (ctx) => { Debug.Log("镇定应对非人类顾客"); completed = true; ctx.eventHandled = true; Sequencer.Message("SpecialEventGameDone"); },
+                    OnFail = (ctx) => { Debug.Log("被非人类特征吓到"); ctx.DecreaseSatisfaction(2); failed = true; Sequencer.Message("SpecialEventGameDone"); }
                 };
                 
             case ContractEventType.Dialogue:
@@ -647,8 +655,8 @@ public class SpecialEventSystem : IContractStage
                     type = ContractEventType.Dialogue,
                     description = "顾客突然开始对话，需要适当回应",
                     duration = 6f,
-                    OnResolve = (ctx) => { Debug.Log("恰当回应顾客对话"); completed = true; ctx.eventHandled = true; },
-                    OnFail = (ctx) => { Debug.Log("回应不当"); ctx.DecreaseSatisfaction(); }
+                    OnResolve = (ctx) => { Debug.Log("恰当回应顾客对话"); completed = true; ctx.eventHandled = true; Sequencer.Message("SpecialEventGameDone"); },
+                    OnFail = (ctx) => { Debug.Log("回应不当"); ctx.DecreaseSatisfaction(); failed = true; Sequencer.Message("SpecialEventGameDone"); }
                 };
                 
             default:
@@ -799,6 +807,8 @@ public class StampSystem : IContractStage
                 // 处理未知类型
                 break;
         }
+        // 无论成功还是失败，都向 Sequencer 发送小游戏完成消息
+        Sequencer.Message("StampGameDone");
     }
 }
 #endregion
@@ -891,18 +901,24 @@ public class SoulHarvestSystem : IContractStage
             Debug.Log("灵魂收取成功!");
             completed = true;
             context.soulHarvested = true;
+            // 向 Sequencer 发送小游戏完成消息
+            Sequencer.Message("SoulHarvestGameDone");
         }
         else if (cutPosition > targetPercentage)
         {
             Debug.Log("收取过多灵魂，顾客感到被欺骗");
             context.DecreaseSatisfaction();
             failed = true;
+            // 向 Sequencer 发送小游戏完成消息
+            Sequencer.Message("SoulHarvestGameDone");
         }
         else
         {
             Debug.Log("收取过少灵魂，浪费公司资产");
             context.AddFailure();
             failed = true;
+            // 向 Sequencer 发送小游戏完成消息
+            Sequencer.Message("SoulHarvestGameDone");
         }
         
         cutterActive = false;
