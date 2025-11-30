@@ -44884,7 +44884,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 288
-        y: 171.2
+        y: 171.68785
         width: 160
         height: 30
     - id: 2
@@ -45097,7 +45097,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 160
+        x: 159.40302
         y: 80
         width: 160
         height: 30
@@ -45841,7 +45841,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Sequence
-        value: StageElementPlay(RedIn)
+        value: 
         type: 0
         typeString: 
       conversationID: 10
@@ -45865,8 +45865,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 241.61703
-        y: 130.67235
+        x: 242.66968
+        y: 131.72499
         width: 160
         height: 30
     - id: 2
@@ -45896,7 +45896,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Sequence
-        value: StageElementPlay(BlueIn)
+        value: 
         type: 0
         typeString: 
       conversationID: 10
@@ -45920,8 +45920,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 322.8
-        y: 219.32765
+        x: 322.27365
+        y: 219.85396
         width: 160
         height: 30
     - id: 3
@@ -45951,9 +45951,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Sequence
-        value: 'FSMNext();
-
-          StageElementPlay(AllOut)'
+        value: FSMNext();
         type: 0
         typeString: 
       conversationID: 10
@@ -45977,7 +45975,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 457.49924
+        x: 455.9203
         y: 308.82553
         width: 160
         height: 30
