@@ -45179,7 +45179,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "\u51C6\u5907\u8FDB\u5165\u5C0F\u6E38\u620F"
+        value: "\u51C6\u5907\u8FDB\u5165\u6587\u4E66\u68C0\u67E5\u5C0F\u6E38\u620F\u6D4B\u8BD5"
         type: 0
         typeString: 
       - title: Sequence
@@ -45240,9 +45240,11 @@ MonoBehaviour:
       - title: Sequence
         value: 'SetDialoguePanel(false);
 
-          SetDialoguePanel(true)@Message(MiniGameDone);
+          StartDocumentVerifierGame();
 
-          Continue()@Message(MiniGameDone);'
+          SetDialoguePanel(true)@Message(DocumentVerifierGameDone);
+
+          Continue()@Message(DocumentVerifierGameDone);'
         type: 0
         typeString: 
       conversationID: 8
