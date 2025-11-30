@@ -170,6 +170,7 @@ public class DocumentVerifier : IContractStage
         context.documentVerified = true;
         completed = true;
         // 向 Sequencer 发送小游戏完成消息
+        Debug.Log("向 Sequencer 发送小游戏完成消息");
         Sequencer.Message("DocumentVerifierGameDone");
     }
 
@@ -329,7 +330,7 @@ public class DocumentVerifier : IContractStage
     }
     private void JudgeSuccess()
     {
-
+        ToExit();
     }
     private void DocumentJudgeProsses(DocumentError error)
     {
@@ -338,7 +339,7 @@ public class DocumentVerifier : IContractStage
             Debug.Log("强制下一阶段");
 
        
-            ToExit();
+        
             JudgeSuccess();
         }
         else
@@ -373,12 +374,13 @@ public class DocumentVerifier : IContractStage
             if (error == DocumentError.Pass)
             {
                 Debug.Log("玩家选择文书无误，通过到下一阶段");
-                ToExit();
+               
                 JudgeSuccess();
             }
             else
             {
                 Debug.Log($"玩家选择了错误的文书问题，文书并没有错误，核验文书不通过");
+
                 JudgeFaild();
             }
 
@@ -983,7 +985,7 @@ public class SigningFlowManager : MonoBehaviour
     {
         if (gameConfig == null)
         {
-            Debug.LogWarning("未设置 HeContractGameConfig，将使用默认设置");
+            //Debug.LogWarning("未设置 HeContractGameConfig，将使用默认设置");
 
 
             gameConfig = ScriptableObject.CreateInstance<HeContractGameConfig>();

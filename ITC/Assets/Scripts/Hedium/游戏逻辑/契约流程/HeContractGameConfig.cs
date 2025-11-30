@@ -37,7 +37,7 @@ public class HeContractGameConfig : ScriptableObject
     public float runeShowTimeLimit = 4f;
     [Tooltip("符文游戏轮次(次)")]
     [Range(5, 30)]
-    public int runeGameTuneCount = 4;
+    public int runeGameTuneCount = 3;
     [Tooltip("最大符文错误次数")]
     [Range(1, 5)]
     public int maxRuneErrors = 3;
@@ -46,18 +46,18 @@ public class HeContractGameConfig : ScriptableObject
     [Range(1, 3)]
     public int runeErrorSatisfactionThreshold = 2;
 
-    [Header("=== 符文核对系统 ===")]
-    [Tooltip("符文核对时间限制(秒)")]
-    [Range(3f, 10f)]
-    public float runeVerificationTime = 5f;
+    //[Header("=== 符文核对系统 ===")]
+    //[Tooltip("符文核对时间限制(秒)")]
+    //[Range(3f, 10f)]
+    //public float runeVerificationTime = 5f;
     
-    [Tooltip("需要找出的扭曲符文数量")]
-    [Range(1, 5)]
-    public int runeVerificationCount = 3;
+    //[Tooltip("需要找出的扭曲符文数量")]
+    //[Range(1, 5)]
+    //public int runeVerificationCount = 3;
     
-    [Tooltip("符文核对触发几率")]
-    [Range(0f, 1f)]
-    public float runeVerificationTriggerChance = 0.3f;
+    //[Tooltip("符文核对触发几率")]
+    //[Range(0f, 1f)]
+    //public float runeVerificationTriggerChance = 0.3f;
 
     [Header("=== 盖章系统 ===")]
     [Tooltip("印章蓄力时间(秒)")]
