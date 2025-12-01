@@ -17,8 +17,6 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     private SkeletonGraphic skeleton;
     private Color originalColor;
  
-    [SerializeField]
-    private Material mat; 
 
   
     [NonSerialized]
@@ -62,35 +60,13 @@ public class SkeletonHoverHighLight : MonoBehaviour,
     public void SetHighLight()
     {
 
-        if(mat == null)
-        {
-            return;
-        }
-        if (mat.HasProperty("_EnableHighLight "))
-        {
-            mat.SetFloat("_EnableHighLight", 1f);
-        }
-        else
-        {
-            Debug.LogWarning("_EnableHighLight property not found in material.");
-        }
+    
     }
     public void UnSetHighLight()
     {
 
         effectTurn.TurnOff();
-        if (mat == null)
-        {
-            return;
-        }
-        if (mat.HasProperty("_EnableHighLight "))
-        {
-            mat.SetFloat("_EnableHighLight", 0f);
-        }
-        else
-        {
-            Debug.LogWarning("_EnableHighLight property not found in material.");
-        }
+      
     }
     
     /// <summary>

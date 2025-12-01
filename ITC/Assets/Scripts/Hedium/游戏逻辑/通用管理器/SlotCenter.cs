@@ -148,6 +148,40 @@ public class SlotCenter : MonoBehaviour
     }
 
     #region Inspector 调试按钮
+
+
+    [ContextMenu("PrintAll Event")]
+    public void PrintAllEvent()
+    {
+        string logOutput = "--- All Registered Events ---\n";
+
+        if (eventTable.Count == 0)
+        {
+            logOutput += "No events registered.\n";
+        }
+        else
+        {
+            foreach (var entry in eventTable)
+            {
+                logOutput += $"\n[Event: {entry.Key}]\n";
+                if (entry.Value.Count == 0)
+                {
+                    logOutput += "  (No listeners)\n";
+                    continue;
+                }
+
+                foreach (var listenerInfo in entry.Value)
+                {
+                    string paramDesc = listenerInfo.ParamCount == 0 ? "无参" :
+                        $"参数: {listenerInfo.ParamCount} ({string.Join(", ", Array.ConvertAll(listenerInfo.ParamTypes, t => t.Name))})";
+                    logOutput += $"  -> Listener: {listenerInfo.DelegateFuncName}\n";
+                    logOutput += $"     IsOnce: {listenerInfo.IsOnce}, {paramDesc}, HasReturn: {listenerInfo.HasReturnValue}\n";
+                }
+            }
+        }
+
+        Debug.Log(logOutput);
+    }
     // Inspector 按钮触发选择的常量事件
     [ContextMenu("Trigger Selected Const Event")]
     public void TriggerSelectedConstEvent()
@@ -261,8 +295,18 @@ public class SlotCenter : MonoBehaviour
         }
         foreach (var info in listCopy)
         {
-            try
+            if(info == null)
             {
+                Debug.LogWarning($"事件{name}的信息为空");
+                return false;
+            }
+            if(info.ListenerDelegate == null)
+            {
+                Debug.LogWarning($"事件{name}的委托为空");
+                return false;
+            }
+       
+
                 switch (info.ListenerDelegate)
                 {
                     case Action a:
@@ -277,11 +321,7 @@ public class SlotCenter : MonoBehaviour
                         Debug.LogWarning($"事件{name}调用失败，签名不支持");
                         break;
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning($"事件{name}的处理器抛出异常: {ex.Message}");
-            }
+      
 
             // 如果是一次性监听器，触发后移除
             if (info.IsOnce)
@@ -315,24 +355,18 @@ public class SlotCenter : MonoBehaviour
         }
         foreach (var info in listCopy)
         {
-            try
+            if (info == null)
             {
-                //if (info.ParamCount == 0)
-                //{
-                //    switch (info.ListenerDelegate)
-                //    {
-                //        case Action<T> a:
-                //            a.Invoke();
-                //            break;
-                //        case MulticastDelegate md:
-                //            md.DynamicInvoke();
-                //            break;
-                //        default:
-                //            Debug.LogWarning($"事件{name}调用失败，签名不支持");
-                //            break;
-                //    }
-                //}
-                //else
+                Debug.LogWarning($"事件{name}的信息为空");
+                return false;
+            }
+            if (info.ListenerDelegate == null)
+            {
+                Debug.LogWarning($"事件{name}的委托为空");
+                return false;
+            }
+       
+
                     switch (info.ListenerDelegate)
                     {
                     case Action a:
@@ -345,11 +379,7 @@ public class SlotCenter : MonoBehaviour
                             Debug.LogWarning($"事件{name}调用失败，签名不支持");
                             break;
                     }
-            }
-            catch (Exception ex)
-            {
-                Debug.LogWarning($"事件{name}的处理器抛出异常: {ex.Message}");
-            }
+          
 
             if (info.IsOnce)
             {

@@ -178,7 +178,7 @@ public class HeContractUIManager : MonoBehaviour
 
         if (typewriterGameObject.activeSelf)
         {
-            var player = typewriterGameObject.transform.Find("MMF_Exit").GetComponent<MMF_Player>();
+            var player = typewriterGameObject.transform.Find("MMF_Exit")?.GetComponent<MMF_Player>();
             if (player)
             {
                 player.PlayFeedbacks();
@@ -406,6 +406,9 @@ public class HeContractUIManager : MonoBehaviour
 
 
     }
+    /// <summary>
+    /// 等待重构
+    /// </summary>
     public void OncontractDocumentsImagePlayEntryAnimationEnd()
     {
         //打开可拖拽
@@ -414,11 +417,19 @@ public class HeContractUIManager : MonoBehaviour
 
 
 
-        var typewriter = typewriterSkeleton.GetComponent<SkeletonGraphicHighLightDragHover>();
-        var role  = roleImage.GetComponent<ImageHighLightDragHover>();
+        var typewriter = typewriterSkeleton?.GetComponent<SkeletonGraphicHighLightDragHover>();
+        var role  = roleImage?.GetComponent<ImageHighLightDragHover>();
+        if (role)
+        {
+            SlotCenter.Instance.add_listener<DocumentError>(role.eventName, OnDragEndToChooseDocumentAction, true);
+
+        }
+        if (typewriter)
+        {
+            SlotCenter.Instance.add_listener<DocumentError>(typewriter.eventName, OnDragEndToChooseDocumentAction, true);
+
+        }
         // 监听事件,可拖拽才能触发事件
-        SlotCenter.Instance.add_listener<DocumentError>(typewriter.eventName, OnDragEndToChooseDocumentAction,true);
-        SlotCenter.Instance.add_listener<DocumentError>(role.eventName, OnDragEndToChooseDocumentAction,true);
     }
     private void OnDragEndToChooseDocumentAction(DocumentError err)
     {
