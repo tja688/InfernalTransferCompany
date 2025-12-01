@@ -16,6 +16,11 @@ public class PanelManager : MonoBehaviour, IGameEventListener<string>
     [SerializeField]
     private GamePanelLibrarySO _panelLibrary;
 
+    /// <summary>
+    /// [公开接口] 获取面板库配置
+    /// </summary>
+    public GamePanelLibrarySO PanelLibrary => _panelLibrary;
+
     [Tooltip("游戏启动时默认处于的面板状态")]
     [SerializeField]
     private string _defaultPanel = "None"; // 对应库中的 "None"
@@ -52,7 +57,7 @@ public class PanelManager : MonoBehaviour, IGameEventListener<string>
             return;
         }
         Instance = this;
-        
+
         // 确保全局存在
         DontDestroyOnLoad(gameObject);
 
@@ -62,7 +67,7 @@ public class PanelManager : MonoBehaviour, IGameEventListener<string>
             Debug.LogError("PanelManager 未配置 GamePanelLibrarySO！面板系统将无法工作。", this);
             return;
         }
-        
+
         // 初始化默认状态
         _currentPanel = _defaultPanel;
         _previousPanel = "None";
