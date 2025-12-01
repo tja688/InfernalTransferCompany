@@ -44884,7 +44884,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 288
-        y: 171.2
+        y: 171.68785
         width: 160
         height: 30
     - id: 2
@@ -45026,7 +45026,7 @@ MonoBehaviour:
       isGroup: 0
       nodeColor: 
       delaySimStatus: 0
-      falseConditionAction: 
+      falseConditionAction: Block
       conditionPriority: 2
       outgoingLinks:
       - originConversationID: 8
@@ -45097,7 +45097,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 160
+        x: 160.3464
         y: 80
         width: 160
         height: 30
@@ -45145,6 +45145,18 @@ MonoBehaviour:
         destinationDialogueID: 3
         isConnector: 0
         priority: 2
+      - originConversationID: 8
+        originDialogueID: 2
+        destinationConversationID: 8
+        destinationDialogueID: 8
+        isConnector: 0
+        priority: 2
+      - originConversationID: 8
+        originDialogueID: 2
+        destinationConversationID: 8
+        destinationDialogueID: 9
+        isConnector: 0
+        priority: 2
       conditionsString: 
       userScript: 
       onExecute:
@@ -45152,8 +45164,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 243.2
-        y: 183.20001
+        x: 748.94794
+        y: 52.0679
         width: 160
         height: 30
     - id: 3
@@ -45167,11 +45179,11 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Actor
-        value: 2
+        value: 1
         type: 5
         typeString: CustomFieldType_Actor
       - title: Conversant
-        value: 1
+        value: 2
         type: 5
         typeString: CustomFieldType_Actor
       - title: Menu Text
@@ -45179,7 +45191,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "\u51C6\u5907\u8FDB\u5165\u5C0F\u6E38\u620F"
+        value: "\u51C6\u5907\u8FDB\u5165\u6587\u4E66\u68C0\u67E5\u5C0F\u6E38\u620F\u6D4B\u8BD5"
         type: 0
         typeString: 
       - title: Sequence
@@ -45207,7 +45219,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 495.6
+        x: 495.13016
         y: 129.8077
         width: 160
         height: 30
@@ -45240,9 +45252,11 @@ MonoBehaviour:
       - title: Sequence
         value: 'SetDialoguePanel(false);
 
-          SetDialoguePanel(true)@Message(MiniGameDone);
+          StartDocumentVerifierGame();
 
-          Continue()@Message(MiniGameDone);'
+          SetDialoguePanel(true)@Message(DocumentVerifierGameDone);
+
+          Continue()@Message(DocumentVerifierGameDone);'
         type: 0
         typeString: 
       conversationID: 8
@@ -45267,7 +45281,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 488.9659
-        y: 218.31215
+        y: 219.25554
         width: 160
         height: 30
     - id: 5
@@ -45321,8 +45335,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 385.20007
-        y: 292.8
+        x: 766.33215
+        y: 372.98868
         width: 160
         height: 30
     - id: 6
@@ -45376,13 +45390,245 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 407.61765
-        y: 371.41968
+        x: 366.10822
+        y: 441.231
+        width: 160
+        height: 30
+    - id: 7
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 'SetDialoguePanel(false);
+
+          StartRuneInputGame();
+
+          SetDialoguePanel(true)@Message(RuneInputGameDone);
+
+          Continue()@Message(RuneInputGameDone);'
+        type: 0
+        typeString: 
+      conversationID: 8
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 8
+        originDialogueID: 7
+        destinationConversationID: 8
+        destinationDialogueID: 5
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 735.0682
+        y: 231.04968
+        width: 160
+        height: 30
+    - id: 8
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: "\u51C6\u5907\u8FDB\u5165\u97F3\u6E38"
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: 
+      conversationID: 8
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 8
+        originDialogueID: 8
+        destinationConversationID: 8
+        destinationDialogueID: 7
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 744.2309
+        y: 133.2
+        width: 160
+        height: 30
+    - id: 9
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: "\u51C6\u5907\u8FDB\u5165\u76D6\u7AE0\u6E38\u620F"
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: 
+      conversationID: 8
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 8
+        originDialogueID: 9
+        destinationConversationID: 8
+        destinationDialogueID: 10
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 941.4007
+        y: 136.03017
+        width: 160
+        height: 30
+    - id: 10
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 'SetDialoguePanel(false);
+
+          StartStampGame();
+
+          SetDialoguePanel(true)@Message(StampGameDone);
+
+          Continue()@Message(StampGameDone);'
+        type: 0
+        typeString: 
+      conversationID: 8
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 8
+        originDialogueID: 10
+        destinationConversationID: 8
+        destinationDialogueID: 5
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 972.5758
+        y: 209.74883
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.6700003
+    canvasScrollPosition: {x: 330.45892, y: 0}
+    canvasZoom: 0.7900002
   - id: 9
     fields:
     - title: Title
@@ -45711,8 +45957,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.64000034
+    canvasScrollPosition: {x: 34.462402, y: 51.566868}
+    canvasZoom: 0.97
   - id: 10
     fields:
     - title: Title
@@ -45865,8 +46111,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 241.61703
-        y: 130.67235
+        x: 242.66968
+        y: 131.72499
         width: 160
         height: 30
     - id: 2
@@ -45920,8 +46166,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 322.8
-        y: 219.32765
+        x: 322.27365
+        y: 219.85396
         width: 160
         height: 30
     - id: 3
@@ -45951,7 +46197,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Sequence
-        value: FSMNext()
+        value: FSMNext();
         type: 0
         typeString: 
       conversationID: 10
@@ -45975,7 +46221,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 458.02554
+        x: 455.9203
         y: 308.82553
         width: 160
         height: 30
