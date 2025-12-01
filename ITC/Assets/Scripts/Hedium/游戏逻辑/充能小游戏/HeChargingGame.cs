@@ -25,8 +25,8 @@ public class HeChargingGame : MonoBehaviour
     }
     private void InitChargingGame()
     {
-        EnterAnimation();
-        Instantiate(JudgmentImagePrefab, JudgmentGroupArea.transform);
+        //EnterAnimation();
+        //Instantiate(JudgmentImagePrefab, JudgmentGroupArea.transform);
 
     }
 
