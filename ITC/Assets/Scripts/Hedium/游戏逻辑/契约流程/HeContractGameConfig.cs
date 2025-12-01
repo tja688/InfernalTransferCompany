@@ -31,7 +31,7 @@ public class HeContractGameConfig : ScriptableObject
     public int runeInputCountMaxLimit = 6;
     [Tooltip("符文输入数量最小(个)")]
     [Range(5, 30)]
-    public int runeInputCountMinLimit = 3;
+    public int runeInputCountMinLimit = 6;
     [Tooltip("符文显示时间限制(秒)")]
     [Range(5f, 30f)]
     public float runeShowTimeLimit = 4f;
