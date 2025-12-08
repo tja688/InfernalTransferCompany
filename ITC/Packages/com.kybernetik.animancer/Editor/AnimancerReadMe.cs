@@ -141,7 +141,7 @@ namespace Animancer.Editor
     /// <summary>[Editor-Only] [Lite-Only]
     /// Validates that the Animancer.Lite.dll is the correct one for this version of Unity.
     /// </summary>
-    [UnityEditor.InitializeOnLoad]
+    // [UnityEditor.InitializeOnLoad]
     internal static class UnityVersionChecker
     {
         /************************************************************************************************************************/
