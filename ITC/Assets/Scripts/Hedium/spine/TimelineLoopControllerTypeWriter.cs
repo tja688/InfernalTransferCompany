@@ -19,6 +19,11 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
     public bool enablePause = true;
 
     private uint disablePauseCount = 0;
+    private  const uint allAnimationCount = 5;
+    private uint curAnimationCount = 5;
+
+    private bool isOnGameTuneEnd = false;
+    private bool isLineBroken = false;
     private void Awake()
     {
         skeletonGraphic = GetComponent<SkeletonGraphic>();
@@ -36,10 +41,18 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
     }
     public void OnPausePoint()
     {
-        if (enablePause && disablePauseCount == 0)
+        if (enablePause && disablePauseCount == 0|| (curAnimationCount== allAnimationCount))
+        {
             PauseLoop();
+        }
+        else if (curAnimationCount < allAnimationCount)
+        {
+            curAnimationCount++;
+        }
+
         if (disablePauseCount != 0)
         {
+
             disablePauseCount--;
         }
     }
@@ -55,15 +68,29 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
     public void OnCycleEndSignal()
     {
         disablePauseCount = 0;
+
         if (loop)
         {
+            isOnGameTuneEnd = false;
+            isLineBroken = false;
+
             director.time = loopPoint;
             director.Play();
         }
     }
+    /// <summary>
+    /// 判断是否到下一轮音游
+    /// </summary>
+    private void OnNextTune()
+    {
+        if(isLineBroken&&isOnGameTuneEnd)
+        SlotCenter.Instance.trigger_event(HeEventNames.OnReadyForBreakLine);
+        
+    }
     public void OnReadyForBreakLine()
     {
-        SlotCenter.Instance.trigger_event(HeEventNames.OnReadyForBreakLine);
+        isLineBroken = true;
+        OnNextTune();
 
     }
     public void LineBreak()
@@ -72,12 +99,10 @@ public class TimelineLoopControllerTypeWriter : MonoBehaviour
         if (loop)
         {
             //director.time = LineBreakPoint;
-
-
-
-
             disablePauseCount = 5;
-
+            curAnimationCount = 0;
+            isOnGameTuneEnd = true;
+            OnNextTune();
             if (director.time<LineBreakPoint )
           { 
                 director.time = LineBreakPoint; 
