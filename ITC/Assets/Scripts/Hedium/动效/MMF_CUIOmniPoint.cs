@@ -3,6 +3,7 @@ using MoreMountains.Tools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI.Extensions;
 namespace MoreMountains.Feedbacks
@@ -34,26 +35,39 @@ namespace MoreMountains.Feedbacks
         [MMFInspectorGroup("Capture Settings", true, 13)]
         [Tooltip("When true, calling Stop on this feedback will capture current positions into NewPositions array.")]
         public bool StopIsCapture = false;
+        [MMFInspectorGroup("DeterminePositionsOnPlay", true, 13)]
+        [Tooltip("When true, calling Stop on this feedback will capture current positions into NewPositions array.")]
+        public bool DeterminePointsOnPlay = false;
+        [MMFInspectorGroup("Start Positions (16 Points)", true, 14)]
+        [Tooltip("Start positions for all 16 control points [Curve0..3, Point0..3].")]
+        public Vector3[] StartPositions = new Vector3[16];
+
 
         [MMFInspectorGroup("Target Positions (16 Points)", true, 14)]
         [Tooltip("Target positions for all 16 control points [Curve0..3, Point0..3].")]
         public Vector3[] NewPositions = new Vector3[16];
-
+        [Tooltip("EnableMove positions for all 16 control points.")]
+        public bool[] EnableMovePositions =
+    Enumerable.Repeat(true, 16).ToArray();
         [MMFInspectorGroup("Interpolation", true, 15)]
         public bool InterpolateValue = true;
         [MMFCondition("InterpolateValue", true)]
         public float Duration = 2f;
         [MMFCondition("InterpolateValue", true)]
         public float ValueMultiple = 1f;
+
         public MMTweenType InterpolationCurve = new MMTweenType(
             new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0)),
             "InterpolateValue"
         );
 
+
         public override float FeedbackDuration { get { return InterpolateValue ? ApplyTimeMultiplier(Duration) : 0f; } set { if (InterpolateValue) Duration = value; } }
 
-        protected Vector3[] _initialPositions = new Vector3[16];
+        protected Vector3[] _initialPositions;
+        protected Vector3[] _initialPositionsSub = new Vector3[16];
         protected Coroutine _coroutine;
+
 
         /// <summary>
         /// 捕获当前所有点位到NewPositions
@@ -112,25 +126,38 @@ namespace MoreMountains.Feedbacks
             if (TargetComponent == null) return;
 
             // 自动读取初始位置
-            ValidateStructure(TargetComponent, out _initialPositions);
+            ValidateStructure(TargetComponent, out StartPositions);
             _coroutine = null;
 
-            // 如果NewPositions全为0，自动捕获作为默认值
-            bool allZero = true;
-            for (int i = 0; i < NewPositions.Length; i++)
-            {
-                if (NewPositions[i] != Vector3.zero) { allZero = false; break; }
-            }
-            if (allZero)
-            {
-                Debug.Log(string.Format("Auto-capturing current positions for {0}", TargetComponent.name));
-                CaptureCurrentPositions();
-            }
+            //// 如果NewPositions全为0，自动捕获作为默认值
+            //bool allZero = true;
+            //for (int i = 0; i < NewPositions.Length; i++)
+            //{
+            //    if (NewPositions[i] != Vector3.zero) { allZero = false; break; }
+            //}
+            //if (allZero)
+            //{
+            //    Debug.Log(string.Format("Auto-capturing current positions for {0}", TargetComponent.name));
+            //    CaptureCurrentPositions();
+            //}
         }
 
         protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1f)
         {
             if (!Active || !FeedbackTypeAuthorized || TargetComponent == null) return;
+            if (DeterminePointsOnPlay == true)
+            {
+              
+
+                ValidateStructure(TargetComponent, out _initialPositionsSub);
+                _initialPositions = _initialPositionsSub;
+                _coroutine = null;
+            }
+            else
+            {
+                ApplyPositions(StartPositions);
+                _initialPositions=StartPositions;
+            }
 
             if (InterpolateValue)
             {
