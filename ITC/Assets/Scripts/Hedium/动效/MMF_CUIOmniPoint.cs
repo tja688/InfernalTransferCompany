@@ -34,7 +34,9 @@ namespace MoreMountains.Feedbacks
 
         [MMFInspectorGroup("Capture Settings", true, 13)]
         [Tooltip("When true, calling Stop on this feedback will capture current positions into NewPositions array.")]
-        public bool StopIsCapture = false;
+        public bool StopIsCaptureTarget = false;
+        [Tooltip("When true, calling Initial on this feedback will capture current positions into NewPositions array.")]
+        public bool InitialIsCaptureStart = false;
         [MMFInspectorGroup("DeterminePositionsOnPlay", true, 13)]
         [Tooltip("When true, calling Stop on this feedback will capture current positions into NewPositions array.")]
         public bool DeterminePointsOnPlay = false;
@@ -126,8 +128,11 @@ namespace MoreMountains.Feedbacks
             if (TargetComponent == null) return;
 
             // 自动读取初始位置
-            ValidateStructure(TargetComponent, out StartPositions);
-            _coroutine = null;
+            if (InitialIsCaptureStart)
+            {
+                ValidateStructure(TargetComponent, out StartPositions);
+                _coroutine = null;
+            }
 
             //// 如果NewPositions全为0，自动捕获作为默认值
             //bool allZero = true;
@@ -182,6 +187,10 @@ namespace MoreMountains.Feedbacks
 
                 for (int i = 0; i < 16; i++)
                 {
+                    if (EnableMovePositions[i]==false)
+                    {
+                        continue;
+                    }
                     Vector3 newPos = Vector3.LerpUnclamped(_initialPositions[i], NewPositions[i], evaluated);
                     SetControlPoint(i, newPos);
                 }
@@ -226,7 +235,7 @@ namespace MoreMountains.Feedbacks
             if (!Active || !FeedbackTypeAuthorized) return;
 
             // 当StopIsCapture为true时，捕获当前位置
-            if (StopIsCapture && TargetComponent != null)
+            if (StopIsCaptureTarget && TargetComponent != null)
             {
                 Debug.Log(string.Format("StopIsCapture is true: Capturing current positions from {0}", TargetComponent.name));
                 CaptureCurrentPositions();
