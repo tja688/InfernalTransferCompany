@@ -2786,7 +2786,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1844986417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3197,6 +3197,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5044348496049227703, guid: 3985d691ee602dd47b681b7b1db7ffe3, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 511
+      objectReference: {fileID: 0}
     - target: {fileID: 5044348496049227707, guid: 3985d691ee602dd47b681b7b1db7ffe3, type: 3}
       propertyPath: displaySettings.dialogueUI
       value: 
@@ -23965,7 +23969,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 511
 --- !u!224 &4961587626577529402
 RectTransform:
   m_ObjectHideFlags: 0
@@ -29661,7 +29665,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45c9cf5dc5bfc3044bbae59369411525, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mat: {fileID: 2100000, guid: 94f30d58f35cd1e499500e31cf6999af, type: 2}
   HoverEffect: {fileID: 7715028345832379275}
   HoverEffectRestore: {fileID: 0}
 --- !u!1 &6401977655293195245
