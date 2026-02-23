@@ -126,12 +126,11 @@ public class HeContractUIManager : MonoBehaviour
     public void RestoreTypeWriterGameObject()
     {
         Debug.Log("恢复打字机入场动画");
-        if (contractDocumentsGameObject.activeSelf)
+        if (contractDocumentsGameObject != null && contractDocumentsGameObject.activeSelf)
         {
-            var player = contractDocumentsGameObject.transform.Find("MMF_Exit").GetComponent<MMF_Player>();
+            var player = contractDocumentsGameObject.transform.Find("MMF_Exit")?.GetComponent<MMF_Player>();
             if (player)
             {
-                  
                 player.PlayFeedbacks();
             }
             else
@@ -140,30 +139,27 @@ public class HeContractUIManager : MonoBehaviour
             }
         }
 
-    if (!typewriterGameObject.activeSelf)
-    {
-       typewriterGameObject.SetActive(true);
-        var player = typewriterGameObject.transform.Find("MMF_Enter").GetComponent<MMF_Player>();
-        if (player)
+        if (typewriterGameObject != null && !typewriterGameObject.activeSelf)
         {
-            player.PlayFeedbacks();
+            typewriterGameObject.SetActive(true);
+            var player = typewriterGameObject.transform.Find("MMF_Enter")?.GetComponent<MMF_Player>();
+            if (player)
+            {
+                player.PlayFeedbacks();
+            }
+            else
+            {
+                Debug.LogError("MMF_Player 入场动画丢失");
+            }
         }
-        else
-        {
-            Debug.LogError("MMF_Player 入场动画丢失");
-        }
-    }
-        
-
 
     }
 
     public void ResotreContractDocumentsGameObject()
     {
-        if (!contractDocumentsGameObject.activeSelf)
+        if (contractDocumentsGameObject != null && !contractDocumentsGameObject.activeSelf)
         {
-
-            var player = contractDocumentsGameObject.transform.Find("MMF_Enter").GetComponent<MMF_Player>();
+            var player = contractDocumentsGameObject.transform.Find("MMF_Enter")?.GetComponent<MMF_Player>();
             contractDocumentsGameObject.SetActive(true);
             if (player)
             {
@@ -176,7 +172,7 @@ public class HeContractUIManager : MonoBehaviour
             }
         }
 
-        if (typewriterGameObject.activeSelf)
+        if (typewriterGameObject != null && typewriterGameObject.activeSelf)
         {
             var player = typewriterGameObject.transform.Find("MMF_Exit")?.GetComponent<MMF_Player>();
             if (player)
