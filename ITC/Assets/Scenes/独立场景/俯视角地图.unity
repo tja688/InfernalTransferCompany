@@ -761,6 +761,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3038381424979213600, guid: af5f9cda9c5420744bd93c2e04a2c3f3, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 511
+      objectReference: {fileID: 0}
     - target: {fileID: 3038381424989720488, guid: af5f9cda9c5420744bd93c2e04a2c3f3, type: 3}
       propertyPath: m_Name
       value: ITC Eco Dialogue Manager

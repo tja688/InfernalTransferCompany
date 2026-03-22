@@ -49,6 +49,16 @@
       },
       "hash": "38fecf55e4fd94ccfe58a92ed8ad1a529ba1694e"
     },
+    "com.coplaydev.unity-mcp": {
+      "version": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#main",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "com.unity.test-framework": "1.1.31"
+      },
+      "hash": "b2d95d2638063e7bb36025df64bf02a9eba8a7c8"
+    },
     "com.esotericsoftware.spine.timeline": {
       "version": "file:com.esotericsoftware.spine.timeline-3.8",
       "depth": 0,
