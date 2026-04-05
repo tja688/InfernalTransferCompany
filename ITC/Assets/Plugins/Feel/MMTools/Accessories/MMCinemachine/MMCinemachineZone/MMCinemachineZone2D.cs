@@ -88,27 +88,43 @@ namespace MoreMountains.Tools
 				BoxCollider2D boxCollider2D = _confinerGameObject.AddComponent<BoxCollider2D>();
 				boxCollider2D.size = _boxCollider2D.size;
 				boxCollider2D.offset = _boxCollider2D.offset;
-				boxCollider2D.compositeOperation = Collider2D.CompositeOperation.Merge;
+				boxCollider2D.usedByComposite = true;
 				boxCollider2D.isTrigger = true;
 			}
 
 			if (_circleCollider2D != null)
 			{
-				CircleCollider2D circleCollider2D = _confinerGameObject.AddComponent<CircleCollider2D>();
+				PolygonCollider2D circleCollider2D = _confinerGameObject.AddComponent<PolygonCollider2D>();
 				circleCollider2D.isTrigger = true;
-				circleCollider2D.compositeOperation = Collider2D.CompositeOperation.Merge;
+				circleCollider2D.usedByComposite = true;
 				circleCollider2D.offset = _circleCollider2D.offset;
-				circleCollider2D.radius = _circleCollider2D.radius;
+				circleCollider2D.pathCount = 1;
+				circleCollider2D.SetPath(0, CreateCirclePoints(_circleCollider2D.radius));
 			}
 
 			if (_polygonCollider2D != null)
 			{
 				PolygonCollider2D polygonCollider2D = _confinerGameObject.AddComponent<PolygonCollider2D>();
 				polygonCollider2D.isTrigger = true;
-				polygonCollider2D.compositeOperation = Collider2D.CompositeOperation.Merge;
+				polygonCollider2D.usedByComposite = true;
 				polygonCollider2D.offset = _polygonCollider2D.offset;
 				polygonCollider2D.points = _polygonCollider2D.points;
 			}
+		}
+
+		protected virtual Vector2[] CreateCirclePoints(float radius)
+		{
+			const int segments = 32;
+			Vector2[] points = new Vector2[segments];
+			float step = Mathf.PI * 2f / segments;
+
+			for (int index = 0; index < segments; index++)
+			{
+				float angle = step * index;
+				points[index] = new Vector2(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius);
+			}
+
+			return points;
 		}
 
 		/// <summary>
