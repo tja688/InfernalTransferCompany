@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will trigger a freeze frame event when played, pausing the game for the specified duration (usually short, but not necessarily)
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will freeze the timescale for the specified duration (in seconds). I usually go with 0.01s or 0.02s, but feel free to tweak it to your liking. It requires a MMTimeManager in your scene to work.")]
+	[FeedbackHelp("此反馈会在指定时长内冻结时间缩放。通常我会用 0.01 秒或 0.02 秒，但你也可以按手感自行调整。要让它生效，场景中必须存在 MMTimeManager。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Time/Freeze Frame")]
 	public class MMF_FreezeFrame : MMF_Feedback
 	{
@@ -26,10 +27,10 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Freeze Frame", true, 63)]
 		/// the duration of the freeze frame
-		[Tooltip("the duration of the freeze frame")]
-		public float FreezeFrameDuration = 0.02f;
+		[Tooltip("定格持续时间")]
+		public float FreezeFrameDuration = 0.1f;
 		/// the minimum value the timescale should be at for this freeze frame to happen. This can be useful to avoid triggering freeze frames when the timescale is already frozen. 
-		[Tooltip("the minimum value the timescale should be at for this freeze frame to happen. This can be useful to avoid triggering freeze frames when the timescale is already frozen.")]
+		[Tooltip("发生此冻结帧的时间尺度应处于的最小值。这对于避免在时间刻度已经冻结时触发冻结帧很有用。")]
 		public float MinimumTimescaleThreshold = 0.1f;
 
 		/// the duration of this feedback is the duration of the freeze frame

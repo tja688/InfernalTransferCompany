@@ -25,33 +25,33 @@ namespace MoreMountains.Tools
 		
 		[Header("Track Volume Settings")]
 		/// The track to change volume on
-		[Tooltip("The track to change volume on")]
+		[Tooltip("要调整音量的轨道（track）")]
 		public MMSoundManager.MMSoundManagerTracks Track;
 		/// The volume to apply to the track when the slider is at its minimum
-		[Tooltip("The volume to apply to the track when the slider is at its minimum")]
+		[Tooltip("滑块处于最小值时应用到轨道的音量")]
 		public float MinVolume = 0f;
 		/// The volume to apply to the track when the slider is at its maximum
-		[Tooltip("The volume to apply to the track when the slider is at its maximum")]
+		[Tooltip("滑块处于最大值时应用到轨道的音量")]
 		public float MaxVolume = 1f;
 		
 		[Header("Read/Write Mode")]
 		/// in read mode, the value of the slider will be applied to the volume of the track. in read mode, the slider will move to reflect the volume of the track
-		[Tooltip("in read mode, the value of the slider will be applied to the volume of the track. in read mode, the slider will move to reflect the volume of the track")]
+		[Tooltip("模式说明：Write 模式下滑块值会写入轨道音量；Read 模式下滑块会跟随轨道音量变化")]
 		public Modes Mode = Modes.Write;
 		/// if this is true, the slider will automatically switch to read mode for the required duration when a track fade event is caught
-		[Tooltip("if this is true, the slider will automatically switch to read mode for the required duration when a track fade event is caught")]
+		[Tooltip("若开启，捕获到轨道淡变事件时，滑块会临时自动切到 Read 模式")]
 		public bool ChangeModeOnTrackFade = true;
 		/// if this is true, the slider will automatically switch to read mode for the required duration when a track mute event is caught
-		[Tooltip("if this is true, the slider will automatically switch to read mode for the required duration when a track mute event is caught")]
+		[Tooltip("若开启，捕获到轨道静音事件时，滑块会临时自动切到 Read 模式")]
 		public bool ChangeModeOnMute = true;
 		/// if this is true, the slider will automatically switch to read mode for the required duration when a track unmute event is caught
-		[Tooltip("if this is true, the slider will automatically switch to read mode for the required duration when a track unmute event is caught")]
+		[Tooltip("若开启，捕获到轨道取消静音事件时，滑块会临时自动切到 Read 模式")]
 		public bool ChangeModeOnUnmute = true;
 		/// if this is true, the slider will automatically switch to read mode for the required duration when a track volume change event is caught
-		[Tooltip("if this is true, the slider will automatically switch to read mode for the required duration when a track volume change event is caught")]
+		[Tooltip("若开启，捕获到轨道音量变化事件时，滑块会临时自动切到 Read 模式")]
 		public bool ChangeModeOnTrackVolumeChange = false;
 		/// when switching automatically (and temporarily) to Read Mode, the minimum duration the slider will remain in that mode
-		[Tooltip("when switching automatically (and temporarily) to Read Mode, the minimum duration the slider will remain in that mode")]
+		[Tooltip("自动临时切换到 Read 模式时，滑块至少保持该模式的时长")]
 		public float ModeSwitchBufferTime = 0.1f;
 
 		protected Slider _slider;

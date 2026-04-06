@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,8 +13,9 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Transform/Squash and Stretch")]
-	[FeedbackHelp("This feedback will let you modify the scale of an object on an axis while the other two axis (or only one) get automatically modified to conserve mass. Careful, the object you'll target with this needs to have a normalized scale.")]
+	[FeedbackHelp("此反馈可在一个轴上压缩/拉伸目标缩放，并自动联动另外一个或两个轴以保持体积观感。目标对象建议使用标准化初始缩放（如 1,1,1），否则视觉结果可能异常。")]
 	public class MMF_SquashAndStretch : MMF_Feedback
 	{
 		/// sets the inspector color for this feedback
@@ -22,7 +23,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.TransformColor; } }
 		public override bool EvaluateRequiresSetup() { return (SquashAndStretchTarget == null); }
 		public override string RequiredTargetText { get { return SquashAndStretchTarget != null ? SquashAndStretchTarget.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a SquashAndStretchTarget be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先设置 SquashAndStretchTarget 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => SquashAndStretchTarget = FindAutomatedTarget<Transform>();
@@ -32,49 +33,46 @@ namespace MoreMountains.Feedbacks
 		/// the possible modes this feedback can operate on
 		public enum Modes { Absolute, Additive, ToDestination }
 		/// the various axis on which to apply the squash and stretch
-		public enum PossibleAxis { XtoYZ, XtoY, XtoZ, YtoXZ, YtoX, YtoZ, ZtoXZ, ZtoX, ZtoY }
+		public enum PossibleAxis { XtoYZ, XtoY, XtoZ, YtoXZ, YtoX, YtoZ, ZtoXY, ZtoX, ZtoY }
 		/// the possible timescales for the animation of the scale
 		public enum TimeScales { Scaled, Unscaled }
 
 		[MMFInspectorGroup("Squash & Stretch", true, 54, true)]
 
 		/// the object to animate
-		[Tooltip("the object to animate")]
+		[Tooltip("要执行压缩/拉伸动画的目标对象。")]
 		public Transform SquashAndStretchTarget;
 		/// the mode this feedback should operate on
 		/// Absolute : follows the curve
 		/// Additive : adds to the current scale of the target
 		/// ToDestination : sets the scale to the destination target, whatever the current scale is
-		[Tooltip("the mode this feedback should operate on" +
-		         "Absolute : follows the curve" +
-		         "Additive : adds to the current scale of the target" +
-		         "ToDestination : sets the scale to the destination target, whatever the current scale is")]
+		[Tooltip("模式：Absolute 按曲线直接计算目标缩放；Additive 在当前缩放基础上叠加；ToDestination 向目标缩放值过渡。")]
 		public Modes Mode = Modes.Absolute;
 		public PossibleAxis Axis = PossibleAxis.YtoXZ;
 		/// the duration of the animation
-		[Tooltip("the duration of the animation")]
+		[Tooltip("动画持续时间（秒）。")]
 		public float AnimateScaleDuration = 0.2f;
 		/// the value to remap the curve's 0 value to
-		[Tooltip("the value to remap the curve's 0 value to")]
+		[Tooltip("将曲线 0 端重映射到的缩放值。")]
 		public float RemapCurveZero = 1f;
 		/// the value to remap the curve's 1 value to
-		[Tooltip("the value to remap the curve's 1 value to")]
+		[Tooltip("将曲线 1 端重映射到的缩放值。")]
 		[FormerlySerializedAs("Multiplier")]
 		public float RemapCurveOne = 2f;
 		/// how much should be added to the curve
-		[Tooltip("how much should be added to the curve")]
+		[Tooltip("应用在曲线结果上的附加偏移。")]
 		public float Offset = 0f;
 		/// the curve along which to animate the scale
-		[Tooltip("the curve along which to animate the scale")]
+		[Tooltip("用于驱动压缩/拉伸的动画曲线。")]
 		public AnimationCurve AnimateCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1.5f), new Keyframe(1, 0));
 		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		[Tooltip("若开启，即使当前播放尚未结束，再次 Play 也会立刻重触发；若关闭，则会忽略新的 Play，直到本次播放结束。")] 
 		public bool AllowAdditivePlays = false;
 		/// if this is true, initial and destination scales will be recomputed on every play
-		[Tooltip("if this is true, initial and destination scales will be recomputed on every play")]
+		[Tooltip("若开启，每次 Play 前都会重新读取初始缩放。目标在运行时会改变缩放时建议开启。")]
 		public bool DetermineScaleOnPlay = false;
 		/// the scale to reach when in ToDestination mode
-		[Tooltip("the scale to reach when in ToDestination mode")]
+		[Tooltip("ToDestination 模式下要过渡到的目标缩放值。仅在 ToDestination 模式下生效。")]
 		[MMFEnumCondition("Mode", (int)Modes.ToDestination)]
 		public float DestinationScale = 2f;
 
@@ -130,7 +128,7 @@ namespace MoreMountains.Feedbacks
 				case PossibleAxis.YtoZ:
 					_initialAxisScale = SquashAndStretchTarget.localScale.y;
 					break;
-				case PossibleAxis.ZtoXZ:
+				case PossibleAxis.ZtoXY:
 					_initialAxisScale = SquashAndStretchTarget.localScale.z;
 					break;
 				case PossibleAxis.ZtoX:
@@ -266,7 +264,8 @@ namespace MoreMountains.Feedbacks
 				yield return null;
 			}
 
-			ComputeAndApplyScale(1f, curve, remapCurveZero, remapCurveOne, targetTransform);
+			float endTime = NormalPlayDirection ? 1f : 0f;
+			ComputeAndApplyScale(endTime, curve, remapCurveZero, remapCurveOne, targetTransform);
 			_coroutine = null;
 			IsPlaying = false;
 			yield return null;
@@ -299,53 +298,54 @@ namespace MoreMountains.Feedbacks
 		/// <param name="newScale"></param>
 		protected virtual void ApplyScale(float newScale)
 		{
+			_newScale = _initialScale;
 			float invertScale = 1 / Mathf.Sqrt(newScale);
 			switch (Axis)
 			{
 				case PossibleAxis.XtoYZ:
-					_newScale.x = newScale;
-					_newScale.y = invertScale;
-					_newScale.z = invertScale;
+					_newScale.x = _initialScale.x * newScale;
+					_newScale.y = _initialScale.y * invertScale;
+					_newScale.z = _initialScale.z * invertScale;
 					break;
 				case PossibleAxis.XtoY:
-					_newScale.x = newScale;
-					_newScale.y = invertScale;
+					_newScale.x = _initialScale.x * newScale;
+					_newScale.y = _initialScale.y * invertScale;
 					_newScale.z = _initialScale.z;
 					break;
 				case PossibleAxis.XtoZ:
-					_newScale.x = newScale;
+					_newScale.x = _initialScale.x * newScale;
 					_newScale.y = _initialScale.y;
-					_newScale.z = invertScale;
+					_newScale.z = _initialScale.z * invertScale;
 					break;
 				case PossibleAxis.YtoXZ:
-					_newScale.x = invertScale;
-					_newScale.y = newScale;
-					_newScale.z = invertScale;
+					_newScale.x = _initialScale.x * invertScale;
+					_newScale.y = _initialScale.y * newScale;
+					_newScale.z = _initialScale.z * invertScale;
 					break;
 				case PossibleAxis.YtoX:
-					_newScale.x = invertScale;
-					_newScale.y = newScale;
+					_newScale.x = _initialScale.x * invertScale;
+					_newScale.y = _initialScale.y * newScale;
 					_newScale.z = _initialScale.z;
 					break;
 				case PossibleAxis.YtoZ:
-					_newScale.x = newScale;
+					_newScale.x = _initialScale.x * newScale;
 					_newScale.y = _initialScale.y;
-					_newScale.z = invertScale;
+					_newScale.z = _initialScale.z * invertScale;
 					break;
-				case PossibleAxis.ZtoXZ:
-					_newScale.x = invertScale;
-					_newScale.y = invertScale;
-					_newScale.z = newScale;
+				case PossibleAxis.ZtoXY:
+					_newScale.x = _initialScale.x * invertScale;
+					_newScale.y = _initialScale.y * invertScale;
+					_newScale.z = _initialScale.z * newScale;
 					break;
 				case PossibleAxis.ZtoX:
-					_newScale.x = invertScale;
+					_newScale.x = _initialScale.x * invertScale;
 					_newScale.y = _initialScale.y;
-					_newScale.z = newScale;
+					_newScale.z = _initialScale.z * newScale;
 					break;
 				case PossibleAxis.ZtoY:
 					_newScale.x = _initialScale.x;
-					_newScale.y = invertScale;
-					_newScale.z = newScale;
+					_newScale.y = _initialScale.y * invertScale;
+					_newScale.z = _initialScale.z * newScale;
 					break;
 			}
 		}

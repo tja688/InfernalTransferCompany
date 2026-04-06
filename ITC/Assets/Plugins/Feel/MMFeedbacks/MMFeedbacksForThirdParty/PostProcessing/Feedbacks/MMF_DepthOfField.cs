@@ -13,9 +13,10 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// with Depth of Field active, and a MMDepthOfFieldShaker component.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to control depth of field focus distance, aperture and focal length over time. " +
-	              "It requires you have in your scene an object with a PostProcessVolume " +
-	              "with Depth of Field active, and a MMDepthOfFieldShaker component.")]
+	[System.Serializable]
+	[FeedbackHelp("此反馈可让你随时间控制景深的焦点距离、光圈和焦距。" +
+	              "它要求你的场景中存在一个带有 PostProcessVolume 的对象，且该对象" +
+	              "已启用 Depth of Field，并挂有 MMDepthOfFieldShaker 组件。")]
 	#if MM_POSTPROCESSING
 	[FeedbackPath("PostProcess/Depth Of Field")]
 	#endif
@@ -39,52 +40,52 @@ namespace MoreMountains.FeedbacksForThirdParty
 
 		[MMFInspectorGroup("Depth Of Field", true, 51)]
 		/// the duration of the shake, in seconds
-		[Tooltip("the duration of the shake, in seconds")]
+		[Tooltip("抖动持续时间，单位为秒")]
 		public float ShakeDuration = 2f;
 		/// whether or not to add to the initial values
-		[Tooltip("whether or not to add to the initial values")]
+		[Tooltip("是否在初始值基础上叠加")]
 		public bool RelativeValues = true;
 		/// whether or not to reset shaker values after shake
-		[Tooltip("whether or not to reset shaker values after shake")]
+		[Tooltip("抖动结束后是否重置抖动器的数值")]
 		public bool ResetShakerValuesAfterShake = true;
 		/// whether or not to reset the target's values after shake
-		[Tooltip("whether or not to reset the target's values after shake")]
+		[Tooltip("抖动结束后是否重置目标对象的数值")]
 		public bool ResetTargetValuesAfterShake = true;
 
 		[MMFInspectorGroup("Focus Distance", true, 52)]
 		/// the curve used to animate the focus distance value on
-		[Tooltip("the curve used to animate the focus distance value on")]
+		[Tooltip("用于驱动焦点距离值变化的曲线")]
 		public AnimationCurve ShakeFocusDistance = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		public float RemapFocusDistanceZero = 4f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		public float RemapFocusDistanceOne = 50f;
 
 		[MMFInspectorGroup("Aperture", true, 53)]
 		/// the curve used to animate the aperture value on
-		[Tooltip("the curve used to animate the aperture value on")]
+		[Tooltip("用于驱动光圈值变化的曲线")]
 		public AnimationCurve ShakeAperture = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(0.1f, 32f)]
 		public float RemapApertureZero = 0.6f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(0.1f, 32f)]
 		public float RemapApertureOne = 0.2f;
 
 		[MMFInspectorGroup("Focal Length", true, 54)]
 		/// the curve used to animate the focal length value on
-		[Tooltip("the curve used to animate the focal length value on")]
+		[Tooltip("用于驱动焦距值变化的曲线")]
 		public AnimationCurve ShakeFocalLength = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(0f, 300f)]
 		public float RemapFocalLengthZero = 27.5f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(0f, 300f)]
 		public float RemapFocalLengthOne = 27.5f;
 

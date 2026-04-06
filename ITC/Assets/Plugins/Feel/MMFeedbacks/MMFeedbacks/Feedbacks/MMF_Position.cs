@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -11,8 +11,9 @@ namespace MoreMountains.Feedbacks
 	/// this feedback will let you animate the position of 
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will animate the target object's position over time, for the specified duration, from the chosen initial position to the chosen destination. These can either be relative Vector3 offsets from the Feedback's position, or Transforms. If you specify transforms, the Vector3 values will be ignored.")]
+	[FeedbackHelp("此反馈会在指定持续时间内，让目标对象的位置从选定的起点动画到终点。起点与终点既可以是相对于反馈位置的 Vector3 偏移，也可以直接使用 Transform；若指定了 Transform，则对应的 Vector3 数值会被忽略。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Transform/Position")]
 	public class MMF_Position : MMF_Feedback
 	{
@@ -33,97 +34,110 @@ namespace MoreMountains.Feedbacks
 		
 		public enum Spaces { World, Local, RectTransform, Self }
 		public enum Modes { AtoB, AlongCurve, ToDestination }
-		public enum TimeScales { Scaled, Unscaled }
+		
+		/// whether to animate the scale over time or at a fixed speed
+		public enum MovementModes { Duration, Speed }
 
 		[MMFInspectorGroup("Position Target", true, 61, true)]
 		/// the object this feedback will animate the position for
-		[Tooltip("the object this feedback will animate the position for")]
+		[Tooltip("目标此反馈将为 位置设置动画")]
 		public GameObject AnimatePositionTarget;
 
 		[MMFInspectorGroup("Transition", true, 63)]
 		/// the mode this animation should follow (either going from A to B, or moving along a curve)
-		[Tooltip("the mode this animation should follow (either going from A to B, or moving along a curve)")]
+		[Tooltip("该动画应遵循的模式（从 A 到 B，或沿曲线移动）")]
 		public Modes Mode = Modes.AtoB;
 		/// the space in which to move the position in
-		[Tooltip("the space in which to move the position in")]
+		[Tooltip("位置移动所使用的坐标空间")]
 		public Spaces Space = Spaces.World;
 		
 		/// whether or not to randomize remap values between their base and alt values on play, useful to add some variety every time you play this feedback
-		[Tooltip("whether or not to randomize remap values between their base and alt values on play, useful to add some variety every time you play this feedback")]
+		[Tooltip("是否在游戏中的基础值和替代值之间随机重新映射值，有助于在每次玩此反馈时添加一些变化")]
 		[MMFEnumCondition("Mode", (int)Modes.AlongCurve)]
 		public bool RandomizeRemap = false;
-		/// the duration of the animation on play
-		[Tooltip("the duration of the animation on play")]
+
+		/// whether movement should occur over a fixed duration, or at a certain speed. Note that speed mode will only apply in AtoB and ToDestination modes
+		[Tooltip("移动应在固定持续时间内完成，还是按指定速度进行。注意：Speed 模式仅在 AtoB 和 ToDestination 模式下生效")]
+		[MMFEnumCondition("Mode", (int)Modes.AtoB, (int)Modes.ToDestination)]
+		public MovementModes MovementMode = MovementModes.Duration;
+			
+		/// the duration of the animation on play 
+		[Tooltip("播放动画的持续时间")]
+		[MMFEnumCondition("MovementMode", (int)MovementModes.Duration)]
 		public float AnimatePositionDuration = 0.2f;
+		/// in speed mode, the speed at which we should animate the position
+		[Tooltip("在 Speed 模式下，用于驱动位置动画的速度")]
+		[MMFEnumCondition("MovementMode", (int)MovementModes.Speed)]
+		public float AnimatePositionSpeed = 1f;
 		
 		/// the MMTween curve definition to use instead of the animation curve to define the acceleration of the movement
-		[Tooltip("the MMTween curve definition to use instead of the animation curve to define the acceleration of the movement")]
+		[Tooltip("使用 MMTween 曲线定义代替动画曲线来定义运动的加速度")]
 		public MMTweenType AnimatePositionTween = new MMTweenType( new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1)), "", "Mode", (int)Modes.AtoB, (int)Modes.ToDestination);
 		
 		/// the value to remap the curve's 0 value to
 		[MMFEnumCondition("Mode", (int)Modes.AlongCurve)]
-		[Tooltip("the value to remap the curve's 0 value to")]
+		[Tooltip("将曲线 0 端重新映射到的值")]
 		public float RemapCurveZero = 0f;
 		/// in randomize remap mode, the value to remap the curve's 0 value to (randomized between this and RemapCurveZero)
 		[MMFCondition("RandomizeRemap", true)]
 		[MMFEnumCondition("Mode", (int)Modes.AlongCurve)]
-		[Tooltip("in randomize remap mode, the value to remap the curve's 0 value to (randomized between this and RemapCurveZero")]
+		[Tooltip("在随机重映射模式下，用于将曲线的 0 值重新映射到（在该值和 RemapCurveZero 之间随机化）")]
 		public float RemapCurveZeroAlt = 0f;
 		/// the value to remap the curve's 1 value to
-		[Tooltip("the value to remap the curve's 1 value to")]
+		[Tooltip("将曲线 1 端重新映射到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.AlongCurve)]
 		[FormerlySerializedAs("CurveMultiplier")]
 		public float RemapCurveOne = 1f;
 		/// in randomize remap mode, the value to remap the curve's 1 value to (randomized between this and RemapCurveOne)
-		[Tooltip("in randomize remap mode, the value to remap the curve's 1 value to (randomized between this and RemapCurveOne)")]
+		[Tooltip("在随机重映射模式下，用于将曲线的 1 值重新映射到（在此和 RemapCurveOne 之间随机化）")]
 		[MMFCondition("RandomizeRemap", true)]
 		[MMFEnumCondition("Mode", (int)Modes.AlongCurve)]
 		public float RemapCurveOneAlt = 1f;
 		/// if this is true, the x position will be animated
-		[Tooltip("if this is true, the x position will be animated")]
+		[Tooltip("若开启此项，x位置将会有动画")]
 		[MMFEnumCondition("Mode", (int)Modes.AlongCurve)]
 		public bool AnimateX;
 		/// the acceleration of the movement
-		[Tooltip("the acceleration of the movement")]
+		[Tooltip("移动加速度")]
 		public MMTweenType AnimatePositionTweenX = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(0.6f, -1f), new Keyframe(1, 0f)), "AnimateX");
 		/// if this is true, the y position will be animated
-		[Tooltip("if this is true, the y position will be animated")]
+		[Tooltip("若开启项目，y 位置将被动画化")]
 		[MMFEnumCondition("Mode", (int)Modes.AlongCurve)]
 		public bool AnimateY;
 		/// the acceleration of the movement
-		[Tooltip("the acceleration of the movement")]
+		[Tooltip("移动加速度")]
 		public MMTweenType AnimatePositionTweenY = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(0.6f, -1f), new Keyframe(1, 0f)), "AnimateY");
 		/// if this is true, the z position will be animated
-		[Tooltip("if this is true, the z position will be animated")]
+		[Tooltip("若开启此项，z位置将会有动画")]
 		[MMFEnumCondition("Mode", (int)Modes.AlongCurve)]
 		public bool AnimateZ;
 		/// the acceleration of the movement
-		[Tooltip("the acceleration of the movement")]
+		[Tooltip("移动加速度")]
 		public MMTweenType AnimatePositionTweenZ = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(0.6f, -1f), new Keyframe(1, 0f)), "AnimateZ");
 		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		[Tooltip("若开启此项，即使该反馈仍在执行中，再次调用也会立即触发；若关闭此项，在当前播放结束前将阻止新的 Play 调用")] 
 		public bool AllowAdditivePlays = false;
 		[MMFInspectorGroup("Positions", true, 64)]
 		/// if this is true, movement will be relative to the object's initial position. So moving its y position along a curve going from 0 to 1 will move it up one unit. If this is false, in that same example, it'll be moved from 0 to 1 in absolute coordinates.
-		[Tooltip("if this is true, movement will be relative to the object's initial position. So moving its y position along a curve going from 0 to 1 will move it up one unit. If this is false, in that same example, it'll be moved from 0 to 1 in absolute coordinates.")]
+		[Tooltip("若开启此项，运动将相对于物体的初始位置。因此，沿着曲线从 0 移动到 1 的 y 位置会将其向上移动一个单位。如果这是 false，在同一示例中，它将在绝对坐标中从 0 移动到 1。")]
 		public bool RelativePosition = true;
 		/// if this is true, initial and destination positions will be recomputed on every play
-		[Tooltip("if this is true, initial and destination positions will be recomputed on every play")]
+		[Tooltip("若开启项目，每次播放时都会重新计算初始位置和目标位置")]
 		public bool DeterminePositionsOnPlay = false;
 		/// the initial position
-		[Tooltip("the initial position")]
+		[Tooltip("初始位置")]
 		[MMFEnumCondition("Mode", (int)Modes.AtoB, (int)Modes.AlongCurve)]
 		public Vector3 InitialPosition = Vector3.zero;
 		/// the destination position
-		[Tooltip("the destination position")]
+		[Tooltip("目的地位置")]
 		[MMFEnumCondition("Mode", (int)Modes.AtoB, (int)Modes.ToDestination)]
 		public Vector3 DestinationPosition = Vector3.one;
 		/// the initial transform - if set, takes precedence over the Vector3 above
-		[Tooltip("the initial transform - if set, takes precedence over the Vector3 above")]
+		[Tooltip("初始变换 - 如果设置，则优先于上面的 Vector3")]
 		[MMFEnumCondition("Mode", (int)Modes.AtoB, (int)Modes.AlongCurve)]
 		public Transform InitialPositionTransform;
 		/// the destination transform - if set, takes precedence over the Vector3 above
-		[Tooltip("the destination transform - if set, takes precedence over the Vector3 above")]
+		[Tooltip("目标变换 - 如果设置，则优先于上面的 Vector3")]
 		[MMFEnumCondition("Mode", (int)Modes.AtoB, (int)Modes.ToDestination)]
 		public Transform DestinationPositionTransform;
 		/// the duration of this feedback is the duration of its animation
@@ -160,7 +174,7 @@ namespace MoreMountains.Feedbacks
 			{
 				if (AnimatePositionTarget == null)
 				{
-					Debug.LogWarning("The animate position target for " + this + " is null, you have to define it in the inspector");
+					Debug.LogWarning("[Position Feedback] The position feedback on "+Owner.name+" doesn't have an AnimatePositionTarget, it won't work. You need to specify one in its inspector.");
 					return;
 				}
 
@@ -203,6 +217,22 @@ namespace MoreMountains.Feedbacks
 			{
 				_workDestinationPosition = RelativePosition ? GetPosition(AnimatePositionTarget.transform) + DestinationPosition : DestinationPosition;
 			}
+		}
+
+		/// <summary>
+		/// In speed mode, computes the duration the feedback should last based on the distance between the two points and the speed
+		/// </summary>
+		/// <param name="pointA"></param>
+		/// <param name="pointB"></param>
+		/// <param name="duration"></param>
+		/// <returns></returns>
+		protected virtual float HandleSpeedMode(Vector3 pointA, Vector3 pointB, float duration)
+		{
+			if (MovementMode != MovementModes.Speed)
+			{
+				return duration;
+			}
+			return Vector3.Distance(pointA, pointB) / AnimatePositionSpeed;
 		}
 
 		/// <summary>
@@ -336,6 +366,8 @@ namespace MoreMountains.Feedbacks
 		/// <param name="duration">Time.</param>
 		protected virtual IEnumerator MoveFromTo(GameObject movingObject, Vector3 pointA, Vector3 pointB, float duration, MMTweenType tweenType)
 		{
+			duration = HandleSpeedMode(pointA, pointB, duration);
+			
 			IsPlaying = true;
 			float journey = NormalPlayDirection ? 0f : duration;
 			while ((journey >= 0) && (journey <= duration) && (duration > 0))
@@ -470,3 +502,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

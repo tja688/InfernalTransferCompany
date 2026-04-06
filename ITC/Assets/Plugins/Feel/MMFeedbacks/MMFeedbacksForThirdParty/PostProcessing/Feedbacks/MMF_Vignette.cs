@@ -13,13 +13,14 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// with Vignette active, and a MMVignetteShaker component.
 	/// </summary>
 	[AddComponentMenu("")]
+	[System.Serializable]
 	#if MM_POSTPROCESSING
 	[FeedbackPath("PostProcess/Vignette")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.PostProcessing")]
-	[FeedbackHelp("This feedback allows you to control vignette intensity over time. " +
-	              "It requires you have in your scene an object with a PostProcessVolume " +
-	              "with Vignette active, and a MMVignetteShaker component.")]
+	[FeedbackHelp("此反馈可让你随时间控制暗角强度。" +
+	              "它要求你的场景中存在一个带有 PostProcessVolume 的对象，且该对象" +
+	              "已启用 Vignette，并挂有 MMVignetteShaker 组件。")]
 	public class MMF_Vignette : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -39,48 +40,48 @@ namespace MoreMountains.FeedbacksForThirdParty
 
 		[MMFInspectorGroup("Vignette", true, 58)]
 		/// the duration of the shake, in seconds
-		[Tooltip("the duration of the shake, in seconds")]
+		[Tooltip("抖动持续时间，单位为秒")]
 		public float Duration = 0.2f;
 		/// whether or not to reset shaker values after shake
-		[Tooltip("whether or not to reset shaker values after shake")]
+		[Tooltip("抖动结束后是否重置抖动器的数值")]
 		public bool ResetShakerValuesAfterShake = true;
 		/// whether or not to reset the target's values after shake
-		[Tooltip("whether or not to reset the target's values after shake")]
+		[Tooltip("抖动结束后是否重置目标对象的数值")]
 		public bool ResetTargetValuesAfterShake = true;
 
 		[MMFInspectorGroup("Intensity", true, 59)]
 		/// the curve to animate the intensity on
-		[Tooltip("the curve to animate the intensity on")]
+		[Tooltip("用于驱动强度变化的曲线")]
 		public AnimationCurve Intensity = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the intensity's zero to
-		[Tooltip("the value to remap the intensity's zero to")]
+		[Tooltip("将强度的 zero 端重映射到的值")]
 		[Range(0f, 1f)]
 		public float RemapIntensityZero = 0f;
 		/// the value to remap the intensity's one to
-		[Tooltip("the value to remap the intensity's one to")]
+		[Tooltip("将强度的 one 端重映射到的值")]
 		[Range(0f, 1f)]
 		public float RemapIntensityOne = 1.0f;
 		/// whether or not to add to the initial intensity
-		[Tooltip("whether or not to add to the initial intensity")]
+		[Tooltip("是否在初始强度基础上叠加")]
 		public bool RelativeIntensity = false;
 		
 		[MMFInspectorGroup("Vignette Color", true, 60)]
 		/// whether or not to also animate  the vignette's color
-		[Tooltip("whether or not to also animate the vignette's color")]
+		[Tooltip("是否同时驱动暗角颜色变化")]
 		public bool InterpolateColor = false;
 		/// the curve to animate the color on
-		[Tooltip("the curve to animate the color on")]
+		[Tooltip("用于驱动颜色变化的曲线")]
 		public AnimationCurve ColorCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.05f, 1f), new Keyframe(0.95f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(0, 1)]
 		public float RemapColorZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(0f, 1f)]
 		public float RemapColorOne = 1f;
 		/// the color to lerp towards
-		[Tooltip("the color to lerp towards")]
+		[Tooltip("要插值到的目标颜色")]
 		public Color TargetColor = Color.red;
 
 

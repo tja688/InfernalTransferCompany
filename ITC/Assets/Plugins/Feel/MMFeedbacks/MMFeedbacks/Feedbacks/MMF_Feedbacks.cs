@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
@@ -6,11 +6,12 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.Feedbacks
 {
 	/// <summary>
-	/// This feedback allows you to trigger a target MMFeedbacks, or any MMFeedbacks on the specified Channel within a certain range. You'll need an MMFeedbacksShaker on them.
+	/// This feedback allows you to trigger a target MMF_Player, or any MMF_Player on the specified Channel within a certain range. You'll need an MMFeedbacksShaker on them.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to trigger a target MMFeedbacks, or any MMFeedbacks on the specified Channel within a certain range. You'll need an MMFeedbacksShaker on them.")]
+	[FeedbackHelp("此反馈可让你触发指定的 MMF_Player，或触发指定通道且处于一定范围内的任意 MMF_Player。被触发方需要挂有 MMFeedbacksShaker。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Feedbacks/Feedbacks Player")]
 	public class MMF_Feedbacks : MMF_Feedback
 	{
@@ -42,30 +43,30 @@ namespace MoreMountains.Feedbacks
 		}
 		public override bool HasChannel => true;
         
-		public enum Modes { PlayFeedbacksInArea, PlayTargetFeedbacks }
+		public enum Modes { PlayFeedbacksInArea, PlayTargetFeedbacks, TriggerMMF_PlayerEvent }
         
 		[MMFInspectorGroup("Feedbacks", true, 79)]
         
 		/// the selected mode for this feedback
-		[Tooltip("the selected mode for this feedback")]
+		[Tooltip("此反馈当前选择的模式")]
 		public Modes Mode = Modes.PlayFeedbacksInArea;
         
 		/// a specific MMFeedbacks / MMF_Player to play
 		[MMFEnumCondition("Mode", (int)Modes.PlayTargetFeedbacks)]
-		[Tooltip("a specific MMFeedbacks / MMF_Player to play")]
+		[Tooltip("要播放的特定反馈组/反馈播放器")]
 		public MMFeedbacks TargetFeedbacks;
         
 		/// whether or not to use a range
 		[MMFEnumCondition("Mode", (int)Modes.PlayFeedbacksInArea)]
-		[Tooltip("whether or not to use a range")]
+		[Tooltip("是否使用范围")]
 		public bool OnlyTriggerPlayersInRange = false;
 		/// the range of the event, in units
 		[MMFEnumCondition("Mode", (int)Modes.PlayFeedbacksInArea)]
-		[Tooltip("the range of the event, in units")]
+		[Tooltip("事件作用范围，单位为世界单位")]
 		public float EventRange = 100f;
 		/// the transform to use to broadcast the event as origin point
 		[MMFEnumCondition("Mode", (int)Modes.PlayFeedbacksInArea)]
-		[Tooltip("the transform to use to broadcast the event as origin point")]
+		[Tooltip("用于作为事件广播原点的 Transform")]
 		public Transform EventOriginTransform;
 
 		/// <summary>
@@ -106,6 +107,10 @@ namespace MoreMountains.Feedbacks
 			else if (Mode == Modes.PlayTargetFeedbacks)
 			{
 				TargetFeedbacks?.PlayFeedbacks(position, feedbacksIntensity);
+			}
+			else if (Mode == Modes.TriggerMMF_PlayerEvent)
+			{
+				MMF_PlayerEvent.Trigger(ChannelData, true, Owner.transform.position, MMF_PlayerEvent.Modes.PlayFeedbacks, feedbacksIntensity, false);	
 			}
 		}
 	}

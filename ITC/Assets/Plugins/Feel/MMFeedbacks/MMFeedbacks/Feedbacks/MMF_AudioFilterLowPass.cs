@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -11,9 +11,10 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Audio/Audio Filter Low Pass")]
 	[FeedbackHelp(
-		"This feedback lets you control a low pass audio filter over time. You'll need a MMAudioFilterLowPassShaker on your filter.")]
+		"This 反馈 可让你 control a low pass audio filter 随时间变化. You'll need a MMAudioFilterLowPassShaker on your filter.")]
 	public class MMF_AudioFilterLowPass : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -30,27 +31,27 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Low Pass Filter", true, 28)]
 		/// the duration of the shake, in seconds
-		[Tooltip("the duration of the shake, in seconds")]
+		[Tooltip("抖动的持续时间，单位为秒")]
 		public float Duration = 2f;
 		/// whether or not to reset shaker values after shake
-		[Tooltip("whether or not to reset shaker values after shake")]
+		[Tooltip("抖动结束后是否重置抖动器的数值")]
 		public bool ResetShakerValuesAfterShake = true;
 		/// whether or not to reset the target's values after shake
-		[Tooltip("whether or not to reset the target's values after shake")]
+		[Tooltip("抖动结束后是否重置目标的数值")]
 		public bool ResetTargetValuesAfterShake = true;
 		/// whether or not to add to the initial value
-		[Tooltip("whether or not to add to the initial value")]
+		[Tooltip("是否在初始值基础上叠加")]
 		public bool RelativeLowPass = false;
 		/// the curve used to animate the intensity value on
-		[Tooltip("the curve used to animate the intensity value on")]
+		[Tooltip("用于驱动强度动画的曲线")]
 		public AnimationCurve ShakeLowPass = new AnimationCurve(new Keyframe(0, 1f), new Keyframe(0.5f, 0f), new Keyframe(1, 1f));
 		/// the value to remap the curve's 0 to
 		[Range(10f, 22000f)]
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重新映射到的值")]
 		public float RemapLowPassZero = 0f;
 		/// the value to remap the curve's 1 to
 		[Range(10f, 22000f)]
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重新映射到的值")]
 		public float RemapLowPassOne = 10000f;
 
 		/// <summary>
@@ -98,3 +99,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

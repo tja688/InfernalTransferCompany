@@ -20,18 +20,18 @@ namespace MoreMountains.FeedbacksForThirdParty
 	{
 		[Header("Bindings")]
 		/// the position of the camera
-		[Tooltip("the position of the camera")]
+		[Tooltip("相机的位置")]
 		public Transform CameraTransform;
 		/// a list of all possible targets
-		[Tooltip("a list of all possible targets")]
+		[Tooltip("所有可选目标的列表")]
 		public Transform[] FocusTargets;
 		[Header("Setup")]
 		/// the current target of this auto focus
-		[Tooltip("the current target of this auto focus")]
+		[Tooltip("当前自动对焦目标")]
 		public float FocusTargetID;
 		[Header("Desired Aperture")]
 		/// the aperture to work with
-		[Tooltip("the aperture to work with")]
+		[Tooltip("要使用的光圈值")]
 		[Range(0.1f, 20f)]
 		public float Aperture = 0.1f;
 
@@ -55,6 +55,10 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// </summary>
 		void Update()
 		{
+			if (FocusTargetID < 0 || FocusTargetID >= FocusTargets.Length)
+			{
+				return;
+			}
 			float distance = Vector3.Distance(CameraTransform.position, FocusTargets[Mathf.FloorToInt(FocusTargetID)].position);
 			_depthOfField.focusDistance.Override(distance);
 			_depthOfField.aperture.Override(Aperture);

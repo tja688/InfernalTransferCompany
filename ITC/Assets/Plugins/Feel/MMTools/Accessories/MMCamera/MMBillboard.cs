@@ -13,16 +13,16 @@ namespace MoreMountains.Tools
 		/// the camera we're facing
 		public virtual Camera MainCamera { get; set; }
 		/// whether or not this object should automatically grab a camera on start
-		[Tooltip("whether or not this object should automatically grab a camera on start")]
+		[Tooltip("是否在 Start 时自动抓取摄像机（通常为 Camera.main）")]
 		public bool GrabMainCameraOnStart = true;
 		/// whether or not to nest this object below a parent container
-		[Tooltip("whether or not to nest this object below a parent container")]
+		[Tooltip("是否将该对象先挂到一个临时父容器下，再由父容器执行朝向计算")]
 		public bool NestObject = true;
 		/// the Vector3 to offset the look at direction by
-		[Tooltip("the Vector3 to offset the look at direction by")]
+		[Tooltip("用于偏移 LookAt 朝向的 Vector3（会与相机旋转共同作用）")]
 		public Vector3 OffsetDirection = Vector3.back;
 		/// the Vector3 to consider as "world up"
-		[Tooltip("the Vector3 to consider as 'world up'")] 
+		[Tooltip("看看使用“世界向上”矢量3")] 
 		public Vector3 Up = Vector3.up;
 
 		protected GameObject _parentContainer;

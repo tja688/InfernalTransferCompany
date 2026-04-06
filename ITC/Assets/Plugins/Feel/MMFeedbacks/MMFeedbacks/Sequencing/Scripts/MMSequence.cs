@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -73,30 +73,30 @@ namespace MoreMountains.Feedbacks
 	{
 		[Header("Sequence")]
 		/// the length (in seconds) of the sequence
-		[Tooltip("the length (in seconds) of the sequence")]
+		[Tooltip("序列长度，单位为秒")]
 		[MMFReadOnly]
 		public float Length;
 		/// the original sequence (as outputted by the input sequence recorder)
-		[Tooltip("the original sequence (as outputted by the input sequence recorder)")]
+		[Tooltip("原始序列（由输入序列记录器输出）")]
 		public MMSequenceList OriginalSequence;
 		/// the duration in seconds to apply after the last input
-		[Tooltip("the duration in seconds to apply after the last input")]
+		[Tooltip("最后一次输入之后额外附加的持续时间（单位为秒）")]
 		public float EndSilenceDuration = 0f;
 
 		[Header("Sequence Contents")]
 		/// the list of tracks for this sequence
-		[Tooltip("the list of tracks for this sequence")]
+		[Tooltip("该序列的轨道列表")]
 		public List<MMSequenceTrack> SequenceTracks;
 
 		[Header("Quantizing")]
 		/// whether this sequence should be used in quantized form or not
-		[Tooltip("whether this sequence should be used in quantized form or not")]
+		[Tooltip("该序列是否使用量化版本")]
 		public bool Quantized;
 		/// the target BPM for this sequence
-		[Tooltip("the target BPM for this sequence")]
+		[Tooltip("该序列的目标 BPM")]
 		public int TargetBPM = 120;
 		/// the contents of the quantized sequence
-		[Tooltip("the contents of the quantized sequence")]
+		[Tooltip("量化后序列的内容")]
 		public List<MMSequenceList> QuantizedSequence;
         
 		[Space]

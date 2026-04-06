@@ -20,6 +20,8 @@ namespace MoreMountains.Feedbacks
 		public float InstantLevel;
 		/// the initial value for this level
 		public float InitialLevel;
+		/// the level to reach in ToDestination mode
+		public float ToDestinationLevel;
 	}
     
 	public abstract class MMF_FeedbackBase : MMF_Feedback
@@ -28,33 +30,33 @@ namespace MoreMountains.Feedbacks
 		public static bool FeedbackTypeAuthorized = true;
 		
 		/// the possible modes for this feedback
-		public enum Modes { OverTime, Instant } 
+		public enum Modes { OverTime, Instant, ToDestination } 
         
 		[MMFInspectorGroup("Mode", true, 64)]
 		/// whether the feedback should affect the target property instantly or over a period of time
-		[Tooltip("whether the feedback should affect the target property instantly or over a period of time")]
+		[Tooltip("该反馈应立即影响目标属性，还是在一段时间内逐步生效")]
 		public Modes Mode = Modes.OverTime;
 		/// how long the target property should change over time
-		[Tooltip("how long the target property should change over time")]
-		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
+		[Tooltip("目标属性在渐变模式下持续变化的时间")]
+		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ToDestination)]
 		public float Duration = 0.2f;
 		/// whether or not that target property should be turned off on start
-		[Tooltip("whether or not that target property should be turned off on start")]
+		[Tooltip("开始时是否应关闭该目标属性")]
 		public bool StartsOff = false;
 		/// whether or not that target property should be turned off once the feedback is done playing
-		[Tooltip("whether or not that target property should be turned off once the feedback is done playing")]
+		[Tooltip("反馈播放完成后是否应关闭该目标属性")]
 		public bool EndsOff = false;
 		/// whether or not the values should be relative or not
-		[Tooltip("whether or not the values should be relative or not")]
-		public bool RelativeValues = true;
+		[Tooltip("数值是否采用相对模式")]
+		public bool RelativeValues = false;
 		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		[Tooltip("若启用，即使该反馈仍在执行中，再次调用也会立刻重新触发；若关闭，则当前一次播放结束前会阻止新的 Play 调用。")] 
 		public bool AllowAdditivePlays = false;
 		/// if this is true, the target object will be disabled on stop
-		[Tooltip("if this is true, the target object will be disabled on stop")]
+		[Tooltip("若启用，调用 Stop 时会禁用目标对象")]
 		public bool DisableOnStop = false;
 		/// if this is true, this feedback will only play if its target is active in hierarchy
-		[Tooltip("if this is true, this feedback will only play if its target is active in hierarchy")]
+		[Tooltip("若启用，仅当目标对象在 Hierarchy 中处于激活状态时，此反馈才会播放")]
 		public bool OnlyPlayIfTargetIsActive = false;
 		/// the duration of this feedback is the duration of the target property, or 0 if instant
 		public override float FeedbackDuration { get { return (Mode == Modes.Instant) ? 0f : ApplyTimeMultiplier(Duration); } set { if (Mode != Modes.Instant) { Duration = value; } } }
@@ -120,7 +122,7 @@ namespace MoreMountains.Feedbacks
 			foreach(MMF_FeedbackBaseTarget target in _targets)
 			{
 				target.Target.Initialization(Owner.gameObject);
-				target.InitialLevel = target.Target.Level;
+				target.InitialLevel = target.Target.GetLevel();;
 			}
 		}
 
@@ -151,7 +153,15 @@ namespace MoreMountains.Feedbacks
 							return;
 						}
 						if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
-						_coroutine = Owner.StartCoroutine(UpdateValueSequence(feedbacksIntensity, position));
+						_coroutine = Owner.StartCoroutine(UpdateValueOverTimeCo(feedbacksIntensity, position));
+						break;
+					case Modes.ToDestination:
+						if (!AllowAdditivePlays && (_coroutine != null))
+						{
+							return;
+						}
+						if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
+						_coroutine = Owner.StartCoroutine(UpdateValueToDestinationCo(feedbacksIntensity, position));
 						break;
 				}
 			}
@@ -198,7 +208,7 @@ namespace MoreMountains.Feedbacks
 		/// This coroutine will modify the values on the target property
 		/// </summary>
 		/// <returns></returns>
-		protected virtual IEnumerator UpdateValueSequence(float feedbacksIntensity, Vector3 position)
+		protected virtual IEnumerator UpdateValueOverTimeCo(float feedbacksIntensity, Vector3 position)
 		{
 			float journey = NormalPlayDirection ? 0f : FeedbackDuration;
 			IsPlaying = true;
@@ -219,14 +229,35 @@ namespace MoreMountains.Feedbacks
 			_coroutine = null;
 			yield return null;
 		}
-        
-        
+
+		protected virtual IEnumerator UpdateValueToDestinationCo(float feedbacksIntensity, Vector3 position)
+		{
+			InitializeTargets();
+			float journey = NormalPlayDirection ? 0f : FeedbackDuration;
+			IsPlaying = true;
+			while ((journey >= 0) && (journey <= FeedbackDuration) && (FeedbackDuration > 0))
+			{
+				float remappedTime = MMFeedbacksHelpers.Remap(journey, 0f, FeedbackDuration, 0f, 1f);
+				SetValues(remappedTime, feedbacksIntensity, position, Modes.ToDestination);
+
+				journey += NormalPlayDirection ? FeedbackDeltaTime : -FeedbackDeltaTime;
+				yield return null;
+			}
+			SetValues(FinalNormalizedTime, feedbacksIntensity, position, Modes.ToDestination);
+			if (EndsOff)
+			{
+				Turn(false);
+			}
+			IsPlaying = false;
+			_coroutine = null;
+			yield return null;
+		}
 
 		/// <summary>
 		/// Sets the various values on the target property on a specified time (between 0 and 1)
 		/// </summary>
 		/// <param name="time"></param>
-		protected virtual void SetValues(float time, float feedbacksIntensity, Vector3 position)
+		protected virtual void SetValues(float time, float feedbacksIntensity, Vector3 position, Modes mode = Modes.OverTime)
 		{
 			if (_targets.Count == 0)
 			{
@@ -238,10 +269,12 @@ namespace MoreMountains.Feedbacks
 			foreach (MMF_FeedbackBaseTarget target in _targets)
 			{
 				float intensity = MMTween.Tween(time, 0f, 1f, target.RemapLevelZero, target.RemapLevelOne, target.LevelCurve);
-				if (RelativeValues)
+				
+				if (mode == Modes.ToDestination)
 				{
-					intensity += target.InitialLevel;
+					intensity = MMTween.Tween(time, 0f, 1f, target.InitialLevel, target.ToDestinationLevel, target.LevelCurve);
 				}
+
 				target.Target.SetLevel(intensity * intensityMultiplier);
 			}
 		}

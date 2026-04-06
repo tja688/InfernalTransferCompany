@@ -31,25 +31,25 @@ namespace MoreMountains.Tools
 		
 		[MMInspectorGroup("Camera", true, 16)]
 		/// The camera to use as the reference for any ScreenToWorldPoint computations
-		[Tooltip("The camera to use as the reference for any ScreenToWorldPoint computations")]
+		[Tooltip("用于一切 ScreenToWorldPoint 计算的参考摄像机")]
 		public Camera TargetCamera;
 
 		[MMInspectorGroup("Joystick Behaviour", true, 18)]
-		[Tooltip("Determines whether the horizontal axis of this stick should be enabled. If not, the stick will only move vertically.")]
+		[Tooltip("决定是否启用该摇杆的水平轴；若关闭，摇杆将只能垂直移动。")]
 		/// Is horizontal axis allowed
 		public bool HorizontalAxisEnabled = true;
 		/// Is vertical axis allowed
-		[Tooltip("Determines whether the vertical axis of this stick should be enabled. If not, the stick will only move horizontally.")]
+		[Tooltip("决定是否启用该摇杆的垂直轴；若关闭，摇杆将只能水平移动。")]
 		public bool VerticalAxisEnabled = true;
 		/// the mode in which to compute the range. Distance will be a flat value, DistanceToTransform will be a distance to a transform you can move around and potentially resize as you wish for various resolutions
-		[Tooltip("the mode in which to compute the range. Distance will be a flat value, DistanceToTransform will be a distance to a transform you can move around and potentially resize as you wish for various resolutions")]
+		[Tooltip("用于计算范围的模式。Distance 使用固定值；DistanceToTransform 使用到某个 Transform 的距离，便于你针对不同分辨率移动或缩放该参照物。")]
 		public MaxRangeModes MaxRangeMode = MaxRangeModes.Distance;
 		/// The MaxRange is the maximum distance from its initial center position you can drag the joystick to
-		[Tooltip("The MaxRange is the maximum distance from its initial center position you can drag the joystick to.")]
+		[Tooltip("MaxRange 表示从初始中心点出发，摇杆可被拖动到的最大距离。")]
 		[MMEnumCondition("MaxRangeMode", (int)MaxRangeModes.Distance)]
 		public float MaxRange = 1.5f;
 		/// in DistanceToTransform mode, the object whose distance to the center will be used to compute the max range. Note that this is computed once, at init. Call RefreshMaxRangeDistance() to recompute it.
-		[Tooltip("in DistanceToTransform mode, the object whose distance to the center will be used to compute the max range. Note that this is computed once, at init. Call RefreshMaxRangeDistance() to recompute it.")]
+		[Tooltip("在 DistanceToTransform 模式下，会使用该对象到中心点的距离来计算最大范围。注意：此值只会在初始化时计算一次；若之后发生变化，请手动调用 RefreshMaxRangeDistance() 重新计算。")]
 		[MMEnumCondition("MaxRangeMode", (int)MaxRangeModes.DistanceToTransform)]
 		public Transform MaxRangeTransform;
 
@@ -82,68 +82,68 @@ namespace MoreMountains.Tools
 
 		[MMInspectorGroup("Value Events", true, 19)]
 		/// An event to use the raw value of the joystick
-		[Tooltip("An event to use the raw value of the joystick")]
+		[Tooltip("用于接收摇杆原始值的事件")]
 		public JoystickEvent JoystickValue;
 		/// An event to use the normalized value of the joystick
-		[Tooltip("An event to use the normalized value of the joystick")]
+		[Tooltip("用于接收摇杆归一化值的事件")]
 		public JoystickEvent JoystickNormalizedValue;
 		// An event to use the joystick's amplitude (the magnitude of its Vector2 output)
-		[Tooltip("An event to use the joystick's amplitude (the magnitude of its Vector2 output)")]
+		[Tooltip("用于接收摇杆幅值（其 Vector2 输出的模长）的事件")]
 		public JoystickFloatEvent JoystickMagnitudeValue;
 		
 		[MMInspectorGroup("Touch Events", true, 8)]
 		/// An event triggered when tapping the joystick for the first time
-		[Tooltip("An event triggered when tapping the joystick for the first time")]
+		[Tooltip("首次按下摇杆时触发的事件")]
 		public UnityEvent OnPointerDownEvent;
 		/// An event triggered when dragging the stick
-		[Tooltip("An event triggered when dragging the stick")]
+		[Tooltip("拖动摇杆时触发的事件")]
 		public UnityEvent OnDragEvent;
 		/// An event triggered when releasing the stick
-		[Tooltip("An event triggered when releasing the stick")]
+		[Tooltip("释放摇杆时触发的事件")]
 		public UnityEvent OnPointerUpEvent;
 		
 		[MMInspectorGroup("Rotating Direction Indicator", true, 20)]
 		/// an object you can rotate to show the direction of the joystick. Will only be visible if the movement is above a threshold
-		[Tooltip("an object you can rotate to show the direction of the joystick. Will only be visible if the movement is above a threshold")]
+		[Tooltip("用于显示摇杆方向的可旋转对象；只有当移动幅度超过阈值时才会显示。")]
 		public Transform RotatingIndicator;
 		/// the threshold above which the rotating indicator will appear
-		[Tooltip("the threshold above which the rotating indicator will appear")]
+		[Tooltip("旋转方向指示器开始显示所需超过的阈值")]
 		public float RotatingIndicatorThreshold = 0.1f;
 		
 		[MMInspectorGroup("Knob Opacity", true, 17)]
 		/// the new opacity to apply to the canvas group when the button is pressed
-		[Tooltip("the new opacity to apply to the canvas group when the button is pressed")]
+		[Tooltip("摇杆按下时要应用到 CanvasGroup 的透明度")]
 		public float PressedOpacity = 0.5f;
 		/// whether or not to interpolate opacity changes on the knob's canvas group
-		[Tooltip("whether or not to interpolate opacity changes on the knob's canvas group")]
+		[Tooltip("是否对摇杆圆帽 CanvasGroup 的透明度变化进行插值")]
 		public bool InterpolateOpacity = true;
 		/// the speed at which to interpolate opacity
-		[Tooltip("the speed at which to interpolate opacity")]
+		[Tooltip("透明度插值速度")]
 		[MMCondition("InterpolateOpacity", true)]
 		public float InterpolateOpacitySpeed = 1f;
 		
 		[MMInspectorGroup("Debug Output", true, 5)]
 		/// the raw value of the joystick, from 0 to 1 on each axis
-		[Tooltip("the raw value of the joystick, from 0 to 1 on each axis")]
+		[Tooltip("摇杆原始值，每个轴的范围为 0 到 1")]
 		[MMReadOnly]
 		public Vector2 RawValue;
 		/// the normalized value of the joystick
-		[Tooltip("the normalized value of the joystick")]
+		[Tooltip("摇杆的归一化值")]
 		[MMReadOnly]
 		public Vector2 NormalizedValue;
 		/// the magnitude of the stick's vector
-		[Tooltip("the magnitude of the stick's vector")]
+		[Tooltip("摇杆向量的模长")]
 		[MMReadOnly]
 		public float Magnitude;
 		/// whether or not to draw gizmos associated to this stick
-		[Tooltip("whether or not to draw gizmos associated to this stick")] 
+		[Tooltip("是否绘制与该摇杆相关的 Gizmo")] 
 		public bool DrawGizmos = true;
 
 		/// the render mode of the parent canvas this stick is on
 		public virtual RenderMode ParentCanvasRenderMode { get; protected set; }
 
-		protected Vector2 _neutralPosition;
-		protected Vector2 _newTargetPosition;
+		protected Vector3 _neutralPosition;
+		protected Vector3 _newTargetPosition;
 		protected Vector3 _newJoystickPosition;
 		protected float _initialZPosition;
 		protected float _targetOpacity;
@@ -152,6 +152,7 @@ namespace MoreMountains.Tools
 		protected Transform _knobTransform;
 		protected bool _rotatingIndicatorIsNotNull = false;
 		protected float _maxRangeTransformDistance;
+		protected Canvas _parentCanvas;
 		
 		/// <summary>
 		/// On Start we initialize our stick
@@ -173,6 +174,7 @@ namespace MoreMountains.Tools
 			}
 			
 			_canvasGroup = GetComponent<CanvasGroup>();
+			_parentCanvas = GetComponentInParent<Canvas>();
 			_rotatingIndicatorIsNotNull = (RotatingIndicator != null);
 			RefreshMaxRangeDistance();
 
@@ -276,52 +278,72 @@ namespace MoreMountains.Tools
 
 			_newTargetPosition = ConvertToWorld(eventData.position);
 
-			// We clamp the stick's position to let it move only inside its defined max range
-			ClampToBounds();
+			Vector3 localDelta = TransformToLocalSpace(_newTargetPosition - _neutralPosition);
+			localDelta = Vector2.ClampMagnitude(localDelta, ComputedMaxRange);
 
-			// If we haven't authorized certain axis, we force them to zero
 			if (!HorizontalAxisEnabled)
 			{
-				_newTargetPosition.x = 0;
+				localDelta.x = 0;
 			}
 			if (!VerticalAxisEnabled)
 			{
-				_newTargetPosition.y = 0;
+				localDelta.y = 0;
 			}
-			// For each axis, we evaluate its lerped value (-1...1)
-			RawValue.x = EvaluateInputValue(_newTargetPosition.x);
-			RawValue.y = EvaluateInputValue(_newTargetPosition.y);
 
-			_newJoystickPosition = _neutralPosition + _newTargetPosition;
+			RawValue.x = EvaluateInputValue(localDelta.x);
+			RawValue.y = EvaluateInputValue(localDelta.y);
+
+			_newTargetPosition = _neutralPosition + TransformToWorldSpace(localDelta);
+			_newJoystickPosition = _newTargetPosition;
 			_newJoystickPosition.z = _initialZPosition;
 
-			// We move the joystick to its dragged position
 			_knobTransform.position = _newJoystickPosition;
 		}
 
 		/// <summary>
-		/// Clamps the stick to the specified range
+		/// Transforms a world space vector to the canvas/camera local space
 		/// </summary>
-		protected virtual void ClampToBounds()
+		protected virtual Vector3 TransformToLocalSpace(Vector3 worldVector)
 		{
-			_newTargetPosition = Vector2.ClampMagnitude(_newTargetPosition - _neutralPosition, ComputedMaxRange);
+			if (ParentCanvasRenderMode == RenderMode.ScreenSpaceCamera && TargetCamera != null)
+			{
+				return Quaternion.Inverse(TargetCamera.transform.rotation) * worldVector;
+			}
+			return worldVector;
 		}
 
 		/// <summary>
-		/// Converts a position to world position
+		/// Transforms a local space vector back to world space
 		/// </summary>
-		/// <param name="position"></param>
-		/// <returns></returns>
+		protected virtual Vector3 TransformToWorldSpace(Vector3 localVector)
+		{
+			if (ParentCanvasRenderMode == RenderMode.ScreenSpaceCamera && TargetCamera != null)
+			{
+				return TargetCamera.transform.rotation * localVector;
+			}
+			return localVector;
+		}
+		
 		protected virtual Vector3 ConvertToWorld(Vector3 position)
 		{
 			if (ParentCanvasRenderMode == RenderMode.ScreenSpaceCamera)
 			{
+				float distance = _parentCanvas != null ? _parentCanvas.planeDistance : 0f;
+				position.z = distance;
 				return TargetCamera.ScreenToWorldPoint(position);
 			}
 			else
 			{
 				return position;
 			}
+		}
+
+		/// <summary>
+		/// Clamps the position of the new target
+		/// </summary>
+		protected virtual void ClampToBounds()
+		{
+			_newTargetPosition = Vector2.ClampMagnitude(_newTargetPosition - _neutralPosition, ComputedMaxRange);
 		}
 
 		/// <summary>
@@ -401,11 +423,11 @@ namespace MoreMountains.Tools
 			Handles.color = MMColors.Orange;
 			if (!Application.isPlaying)
 			{
-				Handles.DrawWireDisc(this.transform.position, Vector3.forward, ComputedMaxRange);	
+				Handles.DrawWireDisc(this.transform.position, this.transform.forward, ComputedMaxRange);	
 			}
 			else
 			{
-				Handles.DrawWireDisc(_neutralPosition, Vector3.forward, ComputedMaxRange);
+				Handles.DrawWireDisc(_neutralPosition, this.transform.forward, ComputedMaxRange);
 			}
 		}
 		#endif

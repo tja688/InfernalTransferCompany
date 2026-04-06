@@ -49,76 +49,76 @@ namespace MoreMountains.Feedbacks
 		public enum Methods { SetGameObjectActive, MaterialAlpha, MaterialEmissionIntensity, ShaderFloatValue }
         
 		[MMInspectorGroup("Blink Method", true, 17)] 
-		/// the selected method to blink the target object
-		[Tooltip("the selected method to blink the target object")]
+		/// 目标对象使用的闪烁方式。
+		[Tooltip("目标对象使用的闪烁方式。")]
 		public Methods Method = Methods.SetGameObjectActive;
-		/// the object to set active/inactive if that method was chosen
-		[Tooltip("the object to set active/inactive if that method was chosen")]
+		/// 当选择对应方法时，要执行启用 / 禁用切换的对象。
+		[Tooltip("当选择对应方法时，要执行启用 / 禁用切换的对象。")]
 		[MMFEnumCondition("Method", (int)Methods.SetGameObjectActive)]
 		public GameObject TargetGameObject;
-		/// the target renderer to work with
-		[Tooltip("the target renderer to work with")]
+		/// 要作用的目标 Renderer。
+		[Tooltip("要作用的目标渲染器。")]
 		[MMFEnumCondition("Method", (int)Methods.MaterialAlpha, (int)Methods.MaterialEmissionIntensity, (int)Methods.ShaderFloatValue)]
 		public Renderer TargetRenderer;
-		/// the material index to target
-		[Tooltip("the material index to target")]
+		/// 要操作的材质索引。
+		[Tooltip("要操作的材质索引。")]
 		[MMFEnumCondition("Method", (int)Methods.MaterialAlpha, (int)Methods.MaterialEmissionIntensity, (int)Methods.ShaderFloatValue)]
 		public int MaterialIndex = 0;
-		/// the shader property to alter a float on
-		[Tooltip("the shader property to alter a float on")]
+		/// 要修改的 Shader float 属性名。
+		[Tooltip("要修改着色器的浮点数属性名。")]
 		[MMFEnumCondition("Method", (int)Methods.MaterialAlpha, (int)Methods.MaterialEmissionIntensity, (int)Methods.ShaderFloatValue)]
 		public string ShaderPropertyName = "_Color";
-		/// the value to apply when blinking is off
-		[Tooltip("the value to apply when blinking is off")]
+		/// 闪烁关闭时应用的值。
+		[Tooltip("闪烁关闭时应用的值。")]
 		[MMFEnumCondition("Method", (int)Methods.MaterialAlpha, (int)Methods.MaterialEmissionIntensity, (int)Methods.ShaderFloatValue)]
 		public float OffValue = 0f;
-		/// the value to apply when blinking is on
-		[Tooltip("the value to apply when blinking is on")]
+		/// 闪烁开启时应用的值。
+		[Tooltip("闪烁开启时应用的值。")]
 		[MMFEnumCondition("Method", (int)Methods.MaterialAlpha, (int)Methods.MaterialEmissionIntensity, (int)Methods.ShaderFloatValue)]
 		public float OnValue = 1f;
-		/// whether to lerp these values or not
-		[Tooltip("whether to lerp these values or not")]
+		/// 这些值切换时是否使用插值。
+		[Tooltip("这些值切换时是否使用插值。")]
 		[MMFEnumCondition("Method", (int)Methods.MaterialAlpha, (int)Methods.MaterialEmissionIntensity, (int)Methods.ShaderFloatValue)]
 		public bool LerpValue = true;
-		/// the curve to apply to the lerping
-		[Tooltip("the curve to apply to the lerping")]
+		/// 用于插值过程的曲线。
+		[Tooltip("用于插值过程的曲线。")]
 		[MMFEnumCondition("Method", (int)Methods.MaterialAlpha, (int)Methods.MaterialEmissionIntensity, (int)Methods.ShaderFloatValue)]
 		public AnimationCurve Curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1.05f), new Keyframe(1, 0));
-		/// if this is true, this component will use material property blocks instead of working on an instance of the material.
-		[Tooltip("if this is true, this component will use material property blocks instead of working on an instance of the material.")] 
+		/// 若启用，此组件会使用 `MaterialPropertyBlock`，而不是直接修改材质实例。
+		[Tooltip("若启用，此组件会使用 `MaterialPropertyBlock`，而不是直接修改材质实例。")] 
 		public bool UseMaterialPropertyBlocks = false;
 		
 		[MMInspectorGroup("Extra Targets", true, 12)] 
-		/// a list of optional extra renderers and their material index to target
-		[Tooltip("a list of optional extra renderers and their material index to target")]
+		/// 可选的额外 Renderer 列表，以及各自要作用的材质索引。
+		[Tooltip("可选的额外 Renderer 列表，以及各自要作用的材质索引。")]
 		public List<BlinkTargetRenderer> ExtraRenderers;
-		/// a list of optional extra game objects to target
-		[Tooltip("a list of optional extra game objects to target")]
+		/// 可选的额外目标 GameObject 列表。
+		[Tooltip("任选的额外目标游戏对象列表。")]
 		public List<GameObject> ExtraGameObjects;
 
 		[MMInspectorGroup("State", true, 18)] 
-		/// whether the object should blink or not
-		[Tooltip("whether the object should blink or not")]
+		/// 对象当前是否应处于闪烁状态。
+		[Tooltip("对象当前是否应处于闪烁状态。")]
 		public bool Blinking = true;
-		/// whether or not to force a certain state on exit
-		[Tooltip("whether or not to force a certain state on exit")]
+		/// 退出时是否强制设置为指定状态。
+		[Tooltip("退出时是否强制设置为指定状态。")]
 		public bool ForceStateOnExit = false;
-		/// the state to apply on exit
-		[Tooltip("the state to apply on exit")]
+		/// 退出时要应用的状态。
+		[Tooltip("退出时要应用的状态。")]
 		[MMFCondition("ForceStateOnExit", true)]
 		public States StateOnExit = States.On;
 
 		[MMInspectorGroup("TimeScale", true, 120)] 
-		/// whether or not this MMBlink should operate on unscaled time 
-		[Tooltip("whether or not this MMBlink should operate on unscaled time")]
+		/// `MMBlink` 是否使用 `unscaled time` 运行。 
+		[Tooltip("`MMBlink` 是否使用 `不受时间缩放影响的时间` 运行。")]
 		public TimescaleModes TimescaleMode = TimescaleModes.Scaled;
         
 		[MMInspectorGroup("Sequence", true, 121)] 
-		/// how many times the sequence should repeat (-1 : infinite)
-		[Tooltip("how many times the sequence should repeat (-1 : infinite)")]
+		/// 该序列应重复的次数（`-1` 表示无限循环）。
+		[Tooltip("该序列应重复的次数（`-1` 表示无限循环）。")]
 		public int RepeatCount = 0;
-		/// The list of phases to apply blinking with
-		[Tooltip("The list of phases to apply blinking with")]
+		/// 用于执行闪烁的阶段列表。
+		[Tooltip("用于执行闪烁的阶段列表。")]
 		public List<BlinkPhase> Phases;
         
 		[MMInspectorGroup("Debug", true, 122)] 
@@ -129,12 +129,12 @@ namespace MoreMountains.Feedbacks
 			new string[] { "main-call-to-action", "", "" })]
 		public bool DebugToolbar;
 		
-		/// is the blinking object in an active state right now?
-		[Tooltip("is the blinking object in an active state right now?")]
+		/// 闪烁对象当前是否处于激活状态？
+		[Tooltip("闪烁对象当前是否处于激活状态？")]
 		[MMFReadOnly]
 		public bool Active = false;
-		/// the index of the phase we're currently in
-		[Tooltip("the index of the phase we're currently in")]
+		/// 当前所处阶段的索引。
+		[Tooltip("当前所处阶段的索引。")]
 		[MMFReadOnly]
 		public int CurrentPhaseIndex = 0;
         
@@ -294,58 +294,58 @@ namespace MoreMountains.Feedbacks
 					break;
 				case Methods.MaterialAlpha:
 					_currentColor.a = value;
-					ApplyCurrentColor(TargetRenderer);
+					ApplyCurrentColor(TargetRenderer, MaterialIndex);
 					for (var index = 0; index < ExtraRenderers.Count; index++)
 					{
 						var blinkRenderer = ExtraRenderers[index];
-						ApplyCurrentColor(blinkRenderer.TargetRenderer);
+						ApplyCurrentColor(blinkRenderer.TargetRenderer, blinkRenderer.TargetMaterialIndex);
 					}
 					break;
 				case Methods.MaterialEmissionIntensity:
 					_currentColor = _initialColor * value;
-					ApplyCurrentColor(TargetRenderer);
+					ApplyCurrentColor(TargetRenderer, MaterialIndex);
 					for (var index = 0; index < ExtraRenderers.Count; index++)
 					{
 						var blinkRenderer = ExtraRenderers[index];
-						ApplyCurrentColor(blinkRenderer.TargetRenderer);
+						ApplyCurrentColor(blinkRenderer.TargetRenderer, blinkRenderer.TargetMaterialIndex);
 					}
 					break;
 				case Methods.ShaderFloatValue:
-					ApplyFloatValue(TargetRenderer, value);
+					ApplyFloatValue(TargetRenderer, value, MaterialIndex);
 					for (var index = 0; index < ExtraRenderers.Count; index++)
 					{
 						var blinkRenderer = ExtraRenderers[index];
-						ApplyFloatValue(blinkRenderer.TargetRenderer, value);
+						ApplyFloatValue(blinkRenderer.TargetRenderer, value, blinkRenderer.TargetMaterialIndex);
 					}
 					break;
 			}
 		}
 
-		protected virtual void ApplyFloatValue(Renderer targetRenderer, float value)
+		protected virtual void ApplyFloatValue(Renderer targetRenderer, float value, int materialIndex)
 		{
 			if (UseMaterialPropertyBlocks)
 			{
-				targetRenderer.GetPropertyBlock(_propertyBlock, MaterialIndex);
+				targetRenderer.GetPropertyBlock(_propertyBlock, materialIndex);
 				_propertyBlock.SetFloat(_propertyID, value);
 				targetRenderer.SetPropertyBlock(_propertyBlock);
 			}
 			else
 			{
-				targetRenderer.materials[MaterialIndex].SetFloat(_propertyID, value); 
+				targetRenderer.materials[materialIndex].SetFloat(_propertyID, value); 
 			}
 		}
 
-		protected virtual void ApplyCurrentColor(Renderer targetRenderer)
+		protected virtual void ApplyCurrentColor(Renderer targetRenderer, int materialIndex)
 		{
 			if (UseMaterialPropertyBlocks)
 			{
-				targetRenderer.GetPropertyBlock(_propertyBlock, MaterialIndex);
+				targetRenderer.GetPropertyBlock(_propertyBlock, materialIndex);
 				_propertyBlock.SetColor(_propertyID, _currentColor);
 				targetRenderer.SetPropertyBlock(_propertyBlock);
 			}
 			else
 			{
-				targetRenderer.materials[MaterialIndex].SetColor(_propertyID, _currentColor);    
+				targetRenderer.materials[materialIndex].SetColor(_propertyID, _currentColor);    
 			}
 		}
 

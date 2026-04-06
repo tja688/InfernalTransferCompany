@@ -1,6 +1,6 @@
-﻿using MoreMountains.Tools;
+using MoreMountains.Tools;
 using UnityEngine;
-#if (MM_TEXTMESHPRO || MM_UGUI2)
+#if MM_UGUI2
 using TMPro;
 #endif
 using UnityEngine.Scripting.APIUpdating;
@@ -11,8 +11,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback lets you control the font size of a target TMP over time
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback lets you control the font size of a target TMP over time.")]
-	#if (MM_TEXTMESHPRO || MM_UGUI2)
+	[System.Serializable]
+	[FeedbackHelp("这个反馈可随时间控制目标 TMP 的字号。")]
+	#if MM_UGUI2
 	[FeedbackPath("TextMesh Pro/TMP Font Size")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.TextMeshPro")]
@@ -30,12 +31,12 @@ namespace MoreMountains.Feedbacks
 			get
 			{
 				return
-					"This feedback requires that a TargetTMPText be set to be able to work properly. You can set one below.";
+					"此反馈需要指定 TargetTMPText 才能正常工作。你可以在下方进行设置。";
 			}
 		}
 		#endif
 		
-		#if UNITY_EDITOR && (MM_TEXTMESHPRO || MM_UGUI2)
+		#if UNITY_EDITOR && MM_UGUI2
 		public override bool EvaluateRequiresSetup()
 		{
 			return (TargetTMPText == null);
@@ -47,39 +48,39 @@ namespace MoreMountains.Feedbacks
 		}
 		#endif
 
-		#if (MM_TEXTMESHPRO || MM_UGUI2)
+		#if MM_UGUI2
 		public override bool HasAutomatedTargetAcquisition => true;
 		public override bool CanForceInitialValue => true;
 		protected override void AutomateTargetAcquisition() => TargetTMPText = FindAutomatedTarget<TMP_Text>();
 
 		[MMFInspectorGroup("Target", true, 12, true)]
-		/// the TMP_Text component to control
-		[Tooltip("the TMP_Text component to control")]
+		/// 要控制的 TMP_Text 组件。
+		[Tooltip("要控制的文本组件。")]
 		public TMP_Text TargetTMPText;
 		#endif
 
 		[MMFInspectorGroup("Font Size", true, 16)]
-		/// the curve to tween on
-		[Tooltip("the curve to tween on")]
-		[MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
-		public MMTweenType FontSizeCurve =
-			new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0)));
-
-		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")] [MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
+		/// 用于执行补间的曲线。
+		[Tooltip("用于执行补间的曲线。")]
+		[MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime, (int)Modes.ToDestination)]
+		public MMTweenType FontSizeCurve = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0)));
+		/// 将曲线 0 端重新映射到的值。
+		[Tooltip("将曲线 0 端重新映射到的值。")] [MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
 		public float RemapZero = 0f;
-
-		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")] [MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
+		/// 将曲线 1 端重新映射到的值。
+		[Tooltip("将曲线 1 端重新映射到的值。")] [MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
 		public float RemapOne = 1f;
-
-		/// the value to move to in instant mode
-		[Tooltip("the value to move to in instant mode")] [MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.Instant)]
+		/// Instant 模式下要立即设置的值。
+		[Tooltip("Instant 模式下要立即设置的值。")] [MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.Instant)]
 		public float InstantFontSize;
+		/// ToDestination 模式下要插值到的目标值。
+		[Tooltip("ToDestination 模式下要插值到的目标值。")]
+		[MMFEnumCondition("Mode", (int)Modes.ToDestination)]
+		public float DestinationFontSize;
 
 		protected override void FillTargets()
 		{
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			if (TargetTMPText == null)
 			{
 				return;
@@ -96,6 +97,7 @@ namespace MoreMountains.Feedbacks
 			target.RemapLevelZero = RemapZero;
 			target.RemapLevelOne = RemapOne;
 			target.InstantLevel = InstantFontSize;
+			target.ToDestinationLevel = DestinationFontSize;
 
 			_targets.Add(target);
 			#endif

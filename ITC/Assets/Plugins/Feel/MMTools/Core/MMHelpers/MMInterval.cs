@@ -11,16 +11,16 @@ namespace MoreMountains.Tools
 		public enum MMIntervalType { Inclusive, Exclusive }
 		
 		/// the lower bound of this interval
-		[Tooltip("the lower bound of this interval")]
+		[Tooltip("区间下界")]
 		public T LowerBound;
 		/// the upper bound of this interval
-		[Tooltip("the upper bound of this interval")]
+		[Tooltip("区间上界")]
 		public T UpperBound;
 		/// whether to include or exclude the lower bound in the interval
-		[Tooltip("whether to include or exclude the lower bound in the interval")]
+		[Tooltip("区间是否包含下界")]
 		public MMIntervalType LowerBoundIntervalType;
 		/// whether to include or exclude the upper bound in the interval
-		[Tooltip("whether to include or exclude the upper bound in the interval")]
+		[Tooltip("区间是否包含上界")]
 		public MMIntervalType UpperBoundIntervalType;
 		
 		/// <summary>

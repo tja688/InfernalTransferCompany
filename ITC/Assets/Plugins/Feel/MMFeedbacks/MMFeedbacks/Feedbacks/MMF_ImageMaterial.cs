@@ -1,4 +1,4 @@
-﻿#if MM_UI
+#if MM_UI
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Scripting.APIUpdating;
@@ -9,9 +9,10 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will let you change the material on a target UI Image
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the material on a target UI Image")]
+	[FeedbackHelp("此反馈可让你切换目标 UI Image 上使用的材质。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
-	[FeedbackPath("Renderer/Image Material")]
+	[System.Serializable]
+	[FeedbackPath("UI/Image Material")]
 	public class MMF_ImageMaterial : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -20,18 +21,18 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.UIColor; } }
 		public override bool EvaluateRequiresSetup() { return (TargetImage == null); }
 		public override string RequiredTargetText { get { return TargetImage != null ? TargetImage.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetImage be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈需要先指定 TargetImage 才能正常工作，可在下方设置。"; } }
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetImage = FindAutomatedTarget<Image>();
         
 		[MMFInspectorGroup("Image", true, 12, true)]
 		/// the target Image we want to change the material on
-		[Tooltip("the target Image we want to change the material on")]
+		[Tooltip("要修改材质的目标 Image。")]
 		public Image TargetImage;
 		
 		/// the new material to apply to the target image
-		[Tooltip("the new material to apply to the target image")]
+		[Tooltip("播放时要应用到目标 Image 的新材质。")]
 		public Material NewMaterial;
 
 		protected Material _initialMaterial;

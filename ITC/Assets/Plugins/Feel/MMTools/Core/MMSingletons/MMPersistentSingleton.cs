@@ -9,7 +9,7 @@ namespace MoreMountains.Tools
 	{
 		[Header("Persistent Singleton")]
 		/// if this is true, this singleton will auto detach if it finds itself parented on awake
-		[Tooltip("if this is true, this singleton will auto detach if it finds itself parented on awake")]
+		[Tooltip("若开启，Singleton 在 Awake 时若检测到自己有父物体，会自动从父物体分离（detach）")]
 		public bool AutomaticallyUnparentOnAwake = true;
 		
 		public static bool HasInstance => _instance != null;

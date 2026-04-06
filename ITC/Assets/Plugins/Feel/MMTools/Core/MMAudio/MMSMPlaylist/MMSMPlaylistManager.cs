@@ -17,71 +17,71 @@ namespace MoreMountains.Tools
 		
 		[MMInspectorGroup("Settings", true, 18)]
 		/// the channel used to target this playlist manager by playlist remote or playlist feedbacks
-		[Tooltip("the channel used to target this playlist manager by playlist remote or playlist feedbacks")]
+		[Tooltip("播放列表远程或播放列表反馈用于定向管理器的频道（频道）")]
 		public int Channel = 0;
 		/// the current playlist this manager will play
-		[Tooltip("the current playlist this manager will play")]
+		[Tooltip("该管理器当前要播放的播放列表")]
 		public MMSMPlaylist Playlist;
 		/// whether this playlist manager should auto play on start or not
-		[Tooltip("whether this playlist manager should auto play on start or not")]
+		[Tooltip("该播放列表管理器是否在启动时自动播放")]
 		public bool PlayOnStart = false; 
 		/// a global volume multiplier to apply when playing a song
-		[Tooltip("a global volume multiplier to apply when playing a song")]
+		[Tooltip("播放歌曲时应用的全局音量乘数")]
 		[Range(0f,1f)]
 		public float VolumeMultiplier = 1f;
 		/// a pitch multiplier to apply to all songs when playing them
-		[Tooltip("a pitch multiplier to apply to all songs when playing them")]
+		[Tooltip("播放歌曲时应用到所有歌曲的音高乘数")]
 		[Range(0f,20f)]
 		public float PitchMultiplier = 1f;
 		/// if this is true, this playlist manager will persist from scene to scene and will keep playing
-		[Tooltip("if this is true, this playlist manager will persist from scene to scene and will keep playing")]
+		[Tooltip("若开启，该管理器会跨场景持久存在并持续播放")]
 		public bool Persistent = false;
 		/// if this is true, this singleton will auto detach if it finds itself parented on awake
-		[Tooltip("if this is true, this singleton will auto detach if it finds itself parented on awake")]
+		[Tooltip("若开启，Singleton 在 Awake 时若检测到自己有父物体，会自动从父物体分离（detach）")]
 		[MMCondition("Persistent", true)]
 		public bool AutomaticallyUnparentOnAwake = true;
 		/// if this is true, this playlist will automatically pause/resume OnApplicationPause, useful if you've prevented your game from running in the background
-		[Tooltip("if this is true, this playlist will automatically pause/resume OnApplicationPause, useful if you've prevented your game from running in the background")]
+		[Tooltip("若开启，在 OnApplicationPause 时会自动暂停/恢复播放（适用于应用切后台时）")]
 		public bool AutoHandleApplicationPause = true;
 
 		[MMInspectorGroup("Fade", true, 12)] 
 		/// whether or not sounds should fade in when they start playing
-		[Tooltip("whether or not sounds should fade in when they start playing")]
+		[Tooltip("声音开始播放时是否淡入")]
 		public bool FadeIn;
 		/// whether or not sounds should fade out when they stop playing
-		[Tooltip("whether or not sounds should fade out when they stop playing")]
+		[Tooltip("声音停止播放时是否淡出")]
 		public bool FadeOut;
 		/// the duration of the fade, in seconds
-		[Tooltip("the duration of the fade, in seconds")]
+		[Tooltip("淡入淡出持续时长（秒）")]
 		public float FadeDuration = 1f;
 		/// the tween to use when fading the sound
-		[Tooltip("the tween to use when fading the sound")]
+		[Tooltip("声音淡入淡出使用的 Tween")]
 		public MMTweenType FadeTween = new MMTweenType(MMTween.MMTweenCurve.EaseInCubic);
 
 		[MMInspectorGroup("Time", true, 20)] 
 		/// whether or not the playlist manager should have its pitch multiplier value driven by the current timescale. If set to true, songs would appear to slow down when time is slowed down, and to speed up when time scale is higher than normal
-		[Tooltip("whether or not the playlist manager should have its pitch multiplier value driven by the current timescale. If set to true, songs would appear to slow down when time is slowed down, and to speed up when time scale is higher than normal")]
+		[Tooltip("是否让播放列表管理器的 pitch multiplier 受当前 timescale 驱动。开启后：慢动作时声音会变慢，加速时间时声音会变快")]
 		public bool BindPitchToTimeScale = false;
 		/// the values to remap timescale from (min and max) - when timescale is equal to TimescaleRemapFrom.x, the pitch multiplier will be TimescaleRemapTo.x
-		[Tooltip("the values to remap timescale from (min and max) - when timescale is equal to TimescaleRemapFrom.x, the pitch multiplier will be TimescaleRemapTo.x")]
+		[Tooltip("时间尺度 重映射输入区间（最小/最大）。当 时间尺度 = 时间刻度重映射自.x 时，输出音调乘数 = 时间刻度重映射到.x")]
 		[MMCondition("BindPitchToTimeScale", true)]
 		public Vector2 TimescaleRemapFrom = new Vector2(0f,2f);
 		/// the values to remap timescale to (min and max) - when timescale is equal to TimescaleRemapFrom.x, the pitch multiplier will be TimescaleRemapTo.x
-		[Tooltip("the values to remap timescale to (min and max) - when timescale is equal to TimescaleRemapFrom.x, the pitch multiplier will be TimescaleRemapTo.x")]
+		[Tooltip("timescale 重映射输出区间（最小/最大）。与 TimescaleRemapFrom 成对使用")]
 		[MMCondition("BindPitchToTimeScale", true)]
 		public Vector2 TimescaleRemapTo = new Vector2(0.8f,1.2f);
 
 		[MMInspectorGroup("Status", true, 14)]
 		/// the current state of the playlist, debug display only
-		[Tooltip("the current state of the playlist, debug display only")]
+		[Tooltip("播放列表当前状态（仅调试显示）")]
 		[MMReadOnly]
 		public PlaylistManagerStates DebugCurrentManagerState = PlaylistManagerStates.Idle;
 		/// the index we're currently playing
-		[Tooltip("the index we're currently playing")]
+		[Tooltip("当前播放索引")]
 		[MMReadOnly]
 		public int CurrentSongIndex = -1;
 		/// the name of the song that is currently playing
-		[Tooltip("the name of the song that is currently playing")]
+		[Tooltip("当前正在播放的歌曲名")]
 		[MMReadOnly]
 		public string CurrentSongName;
 		/// the current state of this playlist
@@ -89,19 +89,19 @@ namespace MoreMountains.Tools
 		public MMStateMachine<PlaylistManagerStates> PlaylistManagerState;
 		
 		/// the time of the currently playing song
-		[Tooltip("the time of the currently playing song")]
+		[Tooltip("当前歌曲的已播放时间")]
 		[MMReadOnly] 
 		public float CurrentTime;
 		/// the time (in seconds) left on the song currently playing 
-		[Tooltip("the time (in seconds) left on the song currently playing")]
+		[Tooltip("当前歌曲剩余时间（秒）")]
 		[MMReadOnly] 
 		public float CurrentTimeLeft;
 		/// the total duration of the song currently playing
-		[Tooltip("the total duration of the song currently playing")]
+		[Tooltip("当前歌曲总时长")]
 		[MMReadOnly] 
 		public float CurrentClipDuration;
 		/// the current normalized progress of the song currently playing
-		[Tooltip("the current normalized progress of the song currently playing")]
+		[Tooltip("当前歌曲的标准化播放进度")]
 		[Range(0f, 1f)]
 		public float CurrentProgress = 0;
 
@@ -122,7 +122,7 @@ namespace MoreMountains.Tools
 		[MMInspectorButton("PlayNextSong")]
 		public bool NextButton;
 		/// the index of the song to play when pressing the PlayTargetSong button
-		[Tooltip("the index of the song to play when pressing the PlayTargetSong button")]
+		[Tooltip("点击 PlayTargetSong 按钮时要播放的歌曲索引")]
 		public int TargetSongIndex = 0;
 		/// a next song test button
 		[MMInspectorButton("PlayTargetSong")]
@@ -137,7 +137,7 @@ namespace MoreMountains.Tools
 		[MMInspectorButton("StopCurrentSongFromLooping")]
 		public bool StopLoopTargetSongButton;
 		/// a playlist you can set to use with the SetTargetPlaylist and PlayTargetPlaylist buttons
-		[Tooltip("a playlist you can set to use with the SetTargetPlaylist and PlayTargetPlaylist buttons")]
+		[Tooltip("可与 SetTargetPlaylist / PlayTargetPlaylist 按钮联动使用的目标播放列表")]
 		public MMSMPlaylist TestPlaylist;
 		/// a test button used to set a new playlist 
 		[MMInspectorButton("SetTargetPlaylist")]
@@ -150,11 +150,11 @@ namespace MoreMountains.Tools
 		public bool ResetPlayCountButton;
 
 		/// a slider used to test volume control
-		[Tooltip("a slider used to test volume control")]
+		[Tooltip("用于测试音量控制的滑块")]
 		[Range(0f,2f)]
 		public float TestVolumeControl = 1f;
 		/// a slider used to test speed control
-		[Tooltip("a slider used to test speed control")]
+		[Tooltip("用于测试速度控制的滑块")]
 		[Range(0f,20f)]
 		public float TestPlaybackSpeedControl = 1f;
 		
@@ -328,6 +328,14 @@ namespace MoreMountains.Tools
 			/// </summary>
 			protected virtual void Update()
 			{
+				if (AudioListener.pause)
+				{
+					return;
+				}
+				if (MMSoundManager.Instance.IsPaused(Playlist.Track))
+				{
+					return;
+				}
 				if (PlaylistManagerState.CurrentState == PlaylistManagerStates.Idle)
 				{
 					this.enabled = false;
@@ -385,6 +393,10 @@ namespace MoreMountains.Tools
 				{
 					if (FadeIn && FadeOut && (CurrentTimeLeft < FadeDuration))
 					{
+						if (FadeOut)
+						{
+							Stop();	
+						}
 						HandleNextSong(1, false);
 					}
 					return;
@@ -764,6 +776,7 @@ namespace MoreMountains.Tools
 			protected virtual void OnMMPlaylistVolumeMultiplierEvent(int channel, float newVolumeMultiplier, bool applyVolumeMultiplierInstantly = false)
 			{
 				if (channel != Channel) { return; }
+				if (CurrentSongIndex < 0) { return; }
 				VolumeMultiplier = newVolumeMultiplier;
 				if (applyVolumeMultiplierInstantly)
 				{
@@ -774,6 +787,7 @@ namespace MoreMountains.Tools
 			protected virtual void OnMMPlaylistPitchMultiplierEvent(int channel, float newPitchMultiplier, bool applyPitchMultiplierInstantly = false)
 			{
 				if (channel != Channel) { return; }
+				if (CurrentSongIndex < 0) { return; }
 				PitchMultiplier = newPitchMultiplier;
 				if (applyPitchMultiplierInstantly)
 				{

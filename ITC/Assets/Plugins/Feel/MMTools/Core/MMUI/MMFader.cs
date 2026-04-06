@@ -176,37 +176,37 @@ namespace MoreMountains.Tools
         
 		[MMInspectorGroup("Identification", true, 122)] 
 		/// the ID for this fader (0 is default), set more IDs if you need more than one fader
-		[Tooltip("the ID for this fader (0 is default), set more IDs if you need more than one fader")]
+		[Tooltip("此 Fader 的 ID（默认 0）。如果场景中有多个 Fader，请为它们设置不同 ID 以便定向触发")]
 		public int ID;
         
 		[MMInspectorGroup("Opacity", true, 123)]
 		/// the opacity the fader should be at when inactive
-		[Tooltip("the opacity the fader should be at when inactive")]
+		[Tooltip("Fader 处于非激活状态时的透明度")]
 		public float InactiveAlpha = 0f;
 		/// the opacity the fader should be at when active
-		[Tooltip("the opacity the fader should be at when active")]
+		[Tooltip("Fader 处于激活状态时的透明度")]
 		public float ActiveAlpha = 1f;
 		/// determines whether a state should be forced on init
-		[Tooltip("determines whether a state should be forced on init")]
+		[Tooltip("是否在初始化时强制应用一个状态")]
 		public ForcedInitStates ForcedInitState = ForcedInitStates.Inactive;
         
 		[MMInspectorGroup("Timing", true, 124)]
 		/// the default duration of the fade in/out
-		[Tooltip("the default duration of the fade in/out")]
+		[Tooltip("淡入/淡出的默认持续时间")]
 		public float DefaultDuration = 0.2f;
 		/// the default curve to use for this fader
-		[Tooltip("the default curve to use for this fader")]
+		[Tooltip("该 Fader 默认使用的插值曲线")]
 		public MMTweenType DefaultTween = new MMTweenType(MMTween.MMTweenCurve.LinearTween);
 		/// whether or not the fade should happen in unscaled time
-		[Tooltip("whether or not the fade should happen in unscaled time")] 
+		[Tooltip("淡入淡出是否使用 unscaled time（不受 Time.timeScale 影响）")] 
 		public bool IgnoreTimescale = true;
 		/// whether or not this fader can cause a fade if the requested final alpha is the same as the current one
-		[Tooltip("whether or not this fader can cause a fade if the requested final alpha is the same as the current one")] 
+		[Tooltip("当目标 alpha 与当前 alpha 相同时是否仍强制执行一次 fade。若关闭，此类请求会被忽略")] 
 		public bool CanFadeToCurrentAlpha = true;
 
 		[MMInspectorGroup("Interaction", true, 125)]
 		/// whether or not the fader should block raycasts when visible
-		[Tooltip("whether or not the fader should block raycasts when visible")]
+		[Tooltip("推子 可见时是否波形 用户界面 射线（荧光检测）")]
 		public bool ShouldBlockRaycasts = false;
 
 		[MMInspectorGroup("Debug", true, 126)]

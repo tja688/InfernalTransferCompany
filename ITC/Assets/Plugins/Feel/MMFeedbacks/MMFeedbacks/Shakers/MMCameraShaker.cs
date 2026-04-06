@@ -84,21 +84,19 @@ namespace MoreMountains.Feedbacks
 	{
 		/// whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what.
 		/// MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable
-		[Tooltip("whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what. " +
-		         "MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable")]
+		[Tooltip("决定此抖动器是监听 `int` 定义的通道，还是监听 `MMChannel` ScriptableObject 定义的通道。`int` 配置简单，但项目一大就容易混乱，也不便记忆每个数字代表什么；`MMChannel` 需要预先创建资源，但名称更直观，也更适合扩展。")]
 		public MMChannelModes ChannelMode = MMChannelModes.Int;
-		/// the channel to listen to - has to match the one on the feedback
-		[Tooltip("the channel to listen to - has to match the one on the feedback")]
+		/// 要监听的频道，必须与对应 feedback 上配置的频道一致。
+		[Tooltip("要监听的通道，必须与触发它的反馈上配置的通道一致。")]
 		[MMEnumCondition("ChannelMode", (int)MMChannelModes.Int)]
 		public int Channel = 0;
 		/// the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel,
 		/// right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name
-		[Tooltip("the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel, " +
-		         "right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name")]
+		[Tooltip("用于监听事件的`通道资源`定义资源。只有引用同一个`通道资源`定义的反馈，才能触发这个增益器。若要创建`通道资源`，可以在项目视图中右键（通常放在数据文件夹中），选择更多山脉 >通道资源，并说明说明。")]
 		[MMEnumCondition("ChannelMode", (int)MMChannelModes.MMChannel)]
 		public MMChannel MMChannelDefinition = null;
-		/// a cooldown, in seconds, after a shake, during which no other shake can start
-		[Tooltip("a cooldown, in seconds, after a shake, during which no other shake can start")]
+		/// 一次 shake 结束后的冷却时间，单位为秒；冷却期间不会开始新的 shake。
+		[Tooltip("一次抖动结束后的冷却时间，单位为秒；冷却期间不会开始新的抖动。")]
 		public float CooldownBetweenShakes = 0f;
 	    
 		protected MMWiggle _wiggle;

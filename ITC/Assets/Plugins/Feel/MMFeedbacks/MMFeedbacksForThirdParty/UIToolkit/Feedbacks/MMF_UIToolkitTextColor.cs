@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,10 +7,11 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you change the text color an element on a target UI Document
+	/// 这个反馈可修改目标 UI Document 中元素的文本颜色。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the text color an element on a target UI Document")]
+	[FeedbackHelp("这个反馈可修改目标 UI Document 中元素的文本颜色。")]
+	[System.Serializable]
 	[FeedbackPath("UI Toolkit/UITK Text Color")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitTextColor : MMF_UIToolkitColorBase

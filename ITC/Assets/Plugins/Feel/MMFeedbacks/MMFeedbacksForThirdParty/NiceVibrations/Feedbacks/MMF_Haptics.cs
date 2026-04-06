@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using MoreMountains.Feedbacks;
 using UnityEngine.Scripting.APIUpdating;
 
@@ -10,9 +10,10 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// This feedback has been deprecated, and is just here to avoid errors in case you were to update from an old version. Use the new haptic feedbacks instead.
 	/// </summary>
 	[AddComponentMenu("")]
+	[System.Serializable]
 	[FeedbackPath("Haptics/Haptics DEPRECATED!")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.NiceVibrations")]
-	[FeedbackHelp("This feedback has been deprecated, and is just here to avoid errors in case you were to update from an old version. Use any of the new haptic feedbacks instead.")]
+	[FeedbackHelp("这个反馈已被弃用，仅用于兼容旧版本升级时避免报错。请改用新的 haptic 反馈。")]
 	public class MMF_Haptics : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once

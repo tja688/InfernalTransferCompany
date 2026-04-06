@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,58 +17,58 @@ namespace MoreMountains.Feedbacks
 		
 		[Header("Sequence")]
 		/// the sequence to design on or to play
-		[Tooltip("the sequence to design on or to play")]
+		[Tooltip("用于编辑或播放的序列")]
 		public MMSequence Sequence;
 		/// the intended BPM for playback and design
-		[Tooltip("the intended BPM for playback and design")]
+		[Tooltip("播放与编辑时使用的目标 BPM")]
 		public int BPM = 160;
 		/// the number of notes in the sequence
-		[Tooltip("the number of notes in the sequence")]
+		[Tooltip("序列中的音符数量")]
 		public int SequencerLength = 8;
 
 		[Header("Playback")]
 		/// the timescale on which this sequencer should play
-		[Tooltip("the timescale on which this sequencer should play")]
+		[Tooltip("此 Sequencer 播放时使用的时间缩放")]
 		public TimeScales TimeScale = TimeScales.Scaled;
 		/// whether the sequence should loop or not when played back
-		[Tooltip("whether the sequence should loop or not when played back")]
+		[Tooltip("播放时序列是否循环")]
 		public bool Loop = true;
 		/// if this is true the sequence will play in random order
-		[Tooltip("if this is true the sequence will play in random order")]
+		[Tooltip("若开启此项，序列将按随机顺序播放")]
 		public bool RandomSequence = false;
 		/// whether that sequencer should start playing on application start
-		[Tooltip("whether that sequencer should start playing on application start")]
+		[Tooltip("该 Sequencer 是否在应用启动时自动开始播放")]
 		public bool PlayOnStart = false;
         
 		[Header("Metronome")]
 		/// a sound to play every beat
-		[Tooltip("a sound to play every beat")]
+		[Tooltip("每一拍都要播放的声音")]
 		public AudioClip MetronomeSound;
 		/// the volume of the metronome sound
-		[Tooltip("the volume of the metronome sound")]
+		[Tooltip("节拍器声音的音量")]
 		[Range(0f, 1f)]
 		public float MetronomeVolume = 0.2f;
 
 		[Header("Events")]
 		/// a list of events to play every time an active beat is found on each track (one event per track)
-		[Tooltip("a list of events to play every time an active beat is found on each track (one event per track)")]
+		[Tooltip("每条轨道检测到激活拍点时要触发的事件列表（每条轨道一个事件）")]
 		public List<UnityEvent> TrackEvents;
 
 		[Header("Monitor")]
 		/// true if the sequencer is playing right now
-		[Tooltip("true if the sequencer is playing right now")]
+		[Tooltip("若音序器当前正在播放，则为真的")]
 		[MMFReadOnly]
 		public bool Playing = false;
 		/// true if the sequencer has been played once
-		[Tooltip("true if the sequencer has been played once")]
+		[Tooltip("若 Sequencer 至少播放过一次，则为 true")]
 		[HideInInspector]
 		public bool PlayedOnce = false;
 		/// true if a perfect beat was found this frame
-		[Tooltip("true if a perfect beat was found this frame")]
+		[Tooltip("若本帧检测到精确拍点，则为 true")]
 		[MMFReadOnly]
 		public bool BeatThisFrame = false;
 		/// the index of the last played bit (our position in the playing sequence)
-		[Tooltip("the index of the last played bit (our position in the playing sequence)")]
+		[Tooltip("上一次播放到的位索引（即当前在播放序列中的位置）")]
 		[MMFReadOnly]
 		public int LastBeatIndex = 0;
 		

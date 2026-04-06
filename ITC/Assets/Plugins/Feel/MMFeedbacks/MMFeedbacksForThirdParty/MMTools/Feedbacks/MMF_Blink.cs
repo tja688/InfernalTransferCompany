@@ -10,7 +10,8 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will trigger a MMBlink object, letting you blink something
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback lets you trigger a blink on an MMBlink object.")]
+	[FeedbackHelp("此反馈可在一个 MMBlink 对象上触发闪烁效果。")]
+	[System.Serializable]
 	[FeedbackPath("Renderer/MMBlink")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
 	public class MMF_Blink : MMF_Feedback
@@ -35,16 +36,16 @@ namespace MoreMountains.Feedbacks
         
 		[MMFInspectorGroup("Blink", true, 61, true)]
 		/// the target object to blink
-		[Tooltip("the target object to blink")]
+		[Tooltip("要执行闪烁的目标对象")]
 		public MMBlink TargetBlink;
 		/// an optional list of extra target objects to blink
-		[Tooltip("an optional list of extra target objects to blink")]
+		[Tooltip("可选的额外闪烁目标对象列表")]
 		public List<MMBlink> ExtraTargetBlinks;
 		/// the selected mode for this feedback
-		[Tooltip("the selected mode for this feedback")]
+		[Tooltip("该反馈当前使用的模式")]
 		public BlinkModes BlinkMode = BlinkModes.Toggle;
 		/// the duration of the blink. You can set it manually, or you can press the GrabDurationFromBlink button to automatically compute it. For performance reasons, this isn't updated unless you press the button, make sure you do so if you change the blink's duration.
-		[Tooltip("the duration of the blink. You can set it manually, or you can press the GrabDurationFromBlink button to automatically compute it. For performance reasons, this isn't updated unless you press the button, make sure you do so if you change the blink's duration.")]
+		[Tooltip("闪烁持续时间。你可以手动设置，也可以点击 GrabDurationFromBlink 按钮自动计算。出于性能考虑，这个值不会自动实时刷新；如果你修改了 Blink 的持续时间，请记得再次点击该按钮重新计算。")]
 		public float Duration;
 		public MMF_Button GrabDurationFromBlinkButton;
 

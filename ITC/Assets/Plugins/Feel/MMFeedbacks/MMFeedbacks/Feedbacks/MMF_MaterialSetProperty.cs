@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using MoreMountains.Tools;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Scripting.APIUpdating;
+using UnityEngine.Serialization;
 
 namespace MoreMountains.Feedbacks
 {
@@ -11,8 +12,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will let you set a property on the target renderer's material
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you set a property on the target renderer's material")]
+	[FeedbackHelp("此反馈可为目标 Renderer 的指定材质槽设置 Shader 属性值。你也可以同时对额外 Renderer 批量应用同一属性修改。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Renderer/Material Set Property")]
 	public class MMF_MaterialSetProperty : MMF_Feedback
 	{
@@ -22,7 +24,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.UIColor; } }
 		public override bool EvaluateRequiresSetup() { return (TargetRenderer == null); }
 		public override string RequiredTargetText { get { return TargetRenderer != null ? TargetRenderer.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetRenderer be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先设置 TargetRenderer 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 		public override bool HasRandomness => true;
 		public override bool HasCustomInspectors => true; 
@@ -40,61 +42,62 @@ namespace MoreMountains.Feedbacks
 		
 		[MMFInspectorGroup("Material", true, 12, true)]
 		/// the renderer to change the material on
-		[Tooltip("the renderer to change the material on")]
+		[Tooltip("要修改材质属性的主渲染器。")]
 		public Renderer TargetRenderer;
 		/// the renderer to change the material on
-		[Tooltip("a list of extra renderers to change the material on")]
+		[Tooltip("额外要同步修改的 Renderer 列表。每个条目可单独指定材质槽（MaterialID）。")]
 		public List<ExtraRendererData> ExtraTargetRenderers;
 		/// the ID of the material to target on the renderer
-		[Tooltip("the ID of the material to target on the renderer")]
+		[Tooltip("主 Renderer 上要操作的材质槽索引（MaterialID）。")]
 		public int MaterialID = 0;
-		/// the ID of the property to set, as exposed by the Visual Effect Graph
-		[Tooltip("the ID of the property to set, as exposed by the Visual Effect Graph")] 
-		public string PropertyID;
+		/// the name of the property to set, as exposed by your material's shader (should be something like _Emission, or _Color, or _MainText, etc)
+		[Tooltip("要设置的 着色器 属性名（必须与材质 着色器 接口名一致，例如 _Emission、_Color、_MainTex）。")] 
+		[FormerlySerializedAs("PropertyID")]
+		public string PropertyName;
 		/// the type of the property to set
-		[Tooltip("the type of the property to set")]
+		[Tooltip("属性类型。该选项会决定下方哪个 New* 字段生效。")]
 		public PropertyTypes PropertyType = PropertyTypes.Float;
 		
 		/// if the property is a color, the new color to set
-		[Tooltip("if the property is a color, the new color to set")]
+		[Tooltip("当属性类型=颜色时，要设置的新颜色。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Color)]
 		[ColorUsage(true, true)]
 		public Color NewColor = Color.red;
 		/// if the property is a float, the new float to set
-		[Tooltip("if the property is a float, the new float to set")]
+		[Tooltip("当 PropertyType=Float 时，要设置的新浮点值。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Float)]
 		public float NewFloat = 1f;
 		/// if the property is an int, the new int to set
-		[Tooltip("if the property is an int, the new int to set")]
+		[Tooltip("当 PropertyType=Integer 时，要设置的新整数值。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Integer)]
 		public int NewInt;
 		/// if the property is a texture, the new texture to set
-		[Tooltip("if the property is a texture, the new texture to set")]
+		[Tooltip("当属性类型=质地时，要设置的新纹理。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Texture)]
 		public Texture NewTexture;
 		/// if the property is a texture offset, the new offset to set
-		[Tooltip("if the property is a texture offset, the new offset to set")] 
+		[Tooltip("当 PropertyType=TextureOffset 时，要设置的新偏移值。")] 
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.TextureOffset)]
 		public Vector2 NewOffset;
 		/// if the property is a texture scale, the new scale to set
-		[Tooltip("if the property is a texture scale, the new scale to set")]
+		[Tooltip("当 PropertyType=TextureScale 时，要设置的新缩放值。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.TextureScale)]
 		public Vector2 NewScale;
 		/// if the property is a vector, the new vector4 to set
-		[Tooltip("if the property is a vector4, the new vector4 to set")]
+		[Tooltip("当属性类型=向量时，要设置的新矢量4。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Vector)]
 		public Vector4 NewVector;
 
 		[Header("Interpolation")] 
 		/// whether or not to interpolate the value over time. If set to false, the change will be instant
-		[Tooltip("whether or not to interpolate the value over time. If set to false, the change will be instant")]
+		[Tooltip("是否在一段时间内插值到目标值。关闭时会立即应用，新值瞬时生效。")]
 		public bool InterpolateValue = false;
 		/// the duration of the interpolation
-		[Tooltip("the duration of the interpolation")]
+		[Tooltip("插值持续时间（秒）。仅在 InterpolateValue 开启时生效。")]
 		[MMFCondition("InterpolateValue", true)]
 		public float Duration = 2f;
 		/// the curve over which to interpolate the value
-		[Tooltip("the curve over which to interpolate the value")]
+		[Tooltip("插值曲线。仅在 InterpolateValue 开启时生效。")]
 		public MMTweenType InterpolationCurve = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0)), "InterpolateValue");
 		
 		public override float FeedbackDuration { get { return (InterpolateValue) ? ApplyTimeMultiplier(Duration) : 0f; } set { if (InterpolateValue) { Duration = value; } } }
@@ -110,7 +113,7 @@ namespace MoreMountains.Feedbacks
 		protected Coroutine _coroutine;
 		protected Color _newColor;
 		protected Vector2 _newVector2;
-		protected Vector2 _newVector4;
+		protected Vector4 _newVector4;
 		
 		/// <summary>
 		/// On init we turn the sprite renderer off if needed
@@ -120,7 +123,13 @@ namespace MoreMountains.Feedbacks
 		{
 			base.CustomInitialization(owner);
 
-			_propertyID = Shader.PropertyToID(PropertyID);
+			_propertyID = Shader.PropertyToID(PropertyName);
+			
+			if (TargetRenderer == null)
+			{
+				Debug.LogWarning("[Material Set Property Feedback] The material set property feedback on "+Owner.name+" doesn't have a target renderer, it won't work. You need to specify a renderer in its inspector.");
+				return;
+			}
 			
 			// we store the initial value of the property based on its type
 			if (Active)
@@ -396,3 +405,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

@@ -20,12 +20,12 @@ namespace MoreMountains.Tools
 		
 		[Header("Emitter")]
 		/// the property whose value you want to read and to have drive the ReceiverProperty's value
-		[Tooltip("the property whose value you want to read and to have drive the ReceiverProperty's value")]
+		[Tooltip("您想要读取其值并驱动 ReceiverProperty 值的属性")]
 		public MMPropertyEmitter EmitterProperty;
 		
 		[Header("Receiver")]
 		/// the property whose value you want to be driven by the EmitterProperty's value
-		[Tooltip("the property whose value you want to be driven by the EmitterProperty's value")]
+		[Tooltip("您希望其值由 EmitterProperty 的值驱动的属性")]
 		public MMPropertyReceiver ReceiverProperty;
 
 		/// a delegate to handle value changes

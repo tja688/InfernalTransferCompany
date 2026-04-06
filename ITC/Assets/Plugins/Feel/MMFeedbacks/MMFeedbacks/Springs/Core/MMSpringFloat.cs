@@ -7,17 +7,17 @@ namespace MoreMountains.Feedbacks
 	[Serializable]
 	public class MMSpringFloat : MMSpringDefinition<float>
 	{
-		/// the dumping ratio determines how fast the spring will evolve after a disturbance. At a low value, it'll oscillate for a long time, while closer to 1 it'll stop oscillating quickly
-		[Tooltip("the dumping ratio determines how fast the spring will evolve after a disturbance. At a low value, it'll oscillate for a long time, while closer to 1 it'll stop oscillating quickly")]
+		/// 阻尼比决定 spring 在受到扰动后恢复的速度。数值较低时会振荡较久；越接近 `1`，停止振荡就越快。
+		[Tooltip("阻尼比决定 spring 在受到扰动后恢复的速度。数值较低时会振荡较久；越接近 `1`，停止振荡就越快。")]
 		[Range(0.01f, 1f)]
 		public float Damping = 0.4f;
-		/// the frequency determines how fast the spring will oscillate when disturbed, low frequency means less oscillations per second, high frequency means more oscillations per second
-		[Tooltip("the frequency determines how fast the spring will oscillate when disturbed, low frequency means less oscillations per second, high frequency means more oscillations per second")]
+		/// 频率决定 spring 在受到扰动后振荡的快慢。频率越低，每秒振荡次数越少；频率越高，每秒振荡次数越多。
+		[Tooltip("频率决定 spring 在受到扰动后振荡的快慢。频率越低，每秒振荡次数越少；频率越高，每秒振荡次数越多。")]
 		public float Frequency = 6f;
 
 		[MMInspectorGroup("Debug", true, 19, true)]
-		/// the current value of this spring
-		[Tooltip("the current value of this spring")]
+		/// 当前 spring 的数值。
+		[Tooltip("当前弹簧的数值。")]
 		public override float CurrentValue
 		{
 			get
@@ -34,8 +34,8 @@ namespace MoreMountains.Feedbacks
 
 		public MMSpringClampSettings ClampSettings = new MMSpringClampSettings();
 		
-		/// the value towards which this spring is trending, and that it'll reach once it stops oscillating
-		[Tooltip("the value towards which this spring is trending, and that it'll reach once it stops oscillating")]
+		/// spring 当前趋近的目标值；当振荡停止后，它最终会到达这里。
+		[Tooltip("spring 当前趋近的目标值；当振荡停止后，它最终会到达这里。")]
 		public override float TargetValue
 		{
 			get
@@ -49,8 +49,8 @@ namespace MoreMountains.Feedbacks
 			}
 		}
 
-		/// the current velocity of the spring
-		[Tooltip("the current velocity of the spring")]
+		/// spring 当前的速度值。
+		[Tooltip("春天 当前的速度值。")]
 		public override float Velocity
 		{
 			get

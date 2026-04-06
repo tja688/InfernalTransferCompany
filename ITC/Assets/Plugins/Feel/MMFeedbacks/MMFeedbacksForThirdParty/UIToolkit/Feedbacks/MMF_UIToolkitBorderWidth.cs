@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -9,25 +9,26 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you change the border width of an element on a target UI Document
+	/// 这个反馈可修改目标 UI Document 中元素的边框宽度。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the border width of an element on a target UI Document")]
+	[FeedbackHelp("这个反馈可修改目标 UI Document 中元素的边框宽度。")]
+	[System.Serializable]
 	[FeedbackPath("UI Toolkit/UITK Border Width")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitBorderWidth : MMF_UIToolkitFloatBase
 	{
-		/// whether to modify the left border width or not
-		[Tooltip("whether to modify the left border width or not")]
+		/// 是否修改左边框宽度。
+		[Tooltip("是否修改左边框宽度。")]
 		public bool Left = true;
-		/// whether to modify the right border width or not
-		[Tooltip("whether to modify the right border width or not")]
+		/// 是否修改右边框宽度。
+		[Tooltip("是否修改右边框宽度。")]
 		public bool Right = true;
-		/// whether to modify the top border width or not
-		[Tooltip("whether to modify the top border width or not")]
+		/// 是否修改上边框宽度。
+		[Tooltip("是否修改上边框宽度。")]
 		public bool Top = true;
-		/// whether to modify the bottom border width or not
-		[Tooltip("whether to modify the bottom border width or not")]
+		/// 是否修改下边框宽度。
+		[Tooltip("是否修改下边框宽度。")]
 		public bool Bottom = true;
 		
 		protected override void SetValue(float newValue)

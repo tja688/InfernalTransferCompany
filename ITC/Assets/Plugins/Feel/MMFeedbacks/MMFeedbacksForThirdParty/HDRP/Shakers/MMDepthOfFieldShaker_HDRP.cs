@@ -19,18 +19,18 @@ namespace MoreMountains.FeedbacksForThirdParty
 	{
 		[MMInspectorGroup("Focus Distance", true, 53)]
 		/// whether or not to animate the focus distance
-		[Tooltip("whether or not to animate the focus distance")]
+		[Tooltip("是否驱动焦点距离变化")]
 		public bool AnimateFocusDistance = true;
 		/// the curve used to animate the focus distance value on
-		[Tooltip("the curve used to animate the focus distance value on")]
+		[Tooltip("用于驱动焦点距离值变化的曲线")]
 		[MMCondition("AnimateFocusDistance", true)]
 		public AnimationCurve ShakeFocusDistance = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[MMCondition("AnimateFocusDistance", true)]
 		public float RemapFocusDistanceZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[MMCondition("AnimateFocusDistance", true)]
 		public float RemapFocusDistanceOne = 3f;
 		
@@ -39,35 +39,35 @@ namespace MoreMountains.FeedbacksForThirdParty
 		
 		[Header("Near Range Start")]
 		/// whether or not to animate the near range start
-		[Tooltip("whether or not to animate the near range start")]
+		[Tooltip("是否驱动近景范围起点变化")]
 		public bool AnimateNearRangeStart = false;
 		/// the curve used to animate the near range start on
-		[Tooltip("the curve used to animate the near range start on")]
+		[Tooltip("用于驱动近景范围起点变化的曲线")]
 		[MMCondition("AnimateNearRangeStart", true)]
 		public AnimationCurve ShakeNearRangeStart = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[MMCondition("AnimateNearRangeStart", true)]
 		public float RemapNearRangeStartZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[MMCondition("AnimateNearRangeStart", true)]
 		public float RemapNearRangeStartOne = 3f;
 		
 		[Header("Near Range End")]
 		/// whether or not to animate the near range end
-		[Tooltip("whether or not to animate the near range end")]
+		[Tooltip("是否驱动近景范围终点变化")]
 		public bool AnimateNearRangeEnd = false;
 		/// the curve used to animate the near range end on
-		[Tooltip("the curve used to animate the near range end on")]
+		[Tooltip("用于驱动近景范围终点变化的曲线")]
 		[MMCondition("AnimateNearRangeEnd", true)]
 		public AnimationCurve ShakeNearRangeEnd = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[MMCondition("AnimateNearRangeEnd", true)]
 		public float RemapNearRangeEndZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[MMCondition("AnimateNearRangeEnd", true)]
 		public float RemapNearRangeEndOne = 3f;
 		
@@ -75,35 +75,35 @@ namespace MoreMountains.FeedbacksForThirdParty
 		
 		[Header("Far Range Start")]
 		/// whether or not to animate the far range start
-		[Tooltip("whether or not to animate the far range start")]
+		[Tooltip("是否驱动远景范围起点变化")]
 		public bool AnimateFarRangeStart = false;
 		/// the curve used to animate the far range start on
-		[Tooltip("the curve used to animate the far range start on")]
+		[Tooltip("用于驱动远景范围起点变化的曲线")]
 		[MMCondition("AnimateFarRangeStart", true)]
 		public AnimationCurve ShakeFarRangeStart = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[MMCondition("AnimateFarRangeStart", true)]
 		public float RemapFarRangeStartZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[MMCondition("AnimateFarRangeStart", true)]
 		public float RemapFarRangeStartOne = 3f;
 		
 		[Header("Far Range End")]
 		/// whether or not to animate the far range end
-		[Tooltip("whether or not to animate the far range end")]
+		[Tooltip("是否驱动远景范围终点变化")]
 		public bool AnimateFarRangeEnd = false;
 		/// the curve used to animate the far range end on
-		[Tooltip("the curve used to animate the far range end on")]
+		[Tooltip("用于驱动远景范围终点变化的曲线")]
 		[MMCondition("AnimateFarRangeEnd", true)]
 		public AnimationCurve ShakeFarRangeEnd = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[MMCondition("AnimateFarRangeEnd", true)]
 		public float RemapFarRangeEndZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[MMCondition("AnimateFarRangeEnd", true)]
 		public float RemapFarRangeEndOne = 3f;
 		

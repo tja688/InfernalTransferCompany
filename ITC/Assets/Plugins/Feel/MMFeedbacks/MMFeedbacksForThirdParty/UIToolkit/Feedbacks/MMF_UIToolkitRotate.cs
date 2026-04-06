@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,10 +7,11 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you rotate an element on a target UI Document
+	/// 这个反馈可旋转目标 UI Document 中的元素。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you rotate an element on a target UI Document")]
+	[FeedbackHelp("这个反馈可旋转目标 UI Document 中的元素。")]
+	[System.Serializable]
 	[FeedbackPath("UI Toolkit/UITK Rotate")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitRotate : MMF_UIToolkitFloatBase

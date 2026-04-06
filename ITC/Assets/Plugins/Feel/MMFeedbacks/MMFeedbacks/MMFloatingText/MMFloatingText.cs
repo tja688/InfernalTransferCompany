@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using MoreMountains.Tools;
 
 namespace MoreMountains.Feedbacks
@@ -13,19 +13,21 @@ namespace MoreMountains.Feedbacks
 		[Header("Bindings")]
 
 		/// the part of the prefab that we'll move
-		[Tooltip("the part of the prefab that we'll move")]
+		[Tooltip("预制件 中将被移动的部分")]
 		public Transform MovingPart;
 		/// the part of the prefab that we'll rotate to face the target camera
-		[Tooltip("the part of the prefab that we'll rotate to face the target camera")]
+		[Tooltip("Prefab 中将旋转以朝向目标相机的部分")]
 		public Transform Billboard;
 		/// the TextMesh used to display the value
-		[Tooltip("the TextMesh used to display the value")]
+		[Tooltip("用于显示数值的 文本网格")]
 		public TextMesh TargetTextMesh;
+		/// the MMFollowTarget component associated to this floating text
+		public MMFollowTarget FollowTarget;
         
 		[Header("Debug")]
 
 		/// the direction of this floating text, used for debug only
-		[Tooltip("the direction of this floating text, used for debug only")]
+		[Tooltip("该浮动文字的方向，仅供调试使用")]
 		[MMReadOnly]
 		public Vector3 Direction = Vector3.up;
 
@@ -103,7 +105,8 @@ namespace MoreMountains.Feedbacks
 			if (TargetTextMesh != null)
 			{
 				_initialTextColor = TargetTextMesh.color;
-			}            
+			}
+			FollowTarget = this.gameObject.MMGetOrAddComponent<MMFollowTarget>();
 		}
 
 		/// <summary>

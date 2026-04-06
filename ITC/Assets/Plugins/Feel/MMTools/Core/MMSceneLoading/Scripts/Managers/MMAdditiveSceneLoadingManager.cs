@@ -33,61 +33,61 @@ namespace MoreMountains.Tools
 		/// the possible ways to unload scenes
 		public enum UnloadMethods { None, ActiveScene, AllScenes };
 		/// the name of the MMSceneLoadingManager scene you want to use when in additive mode
-		[Tooltip("the name of the MMSceneLoadingManager scene you want to use when in additive mode")]
+		[Tooltip("加法加载模式下要使用的 MMSceneLoadingManager 场景名")]
 		public string LoadingSceneName = "MMAdditiveLoadingScreen";
 		/// when in additive loading mode, the thread priority to apply to the loading
-		[Tooltip("when in additive loading mode, the thread priority to apply to the loading")]
+		[Tooltip("加法加载模式下用于加载线程的优先级")]
 		public ThreadPriority ThreadPriority = ThreadPriority.High;
 		/// whether or not to make additional sanity checks (better leave this to true)
-		[Tooltip("whether or not to make additional sanity checks (better leave this to true)")]
+		[Tooltip("是否执行额外健全性检查（通常建议保持开启）")]
 		public bool SecureLoad = true;
 		/// when in additive loading mode, whether or not to interpolate the progress bar's progress
-		[Tooltip("when in additive loading mode, whether or not to interpolate the progress bar's progress")]
+		[Tooltip("加法加载模式下，是否对进度条值进行插值平滑")]
 		public bool InterpolateProgress = true;
 		/// when in additive loading mode, when in additive loading mode, the duration (in seconds) of the delay before the entry fade
-		[Tooltip("when in additive loading mode, when in additive loading mode, the duration (in seconds) of the delay before the entry fade")]
+		[Tooltip("加法加载模式下，入口淡入前的延迟时长（秒）")]
 		public float BeforeEntryFadeDelay = 0f;
 		/// when in additive loading mode, the duration (in seconds) of the entry fade
-		[Tooltip("when in additive loading mode, the duration (in seconds) of the entry fade")]
+		[Tooltip("加法加载模式下，入口淡入时长（秒）")]
 		public float EntryFadeDuration = 0.25f;
 		/// when in additive loading mode, the duration (in seconds) of the delay before the entry fade
-		[Tooltip("when in additive loading mode, the duration (in seconds) of the delay before the entry fade")]
+		[Tooltip("加法加载模式下，入口淡入后的延迟时长（秒）")]
 		public float AfterEntryFadeDelay = 0.1f;
 		/// when in additive loading mode, the duration (in seconds) of the delay before the scene gets activated
-		[Tooltip("when in additive loading mode, the duration (in seconds) of the delay before the scene gets activated")]
+		[Tooltip("加法加载模式下，场景激活前的延迟时长（秒）")]
 		[FormerlySerializedAs("BeforeExitFadeDelay")] 
 		public float BeforeSceneActivationDelay = 0.25f;
 		/// when in additive loading mode, the duration (in seconds) after the scene is loaded and before the fade starts
-		[Tooltip("when in additive loading mode, the duration (in seconds) after the scene is loaded and before the fade starts")]
+		[Tooltip("加法加载模式下，场景加载完成到开始淡出之间的等待时长（秒）")]
 		public float AfterSceneActivationDelay = 0f;
 		/// when in additive loading mode, the duration (in seconds) of the exit fade
-		[Tooltip("when in additive loading mode, the duration (in seconds) of the exit fade")]
+		[Tooltip("加法加载模式下，退出淡出时长（秒）")]
 		public float ExitFadeDuration = 0.2f;
 		/// when in additive loading mode, when in additive loading mode, the tween to use to fade on entry
-		[Tooltip("when in additive loading mode, when in additive loading mode, the tween to use to fade on entry")]
+		[Tooltip("加法加载模式下，入口淡入使用的 Tween")]
 		public MMTweenType EntryFadeTween = null;
 		/// when in additive loading mode, the tween to use to fade on exit
-		[Tooltip("when in additive loading mode, the tween to use to fade on exit")]
+		[Tooltip("加法加载模式下，退出淡出使用的 Tween")]
 		public MMTweenType ExitFadeTween = null;
 		/// when in additive loading mode, the speed at which the loader's progress bar should move
-		[Tooltip("when in additive loading mode, the speed at which the loader's progress bar should move")]
+		[Tooltip("加法加载模式下，加载器进度条推进速度")]
 		public float ProgressBarSpeed = 5f;
 		/// a list of progress intervals (values should be between 0 and 1) and their associated speeds, letting you have the bar progress less linearly
-		[Tooltip("a list of progress intervals (values should be between 0 and 1) and their associated speeds, letting you have the bar progress less linearly")]
+		[Tooltip("进度区间（值范围 0 到 1）及其对应速度列表，可用于实现非线性进度表现")]
 		public List<MMSceneLoadingSpeedInterval> SpeedIntervals;
 		/// whether or not to display debug logs of the loading sequence
-		[Tooltip("whether or not to display debug logs of the loading sequence")]
+		[Tooltip("是否输出加载流程的调试日志")]
 		public bool DebugMode = false;
 		/// when in additive loading mode, the selective additive fade mode
-		[Tooltip("when in additive loading mode, the selective additive fade mode")]
+		[Tooltip("加法加载模式下的选择性淡入淡出模式")]
 		public MMAdditiveSceneLoadingManager.FadeModes FadeMode = MMAdditiveSceneLoadingManager.FadeModes.FadeInThenOut;
 		/// the chosen way to unload scenes (none, only the active scene, all loaded scenes)
-		[Tooltip("the chosen way to unload scenes (none, only the active scene, all loaded scenes)")]
+		[Tooltip("卸载场景方式（无、仅活动场景、所有加载的场景）")]
 		public UnloadMethods UnloadMethod = UnloadMethods.AllScenes;
 		/// the name of the anti spill scene to use when loading additively.
 		/// If left empty, that scene will be automatically created, but you can specify any scene to use for that. Usually you'll want your own anti spill scene to be just an empty scene, but you can customize its lighting settings for example.
-		[Tooltip("the name of the anti spill scene to use when loading additively." +
-		         "If left empty, that scene will be automatically created, but you can specify any scene to use for that. Usually you'll want your own anti spill scene to be just an empty scene, but you can customize its lighting settings for example.")]
+		[Tooltip("加法加载时用于防串景（anti spill）的场景名。" +
+		         "若留空会自动创建该场景；你也可以指定自定义场景。通常建议使用空场景，但也可按需配置其光照等设置。")]
 		public string AntiSpillSceneName = "";
 	}
 
@@ -111,66 +111,67 @@ namespace MoreMountains.Tools
 	{
 		/// The possible orders in which to play fades (depends on the fade you've set in your loading screen
 		public enum FadeModes { FadeInThenOut, FadeOutThenIn }
+		public enum HoldModes { AfterEntryFade, AfterUnloadOriginScene, BeforeSceneActivation, BeforeExitFade }
 		
 		[MMInspectorGroup("Audio Listener", true, 3)]
 		public AudioListener LoadingAudioListener;
 		
 		[MMInspectorGroup("Settings", true, 10)]
 		/// the ID on which to trigger a fade, has to match the ID on the fader in your scene
-		[Tooltip("the ID on which to trigger a fade, has to match the ID on the fader in your scene")]
+		[Tooltip("触发淡入淡出时使用的编号，必须与场景内推子的编号一致，否则不会触发对应推子")]
 		public int FaderID = 500;
 		/// whether or not to output debug messages to the console
-		[Tooltip("whether or not to output debug messages to the console")]
+		[Tooltip("是否向控制台输出调试信息")]
 		public static bool DebugMode = false;
 
 		[MMInspectorGroup("Progress Events", true, 11)]
 		/// an event used to update progress 
-		[Tooltip("an event used to update progress")]
+		[Tooltip("用于更新进度的事件")]
 		public ProgressEvent SetRealtimeProgressValue;
 		/// an event used to update progress with interpolation
-		[Tooltip("an event used to update progress with interpolation")]
+		[Tooltip("用于更新插值进度的事件")]
 		public ProgressEvent SetInterpolatedProgressValue;
 
 		[MMInspectorGroup("State Events", true, 12)]
 		/// an event that will be invoked when the load starts
-		[Tooltip("an event that will be invoked when the load starts")]
+		[Tooltip("加载开始时触发的事件")]
 		public UnityEvent OnLoadStarted;
 		/// an event that will be invoked when the delay before the entry fade starts
-		[Tooltip("an event that will be invoked when the delay before the entry fade starts")]
+		[Tooltip("入口淡入前延迟开始时触发的事件")]
 		public UnityEvent OnBeforeEntryFade;
 		/// an event that will be invoked when the entry fade starts
-		[Tooltip("an event that will be invoked when the entry fade starts")]
+		[Tooltip("入口淡入开始时触发的事件")]
 		public UnityEvent OnEntryFade;
 		/// an event that will be invoked when the delay after the entry fade starts
-		[Tooltip("an event that will be invoked when the delay after the entry fade starts")]
+		[Tooltip("入口淡入后延迟开始时触发的事件")]
 		public UnityEvent OnAfterEntryFade;
 		/// an event that will be invoked when the origin scene gets unloaded
-		[Tooltip("an event that will be invoked when the origin scene gets unloaded")]
+		[Tooltip("原始场景被卸载时触发的事件")]
 		public UnityEvent OnUnloadOriginScene;
 		/// an event that will be invoked when the destination scene starts loading
-		[Tooltip("an event that will be invoked when the destination scene starts loading")]
+		[Tooltip("目标场景开始加载时触发的事件")]
 		public UnityEvent OnLoadDestinationScene;
 		/// an event that will be invoked when the load of the destination scene is complete
-		[Tooltip("an event that will be invoked when the load of the destination scene is complete")]
+		[Tooltip("目标场景加载完成时触发的事件")]
 		public UnityEvent OnLoadProgressComplete;
 		/// an event that will be invoked when the interpolated load of the destination scene is complete
-		[Tooltip("an event that will be invoked when the interpolated load of the destination scene is complete")]
+		[Tooltip("目标场景插值加载完成时触发的事件")]
 		public UnityEvent OnInterpolatedLoadProgressComplete;
 		/// an event that will be invoked when the delay before scene activation starts
-		[Tooltip("an event that will be invoked when the delay before scene activation starts")]
+		[Tooltip("场景激活前延迟开始时触发的事件")]
 		[FormerlySerializedAs("OnBeforeExitFade")] 
 		public UnityEvent OnBeforeSceneActivation;
 		/// an event that will be invoked after the scene has been activated
-		[Tooltip("an event that will be invoked after the scene has been activated")]
+		[Tooltip("场景激活后触发的事件")]
 		public UnityEvent OnAfterSceneActivation;
 		/// an event that will be invoked when the exit fade starts
-		[Tooltip("an event that will be invoked when the exit fade starts")]
+		[Tooltip("退出淡出开始时触发的事件")]
 		public UnityEvent OnExitFade;
 		/// an event that will be invoked when the destination scene gets activated
-		[Tooltip("an event that will be invoked when the destination scene gets activated")]
+		[Tooltip("目标场景被激活时触发的事件")]
 		public UnityEvent OnDestinationSceneActivation;
 		/// an event that will be invoked when the scene loader gets unloaded
-		[Tooltip("an event that will be invoked when the scene loader gets unloaded")]
+		[Tooltip("场景加载器被卸载时触发的事件")]
 		public UnityEvent OnUnloadSceneLoader;
 
 		protected static bool _interpolateProgress;
@@ -200,6 +201,14 @@ namespace MoreMountains.Tools
 		protected const float _asyncProgressLimit = 0.9f;
 		protected MMSceneLoadingAntiSpill _antiSpill = new MMSceneLoadingAntiSpill();
 		protected static string _antiSpillSceneName = "";
+		
+		protected static Dictionary<HoldModes, bool> _holds = new Dictionary<HoldModes, bool>
+		{
+			{HoldModes.AfterEntryFade, false},
+			{HoldModes.AfterUnloadOriginScene, false},
+			{HoldModes.BeforeSceneActivation, false},
+			{HoldModes.BeforeExitFade, false}
+		};
 		
 		/// <summary>
 		/// Statics initialization to support enter play modes
@@ -316,6 +325,22 @@ namespace MoreMountains.Tools
 			_speedIntervals = speedIntervals;
 
 			SceneManager.LoadScene(_loadingScreenSceneName, LoadSceneMode.Additive);
+		}
+		
+		public static void SetHold(HoldModes holdMode, bool state)
+		{
+			if (_holds.ContainsKey(holdMode))
+			{
+				_holds[holdMode] = state;
+			}
+		}
+		
+		public static void ClearHolds()
+		{
+			foreach (KeyValuePair<HoldModes, bool> hold in _holds)
+			{
+				_holds[hold.Key] = false;
+			}
 		}
         
 		private static Scene[] GetScenesToUnload(MMAdditiveSceneLoadingManagerSettings.UnloadMethods unloaded)
@@ -507,12 +532,15 @@ namespace MoreMountains.Tools
 		/// <returns></returns>
 		protected virtual IEnumerator ProcessDelayAfterEntryFade()
 		{
+			while (_holds[HoldModes.AfterEntryFade])
+			{
+				yield return null;
+			}
 			if (_afterEntryFadeDelay > 0f)
 			{
 				MMLoadingSceneDebug("MMLoadingSceneManagerAdditive : delay after entry fade, duration : " + _afterEntryFadeDelay);
 				MMSceneLoadingManager.LoadingSceneEvent.Trigger(_sceneToLoadName, MMSceneLoadingManager.LoadingStatus.AfterEntryFade);
 				OnAfterEntryFade?.Invoke();
-				
 				yield return MMCoroutine.WaitForUnscaled(_afterEntryFadeDelay);
 			}
 		}
@@ -541,6 +569,11 @@ namespace MoreMountains.Tools
 				{
 					yield return null;
 				}
+			}
+			
+			while (_holds[HoldModes.AfterUnloadOriginScene])
+			{
+				yield return null;
 			}
 		}
 
@@ -600,6 +633,11 @@ namespace MoreMountains.Tools
 				
 				yield return MMCoroutine.WaitForUnscaled(_beforeSceneActivationDelay);
 			}
+			
+			while (_holds[HoldModes.BeforeSceneActivation])
+			{
+				yield return null;
+			}
 		}
 
 		/// <summary>
@@ -636,6 +674,10 @@ namespace MoreMountains.Tools
 		/// <returns></returns>
 		protected virtual IEnumerator ExitFade()
 		{
+			while (_holds[HoldModes.BeforeExitFade])
+			{
+				yield return null;
+			}
 			SetAudioListener(false);
 			if (_exitFadeDuration > 0f)
 			{

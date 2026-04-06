@@ -7599,7 +7599,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMin.x
@@ -7607,7 +7607,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_SizeDelta.x
@@ -7647,11 +7647,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 654.40027
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -105
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 419989883815126845, guid: 4ae4b38f8b80d5341b4d6541fa5f26cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -14252,6 +14252,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -14304,8 +14307,12 @@ MonoBehaviour:
   - rid: 6282995626946068607
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -14387,7 +14394,9 @@ MonoBehaviour:
         Mode: 2
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.3
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 11
@@ -14680,7 +14689,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 210919016}
+        MovementMode: 0
         AnimateScaleDuration: 0.3
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 1
         Offset: 0
@@ -15021,7 +15032,9 @@ MonoBehaviour:
         Mode: 2
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.3
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -15316,7 +15329,9 @@ MonoBehaviour:
         Mode: 2
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.3
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -15992,7 +16007,9 @@ MonoBehaviour:
         Mode: 2
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.3
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -16287,7 +16304,9 @@ MonoBehaviour:
         Mode: 2
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.2
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -16581,7 +16600,9 @@ MonoBehaviour:
         AnimateRotationTarget: {fileID: 210919016}
         Mode: 2
         RotationSpace: 0
+        MovementMode: 0
         AnimateRotationDuration: 0.2
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 360
         AnimateX: 1
@@ -16711,6 +16732,7 @@ MonoBehaviour:
         DetermineRotationOnPlay: 0
         ToDestinationSpace: 0
         DestinationAngles: {x: 0, y: 0, z: 0}
+        ToDestinationTransform: {fileID: 0}
         ToDestinationTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 11
@@ -20016,6 +20038,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -20046,8 +20071,12 @@ MonoBehaviour:
   - rid: 6282995601335648400
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -20128,7 +20157,9 @@ MonoBehaviour:
         AnimateRotationTarget: {fileID: 210919016}
         Mode: 1
         RotationSpace: 1
+        MovementMode: 0
         AnimateRotationDuration: 0.2
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: -60
         AnimateX: 0
@@ -20258,6 +20289,7 @@ MonoBehaviour:
         DetermineRotationOnPlay: 1
         ToDestinationSpace: 0
         DestinationAngles: {x: 0, y: 180, z: 0}
+        ToDestinationTransform: {fileID: 0}
         ToDestinationTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 10
@@ -20783,6 +20815,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -20832,8 +20867,12 @@ MonoBehaviour:
   - rid: 6282995620096770200
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -20989,7 +21028,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 210919016}
+        MovementMode: 0
         AnimateScaleDuration: 1
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 1
         Offset: 0
@@ -21368,7 +21409,9 @@ MonoBehaviour:
         Mode: 0
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.2
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -21934,7 +21977,9 @@ MonoBehaviour:
         Mode: 0
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.4
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 11
@@ -22229,7 +22274,9 @@ MonoBehaviour:
         Mode: 0
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.4
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 11
@@ -27542,6 +27589,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -27572,8 +27622,12 @@ MonoBehaviour:
   - rid: 6282995829096054786
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -27651,6 +27705,7 @@ MonoBehaviour:
           ButtonText: Automatic Shaker Setup
         Owner: {fileID: 1498654843}
         DebugActive: 0
+        Source: 0
         Sfx: {fileID: 8300000, guid: abf7a06f0a800ae4a87baa06ef3ecff6, type: 3}
         RandomSfx:
         - {fileID: 8300000, guid: abf7a06f0a800ae4a87baa06ef3ecff6, type: 3}
@@ -27675,11 +27730,12 @@ MonoBehaviour:
         Loop: 0
         Persistent: 0
         DoNotPlayIfClipAlreadyPlaying: 0
+        MaximumConcurrentInstances: 3
         StopSoundOnFeedbackStop: 0
-        Fade: 1
-        FadeInitialVolume: 0
-        FadeDuration: 0.1
-        FadeTween:
+        FadeIn: 1
+        FadeInInitialVolume: 0
+        FadeInDuration: 0.1
+        FadeInTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 9
           Curve:
@@ -27708,6 +27764,39 @@ MonoBehaviour:
             m_RotationOrder: 4
           Initialized: 0
           ConditionPropertyName: Fade
+          EnumConditionPropertyName: 
+          EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
+        FadeOutOnStop: 0
+        FadeOutDuration: 1
+        FadeOutTween:
+          MMTweenDefinitionType: 0
+          MMTweenCurve: 9
+          Curve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 0
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 1
+              value: 1
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+          Initialized: 0
+          ConditionPropertyName: FadeOutOnStop
           EnumConditionPropertyName: 
           EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
         SoloSingleTrack: 0
@@ -31800,6 +31889,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -31830,8 +31922,12 @@ MonoBehaviour:
   - rid: 283540523876876386
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -36075,6 +36171,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -36105,8 +36204,12 @@ MonoBehaviour:
   - rid: 6282995739108573262
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -36188,7 +36291,9 @@ MonoBehaviour:
         Mode: 0
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.4
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 8
@@ -37738,6 +37843,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -37768,8 +37876,12 @@ MonoBehaviour:
   - rid: 6282995601335648400
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -37850,7 +37962,9 @@ MonoBehaviour:
         AnimateRotationTarget: {fileID: 210919016}
         Mode: 1
         RotationSpace: 1
+        MovementMode: 0
         AnimateRotationDuration: 0.2
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 60
         AnimateX: 0
@@ -37980,6 +38094,7 @@ MonoBehaviour:
         DetermineRotationOnPlay: 1
         ToDestinationSpace: 0
         DestinationAngles: {x: 0, y: 180, z: 0}
+        ToDestinationTransform: {fileID: 0}
         ToDestinationTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 10
@@ -38797,7 +38912,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchorMin.x
@@ -38805,7 +38920,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_SizeDelta.x
@@ -38845,11 +38960,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 654.40027
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -105
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1156067715196843396, guid: a4b00ce8c69f647468734c1e37ff7faf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -39044,6 +39159,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -39075,8 +39193,12 @@ MonoBehaviour:
   - rid: 283540317836673106
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -39156,7 +39278,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 7905552431793675034}
+        MovementMode: 0
         AnimateScaleDuration: 0.1
+        AnimatePositionSpeed: 1
         RemapCurveZero: 1.04
         RemapCurveOne: 1
         Offset: 0
@@ -39364,7 +39488,9 @@ MonoBehaviour:
         AnimateRotationTarget: {fileID: 7905552431793675034}
         Mode: 0
         RotationSpace: 1
+        MovementMode: 0
         AnimateRotationDuration: 0.2
+        AnimatePositionSpeed: 1
         RemapCurveZero: 10
         RemapCurveOne: 0
         AnimateX: 0
@@ -39485,6 +39611,7 @@ MonoBehaviour:
         DetermineRotationOnPlay: 0
         ToDestinationSpace: 0
         DestinationAngles: {x: 0, y: 180, z: 0}
+        ToDestinationTransform: {fileID: 0}
         ToDestinationTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 10
@@ -39676,6 +39803,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -39706,8 +39836,12 @@ MonoBehaviour:
   - rid: 283540231235043412
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -39906,6 +40040,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -39953,8 +40090,12 @@ MonoBehaviour:
   - rid: 283540523876876369
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -40034,7 +40175,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 5001025010573742516}
+        MovementMode: 0
         AnimateScaleDuration: 0.2
+        AnimatePositionSpeed: 1
         RemapCurveZero: 1.03
         RemapCurveOne: 1
         Offset: 0
@@ -40296,7 +40439,9 @@ MonoBehaviour:
         AnimateRotationTarget: {fileID: 5001025010573742516}
         Mode: 0
         RotationSpace: 1
+        MovementMode: 0
         AnimateRotationDuration: 0.4
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 10
         AnimateX: 0
@@ -40426,6 +40571,7 @@ MonoBehaviour:
         DetermineRotationOnPlay: 0
         ToDestinationSpace: 0
         DestinationAngles: {x: 0, y: 180, z: 0}
+        ToDestinationTransform: {fileID: 0}
         ToDestinationTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 10
@@ -40680,7 +40826,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 5001025010573742516}
+        MovementMode: 0
         AnimateScaleDuration: 0.3
+        AnimatePositionSpeed: 1
         RemapCurveZero: 1
         RemapCurveOne: 0
         Offset: 0
@@ -40889,7 +41037,9 @@ MonoBehaviour:
         Mode: 0
         Space: 1
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.4
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -41202,7 +41352,9 @@ MonoBehaviour:
         Mode: 0
         Space: 1
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.3
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -41865,6 +42017,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -41908,8 +42063,12 @@ MonoBehaviour:
   - rid: 283540523876876371
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -41990,7 +42149,9 @@ MonoBehaviour:
         AnimateRotationTarget: {fileID: 5001025010573742516}
         Mode: 0
         RotationSpace: 0
+        MovementMode: 0
         AnimateRotationDuration: 6
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 10
         AnimateX: 0
@@ -42165,6 +42326,7 @@ MonoBehaviour:
         DetermineRotationOnPlay: 0
         ToDestinationSpace: 0
         DestinationAngles: {x: 0, y: 180, z: 0}
+        ToDestinationTransform: {fileID: 0}
         ToDestinationTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 10
@@ -42298,7 +42460,9 @@ MonoBehaviour:
         Mode: 0
         Space: 1
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 6
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -42748,6 +42912,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -42781,8 +42948,12 @@ MonoBehaviour:
   - rid: 283540475411431500
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -42864,7 +43035,9 @@ MonoBehaviour:
         Mode: 0
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 3
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -43781,6 +43954,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -43823,8 +43999,12 @@ MonoBehaviour:
   - rid: 283540523876876386
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -44116,6 +44296,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -44146,8 +44329,12 @@ MonoBehaviour:
   - rid: 283540166979616853
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -44227,7 +44414,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 7905552431793675034}
+        MovementMode: 0
         AnimateScaleDuration: 0.8
+        AnimatePositionSpeed: 1
         RemapCurveZero: 1
         RemapCurveOne: 1.08
         Offset: 0
@@ -44902,6 +45091,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -44949,8 +45141,12 @@ MonoBehaviour:
   - rid: 283540271975628966
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -45237,7 +45433,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 5001025010573742516}
+        MovementMode: 0
         AnimateScaleDuration: 0.2
+        AnimatePositionSpeed: 1
         RemapCurveZero: 1.03
         RemapCurveOne: 1
         Offset: 0
@@ -45499,7 +45697,9 @@ MonoBehaviour:
         AnimateRotationTarget: {fileID: 5001025010573742516}
         Mode: 0
         RotationSpace: 1
+        MovementMode: 0
         AnimateRotationDuration: 0.4
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 10
         AnimateX: 0
@@ -45629,6 +45829,7 @@ MonoBehaviour:
         DetermineRotationOnPlay: 0
         ToDestinationSpace: 0
         DestinationAngles: {x: 0, y: 180, z: 0}
+        ToDestinationTransform: {fileID: 0}
         ToDestinationTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 10
@@ -45883,7 +46084,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 5001025010573742516}
+        MovementMode: 0
         AnimateScaleDuration: 0.3
+        AnimatePositionSpeed: 1
         RemapCurveZero: 1
         RemapCurveOne: 0
         Offset: 0
@@ -46124,6 +46327,31 @@ MonoBehaviour:
           m_NumColorKeys: 2
           m_NumAlphaKeys: 2
         InstantColor: {r: 0, g: 0, b: 0, a: 0}
+        ToDestinationColor: {r: 1, g: 0, b: 0, a: 1}
+        ToDestinationColorCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
         DisableOnInit: 0
         EnableOnPlay: 1
         DisableOnSequenceEnd: 0
@@ -46285,6 +46513,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -46332,8 +46563,12 @@ MonoBehaviour:
   - rid: 283540523876876377
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -46413,7 +46648,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 5001025010573742516}
+        MovementMode: 0
         AnimateScaleDuration: 0.2
+        AnimatePositionSpeed: 1
         RemapCurveZero: 1.03
         RemapCurveOne: 1
         Offset: 0
@@ -46675,7 +46912,9 @@ MonoBehaviour:
         AnimateRotationTarget: {fileID: 5001025010573742516}
         Mode: 0
         RotationSpace: 1
+        MovementMode: 0
         AnimateRotationDuration: 0.2
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 10
         AnimateX: 0
@@ -46805,6 +47044,7 @@ MonoBehaviour:
         DetermineRotationOnPlay: 0
         ToDestinationSpace: 0
         DestinationAngles: {x: 0, y: 180, z: 0}
+        ToDestinationTransform: {fileID: 0}
         ToDestinationTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 10
@@ -47059,7 +47299,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 5001025010573742516}
+        MovementMode: 0
         AnimateScaleDuration: 0.1
+        AnimatePositionSpeed: 1
         RemapCurveZero: 1
         RemapCurveOne: 0
         Offset: 0
@@ -47268,7 +47510,9 @@ MonoBehaviour:
         Mode: 0
         Space: 1
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.2
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -47581,7 +47825,9 @@ MonoBehaviour:
         Mode: 0
         Space: 1
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.1
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -48036,6 +48282,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -48066,8 +48315,12 @@ MonoBehaviour:
   - rid: 283540523876876387
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -48148,7 +48401,9 @@ MonoBehaviour:
         AnimateRotationTarget: {fileID: 6717661287262207309}
         Mode: 0
         RotationSpace: 0
+        MovementMode: 0
         AnimateRotationDuration: 0.6
+        AnimatePositionSpeed: 1
         RemapCurveZero: 90
         RemapCurveOne: 0
         AnimateX: 1
@@ -48278,6 +48533,7 @@ MonoBehaviour:
         DetermineRotationOnPlay: 0
         ToDestinationSpace: 0
         DestinationAngles: {x: 0, y: 180, z: 0}
+        ToDestinationTransform: {fileID: 0}
         ToDestinationTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 10
@@ -48500,6 +48756,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -48533,8 +48792,12 @@ MonoBehaviour:
   - rid: 6282995488782549096
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -48739,7 +49002,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 2
         AnimateScaleTarget: {fileID: 210919016}
+        MovementMode: 0
         AnimateScaleDuration: 0.2
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 1
         Offset: 0
@@ -48957,7 +49222,9 @@ MonoBehaviour:
         Mode: 2
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.2
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 9
@@ -49373,6 +49640,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -49416,8 +49686,12 @@ MonoBehaviour:
   - rid: 283540319575736422
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -49499,7 +49773,9 @@ MonoBehaviour:
         Mode: 0
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.6
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -49801,7 +50077,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 4465577201406764840}
+        MovementMode: 0
         AnimateScaleDuration: 0.8
+        AnimatePositionSpeed: 1
         RemapCurveZero: 1
         RemapCurveOne: 1.8
         Offset: 0
@@ -50499,6 +50777,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -50530,8 +50811,12 @@ MonoBehaviour:
   - rid: 283540317836673108
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -50611,7 +50896,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 7905552431793675034}
+        MovementMode: 0
         AnimateScaleDuration: 0.2
+        AnimatePositionSpeed: 1
         RemapCurveZero: 1
         RemapCurveOne: 1.04
         Offset: 0
@@ -50819,7 +51106,9 @@ MonoBehaviour:
         AnimateRotationTarget: {fileID: 7905552431793675034}
         Mode: 0
         RotationSpace: 1
+        MovementMode: 0
         AnimateRotationDuration: 0.2
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 10
         AnimateX: 0
@@ -50940,6 +51229,7 @@ MonoBehaviour:
         DetermineRotationOnPlay: 0
         ToDestinationSpace: 0
         DestinationAngles: {x: 0, y: 180, z: 0}
+        ToDestinationTransform: {fileID: 0}
         ToDestinationTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 10
@@ -51130,6 +51420,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -51174,8 +51467,12 @@ MonoBehaviour:
   - rid: 283540523876876363
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -51256,7 +51553,9 @@ MonoBehaviour:
         AnimateRotationTarget: {fileID: 5001025010573742516}
         Mode: 0
         RotationSpace: 0
+        MovementMode: 0
         AnimateRotationDuration: 1
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 720
         AnimateX: 0
@@ -51413,6 +51712,7 @@ MonoBehaviour:
         DetermineRotationOnPlay: 0
         ToDestinationSpace: 0
         DestinationAngles: {x: 0, y: 180, z: 0}
+        ToDestinationTransform: {fileID: 0}
         ToDestinationTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 10
@@ -51544,7 +51844,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 5001025010573742516}
+        MovementMode: 0
         AnimateScaleDuration: 0.8
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 0.9
         Offset: 0
@@ -51789,7 +52091,9 @@ MonoBehaviour:
         Mode: 0
         Space: 1
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.8
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -52201,6 +52505,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -52231,8 +52538,12 @@ MonoBehaviour:
   - rid: 283540231235043405
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -52312,7 +52623,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 7905552431793675034}
+        MovementMode: 0
         AnimateScaleDuration: 0.2
+        AnimatePositionSpeed: 1
         RemapCurveZero: 1.04
         RemapCurveOne: 1
         Offset: 0
@@ -52714,6 +53027,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -52744,8 +53060,12 @@ MonoBehaviour:
   - rid: 283540319575736416
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -52827,7 +53147,9 @@ MonoBehaviour:
         Mode: 0
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.5
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -53210,6 +53532,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -53241,8 +53566,12 @@ MonoBehaviour:
   - rid: 283540319575736411
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -53324,7 +53653,9 @@ MonoBehaviour:
         Mode: 0
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 1
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -53626,7 +53957,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 4465577201406764840}
+        MovementMode: 0
         AnimateScaleDuration: 1
+        AnimatePositionSpeed: 1
         RemapCurveZero: 1
         RemapCurveOne: 1.5
         Offset: 0
@@ -53848,6 +54181,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -53878,8 +54214,12 @@ MonoBehaviour:
   - rid: 283540231235043412
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 9
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -54652,6 +54992,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -54681,8 +55024,12 @@ MonoBehaviour:
   FeedbacksList: []
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds: []
@@ -54975,6 +55322,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -55008,8 +55358,12 @@ MonoBehaviour:
   - rid: 6282995488782549096
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -55214,7 +55568,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 2
         AnimateScaleTarget: {fileID: 210919016}
+        MovementMode: 0
         AnimateScaleDuration: 0.2
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 1
         Offset: 0
@@ -55441,7 +55797,9 @@ MonoBehaviour:
         Mode: 2
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.3
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 9
@@ -55845,6 +56203,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -55876,8 +56237,12 @@ MonoBehaviour:
   - rid: 283540523876876384
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -55959,7 +56324,9 @@ MonoBehaviour:
         Mode: 0
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.2
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4
@@ -56253,7 +56620,9 @@ MonoBehaviour:
         AnimateRotationTarget: {fileID: 6717661287262207309}
         Mode: 0
         RotationSpace: 0
+        MovementMode: 0
         AnimateRotationDuration: 0.6
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 90
         AnimateX: 1
@@ -56383,6 +56752,7 @@ MonoBehaviour:
         DetermineRotationOnPlay: 0
         ToDestinationSpace: 0
         DestinationAngles: {x: 0, y: 180, z: 0}
+        ToDestinationTransform: {fileID: 0}
         ToDestinationTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 10
@@ -56637,6 +57007,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -56667,8 +57040,12 @@ MonoBehaviour:
   - rid: 283540393669427277
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -56749,7 +57126,9 @@ MonoBehaviour:
         AnimateRotationTarget: {fileID: 409128192984590408}
         Mode: 0
         RotationSpace: 0
+        MovementMode: 0
         AnimateRotationDuration: 3.5
+        AnimatePositionSpeed: 1
         RemapCurveZero: 90
         RemapCurveOne: 0
         AnimateX: 0
@@ -56870,6 +57249,7 @@ MonoBehaviour:
         DetermineRotationOnPlay: 0
         ToDestinationSpace: 0
         DestinationAngles: {x: 0, y: 180, z: 0}
+        ToDestinationTransform: {fileID: 0}
         ToDestinationTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 10
@@ -57446,6 +57826,9 @@ MonoBehaviour:
     OnPause:
       m_PersistentCalls:
         m_Calls: []
+    OnStop:
+      m_PersistentCalls:
+        m_Calls: []
     OnResume:
       m_PersistentCalls:
         m_Calls: []
@@ -57492,8 +57875,12 @@ MonoBehaviour:
   - rid: 283540364364349522
   KeepPlayModeChanges: 0
   PerformanceMode: 0
+  RestoreInitialValuesOnDisable: 0
   StopFeedbacksOnDisable: 0
   PlayCount: 0
+  MMF_ChannelMode: 0
+  MMF_Channel: 0
+  MMF_ChannelDefinition: {fileID: 0}
   references:
     version: 2
     RefIds:
@@ -57573,7 +57960,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 5001025010573742516}
+        MovementMode: 0
         AnimateScaleDuration: 0.2
+        AnimatePositionSpeed: 1
         RemapCurveZero: 1.03
         RemapCurveOne: 1
         Offset: 0
@@ -57835,7 +58224,9 @@ MonoBehaviour:
         AnimateRotationTarget: {fileID: 5001025010573742516}
         Mode: 0
         RotationSpace: 1
+        MovementMode: 0
         AnimateRotationDuration: 0.8
+        AnimatePositionSpeed: 1
         RemapCurveZero: 0
         RemapCurveOne: 10
         AnimateX: 0
@@ -57956,6 +58347,7 @@ MonoBehaviour:
         DetermineRotationOnPlay: 0
         ToDestinationSpace: 0
         DestinationAngles: {x: 0, y: 180, z: 0}
+        ToDestinationTransform: {fileID: 0}
         ToDestinationTween:
           MMTweenDefinitionType: 0
           MMTweenCurve: 10
@@ -58210,7 +58602,9 @@ MonoBehaviour:
         DebugActive: 0
         Mode: 0
         AnimateScaleTarget: {fileID: 5001025010573742516}
+        MovementMode: 0
         AnimateScaleDuration: 0.3
+        AnimatePositionSpeed: 1
         RemapCurveZero: 1
         RemapCurveOne: 0
         Offset: 0
@@ -58419,7 +58813,9 @@ MonoBehaviour:
         Mode: 0
         Space: 0
         RandomizeRemap: 0
+        MovementMode: 0
         AnimatePositionDuration: 0.8
+        AnimatePositionSpeed: 1
         AnimatePositionTween:
           MMTweenDefinitionType: 1
           MMTweenCurve: 4

@@ -9,42 +9,40 @@ namespace MoreMountains.Feedbacks
 		[MMInspectorGroup("Shaker Settings", true, 3)]
 		/// whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what.
 		/// MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable
-		[Tooltip("whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what. " +
-		         "MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable")]
+		[Tooltip("决定此抖动器是监听 `int` 定义的通道，还是监听 `MMChannel` ScriptableObject 定义的通道。`int` 配置简单，但项目一大就容易混乱，也不便记忆每个数字代表什么；`MMChannel` 需要预先创建资源，但名称更直观，也更适合扩展。")]
 		public MMChannelModes ChannelMode = MMChannelModes.Int;
-		/// the channel to listen to - has to match the one on the feedback
-		[Tooltip("the channel to listen to - has to match the one on the feedback")]
+		/// 要监听的频道，必须与对应 feedback 上配置的频道一致。
+		[Tooltip("要监听的通道，必须与触发它的反馈上配置的通道一致。")]
 		[MMEnumCondition("ChannelMode", (int)MMChannelModes.Int)]
 		public int Channel = 0;
 		/// the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel,
 		/// right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name
-		[Tooltip("the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel, " +
-		         "right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name")]
+		[Tooltip("用于监听事件的`通道资源`定义资源。只有引用同一个`通道资源`定义的反馈，才能触发这个增益器。若要创建`通道资源`，可以在项目视图中右键（通常放在数据文件夹中），选择更多山脉 >通道资源，并说明说明。")]
 		[MMEnumCondition("ChannelMode", (int)MMChannelModes.MMChannel)]
 		public MMChannel MMChannelDefinition = null;
-		/// the duration of the shake, in seconds
-		[Tooltip("the duration of the shake, in seconds")]
+		/// 本次 shake 的持续时间，单位为秒。
+		[Tooltip("本次抖动的持续时间，单位为秒。")]
 		public float ShakeDuration = 0.2f;
-		/// if this is true this shaker will play on awake
-		[Tooltip("if this is true this shaker will play on awake")]
+		/// 若启用，shaker 会在 `Awake` 时立即播放。
+		[Tooltip("若启用，抖动器会在 `Awake` 时立即开始播放。")]
 		public bool PlayOnAwake = false;
-		/// if this is true, the shaker will shake permanently as long as its game object is active
-		[Tooltip("if this is true, the shaker will shake permanently as long as its game object is active")]
+		/// 若启用，只要该 GameObject 处于激活状态，shaker 就会持续摇动。
+		[Tooltip("若启用，只要该 GameObject 处于激活状态，抖动器就会持续运行。")]
 		public bool PermanentShake = false;
-		/// if this is true, a new shake can happen while shaking
-		[Tooltip("if this is true, a new shake can happen while shaking")]
+		/// 若启用，在当前 shake 尚未结束时也允许再次触发新的 shake。
+		[Tooltip("若启用，在当前抖动尚未结束时也允许再次触发新的抖动。")]
 		public bool Interruptible = true;
-		/// if this is true, this shaker will always reset target values, regardless of how it was called
-		[Tooltip("if this is true, this shaker will always reset target values, regardless of how it was called")]
+		/// 若启用，无论 shaker 是通过何种方式触发，结束后都会强制把目标值重置回原始状态。
+		[Tooltip("若启用，无论抖动器是通过何种方式触发，结束后都会强制把目标值重置回初始状态。")]
 		public bool AlwaysResetTargetValuesAfterShake = false;
-		/// if this is true, this shaker will ignore any value passed in an event that triggered it, and will instead use the values set on its inspector
-		[Tooltip("if this is true, this shaker will ignore any value passed in an event that triggered it, and will instead use the values set on its inspector")]
+		/// 若启用，shaker 会忽略触发事件传入的参数，改为始终使用 Inspector 中当前配置的数值。
+		[Tooltip("若启用，抖动器会忽略触发事件传入的参数，改为始终使用 Inspector 中当前配置的数值。开启后，事件里携带的参数将失效。")]
 		public bool OnlyUseShakerValues = false;
-		/// a cooldown, in seconds, after a shake, during which no other shake can start
-		[Tooltip("a cooldown, in seconds, after a shake, during which no other shake can start")]
+		/// 一次 shake 结束后的冷却时间，单位为秒；冷却期间不会开始新的 shake。
+		[Tooltip("一次抖动结束后的冷却时间，单位为秒；冷却期间不会开始新的抖动。")]
 		public float CooldownBetweenShakes = 0f;
-		/// whether or not this shaker is shaking right now
-		[Tooltip("whether or not this shaker is shaking right now")]
+		/// 该 shaker 当前是否正处于摇动中。
+		[Tooltip("该抖动器当前是否正处于运行中。")]
 		[MMFReadOnly]
 		public bool Shaking = false;
         

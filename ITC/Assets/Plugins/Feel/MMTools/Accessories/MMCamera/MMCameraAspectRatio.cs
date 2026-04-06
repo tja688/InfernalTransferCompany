@@ -16,22 +16,22 @@ namespace MoreMountains.Tools
 
 		[Header("Camera")]
 		/// the camera to change the aspect ratio on
-		[Tooltip("the camera to change the aspect ratio on")]
+		[Tooltip("要应用纵横比设置的目标 Camera")]
 		public Camera TargetCamera;
 		/// the mode of choice, fixed will force a specified ratio, while ScreenRatio will adapt the camera's aspect to the current screen ratio
-		[Tooltip("the mode of choice, fixed will force a specified ratio, while ScreenRatio will adapt the camera's aspect to the current screen ratio")]
+		[Tooltip("纵横比模式。Fixed 会强制使用下方 FixedAspectRatio；ScreenRatio 会按当前屏幕比例自动计算，此时 FixedAspectRatio 不生效")]
 		public Modes Mode = Modes.Fixed;
 		/// in fixed mode, the ratio to apply to the camera
-		[Tooltip("in fixed mode, the ratio to apply to the camera")]
+		[Tooltip("在 Fixed 模式下要应用到 Camera 的纵横比（X/Y）")]
 		[MMEnumCondition("Mode", (int)Modes.Fixed)]
 		public Vector2 FixedAspectRatio = Vector2.zero;
 
 		[Header("Automation")]
 		/// whether or not to apply the ratio automatically on Start
-		[Tooltip("whether or not to apply the ratio automatically on Start")]
+		[Tooltip("是否在 Start 时自动应用纵横比")]
 		public bool ApplyAspectRatioOnStart = true;
 		/// whether or not to apply the ratio automatically on enable
-		[Tooltip("whether or not to apply the ratio automatically on enable")]
+		[Tooltip("是否在组件启用时自动应用纵横比")]
 		public bool ApplyAspectRatioOnEnable = false;
 
 		[Header("Debug")] 

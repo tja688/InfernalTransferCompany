@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -8,25 +8,26 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you change the border radius of an element on a target UI Document
+	/// 这个反馈可修改目标 UI Document 中元素的边框圆角半径。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the border radius of an element on a target UI Document")]
+	[FeedbackHelp("这个反馈可修改目标 UI Document 中元素的边框圆角半径。")]
+	[System.Serializable]
 	[FeedbackPath("UI Toolkit/UITK Border Radius")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitBorderRadius : MMF_UIToolkitFloatBase
 	{
-		/// whether to modify the bottom left border radius or not
-		[Tooltip("whether to modify the bottom left border radius or not")]
+		/// 是否修改左下角边框圆角半径。
+		[Tooltip("是否修改左下角边框圆角半径。")]
 		public bool BottomLeft = true;
-		/// whether to modify the bottom right border radius or not
-		[Tooltip("whether to modify the bottom right border radius or not")]
+		/// 是否修改右下角边框圆角半径。
+		[Tooltip("是否修改右下角边框圆角半径。")]
 		public bool BottomRight = true;
-		/// whether to modify the top left border radius or not
-		[Tooltip("whether to modify the top left border radius or not")]
+		/// 是否修改左上角边框圆角半径。
+		[Tooltip("是否修改左上角边框圆角半径。")]
 		public bool TopLeft = true;
-		/// whether to modify the top right border radius or not
-		[Tooltip("whether to modify the top right border radius or not")]
+		/// 是否修改右上角边框圆角半径。
+		[Tooltip("是否修改右上角边框圆角半径。")]
 		public bool TopRight = true;
 		
 		protected override void SetValue(float newValue)

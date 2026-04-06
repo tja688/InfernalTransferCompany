@@ -29,17 +29,15 @@ namespace MoreMountains.Feedbacks
 	{
 		/// whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what.
 		/// MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable
-		[Tooltip("whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what. " +
-		         "MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable")]
+		[Tooltip("决定此抖动器是监听 `int` 定义的通道，还是监听 `MMChannel` ScriptableObject 定义的通道。`int` 配置简单，但项目一大就容易混乱，也不便记忆每个数字代表什么；`MMChannel` 需要预先创建资源，但名称更直观，也更适合扩展。")]
 		public MMChannelModes ChannelMode = MMChannelModes.Int;
-		/// the channel to listen to - has to match the one on the feedback
-		[Tooltip("the channel to listen to - has to match the one on the feedback")]
+		/// 要监听的频道，必须与对应 feedback 上配置的频道一致。
+		[Tooltip("要监听的通道，必须与触发它的反馈上配置的通道一致。")]
 		[MMFEnumCondition("ChannelMode", (int)MMChannelModes.Int)]
 		public int Channel = 0;
 		/// the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel,
 		/// right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name
-		[Tooltip("the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel, " +
-		         "right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name")]
+		[Tooltip("用于监听事件的`通道资源`定义资源。只有引用同一个`通道资源`定义的反馈，才能触发这个增益器。若要创建`通道资源`，可以在项目视图中右键（通常放在数据文件夹中），选择更多山脉 >通道资源，并说明说明。")]
 		[MMFEnumCondition("ChannelMode", (int)MMChannelModes.MMChannel)]
 		public MMChannel MMChannelDefinition = null;
 		/// the color of the flash
@@ -63,40 +61,38 @@ namespace MoreMountains.Feedbacks
 		[MMInspectorGroup("Flash", true, 121)] 
 		/// whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what.
 		/// MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable
-		[Tooltip("whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what. " +
-		         "MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable")]
+		[Tooltip("决定此抖动器是监听 `int` 定义的通道，还是监听 `MMChannel` ScriptableObject 定义的通道。`int` 配置简单，但项目一大就容易混乱，也不便记忆每个数字代表什么；`MMChannel` 需要预先创建资源，但名称更直观，也更适合扩展。")]
 		public MMChannelModes ChannelMode = MMChannelModes.Int;
-		/// the channel to listen to - has to match the one on the feedback
-		[Tooltip("the channel to listen to - has to match the one on the feedback")]
+		/// 要监听的频道，必须与对应 feedback 上配置的频道一致。
+		[Tooltip("要监听的通道，必须与触发它的反馈上配置的通道一致。")]
 		[MMFEnumCondition("ChannelMode", (int)MMChannelModes.Int)]
 		public int Channel = 0;
 		/// the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel,
 		/// right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name
-		[Tooltip("the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel, " +
-		         "right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name")]
+		[Tooltip("用于监听事件的`通道资源`定义资源。只有引用同一个`通道资源`定义的反馈，才能触发这个增益器。若要创建`通道资源`，可以在项目视图中右键（通常放在数据文件夹中），选择更多山脉 >通道资源，并说明说明。")]
 		[MMFEnumCondition("ChannelMode", (int)MMChannelModes.MMChannel)]
 		public MMChannel MMChannelDefinition = null;
 		/// the ID of this MMFlash object. When triggering a MMFlashEvent you can specify an ID, and only MMFlash objects with this ID will answer the call and flash, allowing you to have more than one flash object in a scene
-		[Tooltip("the ID of this MMFlash object. When triggering a MMFlashEvent you can specify an ID, and only MMFlash objects with this ID will answer the call and flash, allowing you to have more than one flash object in a scene")]
+		[Tooltip("此 `MMFlash` 对象的 ID。触发 `MMFlashEvent` 时可以指定一个 ID，只有 ID 相同的 `MMFlash` 才会响应并闪烁，因此你可以在同一个场景中放置多个独立的闪烁对象。")]
 		public int FlashID = 0;
 		/// if this is true, the MMFlash will stop before playing on every new event received
-		[Tooltip("if this is true, the MMFlash will stop before playing on every new event received")]
+		[Tooltip("若启用，每次收到新的事件时，当前闪烁会先被停止，再重新开始播放。开启后，前一次尚未结束的闪烁将被中断。")]
 		public bool Interruptable = false;
 		
 		[MMInspectorGroup("Interpolation", true, 122)] 
 		/// the animation curve to use when flashing in
-		[Tooltip("the animation curve to use when flashing in")]
+		[Tooltip("闪入阶段使用的曲线。")]
 		public MMTweenType FlashInTween = new MMTweenType(MMTween.MMTweenCurve.LinearTween);
 		/// the animation curve to use when flashing out
-		[Tooltip("the animation curve to use when flashing out")]
+		[Tooltip("闪出阶段使用的曲线。")]
 		public MMTweenType FlashOutTween = new MMTweenType(MMTween.MMTweenCurve.LinearTween);
 
 		[MMInspectorGroup("Debug", true, 123)] 
 		/// the set of test settings to use when pressing the DebugTest button
-		[Tooltip("the set of test settings to use when pressing the DebugTest button")]
+		[Tooltip("点击 `DebugTest` 按钮时所使用的一组测试设置。")]
 		public MMFlashDebugSettings DebugSettings;
 		/// a test button that calls the DebugTest method
-		[Tooltip("a test button that calls the DebugTest method")]
+		[Tooltip("调用 `调试测试` 方法的测试按钮。")]
 		[MMFInspectorButton("DebugTest")]
 		public bool DebugTestButton;
 

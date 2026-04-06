@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using MoreMountains.Feedbacks;
 using System.Collections.Generic;
@@ -6,6 +6,7 @@ using UnityEngine;
 using DG;
 using DG.Tweening;
 using UnityEngine.Scripting.APIUpdating;
+using System.Reflection;
 
 namespace MoreMountains.Feedbacks
 {
@@ -27,7 +28,7 @@ namespace MoreMountains.Feedbacks
 
         [MMFInspectorGroup("DOTween Animation", true, 54, true)]
         [Tooltip("The DOTweenAnimation to control when playing this feedback")] 
-        public DOTweenAnimation TargetDOTweenAnimation;
+        public Component TargetDOTweenAnimation;
 
         [Tooltip("The action to perform on the DOTweenAnimation when this feedback plays")] 
         public Modes Mode = Modes.DOPlay;
@@ -49,32 +50,41 @@ namespace MoreMountains.Feedbacks
             switch (Mode)
             {
                 case Modes.DOPlay:
-                    TargetDOTweenAnimation.DOPlay();
+                    InvokeTweenMethod("DOPlay");
                     break;
                 case Modes.DOPlayBackwards:
-                    TargetDOTweenAnimation.DOPlayBackwards();
+                    InvokeTweenMethod("DOPlayBackwards");
                     break;
                 case Modes.DOPlayForward:
-                    TargetDOTweenAnimation.DOPlayForward();
+                    InvokeTweenMethod("DOPlayForward");
                     break;
                 case Modes.DOPause:
-                    TargetDOTweenAnimation.DOPause();
+                    InvokeTweenMethod("DOPause");
                     break;
                 case Modes.DOTogglePause:
-                    TargetDOTweenAnimation.DOTogglePause();
+                    InvokeTweenMethod("DOTogglePause");
                     break;
                 case Modes.DORewind:
-                    TargetDOTweenAnimation.DORewind();
+                    InvokeTweenMethod("DORewind");
                     break;
                 case Modes.DORestart:
-                    TargetDOTweenAnimation.DORestart();
+                    InvokeTweenMethod("DORestart");
                     break;
                 case Modes.DOComplete:
-                    TargetDOTweenAnimation.DOComplete();
+                    InvokeTweenMethod("DOComplete");
                     break;
                 case Modes.DOKill:
-                    TargetDOTweenAnimation.DOKill();
+                    InvokeTweenMethod("DOKill");
                     break;
+            }
+        }
+
+        protected virtual void InvokeTweenMethod(string methodName)
+        {
+            MethodInfo method = TargetDOTweenAnimation.GetType().GetMethod(methodName, Type.EmptyTypes);
+            if (method != null)
+            {
+                method.Invoke(TargetDOTweenAnimation, null);
             }
         }
     }

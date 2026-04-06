@@ -38,109 +38,106 @@ namespace MoreMountains.Feedbacks
 		/// Otherwise, you can have this component initialize itself at Awake or Start, and in this case the owner will be the MMFeedbacks itself
 		public enum InitializationModes { Script, Awake, Start, OnEnable }
 		/// the chosen initialization mode
-		[Tooltip("the chosen initialization modes. If you use Script, you'll have to initialize manually by calling the " +
-		         "Initialization method and passing it an owner. Otherwise, you can have this component initialize " +
-		         "itself at Awake or Start, and in this case the owner will be the MMFeedbacks itself")]
+		[Tooltip("初始化模式的选择。如果使用`Script`，您需要手动调用初始化方法并传递给它一个所有者。否则，您可以让该组件在唤醒或启动时初始化自身，在这种情况下，所有者将是 MMFeedbacks 本身")]
 		public InitializationModes InitializationMode = InitializationModes.Start;
-		/// if you set this to true, the system will make changes to ensure that initialization always happens before play
-		[Tooltip("if you set this to true, the system will make changes to ensure that initialization always happens before play")]
+		/// 若启用，系统会自动调整行为，确保初始化一定先于播放发生。
+		[Tooltip("若启用，系统会自动调整行为，确保初始化一定先于播放发生。")]
 		public bool AutoInitialization = true;
-		/// the selected safe mode
-		[Tooltip("the selected safe mode")]
+		/// 当前选择的安全模式。
+		[Tooltip("当前选择的安全模式。")]
 		public SafeModes SafeMode = SafeModes.Full;
 		/// the selected direction
-		[Tooltip("the selected direction these feedbacks should play in")]
+		[Tooltip("这些 feedback 当前采用的播放方向。")]
 		public Directions Direction = Directions.TopToBottom;
-		/// whether or not this MMFeedbacks should invert its direction when all feedbacks have played
-		[Tooltip("whether or not this MMFeedbacks should invert its direction when all feedbacks have played")]
+		/// 当所有 feedback 播放完成后，是否自动反转此 `MMFeedbacks` 的播放方向。
+		[Tooltip("当所有 feedback 播放完成后，是否自动反转此 `MMFeedbacks` 的播放方向。")]
 		public bool AutoChangeDirectionOnEnd = false;
-		/// whether or not to play this feedbacks automatically on Start
-		[Tooltip("whether or not to play this feedbacks automatically on Start")]
+		/// 是否在 `Start` 时自动播放这些 feedback。
+		[Tooltip("是否在 `Start` 时自动播放这些反馈。")]
 		public bool AutoPlayOnStart = false;
-		/// whether or not to play this feedbacks automatically on Enable
-		[Tooltip("whether or not to play this feedbacks automatically on Enable")]
+		/// 是否在 `OnEnable` 时自动播放这些 feedback。
+		[Tooltip("是否在 `OnEnable` 时自动播放这些反馈。")]
 		public bool AutoPlayOnEnable = false;
 
-		/// if this is true, all feedbacks within that player will work on the specified ForcedTimescaleMode, regardless of their individual settings 
-		[Tooltip("if this is true, all feedbacks within that player will work on the specified ForcedTimescaleMode, regardless of their individual settings")] 
+		/// 若启用，该 player 中所有 feedback 都会强制使用下面指定的 `ForcedTimescaleMode`，各自单独的时间模式设置将被覆盖。 
+		[Tooltip("若启用，该 player 中所有反馈都会强制使用下方指定的 `ForcedTimescaleMode`，各反馈各自的时间模式设置将被覆盖。")] 
 		public bool ForceTimescaleMode = false;
-		/// the time scale mode all feedbacks on this player should work on, if ForceTimescaleMode is true
-		[Tooltip("the time scale mode all feedbacks on this player should work on, if ForceTimescaleMode is true")] 
+		/// 当 `ForceTimescaleMode` 为 true 时，此 player 中所有 feedback 统一使用的时间模式。
+		[Tooltip("当 `ForceTimescaleMode` 为 true 时，此 player 中所有反馈统一使用的时间模式。")] 
 		[MMFCondition("ForceTimescaleMode", true)]
 		public TimescaleModes ForcedTimescaleMode = TimescaleModes.Unscaled;
-		/// a time multiplier that will be applied to all feedback durations (initial delay, duration, delay between repeats...)
-		[Tooltip("a time multiplier that will be applied to all feedback durations (initial delay, duration, delay between repeats...)")]
+		/// 会应用到所有 feedback 时长上的倍率，包括初始延迟、持续时间、重复间隔等。
+		[Tooltip("会应用到所有反馈持续时间上的倍率，包括初始延迟、持续时间、重复间隔等。")]
 		public float DurationMultiplier = 1f;
-		/// a multiplier to apply to all timescale operations (1: normal, less than 1: slower operations, higher than 1: faster operations)
-		[Tooltip("a multiplier to apply to all timescale operations (1: normal, less than 1: slower operations, higher than 1: faster operations)")]
+		/// 应用到所有时间缩放运算上的倍率。`1` 为正常速度，小于 `1` 更慢，大于 `1` 更快。
+		[Tooltip("应用到所有时间缩放运算上的倍率。`1` 为正常速度，小于 `1` 更慢，大于 `1` 更快。")]
 		public float TimescaleMultiplier = 1f;
-		/// if this is true, will expose a RandomDurationMultiplier. The final duration of each feedback will be : their base duration * DurationMultiplier * a random value between RandomDurationMultiplier.x and RandomDurationMultiplier.y
-		[Tooltip("if this is true, will expose a RandomDurationMultiplier. The final duration of each feedback will be : their base duration * DurationMultiplier * a random value between RandomDurationMultiplier.x and RandomDurationMultiplier.y")]
+		/// 若启用，会暴露 `RandomDurationMultiplier`。每个 feedback 的最终时长将按以下公式计算：`基础时长 * DurationMultiplier * RandomDurationMultiplier`（随机取 `x` 到 `y` 之间的值）。
+		[Tooltip("若启用，会显示 `RandomDurationMultiplier`。每个反馈的最终持续时间将按以下公式计算：`基础时长 * DurationMultiplier * RandomDurationMultiplier`（随机取 `x` 到 `y` 之间的值）。")]
 		public bool RandomizeDuration = false;
-		/// if RandomizeDuration is true, the min (x) and max (y) values for the random duration multiplier
-		[Tooltip("if RandomizeDuration is true, the min (x) and max (y) values for the random duration multiplier")]
+		/// 当 `RandomizeDuration` 为 true 时，随机时长倍率的最小值（`x`）与最大值（`y`）。
+		[Tooltip("当 `RandomizeDuration` 为 true 时，随机持续时间倍率的最小值（`x`）与最大值（`y`）。")]
 		[MMCondition("RandomizeDuration", true)]
 		public Vector2 RandomDurationMultiplier = new Vector2(0.5f, 1.5f);
-		/// if this is true, more editor-only, detailed info will be displayed per feedback in the duration slot
-		[Tooltip("if this is true, more editor-only, detailed info will be displayed per feedback in the duration slot")]
+		/// 若启用，会在每个 feedback 的时长区域显示更多仅编辑器可见的详细信息。
+		[Tooltip("若启用，会在每个反馈的持续时间区域显示更多仅编辑器可见的详细信息。")]
 		public bool DisplayFullDurationDetails = false;
-		/// the timescale at which the player itself will operate. This notably impacts sequencing and pauses duration evaluation.
-		[Tooltip("the timescale at which the player itself will operate. This notably impacts sequencing and pauses duration evaluation.")]
-		public TimescaleModes PlayerTimescaleMode = TimescaleModes.Unscaled;
+		/// player 自身运行所使用的时间模式。这会直接影响序列播放与 pause 时长的计算。
+		[Tooltip("player 自身运行所使用的时间模式。这会直接影响序列播放与 pause 时长的计算。")]
+		public TimescaleModes PlayerTimescaleMode = TimescaleModes.Scaled;
 
-		/// if this is true, this feedback will only play if its distance to RangeCenter is lower or equal to RangeDistance
-		[Tooltip("if this is true, this feedback will only play if its distance to RangeCenter is lower or equal to RangeDistance")]
+		/// 若启用，只有当此 feedback 到 `RangeCenter` 的距离小于或等于 `RangeDistance` 时才会播放。
+		[Tooltip("若启用，只有当此反馈到 `RangeCenter` 的距离小于或等于 `RangeDistance` 时才会播放。")]
 		public bool OnlyPlayIfWithinRange = false;
-		/// when in OnlyPlayIfWithinRange mode, the transform to consider as the center of the range
-		[Tooltip("when in OnlyPlayIfWithinRange mode, the transform to consider as the center of the range")]
+		/// 在 `OnlyPlayIfWithinRange` 模式下，作为范围中心点参考的 Transform。
+		[Tooltip("在 `OnlyPlayIfWithinRange` 模式下，作为范围中心点参考的 Transform。")]
 		public Transform RangeCenter;
-		/// when in OnlyPlayIfWithinRange mode, the distance to the center within which the feedback will play
-		[Tooltip("when in OnlyPlayIfWithinRange mode, the distance to the center within which the feedback will play")]
+		/// 在 `OnlyPlayIfWithinRange` 模式下，允许播放 feedback 的最大中心距离。
+		[Tooltip("在 `OnlyPlayIfWithinRange` 模式下，允许播放反馈的最大中心距离。")]
 		public float RangeDistance = 5f;
-		/// when in OnlyPlayIfWithinRange mode, whether or not to modify the intensity of feedbacks based on the RangeFallOff curve  
-		[Tooltip("when in OnlyPlayIfWithinRange mode, whether or not to modify the intensity of feedbacks based on the RangeFallOff curve")]
+		/// 在 `OnlyPlayIfWithinRange` 模式下，是否根据 `RangeFallOff` 曲线对 feedback 强度进行衰减。  
+		[Tooltip("在 `OnlyPlayIfWithinRange` 模式下，是否根据 `RangeFallOff` 曲线对反馈强度进行衰减。")]
 		public bool UseRangeFalloff = false;
-		/// the animation curve to use to define falloff (on the x 0 represents the range center, 1 represents the max distance to it)
-		[Tooltip("the animation curve to use to define falloff (on the x 0 represents the range center, 1 represents the max distance to it)")]
+		/// 用于定义衰减的动画曲线。横轴 `x` 中，`0` 表示范围中心，`1` 表示最大作用距离。
+		[Tooltip("用于定义衰减的动画曲线。横轴 `x` 中，`0` 表示范围中心，`1` 表示最大作用距离。")]
 		[MMFCondition("UseRangeFalloff", true)]
 		public AnimationCurve RangeFalloff = new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(1f, 0f));
-		/// the values to remap the falloff curve's y axis' 0 and 1
-		[Tooltip("the values to remap the falloff curve's y axis' 0 and 1")]
+		/// 将衰减曲线 `y` 轴上 `0` 和 `1` 重映射到的目标值。
+		[Tooltip("将衰减曲线 `y` 轴上 `0` 和 `1` 重映射到的目标值。")]
 		[MMFVector("Zero","One")]
 		public Vector2 RemapRangeFalloff = new Vector2(0f, 1f);
-		/// whether or not to ignore MMSetFeedbackRangeCenterEvent, used to set the RangeCenter from anywhere
-		[Tooltip("whether or not to ignore MMSetFeedbackRangeCenterEvent, used to set the RangeCenter from anywhere")]
+		/// 是否忽略 `MMSetFeedbackRangeCenterEvent`。若启用忽略，外部事件将无法再修改 `RangeCenter`。
+		[Tooltip("是否忽略 `MMSetFeedbackRangeCenterEvent`。若启用忽略，外部事件将无法再修改 `RangeCenter`。")]
 		public bool IgnoreRangeEvents = false;
 
-		/// a duration, in seconds, during which triggering a new play of this MMFeedbacks after it's been played once will be impossible
-		[Tooltip("a duration, in seconds, during which triggering a new play of this MMFeedbacks after it's been played once will be impossible")]
+		/// 此 `MMFeedbacks` 播放一次后，在接下来的这段时间内将无法再次触发播放，单位为秒。
+		[Tooltip("此 `MMFeedbacks` 播放一次后，在接下来的这段时间内将无法再次触发播放，单位为秒。")]
 		public float CooldownDuration = 0f;
-		/// a duration, in seconds, to delay the start of this MMFeedbacks' contents play
-		[Tooltip("a duration, in seconds, to delay the start of this MMFeedbacks' contents play")]
+		/// 延迟此 `MMFeedbacks` 内部内容开始播放的时间，单位为秒。
+		[Tooltip("延迟此 `MMFeedbacks` 内部内容开始播放的时间，单位为秒。")]
 		public float InitialDelay = 0f;
-		/// whether this player can be played or not, useful to temporarily prevent play from another class, for example
-		[Tooltip("whether this player can be played or not, useful to temporarily prevent play from another class, for example")]
+		/// 此 player 当前是否允许被播放。比如你可以通过别的类临时禁止它播放。
+		[Tooltip("此 player 当前是否允许被播放。比如你可以通过别的类临时禁止它播放。")]
 		public bool CanPlay = true;
-		/// if this is true, you'll be able to trigger a new Play while this feedback is already playing, otherwise you won't be able to
-		[Tooltip("if this is true, you'll be able to trigger a new Play while this feedback is already playing, otherwise you won't be able to")]
+		/// 若启用，即使当前 feedback 仍在播放中，也允许再次触发新的 `Play`；否则新的触发会被忽略。
+		[Tooltip("若启用，即使当前反馈仍在播放中，也允许再次触发新的 `Play`；否则新的触发会被忽略。")]
 		public bool CanPlayWhileAlreadyPlaying = true;
-		/// the chance of this sequence happening (in percent : 100 : happens all the time, 0 : never happens, 50 : happens once every two calls, etc)
-		[Tooltip("the chance of this sequence happening (in percent : 100 : happens all the time, 0 : never happens, 50 : happens once every two calls, etc)")]
+		/// 此序列的触发概率（百分比）。`100` 表示每次都触发，`0` 表示永不触发，`50` 大致表示两次调用触发一次。
+		[Tooltip("此序列的触发概率（百分比）。`100` 表示每次都触发，`0` 表示永不触发，`50` 大致表示两次调用触发一次。")]
 		[Range(0,100)]
 		public float ChanceToPlay = 100f;
         
 		/// the intensity at which to play this feedback. That value will be used by most feedbacks to tune their amplitude. 1 is normal, 0.5 is half power, 0 is no effect.
 		/// Note that what this value controls depends from feedback to feedback, don't hesitate to check the code to see what it does exactly.  
-		[Tooltip("the intensity at which to play this feedback. That value will be used by most feedbacks to tune their amplitude. 1 is normal, 0.5 is half power, 0 is no effect." +
-		         "Note that what this value controls depends from feedback to feedback, don't hesitate to check the code to see what it does exactly.")]
+		[Tooltip("播放此反馈时使用的强度。大多数反馈都会用这个值来调整自身幅度：`1` 为正常强度，`0.5` 为半强度，`0` 则表示不产生效果。注意，这个值控制什么取决于反馈到反馈，不要犹豫，检查代码看看它到底做了什么。")]
 		public float FeedbacksIntensity = 1f;
 
-		/// a number of UnityEvents that can be triggered at the various stages of this MMFeedbacks 
-		[Tooltip("a number of UnityEvents that can be triggered at the various stages of this MMFeedbacks")] 
+		/// 可在此 `MMFeedbacks` 各个阶段触发的一组 UnityEvents。 
+		[Tooltip("可在此 `MMFeedbacks` 各个阶段触发的一组 Unity Events。")] 
 		public MMFeedbacksEvents Events;
         
-		/// a global switch used to turn all feedbacks on or off globally
-		[Tooltip("a global switch used to turn all feedbacks on or off globally")]
+		/// 用于全局开启或关闭所有 feedback 的总开关。
+		[Tooltip("用于全局启用或禁用所有反馈的总开关。")]
 		public static bool GlobalMMFeedbacksActive = true;
         
 		[HideInInspector]
@@ -336,7 +333,7 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// Plays all feedbacks using the MMFeedbacks' position as reference, and no attenuation, and in reverse (from bottom to top)
+		/// Changes the player's direction (inverting it - top to bottom becomes bottom to top, top to bottom becomes bottom to top) then plays all feedbacks using the MMFeedbacks' position as reference, and no attenuation
 		/// </summary>
 		public virtual void PlayFeedbacksInReverse()
 		{
@@ -344,7 +341,7 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// Plays all feedbacks using the MMFeedbacks' position as reference, and no attenuation, and in reverse (from bottom to top)
+		/// Changes the player's direction (inverting it - top to bottom becomes bottom to top, top to bottom becomes bottom to top) then plays all feedbacks
 		/// </summary>
 		public virtual void PlayFeedbacksInReverse(Vector3 position, float feedbacksIntensity = 1.0f, bool forceChangeDirection = false)
 		{

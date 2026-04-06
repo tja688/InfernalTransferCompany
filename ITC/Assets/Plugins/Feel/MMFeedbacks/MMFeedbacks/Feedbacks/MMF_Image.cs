@@ -1,4 +1,4 @@
-﻿#if MM_UI
+#if MM_UI
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,8 +12,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will let you change the color of a target sprite renderer over time, and flip it on X or Y. You can also use it to command one or many MMSpriteRendererShakers.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the color of a target Image over time. You can also use it to command one or many MMImageShakers.")]
+	[FeedbackHelp("此反馈可让你随时间修改目标 Image 的颜色。你也可以用它来驱动一个或多个 MMImageShaker。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("UI/Image")]
 	public class MMF_Image : MMF_Feedback
 	{
@@ -24,7 +25,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.UIColor; } }
 		public override bool EvaluateRequiresSetup() { return (BoundImage == null); }
 		public override string RequiredTargetText { get { return BoundImage != null ? BoundImage.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a BoundImage be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈需要先指定 BoundImage 才能正常工作，可在下方设置。"; } }
 		#endif
 
 		/// the duration of this feedback is the duration of the Image, or 0 if instant
@@ -34,45 +35,55 @@ namespace MoreMountains.Feedbacks
 		protected override void AutomateTargetAcquisition() => BoundImage = FindAutomatedTarget<Image>();
 
 		/// the possible modes for this feedback
-		public enum Modes { OverTime, Instant }
+		public enum Modes { OverTime, Instant, ToDestinationColor, ToDestinationColorAndBack }
 
 		[MMFInspectorGroup("Image", true, 54, true)]
 		/// the Image to affect when playing the feedback
-		[Tooltip("the Image to affect when playing the feedback")]
+		[Tooltip("播放该反馈时要作用的 Image")]
 		public Image BoundImage;
 		/// whether the feedback should affect the Image instantly or over a period of time
-		[Tooltip("whether the feedback should affect the Image instantly or over a period of time")]
+		[Tooltip("作用模式：`立即的` 立即应用；`随时间变化` 使用`色彩随时间变化`；`到目的地颜色`/`到目的地颜色并返回` 使用目标颜色与曲线插值。")]
 		public Modes Mode = Modes.OverTime;
 		/// how long the Image should change over time
-		[Tooltip("how long the Image should change over time")]
+		[Tooltip("在非 `Instant` 模式下，颜色变化持续时间（秒）。")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public float Duration = 0.2f;
 		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		[Tooltip("若开启此项，即使该反馈仍在执行中，再次调用也会立即触发；若关闭此项，在当前播放结束前将阻止新的 Play 调用")] 
 		public bool AllowAdditivePlays = false;
 		/// whether or not to modify the color of the image
-		[Tooltip("whether or not to modify the color of the image")]
+		[Tooltip("是否修改目标 Image 的颜色。")]
 		public bool ModifyColor = true;
 		/// the colors to apply to the Image over time
-		[Tooltip("the colors to apply to the Image over time")]
-		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
+		[Tooltip("用于颜色变化的渐变：在 `OverTime` 和目标色模式下会参与计算。")]
+		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ToDestinationColor, (int)Modes.ToDestinationColorAndBack)]
 		public Gradient ColorOverTime;
 		/// the color to move to in instant mode
-		[Tooltip("the color to move to in instant mode")]
+		[Tooltip("在 `Instant` 模式下立即切换到的颜色。")]
 		[MMFEnumCondition("Mode", (int)Modes.Instant)]
 		public Color InstantColor;
+		/// the color to move to in ToDestination mode
+		[Tooltip("在 `ToDestinationColor` 与 `ToDestinationColorAndBack` 模式下使用的目标颜色。")]
+		[MMFEnumCondition("Mode", (int)Modes.Instant, (int)Modes.ToDestinationColor, (int)Modes.ToDestinationColorAndBack)]
+		public Color ToDestinationColor = Color.red;
+		/// the color to move to in ToDestination mode
+		[Tooltip("目标色模式的插值曲线；在 `ToDestinationColorAndBack` 中会先去目标色再按同曲线返回。")]
+		[MMFEnumCondition("Mode", (int)Modes.Instant, (int)Modes.ToDestinationColor, (int)Modes.ToDestinationColorAndBack)]
+		public AnimationCurve ToDestinationColorCurve = new AnimationCurve(new Keyframe(0, 0f), new Keyframe(1, 1f));
+		
+		[Header("Behaviour")]
 		/// whether or not that Image should be turned off on start
-		[Tooltip("whether or not that Image should be turned off on start")]
+		[Tooltip("初始化时是否关闭目标 Image。")]
 		[FormerlySerializedAs("StartsOff")]
 		public bool DisableOnInit = false;
 		/// if this is true, the target will be enabled when this feedback gets played
-		[Tooltip("if this is true, the target will be enabled when this feedback gets played")] 
+		[Tooltip("若开启，Play 时会先启用目标 Image；若关闭，则仅执行颜色逻辑，不改变启用状态。")] 
 		public bool EnableOnPlay = true;
 		/// if this is true, the target disabled after the color over time change ends
-		[Tooltip("if this is true, the target disabled after the color over time change ends")]
+		[Tooltip("若开启，在序列播放完成后关闭目标 Image。")]
 		public bool DisableOnSequenceEnd = false;
 		/// if this is true, the target will be disabled when this feedbacks is stopped
-		[Tooltip("if this is true, the target will be disabled when this feedbacks is stopped")] 
+		[Tooltip("若开启，调用 Stop 时会关闭目标 Image。")] 
 		public bool DisableOnStop = false;
 
 		protected Coroutine _coroutine;
@@ -93,7 +104,15 @@ namespace MoreMountains.Feedbacks
 				{
 					Turn(false);
 				}
-				_initialInstantColor = BoundImage.color;
+
+				if (BoundImage == null)
+				{
+					Debug.LogWarning("[Image Feedback] The image feedback on "+Owner.name+" doesn't have a BoundImage, it won't work. You need to specify an Image in its inspector.");
+				}
+				else
+				{
+					_initialInstantColor = BoundImage.color;
+				}
 			}
 		}
 
@@ -104,7 +123,7 @@ namespace MoreMountains.Feedbacks
 		/// <param name="feedbacksIntensity"></param>
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
-			if (!Active || !FeedbackTypeAuthorized)
+			if (!Active || !FeedbackTypeAuthorized || (BoundImage == null))
 			{
 				return;
 			}
@@ -130,7 +149,61 @@ namespace MoreMountains.Feedbacks
 					if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
 					_coroutine = Owner.StartCoroutine(ImageSequence());
 					break;
+				case Modes.ToDestinationColor:
+					if (!AllowAdditivePlays && (_coroutine != null))
+					{
+						return;
+					}
+					if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
+					_coroutine = Owner.StartCoroutine(ToDestinationSequence(false));
+					break;
+				case Modes.ToDestinationColorAndBack:
+					if (!AllowAdditivePlays && (_coroutine != null))
+					{
+						return;
+					}
+					if (_coroutine != null) { Owner.StopCoroutine(_coroutine); }
+					_coroutine = Owner.StartCoroutine(ToDestinationSequence(true));
+					break;
 			}
+		}
+		
+		/// <summary>
+		/// This coroutine will modify the values on the Image in destination modes
+		/// </summary>
+		/// <returns></returns>
+		protected virtual IEnumerator ToDestinationSequence(bool andBack)
+		{
+			float journey = NormalPlayDirection ? 0f : FeedbackDuration;
+			IsPlaying = true;
+			while ((journey >= 0) && (journey <= FeedbackDuration) && (FeedbackDuration > 0))
+			{
+				float remappedTime = MMFeedbacksHelpers.Remap(journey, 0f, FeedbackDuration, 0f, 1f);
+
+				if (andBack)
+				{
+					remappedTime = (remappedTime < 0.5f)
+						? MMFeedbacksHelpers.Remap(remappedTime, 0f, 0.5f, 0f, 1f)
+						: MMFeedbacksHelpers.Remap(remappedTime, 0.5f, 1f, 1f, 0f);
+				}
+                
+				float evalTime = ToDestinationColorCurve.Evaluate(remappedTime);
+                
+				if (ModifyColor)
+				{
+					BoundImage.color = Color.LerpUnclamped(_initialColor, ToDestinationColor, evalTime);
+				}
+
+				journey += NormalPlayDirection ? FeedbackDeltaTime : -FeedbackDeltaTime;
+				yield return null;
+			}
+			if (ModifyColor)
+			{
+				BoundImage.color = andBack ? _initialColor : ToDestinationColor;
+			}          
+			_coroutine = null;
+			IsPlaying = false;
+			yield return null;
 		}
 
 		/// <summary>

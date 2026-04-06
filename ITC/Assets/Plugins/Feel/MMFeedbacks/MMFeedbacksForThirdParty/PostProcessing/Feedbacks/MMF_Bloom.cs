@@ -12,8 +12,9 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// with Bloom active, and a MMBloomShaker component.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to control bloom intensity and threshold over time. It requires you have in your scene an object with a PostProcessVolume " +
-	              "with Bloom active, and a MMBloomShaker component.")]
+	[System.Serializable]
+	[FeedbackHelp("此反馈可让你随时间控制 Bloom 的强度与阈值。它要求你的场景中存在一个带有 PostProcessVolume 的对象，且该对象" +
+	              "已启用 Bloom，并挂有 MMBloomShaker 组件。")]
 	#if MM_POSTPROCESSING
 	[FeedbackPath("PostProcess/Bloom")]
 	#endif
@@ -37,38 +38,38 @@ namespace MoreMountains.FeedbacksForThirdParty
 
 		[MMFInspectorGroup("Bloom", true, 41)]
 		/// the duration of the feedback, in seconds
-		[Tooltip("the duration of the feedback, in seconds")]
+		[Tooltip("反馈持续时间，单位为秒")]
 		public float ShakeDuration = 0.2f;
 		/// whether or not to reset shaker values after shake
-		[Tooltip("whether or not to reset shaker values after shake")]
+		[Tooltip("抖动结束后是否重置抖动器的数值")]
 		public bool ResetShakerValuesAfterShake = true;
 		/// whether or not to reset the target's values after shake
-		[Tooltip("whether or not to reset the target's values after shake")]
+		[Tooltip("抖动结束后是否重置目标对象的数值")]
 		public bool ResetTargetValuesAfterShake = true;
 		/// whether or not to add to the initial intensity
-		[Tooltip("whether or not to add to the initial intensity")]
+		[Tooltip("是否在初始强度基础上叠加")]
 		public bool RelativeValues = true;
 
 		[MMFInspectorGroup("Intensity", true, 42)]
 		/// the curve to animate the intensity on
-		[Tooltip("the curve to animate the intensity on")]
+		[Tooltip("用于驱动强度变化的曲线")]
 		public AnimationCurve ShakeIntensity = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		public float RemapIntensityZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		public float RemapIntensityOne = 10f;
         
 		[MMFInspectorGroup("Threshold", true, 43)]
 		/// the curve to animate the threshold on
-		[Tooltip("the curve to animate the threshold on")]
+		[Tooltip("用于驱动阈值变化的曲线")]
 		public AnimationCurve ShakeThreshold = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		public float RemapThresholdZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		public float RemapThresholdOne = 0f;
 
 		/// <summary>

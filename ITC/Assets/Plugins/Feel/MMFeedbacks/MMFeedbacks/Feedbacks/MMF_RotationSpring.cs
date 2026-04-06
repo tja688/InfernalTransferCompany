@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Tools;
@@ -14,8 +14,9 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Transform/Rotation Spring")]
-	[FeedbackHelp("This feedback will let you animate the rotation of the target object over time, with a spring effect.")]
+	[FeedbackHelp("此反馈可让你以弹簧效果为目标对象的旋转制作随时间变化的动画。")]
 	public class MMF_RotationSpring : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -25,7 +26,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.TransformColor; } }
 		public override bool EvaluateRequiresSetup() { return (AnimateRotationTarget == null); }
 		public override string RequiredTargetText { get { return AnimateRotationTarget != null ? AnimateRotationTarget.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that an AnimateRotationTarget be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先设置an AnimateRotationTarget才能正常工作。你可以在下方进行设置。"; } }
 		public override bool HasCustomInspectors { get { return true; } }
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
@@ -39,56 +40,56 @@ namespace MoreMountains.Feedbacks
 		
 		[MMFInspectorGroup("Target", true, 12, true)]
 		/// the object to animate
-		[Tooltip("the object to animate")]
+		[Tooltip("要执行动画的对象")]
 		public Transform AnimateRotationTarget;
 		/// spring duration is determined by the spring (and could be impacted real time), so it's up to you to determine how long this feedback should last, from the point of view of its parent MMF Player
-		[Tooltip("spring duration is determined by the spring (and could be impacted real time), so it's up to you to determine how long this feedback should last, from the point of view of its parent MMF Player")]
+		[Tooltip("spring 持续时间由 spring 决定（并且可能实时影响），因此您可以从其父 MMF 播放器的角度来确定此反馈应持续多长时间")]
 		public float DeclaredDuration = 0f;
 		/// whether this feedback should play on local or world rotation
-		[Tooltip("whether this feedback should play on local or world rotation")]
+		[Tooltip("此反馈是否应在本地或世界轮换中播放")]
 		public Space RotationSpace = Space.World;
 		
 		[MMFInspectorGroup("Spring Settings", true, 18)]
 		/// the dumping ratio determines how fast the spring will evolve after a disturbance. At a low value, it'll oscillate for a long time, while closer to 1 it'll stop oscillating quickly
-		[Tooltip("the dumping ratio determines how fast the spring will evolve after a disturbance. At a low value, it'll oscillate for a long time, while closer to 1 it'll stop oscillating quickly")]
+		[Tooltip("倾倒比决定了弹簧在受到干扰后演化的速度。值较低时会振荡较长时间，接近1时会很快停止振荡")]
 		[Range(0.01f, 1f)]
 		public float DampingX = 0.4f;
 		/// the frequency determines how fast the spring will oscillate when disturbed, low frequency means less oscillations per second, high frequency means more oscillations per second
-		[Tooltip("the frequency determines how fast the spring will oscillate when disturbed, low frequency means less oscillations per second, high frequency means more oscillations per second")]
+		[Tooltip("频率决定了弹簧在受到干扰时振荡的速度，低频意味着每秒振荡较少，高频意味着每秒振荡较多")]
 		public float FrequencyX = 6f;
 		/// the dumping ratio determines how fast the spring will evolve after a disturbance. At a low value, it'll oscillate for a long time, while closer to 1 it'll stop oscillating quickly
-		[Tooltip("the dumping ratio determines how fast the spring will evolve after a disturbance. At a low value, it'll oscillate for a long time, while closer to 1 it'll stop oscillating quickly")]
+		[Tooltip("倾倒比决定了弹簧在受到干扰后演化的速度。值较低时会振荡较长时间，接近1时会很快停止振荡")]
 		[Range(0.01f, 1f)]
 		public float DampingY = 0.4f;
 		/// the frequency determines how fast the spring will oscillate when disturbed, low frequency means less oscillations per second, high frequency means more oscillations per second
-		[Tooltip("the frequency determines how fast the spring will oscillate when disturbed, low frequency means less oscillations per second, high frequency means more oscillations per second")]
+		[Tooltip("频率决定了弹簧在受到干扰时振荡的速度，低频意味着每秒振荡较少，高频意味着每秒振荡较多")]
 		public float FrequencyY = 6f;
 		/// the dumping ratio determines how fast the spring will evolve after a disturbance. At a low value, it'll oscillate for a long time, while closer to 1 it'll stop oscillating quickly
-		[Tooltip("the dumping ratio determines how fast the spring will evolve after a disturbance. At a low value, it'll oscillate for a long time, while closer to 1 it'll stop oscillating quickly")]
+		[Tooltip("倾倒比决定了弹簧在受到干扰后演化的速度。值较低时会振荡较长时间，接近1时会很快停止振荡")]
 		[Range(0.01f, 1f)]
 		public float DampingZ = 0.4f;
 		/// the frequency determines how fast the spring will oscillate when disturbed, low frequency means less oscillations per second, high frequency means more oscillations per second
-		[Tooltip("the frequency determines how fast the spring will oscillate when disturbed, low frequency means less oscillations per second, high frequency means more oscillations per second")]
+		[Tooltip("频率决定了弹簧在受到干扰时振荡的速度，低频意味着每秒振荡较少，高频意味着每秒振荡较多")]
 		public float FrequencyZ = 6f;
 		
 		[MMFInspectorGroup("Spring Mode", true, 19)]
 		/// the chosen mode for this spring. MoveTo will move the target the specified rotation (randomized between min and max). MoveToAdditive will add the specified rotation (randomized between min and max) to the target's current rotation. Bump will bump the target's rotation by the specified power (randomized between min and max)
-		[Tooltip("the chosen mode for this spring. MoveTo will move the target the specified rotation (randomized between min and max). MoveToAdditive will add the specified rotation (randomized between min and max) to the target's current rotation. Bump will bump the target's rotation by the specified power (randomized between min and max)")]
+		[Tooltip("今年春天选择的模式。 MoveTo 将移动目标指定的旋转（在最小和最大之间随机）。 MoveToAdditive 会将指定的旋转（在最小和最大之间随机）添加到目标的当前旋转。碰撞将以指定的功率（在最小和最大之间随机）来碰撞目标的旋转")]
 		public Modes Mode = Modes.Bump;
 		/// the min value from which to pick a random target value when in MoveTo or MoveToAdditive modes
-		[Tooltip("the min value from which to pick a random target value when in MoveTo or MoveToAdditive modes")]
+		[Tooltip("在 MoveTo 或 MoveToAdditive 模式下从中选取随机目标值的最小值")]
 		[MMFEnumCondition("Mode", (int)Modes.MoveTo, (int)Modes.MoveToAdditive)]
 		public Vector3 MoveToRotationMin = new Vector3(45f, 0f, 0f);
 		/// the max value from which to pick a random target value when in MoveTo or MoveToAdditive modes
-		[Tooltip("the max value from which to pick a random target value when in MoveTo or MoveToAdditive modes")]
+		[Tooltip("在 MoveTo 或 MoveToAdditive 模式下从中选取随机目标值的最大值")]
 		[MMFEnumCondition("Mode", (int)Modes.MoveTo, (int)Modes.MoveToAdditive)]
 		public Vector3 MoveToRotationMax = new Vector3(90f, 0f, 0f);
 		/// the min value from which to pick a random bump amount when in Bump mode
-		[Tooltip("the min value from which to pick a random bump amount when in Bump mode")]
+		[Tooltip("在凹凸模式下从中选择随机凹凸量的最小值")]
 		[MMFEnumCondition("Mode", (int)Modes.Bump)]
 		public Vector3 BumpRotationMin = new Vector3(2000f, 2000f, 0f);
 		/// the max value from which to pick a random bump amount when in Bump mode
-		[Tooltip("the max value from which to pick a random bump amount when in Bump mode")]
+		[Tooltip("在凹凸模式下从中选择随机凹凸量的最大值")]
 		[MMFEnumCondition("Mode", (int)Modes.Bump)]
 		public Vector3 BumpRotationMax = new Vector3(3000f, 3000f, 0f);
         
@@ -282,3 +283,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

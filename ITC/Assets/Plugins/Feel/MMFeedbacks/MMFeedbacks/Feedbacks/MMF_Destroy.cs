@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
@@ -9,8 +9,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback allows you to destroy a target gameobject, either via Destroy, DestroyImmediate, or SetActive:False
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to destroy a target gameobject, either via Destroy, DestroyImmediate, or SetActive:False")]
+	[FeedbackHelp("此反馈可让你销毁目标 GameObject，可选方式为 Destroy、DestroyImmediate，或 SetActive:false。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("GameObject/Destroy")]
 	public class MMF_Destroy : MMF_Feedback
 	{
@@ -21,7 +22,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.GameObjectColor; } }
 		public override bool EvaluateRequiresSetup() { return (TargetGameObject == null); }
 		public override string RequiredTargetText { get { return TargetGameObject != null ? TargetGameObject.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetGameObject be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先设置a TargetGameObject才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetGameObject = FindAutomatedTargetGameObject();
@@ -31,14 +32,14 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Destruction", true, 18, true)]
 		/// the gameobject we want to change the active state of
-		[Tooltip("the game object we want to destroy")]
+		[Tooltip("要引入的目标 游戏对象")]
 		public GameObject TargetGameObject;
 		/// the optional list of extra gameobjects we want to change the active state of
-		[Tooltip("the optional list of extra gameobjects we want to change the active state of")]
+		[Tooltip("可选的额外 GameObject 列表（会一起执行相同操作）")]
 		public List<GameObject> ExtraTargetGameObjects;
 		
 		/// the selected destruction mode 
-		[Tooltip("the selected destruction mode")]
+		[Tooltip("当前销毁模式")]
 		public Modes Mode;
 
 		protected bool _initialActiveState;
@@ -99,3 +100,5 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+
+

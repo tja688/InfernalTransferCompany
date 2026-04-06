@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
@@ -7,10 +7,11 @@ using UnityEngine.UIElements;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you change the background color of an element on a target UI Document
+	/// 这个反馈可修改目标 UI Document 中元素的背景颜色。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the background color of an element on a target UI Document")]
+	[FeedbackHelp("这个反馈可修改目标 UI Document 中元素的背景颜色。")]
+	[System.Serializable]
 	[FeedbackPath("UI Toolkit/UITK Background Color")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitBackgroundColor : MMF_UIToolkitColorBase

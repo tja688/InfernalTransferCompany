@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will let you output a message to the console, using a custom MM debug method, or Log, Assertion, Error or Warning logs.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you output a message to the console, using a custom MM debug method, or Log, Assertion, Error or Warning logs.")]
+	[FeedbackHelp("此反馈可将一条消息输出到控制台，可使用自定义 MM 调试方式，或使用 Log、Assertion、Error、Warning 等日志类型。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("Debug/Log")]
 	public class MMF_DebugLog : MMF_Feedback
 	{
@@ -30,19 +31,19 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Debug", true, 17)]
 		/// the selected debug mode
-		[Tooltip("the selected debug mode")]
+		[Tooltip("当前选定的调试模式")]
 		public DebugLogModes DebugLogMode = DebugLogModes.DebugLogTime;
 
 		/// the message to display 
-		[Tooltip("the message to display")]
+		[Tooltip("要显示的消息内容")]
 		[TextArea] 
 		public string DebugMessage = "YOUR DEBUG MESSAGE GOES HERE";
 		/// the color of the message when in DebugLogTime mode
-		[Tooltip("the color of the message when in DebugLogTime mode")]
+		[Tooltip("处于 DebugLogTime 模式时消息显示的颜色")]
 		[MMFEnumCondition("DebugLogMode", (int) DebugLogModes.DebugLogTime)]
 		public Color DebugColor = Color.cyan;
 		/// whether or not to display the frame count when in DebugLogTime mode
-		[Tooltip("whether or not to display the frame count when in DebugLogTime mode")]
+		[Tooltip("在 DebugLogTime 模式下是否显示帧数")]
 		[MMFEnumCondition("DebugLogMode", (int) DebugLogModes.DebugLogTime)]
 		public bool DisplayFrameCount = true;
 

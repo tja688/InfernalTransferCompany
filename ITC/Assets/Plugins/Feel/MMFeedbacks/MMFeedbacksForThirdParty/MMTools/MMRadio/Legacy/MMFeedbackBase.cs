@@ -32,24 +32,24 @@ namespace MoreMountains.Feedbacks
         
 		[Header("Mode")]
 		/// whether the feedback should affect the target property instantly or over a period of time
-		[Tooltip("whether the feedback should affect the target property instantly or over a period of time")]
+		[Tooltip("该反馈应立即影响目标属性，还是在一段时间内逐步生效")]
 		public Modes Mode = Modes.OverTime;
 		/// how long the target property should change over time
-		[Tooltip("how long the target property should change over time")]
+		[Tooltip("目标属性在渐变模式下持续变化的时间")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public float Duration = 0.2f;
 		/// whether or not that target property should be turned off on start
-		[Tooltip("whether or not that target property should be turned off on start")]
+		[Tooltip("开始时是否应关闭该目标属性")]
 		public bool StartsOff = false;
 		/// whether or not the values should be relative or not
-		[Tooltip("whether or not the values should be relative or not")]
+		[Tooltip("数值是否采用相对模式")]
 		public bool RelativeValues = true;
 		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		[Tooltip("若启用，即使该反馈仍在执行中，再次调用也会立刻重新触发；若关闭，则当前一次播放结束前会阻止新的 Play 调用。")] 
 		public bool AllowAdditivePlays = false;
 
 		/// if this is true, the target object will be disabled on stop
-		[Tooltip("if this is true, the target object will be disabled on stop")]
+		[Tooltip("若启用，调用 Stop 时会禁用目标对象")]
 		public bool DisableOnStop = false;
         
 		/// the duration of this feedback is the duration of the target property, or 0 if instant

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will let you enable/disable/toggle a target collider, or change its trigger status
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you enable/disable/toggle a target collider, or change its trigger status")]
+	[FeedbackHelp("此反馈可让你启用、禁用或切换目标 Collider，也可以修改它的 Trigger 状态。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("GameObject/Collider")]
 	public class MMF_Collider : MMF_Feedback
 	{
@@ -22,7 +23,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.GameObjectColor; } }
 		public override bool EvaluateRequiresSetup() { return (TargetCollider == null); }
 		public override string RequiredTargetText { get { return TargetCollider != null ? TargetCollider.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetCollider be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先设置a TargetCollider才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetCollider = FindAutomatedTarget<Collider>();
@@ -32,7 +33,7 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Collider", true, 12, true)]
 		/// the collider to act upon
-		[Tooltip("the collider to act upon")]
+		[Tooltip("要作用的碰撞体")]
 		public Collider TargetCollider;
 		/// the effect the feedback will have on the target collider's status 
 		public Modes Mode = Modes.Disable;
@@ -127,3 +128,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

@@ -14,7 +14,7 @@ namespace MoreMountains.Tools
 		public abstract bool Decide();
 
 		/// a label you can set to organize your AI Decisions, not used by anything else 
-		[Tooltip("a label you can set to organize your AI Decisions, not used by anything else")]
+		[Tooltip("用于整理 AI Decision 的标签，不会被其他系统使用")]
 		public string Label;
 		public virtual bool DecisionInProgress { get; set; }
 		protected AIBrain _brain;

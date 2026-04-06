@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -11,8 +11,9 @@ namespace MoreMountains.Feedbacks
 	/// You can also use it to broadcast a MMLookAtShake event, that MMLookAtShakers on the right channel will be able to listen for and act upon 
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you animate the rotation of a transform to look at a target over time. You can also use it to broadcast a MMLookAtShake event, that MMLookAtShakers on the right channel will be able to listen for and act upon.")]
+	[FeedbackHelp("此反馈可让某个 Transform 的朝向随时间转向目标。你也可以用它广播 MMLookAtShake 事件，让对应通道上的 MMLookAtShaker 响应并执行。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Transform/LookAt")]
 	public class MMF_LookAt : MMF_Feedback
 	{
@@ -46,7 +47,7 @@ namespace MoreMountains.Feedbacks
 				}
 			}
 		}
-		public override string RequiresSetupText { get { return "In Direct mode, this feedback requires that a DirectTargetTransform be set to be able to work properly. You can set one below."; } } 
+		public override string RequiresSetupText { get { return "在 Direct 模式下，此反馈必须先设置 TransformToRotate 才能正常工作。你可以在下方进行设置。"; } } 
 		#endif
 
 		/// the duration of this feedback is the duration of the movement, in seconds
@@ -63,56 +64,56 @@ namespace MoreMountains.Feedbacks
 		
 		[MMFInspectorGroup("Look at settings", true, 37, true)]
 		/// the duration of this feedback, in seconds
-		[Tooltip("the duration of this feedback, in seconds")]
+		[Tooltip("此反馈持续时间，单位为秒。")]
 		public float Duration = 1f;
 		/// the curve over which to animate the look at transition
-		[Tooltip("the curve over which to animate the look at transition")]
+		[Tooltip("用于 LookAt 过渡动画的曲线")]
 		public MMTweenType LookAtTween = new MMTweenType( new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1)));
 		/// whether or not to lock rotation on the x axis
-		[Tooltip("whether or not to lock rotation on the x axis")]
+		[Tooltip("是否锁定 X 轴旋转；开启后会保留当前 X 分量，不参与 LookAt 计算。")]
 		public bool LockXAxis = false;
 		/// whether or not to lock rotation on the y axis
-		[Tooltip("whether or not to lock rotation on the y axis")]
+		[Tooltip("是否锁定 Y 轴旋转；开启后会保留当前 Y 分量，不参与 LookAt 计算。")]
 		public bool LockYAxis = false;
 		/// whether or not to lock rotation on the z axis
-		[Tooltip("whether or not to lock rotation on the z axis")]
+		[Tooltip("是否锁定 Z 轴旋转；开启后会保留当前 Z 分量，不参与 LookAt 计算。")]
 		public bool LockZAxis = false;
 
 		[MMFInspectorGroup("What we want to rotate", true, 37, true)]
-		/// whether to make a certain transform look at a target, or to broadcast an event
-		[Tooltip("whether to make a certain transform look at a target, or to broadcast an event")]
+		/// 选择直接让某个 Transform LookAt 目标，或改为广播事件
+		[Tooltip("执行模式：直接的 会直接旋转 变换旋转；事件 会广播 看看 事件，由匹配通道的 MM看摇床 处理。")]
 		public Modes Mode = Modes.Direct;
 		/// in Direct mode, the transform to rotate to have it look at our target
-		[Tooltip("in Direct mode, the transform to rotate to have it look at our target")]
+		[Tooltip("在 Direct 模式下，要旋转并对准目标的 Transform")]
 		[MMFEnumCondition("Mode", (int)Modes.Direct)]
 		public Transform TransformToRotate;
 		/// the vector representing the up direction on the object we want to rotate and look at our target
-		[Tooltip("the vector representing the up direction on the object we want to rotate and look at our target")]
+		[Tooltip("要旋转对象的 Up 方向向量（用于计算朝向）")]
 		[MMFEnumCondition("Mode", (int)Modes.Direct)]
 		public UpwardVectors UpwardVector = UpwardVectors.Up;
 		/// whether or not to reset shaker values after shake
-		[Tooltip("whether or not to reset shaker values after shake")]
+		[Tooltip("仅在 Event 模式生效：抖动结束后是否重置抖动器内部数值。")]
 		[MMFEnumCondition("Mode", (int)Modes.Event)]
 		public bool ResetShakerValuesAfterShake = true;
 		/// whether or not to reset the target's values after shake
-		[Tooltip("whether or not to reset the target's values after shake")]
+		[Tooltip("仅在 Event 模式生效：抖动结束后是否将目标对象恢复到初始值。")]
 		[MMFEnumCondition("Mode", (int)Modes.Event)]
 		public bool ResetTargetValuesAfterShake = true;
 
 		[MMFInspectorGroup("What we want to look at", true, 37, true)]
-		/// the different target modes : either a specific transform to look at, the coordinates of a world position, or a direction vector
-		[Tooltip("the different target modes : either a specific transform to look at, the coordinates of a world position, or a direction vector")]
+		/// 目标模式：可选择看向指定 Transform、世界坐标点，或方向向量
+		[Tooltip("目标模式：转换使用观察目标；目标世界位置 使用观察目标世界位置；方向使用观察方向。")]
 		public LookAtTargetModes LookAtTargetMode = LookAtTargetModes.Transform;
 		/// the transform we want to look at 
-		[Tooltip("the transform we want to look at")]
+		[Tooltip("不同于向的变换")]
 		[MMFEnumCondition("LookAtTargetMode", (int)LookAtTargetModes.Transform)]
 		public Transform LookAtTarget;
-		/// the coordinates of a point the world that we want to look at
-		[Tooltip("the coordinates of a point the world that we want to look at")]
+		/// 要看向的世界坐标点
+		[Tooltip("要看向的世界坐标点")]
 		[MMFEnumCondition("LookAtTargetMode", (int)LookAtTargetModes.TargetWorldPosition)]
 		public Vector3 LookAtTargetWorldPosition = Vector3.forward;
-		/// a direction (from our rotating object) that we want to look at
-		[Tooltip("a direction (from our rotating object) that we want to look at")]
+		/// 要看向的方向向量（相对于旋转对象）
+		[Tooltip("要看向的方向向量（以 TransformToRotate 的当前位置为起点）。")]
 		[MMFEnumCondition("LookAtTargetMode", (int)LookAtTargetModes.Direction)]
 		public Vector3 LookAtDirection = Vector3.forward;
 		
@@ -170,6 +171,11 @@ namespace MoreMountains.Feedbacks
 		/// <param name="position"></param>
 		protected virtual void InitiateLookAt(Vector3 position)
 		{
+			if (TransformToRotate == null)
+			{
+				return;
+			}
+			
 			_initialRotation = TransformToRotate.transform.rotation;
 			
 			switch (Mode)
@@ -292,3 +298,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

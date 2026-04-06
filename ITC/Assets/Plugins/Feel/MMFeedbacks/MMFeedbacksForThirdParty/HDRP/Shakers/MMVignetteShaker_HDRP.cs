@@ -20,37 +20,37 @@ namespace MoreMountains.FeedbacksForThirdParty
 		[Header("Intensity")]
 		[MMInspectorGroup("Vignette Intensity", true, 46)]
 		/// whether or not to add to the initial value
-		[Tooltip("whether or not to add to the initial value")]
+		[Tooltip("是否在初始值基础上叠加")]
 		public bool RelativeIntensity = false;
 		/// the curve used to animate the intensity value on
-		[Tooltip("the curve used to animate the intensity value on")]
+		[Tooltip("用于驱动强度值变化的曲线")]
 		public AnimationCurve ShakeIntensity = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(0f, 1f)]
 		public float RemapIntensityZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(0f, 1f)]
 		public float RemapIntensityOne = 1f;
 
 		[MMFInspectorGroup("Vignette Color", true, 60)]
 		/// whether or not to also animate  the vignette's color
-		[Tooltip("whether or not to also animate the vignette's color")]
+		[Tooltip("是否同时驱动暗角颜色变化")]
 		public bool InterpolateColor = false;
 		/// the curve to animate the color on
-		[Tooltip("the curve to animate the color on")]
+		[Tooltip("用于驱动颜色变化的曲线")]
 		public AnimationCurve ColorCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.05f, 1f), new Keyframe(0.95f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(0, 1)]
 		public float RemapColorZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(0f, 1f)]
 		public float RemapColorOne = 1f;
 		/// the color to lerp towards
-		[Tooltip("the color to lerp towards")]
+		[Tooltip("要插值到的目标颜色")]
 		public Color TargetColor = Color.red;
 
 		#if MM_HDRP

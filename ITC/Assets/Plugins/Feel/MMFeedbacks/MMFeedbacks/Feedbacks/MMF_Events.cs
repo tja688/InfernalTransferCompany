@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// A feedback to bind Unity events to and trigger them when played
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to bind any type of Unity events to this feebdack's Play, Stop, Initialization and Reset methods.")]
+	[FeedbackHelp("此反馈可让你把任意类型的 UnityEvent 绑定到该反馈的 Play、Stop、Initialization 与 Reset 方法上。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Events/Unity Events")]
 	public class MMF_Events : MMF_Feedback
 	{
@@ -24,16 +25,16 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Events", true, 44)]
 		/// the events to trigger when the feedback is played
-		[Tooltip("the events to trigger when the feedback is played")]
+		[Tooltip("反馈播放时触发的事件")]
 		public UnityEvent PlayEvents;
 		/// the events to trigger when the feedback is stopped
-		[Tooltip("the events to trigger when the feedback is stopped")]
+		[Tooltip("反馈停止时触发的事件")]
 		public UnityEvent StopEvents;
 		/// the events to trigger when the feedback is initialized
-		[Tooltip("the events to trigger when the feedback is initialized")]
+		[Tooltip("反馈初始化时触发的事件")]
 		public UnityEvent InitializationEvents;
 		/// the events to trigger when the feedback is reset
-		[Tooltip("the events to trigger when the feedback is reset")]
+		[Tooltip("反馈重置时触发的事件")]
 		public UnityEvent ResetEvents;
 
 		/// <summary>
@@ -91,3 +92,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

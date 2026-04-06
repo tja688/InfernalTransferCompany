@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
-#if (MM_TEXTMESHPRO || MM_UGUI2)
+#if MM_UGUI2
 using TMPro;
 #endif
 using UnityEngine.Scripting.APIUpdating;
@@ -11,8 +11,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback lets you control the color of a target TMP's outline over time
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback lets you control the color of a target TMP's outline over time.")]
-	#if (MM_TEXTMESHPRO || MM_UGUI2)
+	[System.Serializable]
+	[FeedbackHelp("这个反馈可随时间控制目标 TMP 描边的颜色。")]
+	#if MM_UGUI2
 	[FeedbackPath("TextMesh Pro/TMP Outline Color")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.TextMeshPro")]
@@ -21,9 +22,9 @@ namespace MoreMountains.Feedbacks
 		/// sets the inspector color for this feedback
 		#if UNITY_EDITOR
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.TMPColor; } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetTMPText be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈需要指定 TargetTMPText 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
-		#if UNITY_EDITOR && (MM_TEXTMESHPRO || MM_UGUI2)
+		#if UNITY_EDITOR && MM_UGUI2
 		public override bool EvaluateRequiresSetup() { return (TargetTMPText == null); }
 		public override string RequiredTargetText { get { return TargetTMPText != null ? TargetTMPText.name : "";  } }
 		#endif
@@ -35,49 +36,49 @@ namespace MoreMountains.Feedbacks
 		/// the duration of this feedback is the duration of the color transition, or 0 if instant
 		public override float FeedbackDuration { get { return (ColorMode == ColorModes.Instant) ? 0f : ApplyTimeMultiplier(Duration); } set { Duration = value; } }
 
-		#if (MM_TEXTMESHPRO || MM_UGUI2)
+		#if MM_UGUI2
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetTMPText = FindAutomatedTarget<TMP_Text>();
 
 		[MMFInspectorGroup("Target", true, 12, true)]
-		/// the TMP_Text component to control
-		[Tooltip("the TMP_Text component to control")]
+		/// 要控制的 TMP_Text 组件。
+		[Tooltip("要控制的文本组件。")]
 		public TMP_Text TargetTMPText;
 		#endif
 
 		[MMFInspectorGroup("Outline Color", true, 16)]
-		/// the selected color mode :
-		/// None : nothing will happen,
-		/// gradient : evaluates the color over time on that gradient, from left to right,
-		/// interpolate : lerps from the current color to the destination one 
-		[Tooltip("the selected color mode :" +
-		         "None : nothing will happen," +
-		         "gradient : evaluates the color over time on that gradient, from left to right," +
-		         "interpolate : lerps from the current color to the destination one ")]
+		/// 所选颜色模式：
+		/// None：不执行任何操作；
+		/// Gradient：沿渐变从左到右随时间评估颜色；
+		/// Interpolate：从当前颜色插值到目标颜色。
+		[Tooltip("所选颜色模式：" +
+		         "None：不执行任何操作；" +
+		         "Gradient：沿渐变从左到右随时间评估颜色；" +
+		         "Interpolate：从当前颜色插值到目标颜色。")]
 		public ColorModes ColorMode = ColorModes.Interpolate;
-		/// how long the color of the text should change over time
-		[Tooltip("how long the color of the text should change over time")]
+		/// 文本颜色/数值随时间变化时的持续时间。
+		[Tooltip("文本颜色/数值随时间变化时的持续时间。")]
 		[MMFEnumCondition("ColorMode", (int)ColorModes.Interpolate, (int)ColorModes.Gradient)]
 		public float Duration = 0.2f;
-		/// the color to apply
-		[Tooltip("the color to apply")]
+		/// 要应用的颜色。
+		[Tooltip("要应用的颜色。")]
 		[MMFEnumCondition("ColorMode", (int)ColorModes.Instant)]
 		public Color32 InstantColor = Color.yellow;
-		/// the gradient to use to animate the color over time
-		[Tooltip("the gradient to use to animate the color over time")]
+		/// 用于随时间驱动颜色变化的渐变。
+		[Tooltip("用于随时间驱动颜色变化的渐变。")]
 		[MMFEnumCondition("ColorMode", (int)ColorModes.Gradient)]
 		[GradientUsage(true)]
 		public Gradient ColorGradient;
-		/// the destination color when in interpolate mode
-		[Tooltip("the destination color when in interpolate mode")]
+		/// Interpolate 模式下的目标颜色。
+		[Tooltip("插入模式下的目标颜色。")]
 		[MMFEnumCondition("ColorMode", (int)ColorModes.Interpolate)]
 		public Color32 DestinationColor = Color.yellow;
-		/// the curve to use when interpolating towards the destination color
-		[Tooltip("the curve to use when interpolating towards the destination color")]
+		/// 插值到目标颜色时使用的曲线。
+		[Tooltip("插值到目标颜色时使用的曲线。")]
 		[MMFEnumCondition("ColorMode", (int)ColorModes.Interpolate)]
 		public AnimationCurve ColorCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
-		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		/// 若启用，即使当前反馈仍在执行中，再次调用也会重新触发；若关闭，在本次播放结束前新的 Play 调用将被忽略。
+		[Tooltip("若启用，即使当前反馈仍在执行中，再次调用也会重新触发；若关闭，在本次播放结束前新的 Play 调用将被忽略。")] 
 		public bool AllowAdditivePlays = false;
 
 		protected Color _initialColor;
@@ -91,7 +92,7 @@ namespace MoreMountains.Feedbacks
 		{
 			base.CustomInitialization(owner);
 
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			if (TargetTMPText == null)
 			{
 				return;
@@ -111,7 +112,7 @@ namespace MoreMountains.Feedbacks
 			{
 				return;
 			}
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			if (TargetTMPText == null)
 			{
 				return;
@@ -170,7 +171,7 @@ namespace MoreMountains.Feedbacks
 		/// <param name="time"></param>
 		protected virtual void SetColor(float time)
 		{
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			if (ColorMode == ColorModes.Gradient)
 			{
 				// we set our object inactive then active, otherwise for some reason outline color isn't applied.
@@ -217,7 +218,7 @@ namespace MoreMountains.Feedbacks
 			{
 				return;
 			}
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 				TargetTMPText.gameObject.SetActive(false);
 				TargetTMPText.outlineColor = _initialColor;
 				TargetTMPText.gameObject.SetActive(true);

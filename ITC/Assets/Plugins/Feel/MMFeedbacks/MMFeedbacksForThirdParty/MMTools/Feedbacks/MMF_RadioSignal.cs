@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will let you trigger a play on a target MMRadioSignal (usually used by a MMRadioBroadcaster to emit a value that can then be listened to by MMRadioReceivers. From this feedback you can also specify a duration, timescale and multiplier.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you trigger a play on a target MMRadioSignal (usually used by a MMRadioBroadcaster to emit a value that can then be listened to by MMRadioReceivers. From this feedback you can also specify a duration, timescale and multiplier.")]
+	[FeedbackHelp("此反馈会在目标 MMRadioSignal 上触发播放。常用于由 MMRadioBroadcaster 发射信号，再由 MMRadioReceiver 监听。你也可以在此设置持续时间、时间缩放模式与全局倍率。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("GameObject/MMRadioSignal")]
 	public class MMF_RadioSignal : MMF_Feedback
 	{
@@ -22,7 +23,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.GameObjectColor; } }
 		public override bool EvaluateRequiresSetup() { return (TargetSignal == null); }
 		public override string RequiredTargetText { get { return TargetSignal != null ? TargetSignal.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetSignal be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先指定 TargetSignal 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
         
 		/// the duration of this feedback is 0
@@ -33,16 +34,16 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Radio Signal", true, 72)]
 		/// The target MMRadioSignal to trigger
-		[Tooltip("The target MMRadioSignal to trigger")]
+		[Tooltip("要触发的目标MM无线电信号。")]
 		public MMRadioSignal TargetSignal;
 		/// the timescale to operate on
-		[Tooltip("the timescale to operate on")]
+		[Tooltip("该信号采用的时间缩放模式（例如受时间缩放或不受时间缩放影响）。")]
 		public MMRadioSignal.TimeScales TimeScale = MMRadioSignal.TimeScales.Unscaled;
 		/// the duration of the shake, in seconds
-		[Tooltip("the duration of the shake, in seconds")]
+		[Tooltip("信号持续时间，单位为秒。")]
 		public float Duration = 1f;
 		/// a global multiplier to apply to the end result of the combination
-		[Tooltip("a global multiplier to apply to the end result of the combination")]
+		[Tooltip("应用到最终信号结果的全局倍率。")]
 		public float GlobalMultiplier = 1f;
         
 

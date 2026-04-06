@@ -14,8 +14,9 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("Audio/MMSoundManager Track Control")]
-	[FeedbackHelp("This feedback will let you control all sounds playing on a specific track (master, UI, music, sfx), and play, pause, mute, unmute, resume, stop, free them all at once. You will need a MMSoundManager in your scene for this to work.")]
+	[FeedbackHelp("此反馈可控制指定轨道（Master/UI/Music/SFX）上的全部声音：Mute、UnMute、SetVolume、Pause、Play、Stop、Free。要生效，场景中必须存在 MMSoundManager。")]
 	public class MMF_MMSoundManagerTrackControl : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -31,13 +32,13 @@ namespace MoreMountains.Feedbacks
         
 		[MMFInspectorGroup("MMSoundManager Track Control", true, 30)]
 		/// the track to mute/unmute/pause/play/stop/free/etc
-		[Tooltip("the track to mute/unmute/pause/play/stop/free/etc")]
+		[Tooltip("要执行控制命令的目标轨道。")]
 		public MMSoundManager.MMSoundManagerTracks Track;
 		/// the selected control mode to interact with the track. Free will stop all sounds and return them to the pool
-		[Tooltip("the selected control mode to interact with the track. Free will stop all sounds and return them to the pool")]
+		[Tooltip("轨道控制模式。`Free` 会停止该轨道所有声音并将其回收到对象池。")]
 		public ControlModes ControlMode = ControlModes.Pause;
 		/// if setting the volume, the volume to assign to the track 
-		[Tooltip("if setting the volume, the volume to assign to the track")]
+		[Tooltip("当模式为 `SetVolume` 时，要设置到轨道的音量值。")]
 		[MMEnumCondition("ControlMode", (int) ControlModes.SetVolume)]
 		public float Volume = 0.5f;
 

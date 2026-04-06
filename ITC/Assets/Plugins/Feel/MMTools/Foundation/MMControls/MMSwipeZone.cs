@@ -70,23 +70,23 @@ namespace MoreMountains.Tools
 	public class MMSwipeZone : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler, IPointerEnterHandler
 	{
 		/// the minimal length of a swipe
-		[Tooltip("the minimal length of a swipe")]
+		[Tooltip("一次滑动被识别所需的最小长度")]
 		public float MinimalSwipeLength = 50f;
 		/// the maximum press length of a swipe
-		[Tooltip("the maximum press length of a swipe")]
+		[Tooltip("一次操作仍被视为“按压”而不是“滑动”的最大位移长度")]
 		public float MaximumPressLength = 10f;
 
 		/// The method(s) to call when the zone is swiped
-		[Tooltip("The method(s) to call when the zone is swiped")]
+		[Tooltip("检测区发生滑动时要调用的方法")]
 		public SwipeEvent ZoneSwiped;
 		/// The method(s) to call while the zone is being pressed
-		[Tooltip("The method(s) to call while the zone is being pressed")]
+		[Tooltip("检测区持续按下期间要调用的方法")]
 		public UnityEvent ZonePressed;
 
 		[Header("Mouse Mode")]
-		[MMInformation("If you set this to true, you'll need to actually press the button for it to be triggered, otherwise a simple hover will trigger it (better for touch input).", MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("如果将此项设为 true，必须真的按下该区域才会触发；否则仅仅悬停就会触发（更适合触控输入）。", MMInformationAttribute.InformationType.Info,false)]
 		/// If you set this to true, you'll need to actually press the button for it to be triggered, otherwise a simple hover will trigger it (better for touch input).
-		[Tooltip("If you set this to true, you'll need to actually press the button for it to be triggered, otherwise a simple hover will trigger it (better for touch input).")]
+		[Tooltip("如果将此项设为 true，必须真的按下该区域才会触发；否则仅仅悬停就会触发（更适合触控输入）。")]
 		public bool MouseMode = false;
 
 		protected Vector2 _firstTouchPosition;

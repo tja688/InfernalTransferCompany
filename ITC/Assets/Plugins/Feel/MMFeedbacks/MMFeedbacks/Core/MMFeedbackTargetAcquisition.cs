@@ -20,14 +20,7 @@ namespace MoreMountains.Feedbacks
 		/// ChildAtIndex : the target will be picked on the child at index X of the MMF Player
 		/// Parent : the target will be picked on the first parent where a matching target is found
 		/// Various reference holders : the target will be picked on the specified reference holder in the list (either the first one, previous : first one found before this feedback in the list, closest in any direction from this feedback, the next one found, or the last one in the list)   
-		[Tooltip("the selected mode for target acquisition\n"+
-			"None : nothing will happen\n"+
-			"Self : the target will be picked on the MMF Player's game object\n"+
-			"AnyChild : the target will be picked on any of the MMF Player's child objects\n"+
-			"ChildAtIndex : the target will be picked on the child at index X of the MMF Player\n"+
-			"Parent : the target will be picked on the first parent where a matching target is found\n"+
-			"Various reference holders : the target will be picked on the specified reference holder in the list " +
-			"(either the first one, previous : first one found before this feedback in the list, closest in any direction from this feedback, the next one found, or the last one in the list)")]
+		[Tooltip("None ：不会发生任何事情 Self ：将在 MMF 玩家的游戏对象上拾取目标 AnyChild ：将在 MMF 玩家的任何子对象上拾取目标 ChildAtIndex ：将在 MMF 玩家索引 X 处的子对象上拾取目标 Parent ：将在找到匹配目标的第一个父对象上拾取目标 各种引用持有者 ：将在列表中指定的引用持有者上拾取目标（第一个，上一个） ：列表中此反馈之前找到的第一个、与此反馈在任何方向上最接近的、找到的下一个或列表中的最后一个）")]
 		public Modes Mode = Modes.None;
 
 		[MMFEnumCondition("Mode", (int)Modes.ChildAtIndex)]

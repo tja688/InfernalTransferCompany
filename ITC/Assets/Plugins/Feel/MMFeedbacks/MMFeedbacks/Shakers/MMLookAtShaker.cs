@@ -11,43 +11,43 @@ namespace MoreMountains.Feedbacks
 	public class MMLookAtShaker : MMShaker
 	{
 		[MMInspectorGroup("Look at settings", true, 37)]
-		/// the duration of this shake, in seconds
-		[Tooltip("the duration of this shake, in seconds")]
+		/// 此次 shake 的持续时间，单位为秒。
+		[Tooltip("此次抖动的持续时间，单位为秒。")]
 		public float Duration = 1f;
 		/// the curve over which to animate the look at transition
-		[Tooltip("the curve over which to animate the look at transition")]
+		[Tooltip("用于控制 Look At 过渡过程的曲线。")]
 		public MMTweenType LookAtTween = new MMTweenType( new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1)));
 		/// whether or not to lock rotation on the x axis
-		[Tooltip("whether or not to lock rotation on the x axis")]
+		[Tooltip("是否锁定 X 轴旋转。若启用，X 轴旋转将保持不变。")]
 		public bool LockXAxis = false;
 		/// whether or not to lock rotation on the y axis
-		[Tooltip("whether or not to lock rotation on the y axis")]
+		[Tooltip("是否锁定 Y 轴旋转。若启用，Y 轴旋转将保持不变。")]
 		public bool LockYAxis = false;
 		/// whether or not to lock rotation on the z axis
-		[Tooltip("whether or not to lock rotation on the z axis")]
+		[Tooltip("是否锁定 Z 轴旋转。若启用，Z 轴旋转将保持不变。")]
 		public bool LockZAxis = false;
 
 		[MMInspectorGroup("What we want to rotate", true, 37)]
 		/// in Direct mode, the transform to rotate to have it look at our target - if left empty, will be the transform this shaker is on
-		[Tooltip("in Direct mode, the transform to rotate to have it look at our target - if left empty, will be the transform this shaker is on")]
+		[Tooltip("在 `Direct` 模式下，用来朝向目标的旋转主体 `Transform`。若留空，则默认使用挂载此抖动器的对象。")]
 		public Transform TransformToRotate;
 		/// the vector representing the up direction on the object we want to rotate and look at our target
 		public MMF_LookAt.UpwardVectors UpwardVector = MMF_LookAt.UpwardVectors.Up;
 
 		[MMInspectorGroup("What we want to look at", true, 37)]
 		/// the different target modes : either a specific transform to look at, the coordinates of a world position, or a direction vector
-		[Tooltip("the different target modes : either a specific transform to look at, the coordinates of a world position, or a direction vector")]
+		[Tooltip("目标模式。可以选择朝向某个指定 `Transform`、某个世界坐标点，或某个方向向量。")]
 		public MMF_LookAt.LookAtTargetModes LookAtTargetMode = MMF_LookAt.LookAtTargetModes.Transform;
 		/// the transform we want to look at 
-		[Tooltip("the transform we want to look at")]
+		[Tooltip("要一个目标 `转换`。")]
 		[MMFEnumCondition("LookAtTargetMode", (int)MMF_LookAt.LookAtTargetModes.Transform)]
 		public Transform LookAtTarget;
 		/// the coordinates of a point the world that we want to look at
-		[Tooltip("the coordinates of a point the world that we want to look at")]
+		[Tooltip("要朝向的世界坐标点。")]
 		[MMFEnumCondition("LookAtTargetMode", (int)MMF_LookAt.LookAtTargetModes.TargetWorldPosition)]
 		public Vector3 LookAtTargetWorldPosition = Vector3.forward;
 		/// a direction (from our rotating object) that we want to look at
-		[Tooltip("a direction (from our rotating object) that we want to look at")]
+		[Tooltip("要朝向的方向向量（以当前旋转对象为参考）。")]
 		[MMFEnumCondition("LookAtTargetMode", (int)MMF_LookAt.LookAtTargetModes.Direction)]
 		public Vector3 LookAtDirection = Vector3.forward;
 		

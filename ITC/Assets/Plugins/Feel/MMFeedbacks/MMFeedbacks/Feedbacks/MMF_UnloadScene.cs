@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.Scripting.APIUpdating;
@@ -9,8 +9,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback lets you unload a scene by name or build index
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback lets you unload a scene by name or build index")]
+	[FeedbackHelp("此反馈可让你通过场景名或 Build Index 卸载场景。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Scene/Unload Scene")]
 	public class MMF_UnloadScene : MMF_Feedback
 	{
@@ -36,7 +37,7 @@ namespace MoreMountains.Feedbacks
 			return false;
 		}
 		public override string RequiredTargetText { get { return SceneName;  } }
-		public override string RequiresSetupText { get { return "This feedback requires that you specify a SceneName below. Make sure you also add that destination scene to your Build Settings."; } }
+		public override string RequiresSetupText { get { return "此反馈需要先根据 Method 配置有效目标：SceneName 模式填写 SceneName，BuildIndex 模式填写 BuildIndex；并确保目标场景已加入 Build Settings。"; } }
 		#endif
         
 		public enum Methods { BuildIndex, SceneName }
@@ -44,22 +45,22 @@ namespace MoreMountains.Feedbacks
 		[MMFInspectorGroup("Unload Scene", true, 43, false)]
         
 		/// whether to unload a scene by build index or by name
-		[Tooltip("whether to unload a scene by build index or by name")]
+		[Tooltip("卸载方式：按构建索引或按场景名称。")]
 		public Methods Method = Methods.SceneName;
 
 		/// the build ID of the scene to unload, find it in your Build Settings
-		[Tooltip("the build ID of the scene to unload, find it in your Build Settings")]
+		[Tooltip("要卸载的场景建立索引（可在构建设置中查看）。仅在构建索引模式下生效。")]
 		[MMFEnumCondition("Method", (int)Methods.BuildIndex)]
 		public int BuildIndex = 0;
 
 		/// the name of the scene to unload
-		[Tooltip("the name of the scene to unload")]
+		[Tooltip("要卸载的场景名称。仅在 SceneName 模式下生效。")]
 		[MMFEnumCondition("Method", (int)Methods.SceneName)]
 		public string SceneName = "";
 
         
 		/// whether or not to output warnings if the scene doesn't exist or can't be loaded
-		[Tooltip("whether or not to output warnings if the scene doesn't exist or can't be loaded")]
+		[Tooltip("若场景不存在、未加载或无法卸载，是否输出警告日志。")]
 		public bool OutputWarningsIfNeeded = true;
         
 		protected Scene _sceneToUnload;
@@ -93,9 +94,10 @@ namespace MoreMountains.Feedbacks
 			{
 				if (OutputWarningsIfNeeded)
 				{
-					Debug.LogWarning("Unload Scene Feedback : you're trying to unload a scene that hasn't been loaded.");    
+					Debug.LogWarning("[Unload Scene Feedback] The unload scene feedback on "+Owner.name+" is trying to unload a scene that hasn't been loaded.");   
 				}
 			}
 		}
 	}
 }
+

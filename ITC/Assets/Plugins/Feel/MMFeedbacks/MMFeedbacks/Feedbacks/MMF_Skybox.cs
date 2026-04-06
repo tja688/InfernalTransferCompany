@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
@@ -9,8 +9,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will let you change the scene's skybox on play, replacing it with another one, either a specific one, or one picked at random among multiple skyboxes.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the scene's skybox on play, replacing it with another one, either a specific one, or one picked at random among multiple skyboxes.")]
+	[FeedbackHelp("此反馈会在播放时替换场景 Skybox。Single 模式使用指定材质；Random 模式会在 RandomSkyboxes 中随机选择。请确保 Random 模式下数组不为空。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Renderer/Skybox")]
 	public class MMF_Skybox : MMF_Feedback
 	{

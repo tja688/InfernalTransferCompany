@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using MoreMountains.Feedbacks;
 #if MM_CINEMACHINE
 using Cinemachine;
@@ -11,10 +11,11 @@ namespace MoreMountains.FeedbacksForThirdParty
 {
 	[AddComponentMenu("")]
 	#if MM_CINEMACHINE || MM_CINEMACHINE3
+	[System.Serializable]
 	[FeedbackPath("Camera/Cinemachine Impulse Clear")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.Cinemachine")]
-	[FeedbackHelp("This feedback lets you trigger a Cinemachine Impulse clear, stopping instantly any impulse that may be playing.")]
+	[FeedbackHelp("这个反馈可触发 Cinemachine Impulse 清除，立即停止当前正在播放的所有 impulse。")]
 	public class MMF_CinemachineImpulseClear : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once

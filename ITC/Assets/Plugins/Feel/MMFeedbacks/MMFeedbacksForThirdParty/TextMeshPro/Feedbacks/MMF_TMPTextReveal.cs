@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
-#if (MM_TEXTMESHPRO || MM_UGUI2)
+#if MM_UGUI2
 using MoreMountains.Tools;
 using TMPro;
 #endif
@@ -14,11 +14,12 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.Feedbacks
 {
 	/// <summary>
-	/// This feedback will let you reveal words, lines, or characters in a target TMP, one at a time
+	/// 这个反馈可让目标 TMP 按字符、单词或行逐步显示文本。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you reveal words, lines, or characters in a target TMP, one at a time")]
-	#if (MM_TEXTMESHPRO || MM_UGUI2)
+	[System.Serializable]
+	[FeedbackHelp("这个反馈可让目标 TMP 按字符、单词或行逐步显示文本。")]
+	#if MM_UGUI2
 	[FeedbackPath("TextMesh Pro/TMP Text Reveal")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.TextMeshPro")]
@@ -28,16 +29,16 @@ namespace MoreMountains.Feedbacks
 		public static bool FeedbackTypeAuthorized = true;
 		#if UNITY_EDITOR
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.TMPColor; } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetTMPText be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈需要指定 TargetTMPText 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
-		#if UNITY_EDITOR && (MM_TEXTMESHPRO || MM_UGUI2)
+		#if UNITY_EDITOR && MM_UGUI2
 		public override bool EvaluateRequiresSetup() { return (TargetTMPText == null); }
 		public override string RequiredTargetText { get { return TargetTMPText != null ? TargetTMPText.name : "";  } }
 		#endif
 
 		protected string _originalText;
 		
-		#if (MM_TEXTMESHPRO || MM_UGUI2)
+		#if MM_UGUI2
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetTMPText = FindAutomatedTarget<TMP_Text>();
 
@@ -174,49 +175,49 @@ namespace MoreMountains.Feedbacks
 
 		/// the possible ways to reveal the text
 		public enum RevealModes { Character, Lines, Words }
-		/// whether to define duration by the time interval between two unit reveals, or by the total duration the reveal should take
+		/// 持续时间的定义方式：使用每次显示单位之间的时间间隔，或使用整段揭示的总持续时间。
 		public enum DurationModes { Interval, TotalDuration }
 
-		#if (MM_TEXTMESHPRO || MM_UGUI2)
+		#if MM_UGUI2
 		[MMFInspectorGroup("Target", true, 12, true)]
-		/// the target TMP_Text component we want to change the text on
-		[Tooltip("the target TMP_Text component we want to change the text on")]
+		/// 要修改文本内容的目标 TMP_Text 组件。
+		[Tooltip("要修改文本内容的目标 TMP_Text 组件。")]
 		public TMP_Text TargetTMPText;
 		#endif
 
 		[MMFInspectorGroup("Change Text", true, 13)]
 
-		/// whether or not to replace the current TMP target's text on play
-		[Tooltip("whether or not to replace the current TMP target's text on play")]
+		/// 播放时是否替换当前 TMP 目标的文本内容。
+		[Tooltip("播放时是否替换当前 TMP 目标的文本内容。")]
 		public bool ReplaceText = false;
-		/// if this is true, the maxVisible Characters/Lines/Words will be set to 0 on initialization
-		[Tooltip("if this is true, the maxVisible Characters/Lines/Words will be set to 0 on initialization")]
+		/// 若启用，初始化时会将 maxVisible Characters/Lines/Words 设为 0。
+		[Tooltip("若启用，初始化时将 最大可见字符/行/单词 设置为 0。")]
 		public bool HideTextOnInitialization = false;
-		/// the new text to replace the old one with
-		[Tooltip("the new text to replace the old one with")]
+		/// 用于替换旧文本的新内容。
+		[Tooltip("用于替换旧文本的新内容。")]
 		[TextArea]
 		public string NewText = "Hello World";
 
 		[MMFInspectorGroup("Reveal", true, 14)]
-		/// the selected way to reveal the text (character by character, word by word, or line by line)
-		[Tooltip("the selected way to reveal the text (character by character, word by word, or line by line)")]
+		/// 文本逐步显示的方式：按字符、按单词或按行。
+		[Tooltip("文本逐步显示的方式：按字符、按单词或按行。")]
 		public RevealModes RevealMode = RevealModes.Character;
-		/// whether to define duration by the time interval between two unit reveals, or by the total duration the reveal should take
-		[Tooltip("whether to define duration by the time interval between two unit reveals, or by the total duration the reveal should take")]
+		/// 持续时间的定义方式：使用每次显示单位之间的时间间隔，或使用整段揭示的总持续时间。
+		[Tooltip("持续时间的定义方式：使用每次显示单位之间的时间间隔，或使用整段揭示的总持续时间。")]
 		public DurationModes DurationMode = DurationModes.Interval;
-		/// the interval (in seconds) between two reveals
-		[Tooltip("the interval (in seconds) between two reveals")]
+		/// 两次揭示之间的时间间隔（秒）。
+		[Tooltip("两次揭示之间的时间间隔（秒）。")]
 		[MMFEnumCondition("DurationMode", (int)DurationModes.Interval)]
 		public float IntervalBetweenReveals = 0.05f;
-		/// the total duration of the text reveal, in seconds
-		[Tooltip("the total duration of the text reveal, in seconds")]
+		/// 整段文本揭示的总持续时间（秒）。
+		[Tooltip("整段文本揭示的总持续时间（秒）。")]
 		[MMFEnumCondition("DurationMode", (int)DurationModes.TotalDuration)]
 		public float RevealDuration = 1f;
-		/// a UnityEvent to invoke every time a reveal happens (word, line or character)
-		[Tooltip("a UnityEvent to invoke every time a reveal happens (word, line or character)")]
+		/// 每次发生一次揭示（单词、行或字符）时调用的 UnityEvent。
+		[Tooltip("每次发生一次揭示（单词、行或字符）时调用的 UnityEvent。")]
 		public UnityEvent OnReveal;
-		/// alright so that one will be weird : for reasons, TextMeshPro won't let you read the length of a disabled text, so to do so, we need to enable it, even if it's just to disable it again right after. If you're targeting a disabled text, or a text that is part of a disabled hierarchy, you'll probably want to set this to true so that the system can proceed with accurate duration computation. If you don't, and your target transform is disabled, duration won't be computed correctly.
-		[Tooltip("alright so that one will be weird : for reasons, TextMeshPro won't let you read the length of a disabled text, so to do so, we need to enable it, even if it's just to disable it again right after. If you're targeting a disabled text, or a text that is part of a disabled hierarchy, you'll probably want to set this to true so that the system can proceed with accurate duration computation. If you don't, and your target transform is disabled, duration won't be computed correctly.")]
+		/// 这个选项有点特殊：由于 TextMeshPro 无法直接读取已禁用文本的长度，系统需要先临时启用它，再立刻恢复禁用。如果你的目标文本本身被禁用，或它位于被禁用的层级中，建议开启此项，以便系统正确计算持续时间。否则在目标 Transform 被禁用时，持续时间计算会不准确。
+		[Tooltip("这个选项有点特殊：由于 TextMeshPro 无法直接读取已禁用文本的长度，系统需要先临时启用它，再立刻恢复禁用。如果你的目标文本本身被禁用，或它位于被禁用的层级中，建议开启此项，以便系统正确计算持续时间。否则在目标 Transform 被禁用时，持续时间计算会不准确。")]
 		public bool AllowHierarchyActivationForDurationComputation = false;
 
 		protected float _delay;
@@ -241,7 +242,7 @@ namespace MoreMountains.Feedbacks
 				return;
 			}
 
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
             
 			if (TargetTMPText == null)
 			{
@@ -279,7 +280,7 @@ namespace MoreMountains.Feedbacks
 				return;
 			}
 
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
             
 			if (TargetTMPText == null)
 			{
@@ -322,7 +323,7 @@ namespace MoreMountains.Feedbacks
 			#endif
 		}
 
-		#if (MM_TEXTMESHPRO || MM_UGUI2)
+		#if MM_UGUI2
 
 		/// <summary>
 		/// Reveals characters one at a time
@@ -333,51 +334,38 @@ namespace MoreMountains.Feedbacks
 			float startTime = FeedbackTime;
 			_totalCharacters = _richTextLength;
 			int visibleCharacters = 0;
-			float lastCharAt = FeedbackTime;
-	            
+
 			IsPlaying = true;
-			while ((visibleCharacters <= _totalCharacters) && !Owner.SkippingToTheEnd)
+			TargetTMPText.maxVisibleCharacters = 0;
+
+			while ((visibleCharacters < _totalCharacters) && !Owner.SkippingToTheEnd)
 			{
-				float time = FeedbackTime;
+				float currentTime = FeedbackTime;
+				float elapsed = currentTime - startTime;
 
-				if (time - lastCharAt < IntervalBetweenReveals)
-				{
-					yield return null;
-				}
-		            
-				TargetTMPText.maxVisibleCharacters = visibleCharacters;
-				InvokeRevealEvents();
+				int expectedVisibleCharacters = 0;
 
-				float timeSinceLastChar = time - lastCharAt;
-				int numberOfIntervals = (int)Mathf.Round(timeSinceLastChar / IntervalBetweenReveals);
-				for (int i = 0; i < numberOfIntervals; i++)
-				{
-					visibleCharacters++;
-				}            
-				lastCharAt = time;
-
-				// we adjust our delay
-	                
-				float delay = 0f;
-	                
 				if (DurationMode == DurationModes.Interval)
 				{
-					_delay = Mathf.Max(IntervalBetweenReveals, FeedbackDeltaTime);
-					delay = _delay - FeedbackDeltaTime;
+					expectedVisibleCharacters = Mathf.FloorToInt(elapsed / IntervalBetweenReveals);
 				}
-				else
+				else 
 				{
-					int remainingCharacters = _totalCharacters - visibleCharacters;
-					float elapsedTime = time - startTime;
-					if (remainingCharacters != 0)
-					{
-						_delay = (RevealDuration - elapsedTime) / remainingCharacters;   
-					}
-					delay = _delay - FeedbackDeltaTime;
+					expectedVisibleCharacters = Mathf.FloorToInt((_totalCharacters * elapsed) / RevealDuration);
 				}
-	                
-				yield return WaitFor(delay);
+
+				expectedVisibleCharacters = Mathf.Clamp(expectedVisibleCharacters, 0, _totalCharacters);
+
+				if (expectedVisibleCharacters > visibleCharacters)
+				{
+					visibleCharacters = expectedVisibleCharacters;
+					TargetTMPText.maxVisibleCharacters = visibleCharacters;
+					InvokeRevealEvents();
+				}
+
+				yield return null;
 			}
+
 			TargetTMPText.maxVisibleCharacters = _richTextLength;
 			IsPlaying = false;
 		}
@@ -565,7 +553,7 @@ namespace MoreMountains.Feedbacks
 			{
 				return;
 			}
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			TargetTMPText.text = _initialText;
 			#endif
 		}

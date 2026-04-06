@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 #if MM_CINEMACHINE
 using Cinemachine;
@@ -6,6 +6,7 @@ using Cinemachine;
 using Unity.Cinemachine;
 #endif
 using MoreMountains.Feedbacks;
+using MoreMountains.Tools;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -22,47 +23,46 @@ namespace MoreMountains.FeedbacksForThirdParty
 	{
 		[Header("Settings")]
 		/// whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what.
-		/// MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable
-		[Tooltip("whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what. " +
-		         "MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable")]
+		/// MMChannel 需要预先创建，但具备可读名称，后期也更容易维护和扩展。
+		[Tooltip("选择使用 int 通道还是 MMChannel ScriptableObject 通道来接收事件。int 配置更简单，但项目变大后容易混乱，不利于记忆每个数字对应什么。" +
+		         "MMChannel 需要预先创建，但具备可读名称，后期也更容易维护和扩展。")]
 		public MMChannelModes ChannelMode = MMChannelModes.Int;
-		/// the channel to listen to - has to match the one on the feedback
-		[Tooltip("the channel to listen to - has to match the one on the feedback")]
+		/// 要监听的通道，必须与反馈上发送的通道一致。
+		[Tooltip("要监听的通道，必须与反馈上发送的通道一致。")]
 		[MMFEnumCondition("ChannelMode", (int)MMChannelModes.Int)]
 		public int Channel = 0;
 		/// the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel,
-		/// right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name
-		[Tooltip("the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel, " +
-		         "right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name")]
+		/// 在 Project 视图中任意位置（通常是 Data 文件夹）右键，选择 MoreMountains > MMChannel，然后为它起一个唯一名称。
+		[Tooltip("用于监听事件的通道资源。要让目标反馈驱动这个通道器，反馈也必须引用同一个通道资源；否则将收不到事件。要创建通道资源，请在项目视图中的任何位置（通常是数据文件夹）右键，选择 更多山脉 > 通道资源，然后为它起一个唯一的名称。")]
 		[MMFEnumCondition("ChannelMode", (int)MMChannelModes.MMChannel)]
 		public MMChannel MMChannelDefinition = null;
-		/// The default amplitude that will be applied to your shakes if you don't specify one
-		[Tooltip("The default amplitude that will be applied to your shakes if you don't specify one")]
+		/// 如果事件里没有单独指定 amplitude，将使用这里的默认强度。
+		[Tooltip("如果事件里没有单独指定 amplitude，将使用这里的默认强度。")]
 		public float DefaultShakeAmplitude = .5f;
-		/// The default frequency that will be applied to your shakes if you don't specify one
-		[Tooltip("The default frequency that will be applied to your shakes if you don't specify one")]
+		/// 如果事件里没有单独指定 frequency，将使用这里的默认频率。
+		[Tooltip("如果事件里没有单独指定 frequency，将使用这里的默认频率。")]
 		public float DefaultShakeFrequency = 10f;
-		/// the amplitude of the camera's noise when it's idle
-		[Tooltip("the amplitude of the camera's noise when it's idle")]
+		/// 相机处于空闲时的噪声强度。
+		[Tooltip("相机处于空闲时的噪声强度。")]
 		[MMFReadOnly]
 		public float IdleAmplitude;
-		/// the frequency of the camera's noise when it's idle
-		[Tooltip("the frequency of the camera's noise when it's idle")]
+		/// 相机处于空闲时的噪声频率。
+		[Tooltip("相机处于空闲时的噪声频率。")]
 		[MMFReadOnly]
 		public float IdleFrequency = 1f;
-		/// the speed at which to interpolate the shake
-		[Tooltip("the speed at which to interpolate the shake")]
+		/// 抖动插值的速度。
+		[Tooltip("抖动插值的速度。")]
 		public float LerpSpeed = 5f;
 
 		[Header("Test")]
-		/// a duration (in seconds) to apply when testing this shake via the TestShake button
-		[Tooltip("a duration (in seconds) to apply when testing this shake via the TestShake button")]
+		/// 通过 TestShake 按钮测试时使用的持续时间（秒）。
+		[Tooltip("通过 TestShake 按钮测试时使用的持续时间（秒）。")]
 		public float TestDuration = 0.3f;
-		/// the amplitude to apply when testing this shake via the TestShake button
-		[Tooltip("the amplitude to apply when testing this shake via the TestShake button")]
+		/// 通过 TestShake 按钮测试时使用的强度。
+		[Tooltip("通过 TestShake 按钮测试时使用的强度。")]
 		public float TestAmplitude = 2f;
-		/// the frequency to apply when testing this shake via the TestShake button
-		[Tooltip("the frequency to apply when testing this shake via the TestShake button")]
+		/// 通过 TestShake 按钮测试时使用的频率。
+		[Tooltip("通过 TestShake 按钮测试时使用的频率。")]
 		public float TestFrequency = 20f;
 
 		[MMFInspectorButton("TestShake")]
@@ -176,7 +176,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 			_timescaleMode = useUnscaledTime ? TimescaleModes.Unscaled : TimescaleModes.Scaled;
 			if (!infinite)
 			{
-				yield return new WaitForSeconds(duration);
+				yield return MMCoroutine.WaitFor(duration);
 				CameraReset();
 			}                        
 		}

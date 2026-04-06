@@ -12,7 +12,7 @@ namespace MoreMountains.Tools
 	[AddComponentMenu("More Mountains/Tools/VFX/Panning Texture")]
 	public class MMPanningTexture : MonoBehaviour
 	{
-		[MMInformation("This script will let you pan a texture on an attached Renderer.",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("该脚本可让挂载对象上的 Renderer 纹理持续平移滚动。",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
 
 		/// whether or not this texture should pan
 		public bool TextureShouldPan = true;
@@ -21,10 +21,10 @@ namespace MoreMountains.Tools
 		/// the name of the sorting layer to render the texture at
 		public string SortingLayerName = "Above";
 		/// the property name, for example "_MainTex"
-		[Tooltip("the property name, for example _MainTex")]
+		[Tooltip("要修改的材质属性名，例如 _MainTex_ST（若使用 _MainTex 通常只适用于贴图偏移）")]
 		public string MaterialPropertyName = "_MainTex_ST";
 		/// the index of the material
-		[Tooltip("the index of the material")]
+		[Tooltip("要操作的材质索引（对应 Renderer.sharedMaterials 的下标）")]
 		public int MaterialIndex = 0;
         
 		#if MM_UI

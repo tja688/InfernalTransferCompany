@@ -15,16 +15,16 @@ namespace MoreMountains.Tools
 	{
 		[MMInspectorGroup("Repositionable Joystick", true, 22)]
 		/// the canvas group to use as the joystick's knob
-		[Tooltip("the canvas group to use as the joystick's knob")]
+		[Tooltip("作为摇杆圆帽使用的失踪组")]
 		public CanvasGroup KnobCanvasGroup;
 		/// the canvas group to use as the joystick's background
-		[Tooltip("the canvas group to use as the joystick's background")]
+		[Tooltip("作为摇杆背景使用了剩余的组")]
 		public CanvasGroup BackgroundCanvasGroup;
 		/// if this is true, the joystick won't be able to travel beyond the bounds of the top level canvas
-		[Tooltip("if this is true, the joystick won't be able to travel beyond the bounds of the top level canvas")]
+		[Tooltip("若开启，摇杆将无法移动到顶层 Canvas 边界之外")]
 		public bool ConstrainToInitialRectangle = true;
 		/// if this is true, the joystick will return back to its initial position when released
-		[Tooltip("if this is true, the joystick will return back to its initial position when released")]
+		[Tooltip("若开启，松开摇杆时它会回到初始位置")]
 		public bool ResetPositionToInitialOnRelease = false;
 
 		protected Vector3 _initialPosition;
@@ -39,7 +39,6 @@ namespace MoreMountains.Tools
 		{
 			base.Start();
 
-			// we store the detection zone's initial position
 			_rectTransform = GetComponent<RectTransform>();
 			_initialPosition = BackgroundCanvasGroup.GetComponent<RectTransform>().position;
 		}
@@ -61,29 +60,53 @@ namespace MoreMountains.Tools
 		/// <param name="data">Data.</param>
 		public override void OnPointerDown(PointerEventData data)
 		{
-			base.OnPointerDown(data);
+			_targetOpacity = PressedOpacity;
+			OnPointerDownEvent.Invoke();
 			
-			// if we're in "screen space - camera" render mode
-			if (ParentCanvasRenderMode == RenderMode.ScreenSpaceCamera)
-			{
-				_newPosition = TargetCamera.ScreenToWorldPoint(data.position);
-			}
-			// otherwise
-			else
-			{
-				_newPosition = data.position;
-			}
-			_newPosition.z = this.transform.position.z;
+			_newPosition = ConvertToWorld(data.position);
 			
 			if (!WithinBounds())
 			{
 				return;
 			}
 
-			// we define a new neutral position
 			BackgroundCanvasGroup.transform.position = _newPosition;
 			SetNeutralPosition(_newPosition);
 			_knobTransform.position = _newPosition;
+			
+			_initialZPosition = _newPosition.z;
+		}
+
+		/// <summary>
+		/// Override OnDrag to handle repositionable joystick with rotated camera
+		/// </summary>
+		public override void OnDrag(PointerEventData eventData)
+		{
+			OnDragEvent.Invoke();
+
+			_newTargetPosition = ConvertToWorld(eventData.position);
+
+			Vector3 localDelta = TransformToLocalSpace(_newTargetPosition - _neutralPosition);
+
+			localDelta = Vector2.ClampMagnitude(localDelta, ComputedMaxRange);
+
+			if (!HorizontalAxisEnabled)
+			{
+				localDelta.x = 0;
+			}
+			if (!VerticalAxisEnabled)
+			{
+				localDelta.y = 0;
+			}
+
+			RawValue.x = EvaluateInputValue(localDelta.x);
+			RawValue.y = EvaluateInputValue(localDelta.y);
+
+			_newTargetPosition = _neutralPosition + TransformToWorldSpace(localDelta);
+			_newJoystickPosition = _newTargetPosition;
+			_newJoystickPosition.z = _initialZPosition;
+
+			_knobTransform.position = _newJoystickPosition;
 		}
 
 		/// <summary>
@@ -96,7 +119,14 @@ namespace MoreMountains.Tools
 			{
 				return true;
 			}
-			return RectTransformUtility.RectangleContainsScreenPoint(_rectTransform, _newPosition);
+
+			Vector2 screenPoint = _newPosition;
+			if (ParentCanvasRenderMode == RenderMode.ScreenSpaceCamera && TargetCamera != null)
+			{
+				screenPoint = TargetCamera.WorldToScreenPoint(_newPosition);
+			}
+			
+			return RectTransformUtility.RectangleContainsScreenPoint(_rectTransform, screenPoint, TargetCamera);
 		}
 
 		/// <summary>
@@ -131,16 +161,16 @@ namespace MoreMountains.Tools
 			{
 				if (KnobCanvasGroup != null)
 				{
-					Handles.DrawWireDisc(KnobCanvasGroup.transform.position, Vector3.forward, ComputedMaxRange);	
+					Handles.DrawWireDisc(KnobCanvasGroup.transform.position, this.transform.forward, ComputedMaxRange);	
 				}
 				else
 				{
-					Handles.DrawWireDisc(this.transform.position, Vector3.forward, ComputedMaxRange);	
+					Handles.DrawWireDisc(this.transform.position, this.transform.forward, ComputedMaxRange);	
 				}
 			}
 			else
 			{
-				Handles.DrawWireDisc(_neutralPosition, Vector3.forward, ComputedMaxRange);
+				Handles.DrawWireDisc(_neutralPosition, this.transform.forward, ComputedMaxRange);
 			}
 		}
 		#endif

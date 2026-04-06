@@ -8,7 +8,8 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will let you change the width and color of a target line renderer over time
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the width and color of a target line renderer over time")]
+	[FeedbackHelp("此反馈可随时间修改目标 LineRenderer 的宽度和颜色。")]
+	[System.Serializable]
 	[FeedbackPath("Renderer/Line Renderer")]
 	public class MMF_LineRenderer : MMF_Feedback
 	{
@@ -29,37 +30,37 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Line Renderer", true, 24, true)]
 		/// the line renderer whose properties you want to modify
-		[Tooltip("the line renderer whose properties you want to modify")]
+		[Tooltip("要修改其属性的线条渲染器")]
 		public LineRenderer TargetLineRenderer;
 		/// whether the feedback should affect the sprite renderer instantly or over a period of time
-		[Tooltip("whether the feedback should affect the sprite renderer instantly or over a period of time")]
+		[Tooltip("该反馈应立即生效，还是在一段时间内逐步作用")]
 		public Modes Mode = Modes.OverTime;
 		/// how long the sprite renderer should change over time
-		[Tooltip("how long the sprite renderer should change over time")]
+		[Tooltip("该效果在渐变模式下持续变化的时间")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public float Duration = 2f;
 		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		[Tooltip("若启用，即使该反馈仍在执行中，再次调用也会立刻重新触发；若关闭，则当前一次播放结束前会阻止新的 Play 调用。")] 
 		public bool AllowAdditivePlays = false;
 		/// a curve to use to animate the line renderer's density over time
-		[Tooltip("a curve to use to animate the line renderer's density over time")]
+		[Tooltip("用于随时间驱动 LineRenderer 密度变化的曲线")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public MMTweenType Transition = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0)));
 
 		[MMFInspectorGroup("Width", true, 25)]
 		/// whether or not to modify the line renderer's width
-		[Tooltip("whether or not to modify the line renderer's width")]
+		[Tooltip("是否修改 线条渲染器 的宽度")]
 		public bool ModifyWidth = true;
 		/// a curve defining the new width of the line renderer, describing the world space width of the line at each point along its length
-		[Tooltip("a curve defining the new width of the line renderer, describing the world space width of the line at each point along its length")]
+		[Tooltip("定义 LineRenderer 新宽度的曲线，描述线段沿长度各位置在世界空间中的宽度。")]
 		public AnimationCurve NewWidth = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 0));
 
 		[MMFInspectorGroup("Color", true, 28)]
 		/// whether or not to modify the line renderer's color
-		[Tooltip("whether or not to modify the line renderer's color")]
+		[Tooltip("是否修改 线条渲染器 的颜色")]
 		public bool ModifyColor = true;
 		/// the colors to apply to the sprite renderer over time
-		[Tooltip("the colors to apply to the sprite renderer over time")]
+		[Tooltip("随时间应用的颜色变化")]
 		public Gradient NewColor = new Gradient();
 
 		/// the duration of this feedback is the duration of the sprite renderer, or 0 if instant
@@ -80,7 +81,7 @@ namespace MoreMountains.Feedbacks
 			{
 				if (TargetLineRenderer == null)
 				{
-					Debug.LogError(Owner.name+ " line renderer feedback: you need to set a TargetLineRenderer in the inspector for this feedback to be able to operate.");
+					Debug.LogWarning("[Line Renderer Feedback] The line renderer feedback on "+Owner.name+" doesn't have a TargetLineRenderer, it won't work. You need to specify one in its inspector.");
 					return;
 				}
 				
@@ -96,7 +97,7 @@ namespace MoreMountains.Feedbacks
 		/// <param name="feedbacksIntensity"></param>
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
-			if (!Active || !FeedbackTypeAuthorized)
+			if (!Active || !FeedbackTypeAuthorized || (TargetLineRenderer == null))
 			{
 				return;
 			}

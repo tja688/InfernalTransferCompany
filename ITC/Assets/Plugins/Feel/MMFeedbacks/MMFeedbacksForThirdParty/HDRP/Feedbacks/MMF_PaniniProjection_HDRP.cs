@@ -12,9 +12,10 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// It requires you have in your scene an object with a Volume with Bloom active, and a MMPaniniProjectionShaker_HDRP component.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to control Panini Projection distance and crop to fit over time. " +
-	              "It requires you have in your scene an object with a Volume " +
-	              "with PaniniProjection active, and a MMPaniniProjectionShaker_HDRP component.")]
+	[System.Serializable]
+	[FeedbackHelp("此反馈可让你随时间控制 Panini Projection 的 Distance 与 Crop To Fit。" +
+	              "它要求你的场景中存在一个带有 Volume 的对象，且该对象" +
+	              "已启用 PaniniProjection，并挂有 MMPaniniProjectionShaker_HDRP 组件。")]
 	#if MM_HDRP
 	[FeedbackPath("PostProcess/Panini Projection HDRP")]
 	#endif
@@ -37,28 +38,28 @@ namespace MoreMountains.FeedbacksForThirdParty
 
 		[MMFInspectorGroup("Panini Projection", true, 26)]
 		/// the duration of the shake, in seconds
-		[Tooltip("the duration of the shake, in seconds")]
+		[Tooltip("抖动持续时间，单位为秒")]
 		public float Duration = 0.2f;
 		/// whether or not to reset shaker values after shake
-		[Tooltip("whether or not to reset shaker values after shake")]
+		[Tooltip("抖动结束后是否重置抖动器的数值")]
 		public bool ResetShakerValuesAfterShake = true;
 		/// whether or not to reset the target's values after shake
-		[Tooltip("whether or not to reset the target's values after shake")]
+		[Tooltip("抖动结束后是否重置目标对象的数值")]
 		public bool ResetTargetValuesAfterShake = true;
 
 		[MMFInspectorGroup("Distance", true, 27)]
 		/// whether or not to add to the initial value
-		[Tooltip("whether or not to add to the initial value")]
+		[Tooltip("是否在初始值基础上叠加")]
 		public bool RelativeDistance = false;
 		/// the curve used to animate the distance value on
-		[Tooltip("the curve used to animate the distance value on")]
+		[Tooltip("用于驱动距离值变化的曲线")]
 		public AnimationCurve ShakeDistance = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(0f, 1f)]
 		public float RemapDistanceZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(0f, 1f)]
 		public float RemapDistanceOne = 1f;
 

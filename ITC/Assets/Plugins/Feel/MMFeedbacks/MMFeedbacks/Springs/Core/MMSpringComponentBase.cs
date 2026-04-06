@@ -88,7 +88,7 @@ namespace MoreMountains.Feedbacks
 		public virtual void RestoreInitialValue() { }
 		
 		/// <summary>
-		/// Sets the current value of this spring as its new initial value, overriding the previous one
+		/// Sets 当前 spring 的数值。 as its new initial value, overriding the previous one
 		/// </summary>
 		public virtual void ResetInitialValue() { }
 		

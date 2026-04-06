@@ -10,10 +10,11 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you apply basic controls to a target VisualEffect
+	/// 这个反馈可对目标 VisualEffect 执行基础控制。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you apply basic controls to a target VisualEffect")]
+	[System.Serializable]
+	[FeedbackHelp("这个反馈可对目标 VisualEffect 执行基础控制。")]
 	#if MM_VISUALEFFECTGRAPH
 	[FeedbackPath("Particles/VisualEffect")]
 	#endif
@@ -33,8 +34,8 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public override bool HasRandomness => true;
 		
 		[MMFInspectorGroup("Visual Effect", true, 41)]
-		/// the duration for the player to consider. This won't impact your visual effect, but is a way to communicate to the MMF Player the duration of this feedback. Usually you'll want it to match your actual visual effect, and setting it can be useful to have this feedback work with holding pauses.
-		[Tooltip("the duration for the player to consider. This won't impact your visual effect, but is a way to communicate to the MMF Player the duration of this feedback. Usually you'll want it to match your actual visual effect, and setting it can be useful to have this feedback work with holding pauses.")]
+		/// 这是提供给 MMF_Player 参考的反馈持续时间，不会直接影响你的 VisualEffect。通常建议让它与实际视觉效果的持续时间一致；这样在使用 Holding Pause 时，本反馈的时序会更准确。
+		[Tooltip("这是提供给 MMF_Player 参考的反馈持续时间，不会直接影响你的 VisualEffect。通常建议让它与实际视觉效果的持续时间一致；这样在使用 Holding Pause 时，本反馈的时序会更准确。")]
 		public float DeclaredDuration = 0f;
 		
 		#if MM_VISUALEFFECTGRAPH
@@ -42,32 +43,32 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// the various modes to control the target visual effect
 		public enum Modes { Play, Stop, Pause, Unpause, AdvanceOneFrame, Reinit, SetPlayRate, Simulate }
 		
-		/// the visual effect to control when playing this feedback
-		[Tooltip("the visual effect to control when playing this feedback")]
+		/// 播放此反馈时要控制的 VisualEffect。
+		[Tooltip("播放此反馈时要控制的 VisualEffect。")]
 		public VisualEffect TargetVisualEffect;
-		/// the selected mode, the instruction to send to the target visual effect when playing this feedback
-		[Tooltip("the selected mode, the instruction to send to the target visual effect when playing this feedback")]
+		/// 播放此反馈时发送给目标 VisualEffect 的控制模式。
+		[Tooltip("播放此反馈时发送给目标 VisualEffect 的控制模式。")]
 		public Modes Mode = Modes.Play;
-		/// when in SetPlayRate mode, the new play rate to apply
-		[Tooltip("when in SetPlayRate mode, the new play rate to apply")]
+		/// 在 SetPlayRate 模式下要应用的新播放速率。
+		[Tooltip("在 SetPlayRate 模式下要应用的新播放速率。")]
 		[MMFEnumCondition("Mode", (int)Modes.SetPlayRate)]
 		public float NewPlayRate = 1f;
-		/// when in Simulate mode, the delta time to use
-		[Tooltip("when in Simulate mode, the delta time to use")]
+		/// 在 Simulate 模式下使用的 delta time。
+		[Tooltip("在模拟模式下使用的增量时间。")]
 		[MMFEnumCondition("Mode", (int)Modes.Simulate)]
 		public float StepDeltaTime = 1f;
-		/// when in Simulate mode, the number of steps to simulate
-		[Tooltip("when in Simulate mode, the number of steps to simulate")]
+		/// 在 Simulate 模式下要模拟的步数。
+		[Tooltip("在 Simulate 模式下要模拟的步数。")]
 		[MMFEnumCondition("Mode", (int)Modes.Simulate)]
 		public uint StepCount = 5;
-		/// whether or not to stop the visual effect when stopping this feedback
-		[Tooltip("whether or not to stop the visual effect when stopping this feedback")] 
+		/// 停止此反馈时，是否一并停止该 VisualEffect。
+		[Tooltip("停止此反馈时，是否一并停止该 VisualEffect。")] 
 		public bool StopVisualEffectOnStopFeedback = false;
-		/// whether or not to stop the visual effect when resetting this feedback
-		[Tooltip("whether or not to stop the visual effect when resetting this feedback")] 
+		/// 重置此反馈时，是否一并停止该 VisualEffect。
+		[Tooltip("重置此反馈时，是否一并停止该 VisualEffect。")] 
 		public bool StopVisualEffectOnReset = false;
-		/// whether or not to stop the visual effect when initializing this feedback
-		[Tooltip("whether or not to stop the visual effect when initializing this feedback")] 
+		/// 初始化此反馈时，是否一并停止该 VisualEffect。
+		[Tooltip("初始化此反馈时，是否一并停止该 VisualEffect。")] 
 		public bool StopVisualEffectOnInit = false;
 
 		protected VFXEventAttribute _eventAttribute;

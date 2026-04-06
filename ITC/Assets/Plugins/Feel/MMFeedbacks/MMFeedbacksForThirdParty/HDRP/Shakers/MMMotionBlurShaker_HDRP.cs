@@ -19,16 +19,16 @@ namespace MoreMountains.FeedbacksForThirdParty
 	{
 		[MMInspectorGroup("Motion Blur Intensity", true, 48)]
 		/// whether or not to add to the initial value
-		[Tooltip("whether or not to add to the initial value")]
+		[Tooltip("是否在初始值基础上叠加")]
 		public bool RelativeIntensity = false;
 		/// the curve used to animate the intensity value on
-		[Tooltip("the curve used to animate the intensity value on")]
+		[Tooltip("用于驱动强度值变化的曲线")]
 		public AnimationCurve ShakeIntensity = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		public float RemapIntensityZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		public float RemapIntensityOne = 1000f;
 
 		#if MM_HDRP

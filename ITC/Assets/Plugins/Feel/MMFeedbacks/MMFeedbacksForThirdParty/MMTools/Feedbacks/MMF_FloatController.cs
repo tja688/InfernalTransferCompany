@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will trigger a one time play on a target FloatController
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback lets you trigger a one time play on a target FloatController.")]
+	[FeedbackHelp("此反馈可在目标 FloatController 上触发一次性播放。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("GameObject/FloatController")]
 	public class MMF_FloatController : MMF_Feedback
 	{
@@ -24,7 +25,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.GameObjectColor; } }
 		public override bool EvaluateRequiresSetup() { return (TargetFloatController == null); }
 		public override string RequiredTargetText { get { return TargetFloatController != null ? TargetFloatController.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetFloatController be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先指定 TargetFloatController 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 		public override bool HasRandomness => true;
 		public override bool CanForceInitialValue => true;
@@ -34,47 +35,47 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Float Controller", true, 36, true)]
 		/// the mode this controller is in
-		[Tooltip("the mode this controller is in")]
+		[Tooltip("该控制器当前所处的模式")]
 		public Modes Mode = Modes.OneTime;
 		/// the float controller to trigger a one time play on
-		[Tooltip("the float controller to trigger a one time play on")]
+		[Tooltip("要触发一次性播放的 浮点控制器")]
 		public FloatController TargetFloatController;
 		/// a list of extra and optional float controllers to trigger a one time play on
-		[Tooltip("a list of extra and optional float controllers to trigger a one time play on")]
+		[Tooltip("额外的可选 FloatController 列表，也会一并触发一次性播放")]
 		public List<FloatController> ExtraTargetFloatControllers;
 		/// whether this should revert to original at the end
-		[Tooltip("whether this should revert to original at the end")]
+		[Tooltip("结束时是否恢复为原始值")]
 		public bool RevertToInitialValueAfterEnd = false;
 		/// the duration of the One Time shake
-		[Tooltip("the duration of the One Time shake")]
+		[Tooltip("一次的持续时间")]
 		[MMFEnumCondition("Mode", (int)Modes.OneTime)]
 		public float OneTimeDuration = 1f;
 		/// the amplitude of the One Time shake (this will be multiplied by the curve's height)
-		[Tooltip("the amplitude of the One Time shake (this will be multiplied by the curve's height)")]
+		[Tooltip("One Time 抖动的幅度（会再乘以曲线当前高度）")]
 		[MMFEnumCondition("Mode", (int)Modes.OneTime)]
 		public float OneTimeAmplitude = 1f;
 		/// the low value to remap the normalized curve value to 
-		[Tooltip("the low value to remap the normalized curve value to")]
+		[Tooltip("归一化曲线值要重映射到的较低值")]
 		[MMFEnumCondition("Mode", (int)Modes.OneTime)]
 		public float OneTimeRemapMin = 0f;
 		/// the high value to remap the normalized curve value to 
-		[Tooltip("the high value to remap the normalized curve value to")]
+		[Tooltip("归一化曲线值要重映射到的较高值")]
 		[MMFEnumCondition("Mode", (int)Modes.OneTime)]
 		public float OneTimeRemapMax = 1f;
 		/// the curve to apply to the one time shake
-		[Tooltip("the curve to apply to the one time shake")]
+		[Tooltip("一次性应用到臀部上的曲线")]
 		[MMFEnumCondition("Mode", (int)Modes.OneTime)]
 		public AnimationCurve OneTimeCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to move this float controller to
-		[Tooltip("the value to move this float controller to")]
+		[Tooltip("这个浮点控制器要移动到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.ToDestination)]
 		public float ToDestinationValue = 1f;
 		/// the duration over which to move the value
-		[Tooltip("the duration over which to move the value")]
+		[Tooltip("数值移动到目标所需的持续时间")]
 		[MMFEnumCondition("Mode", (int)Modes.ToDestination)]
 		public float ToDestinationDuration = 1f;
 		/// the curve over which to move the value in ToDestination mode
-		[Tooltip("the curve over which to move the value in ToDestination mode")]
+		[Tooltip("ToDestination 模式下用于驱动数值移动的曲线")]
 		[MMFEnumCondition("Mode", (int)Modes.ToDestination)]
 		public AnimationCurve ToDestinationCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 

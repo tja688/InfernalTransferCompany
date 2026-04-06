@@ -20,21 +20,21 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public enum Modes { OverTime, Instant }
 		
 		[MMFInspectorGroup("Color", true, 55, true)]
-		/// whether the feedback should affect the Image instantly or over a period of time
-		[Tooltip("whether the feedback should affect the Image instantly or over a period of time")]
+		/// 此反馈是立即修改 Image，还是在一段时间内逐步变化。
+		[Tooltip("此反馈是立即修改 Image，还是在一段时间内逐步变化。")]
 		public Modes Mode = Modes.OverTime;
-		/// how long the Image should change over time
-		[Tooltip("how long the Image should change over time")]
+		/// Image 在一段时间内变化时的持续时间。
+		[Tooltip("Image 在一段时间内变化时的持续时间。")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public float Duration = 0.2f;
-		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		/// 若启用，即使当前反馈仍在执行中，再次调用也会重新触发；若关闭，在本次播放结束前新的 Play 调用将被忽略。
+		[Tooltip("若启用，即使当前反馈仍在执行中，再次调用也会重新触发；若关闭，在本次播放结束前新的 Play 调用将被忽略。")] 
 		public bool AllowAdditivePlays = false;
-		/// whether or not to modify the color of the image
-		[Tooltip("whether or not to modify the color of the image")]
+		/// 是否修改 Image 的颜色。
+		[Tooltip("是否修改图片的颜色。")]
 		public bool ModifyColor = true;
-		/// the colors to apply to the Image over time
-		[Tooltip("the colors to apply to the Image over time")]
+		/// Image 在时间轴上要使用的颜色渐变。
+		[Tooltip("Image 在时间轴上要使用的颜色渐变。")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public Gradient ColorOverTime = 
 			new Gradient()
@@ -52,21 +52,21 @@ namespace MoreMountains.FeedbacksForThirdParty
 					new GradientAlphaKey(1f, 1f)
 				}
 			};
-		/// the color to move to in instant mode
-		[Tooltip("the color to move to in instant mode")]
+		/// Instant 模式下要立即切换到的颜色。
+		[Tooltip("Instant 模式下要立即切换到的颜色。")]
 		[MMFEnumCondition("Mode", (int)Modes.Instant)]
 		public Color InstantColor;
-		/// if this is true, the initial color will be applied to the gradient start
-		[Tooltip("if this is true, the initial color will be applied to the gradient start")]
+		/// 若启用，初始颜色会写入渐变起点。
+		[Tooltip("若启用，初始颜色会写入渐变起点。")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public bool ApplyInitialColorToGradientStart = false;
-		/// if this is true, the initial color will be applied to the gradient end
-		[Tooltip("if this is true, the initial color will be applied to the gradient end")]
+		/// 若启用，初始颜色会写入渐变终点。
+		[Tooltip("若启用，初始颜色会写入渐变终点。")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public bool ApplyInitialColorToGradientEnd = false;
-		/// if this is true, the initial color will be applied to the gradient start and end on play
+		/// 若启用，初始颜色会写入渐变起点。 and end on play
 		[FormerlySerializedAs("GrabInitialColorsOnPlay")]
-		[Tooltip("if this is true, the initial color will be applied to the gradient start and end on play")]
+		[Tooltip("若启用，初始颜色会写入渐变起点。 and end on play")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public bool ApplyInitialColorsOnPlay = true;
 
@@ -83,6 +83,12 @@ namespace MoreMountains.FeedbacksForThirdParty
 			base.CustomInitialization(owner);
 
 			HandleApplyInitialColors();
+        
+			if ((_visualElements == null) || (_visualElements.Count == 0))
+			{
+				return;
+			}
+			
 			_initialInstantColor = GetInitialColor();
 		}
 
@@ -128,6 +134,11 @@ namespace MoreMountains.FeedbacksForThirdParty
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
 			if (!Active || !FeedbackTypeAuthorized)
+			{
+				return;
+			}
+			
+			if ((_visualElements == null) || (_visualElements.Count == 0))
 			{
 				return;
 			}

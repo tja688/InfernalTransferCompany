@@ -27,93 +27,93 @@ namespace MoreMountains.Tools
 		public enum ButtonStates { Off, ButtonDown, ButtonPressed, ButtonUp, Disabled }
 		[Header("Binding")]
 		/// The method(s) to call when the button gets pressed down
-		[Tooltip("The method(s) to call when the button gets pressed down")]
+		[Tooltip("按钮首次被按下时要调用的方法")]
 		public UnityEvent ButtonPressedFirstTime;
 		/// The method(s) to call when the button gets released
-		[Tooltip("The method(s) to call when the button gets released")]
+		[Tooltip("按钮释放时要调用的方法")]
 		public UnityEvent ButtonReleased;
 		/// The method(s) to call while the button is being pressed
-		[Tooltip("The method(s) to call while the button is being pressed")]
+		[Tooltip("按钮持续按下期间要调用的方法")]
 		public UnityEvent ButtonPressed;
 
 		[Header("Sprite Swap")]
-		[MMInformation("Here you can define, for disabled and pressed states, if you want a different sprite, and a different color.", MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("你可以在这里为禁用和按下状态分别指定不同的 Sprite 与颜色。", MMInformationAttribute.InformationType.Info,false)]
 		/// the sprite to use on the button when it's in the disabled state
-		[Tooltip("the sprite to use on the button when it's in the disabled state")]
+		[Tooltip("按钮处于禁用状态时使用的 Sprite")]
 		public Sprite DisabledSprite;
 		/// whether or not to change color when the button is disabled
-		[Tooltip("whether or not to change color when the button is disabled")]
+		[Tooltip("按钮禁用时是否切换颜色")]
 		public bool DisabledChangeColor = false;
 		/// the color to use when the button is disabled
-		[Tooltip("the color to use when the button is disabled")]
+		[Tooltip("按钮禁用时使用的颜色")]
 		[MMCondition("DisabledChangeColor", true)]
 		public Color DisabledColor = Color.white;
 		/// the sprite to use on the button when it's in the pressed state
-		[Tooltip("the sprite to use on the button when it's in the pressed state")]
+		[Tooltip("按钮处于按下状态时使用的 Sprite")]
 		public Sprite PressedSprite;
 		/// whether or not to change the button color on press
-		[Tooltip("whether or not to change the button color on press")]
+		[Tooltip("按钮按下时是否切换颜色")]
 		public bool PressedChangeColor = false;
 		/// the color to use when the button is pressed
-		[Tooltip("the color to use when the button is pressed")]
+		[Tooltip("按钮按下时使用的颜色")]
 		[MMCondition("PressedChangeColor", true)]
 		public Color PressedColor= Color.white;
 		/// the sprite to use on the button when it's in the highlighted state
-		[Tooltip("the sprite to use on the button when it's in the highlighted state")]
+		[Tooltip("按钮处于高亮状态时使用的 Sprite")]
 		public Sprite HighlightedSprite;
 		/// whether or not to change color when highlighting the button
-		[Tooltip("whether or not to change color when highlighting the button")]
+		[Tooltip("按钮高亮时是否切换颜色")]
 		public bool HighlightedChangeColor = false;
 		/// the color to use when the button is highlighted 
-		[Tooltip("the color to use when the button is highlighted")]
+		[Tooltip("按钮高亮时使用的颜色")]
 		[MMCondition("HighlightedChangeColor", true)]
 		public Color HighlightedColor = Color.white;
 
 		[Header("Opacity")]
-		[MMInformation("Here you can set different opacities for the button when it's pressed, idle, or disabled. Useful for visual feedback.",MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("你可以在这里分别设置按钮在按下、空闲、禁用状态下的透明度，用于增强视觉反馈。",MMInformationAttribute.InformationType.Info,false)]
 		/// the new opacity to apply to the canvas group when the button is pressed
-		[Tooltip("the opacity to apply to the canvas group when the button is pressed")]
+		[Tooltip("按钮按下时要应用到 CanvasGroup 的透明度")]
 		public float PressedOpacity = 1f;
 		/// the new opacity to apply to the canvas group when the button is idle
-		[Tooltip("the new opacity to apply to the canvas group when the button is idle")]
+		[Tooltip("按钮空闲时要应用到 CanvasGroup 的透明度")]
 		public float IdleOpacity = 1f;
 		/// the new opacity to apply to the canvas group when the button is disabled
-		[Tooltip("the new opacity to apply to the canvas group when the button is disabled")]
+		[Tooltip("按钮禁用时要应用到 CanvasGroup 的透明度")]
 		public float DisabledOpacity = 1f;
 
 		[Header("Delays")]
-		[MMInformation("Specify here the delays to apply when the button is pressed initially, and when it gets released. Usually you'll keep them at 0.",MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("在这里指定按钮首次按下和释放时要附加的延迟。通常保持为 0 即可。",MMInformationAttribute.InformationType.Info,false)]
 		/// the delay to apply to events when the button gets pressed for the first time
-		[Tooltip("the delay to apply to events when the button gets pressed for the first time")]
+		[Tooltip("按钮首次按下时，事件触发前要等待的延迟")]
 		public float PressedFirstTimeDelay = 0f;
 		/// the delay to apply to events when the button gets released
-		[Tooltip("the delay to apply to events when the button gets released")]
+		[Tooltip("按钮释放时，事件触发前要等待的延迟")]
 		public float ReleasedDelay = 0f;
 
 		[Header("Buffer")]
 		/// the duration (in seconds) after a press during which the button can't be pressed again
-		[Tooltip("the duration (in seconds) after a press during which the button can't be pressed again")]
+		[Tooltip("每次按下后按钮不可再次按下的缓冲持续时间（秒）")]
 		public float BufferDuration = 0f;
 
 		[Header("Animation")]
-		[MMInformation("Here you can bind an animator, and specify animation parameter names for the various states.",MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("你可以在这里绑定 Animator，并为各个状态指定对应的动画参数名。",MMInformationAttribute.InformationType.Info,false)]
 		/// an animator you can bind to this button to have its states updated to reflect the button's states
-		[Tooltip("an animator you can bind to this button to have its states updated to reflect the button's states")]
+		[Tooltip("可绑定到此按钮的 Animator；绑定后会随按钮状态同步更新")]
 		public Animator Animator;
 		/// the name of the animation parameter to turn true when the button is idle
-		[Tooltip("the name of the animation parameter to turn true when the button is idle")]
+		[Tooltip("按钮空闲时要设为 true 的动画参数名")]
 		public string IdleAnimationParameterName = "Idle";
 		/// the name of the animation parameter to turn true when the button is disabled
-		[Tooltip("the name of the animation parameter to turn true when the button is disabled")]
+		[Tooltip("按钮禁用时要设为 true 的动画参数名")]
 		public string DisabledAnimationParameterName = "Disabled";
 		/// the name of the animation parameter to turn true when the button is pressed
-		[Tooltip("the name of the animation parameter to turn true when the button is pressed")]
+		[Tooltip("按钮按下时要设为 true 的动画参数名")]
 		public string PressedAnimationParameterName = "Pressed";
 
 		[Header("Mouse Mode")]
-		[MMInformation("If you set this to true, you'll need to actually press the button for it to be triggered, otherwise a simple hover will trigger it (better to leave it unchecked if you're going for touch input).", MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("如果将此项设为 true，必须真的按下按钮才会触发；否则仅仅悬停就会触发。若以触控输入为主，通常建议不要勾选。", MMInformationAttribute.InformationType.Info,false)]
 		/// If you set this to true, you'll need to actually press the button for it to be triggered, otherwise a simple hover will trigger it (better for touch input).
-		[Tooltip("If you set this to true, you'll need to actually press the button for it to be triggered, otherwise a simple hover will trigger it (better for touch input).")]
+		[Tooltip("如果将此项设为 true，必须真的按下按钮才会触发；否则仅仅悬停就会触发。若以触控输入为主，通常建议关闭此项。")]
 		public bool MouseMode = false;
 
 		public bool PreventLeftClick = false;
@@ -320,7 +320,7 @@ namespace MoreMountains.Tools
 				return;
 			}
 			
-			if (Time.time - _lastClickTimestamp < BufferDuration)
+			if (Time.unscaledTime - _lastClickTimestamp < BufferDuration)
 			{
 				return;
 			}
@@ -330,7 +330,7 @@ namespace MoreMountains.Tools
 				return;
 			}
 			CurrentState = ButtonStates.ButtonDown;
-			_lastClickTimestamp = Time.time;
+			_lastClickTimestamp = Time.unscaledTime;
 			InvokeButtonStateChange(PointerEventData.FramePressState.Pressed, data);
 			if ((Time.timeScale != 0) && (PressedFirstTimeDelay > 0))
 			{

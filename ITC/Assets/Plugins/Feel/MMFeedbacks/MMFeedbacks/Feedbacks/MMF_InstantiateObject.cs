@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.Scripting.APIUpdating;
@@ -9,8 +9,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will instantiate the associated object (usually a VFX, but not necessarily), optionnally creating an object pool of them for performance
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to instantiate the object specified in its inspector, at the feedback's position (plus an optional offset). You can also optionally (and automatically) create an object pool at initialization to save on performance. In that case you'll need to specify a pool size (usually the maximum amount of these instantiated objects you plan on having in your scene at each given time).")]
+	[FeedbackHelp("此反馈会在反馈位置实例化 Inspector 中指定的对象，你也可以额外设置偏移。你还可以选择在初始化时自动创建对象池以提升性能；若启用该方式，就需要指定对象池容量，通常应设为场景中这些实例可能同时存在的最大数量。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("GameObject/Instantiate Object")]
 	public class MMF_InstantiateObject : MMF_Feedback
 	{
@@ -28,71 +29,71 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.GameObjectColor; } }
 		public override bool EvaluateRequiresSetup() { return (GameObjectToInstantiate == null); }
 		public override string RequiredTargetText { get { return GameObjectToInstantiate != null ? GameObjectToInstantiate.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a GameObjectToInstantiate be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先设置a GameObjectToInstantiate才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 
 		[MMFInspectorGroup("Instantiate Object", true, 37, true)]
 		/// the object to instantiate
-		[Tooltip("the object to instantiate")]
+		[Tooltip("要实例化的对象")]
 		[FormerlySerializedAs("VfxToInstantiate")]
 		public GameObject GameObjectToInstantiate;
 
 		[MMFInspectorGroup("Position", true, 39)]
 		/// the chosen way to position the object 
-		[Tooltip("the chosen way to position the object")]
+		[Tooltip("对象的定位方式")]
 		public PositionModes PositionMode = PositionModes.FeedbackPosition;
 		/// the chosen way to position the object 
-		[Tooltip("the chosen way to position the object")]
+		[Tooltip("对象的定位方式")]
 		public bool AlsoApplyRotation = false;
 		/// the chosen way to position the object 
-		[Tooltip("the chosen way to position the object")]
+		[Tooltip("对象的定位方式")]
 		public bool AlsoApplyScale = false;
 		/// the transform at which to instantiate the object
-		[Tooltip("the transform at which to instantiate the object")]
+		[Tooltip("实例化对象时所使用的 Transform")]
 		[MMFEnumCondition("PositionMode", (int)PositionModes.Transform)]
 		public Transform TargetTransform;
 		/// the transform at which to instantiate the object
-		[Tooltip("the transform at which to instantiate the object")]
+		[Tooltip("实例化对象时所使用的 Transform")]
 		[MMFEnumCondition("PositionMode", (int)PositionModes.WorldPosition)]
 		public Vector3 TargetPosition;
 		/// the position offset at which to instantiate the object
-		[Tooltip("the position offset at which to instantiate the object")]
+		[Tooltip("实例化位置偏移")]
 		[FormerlySerializedAs("VfxPositionOffset")]
 		public Vector3 PositionOffset;
 
 		/// if this is true, instantiation position will be randomized between RandomizeMin and RandomizeMax 
-		[Tooltip("if this is true, instantiation position will be randomized between RandomizeMin and RandomizeMax")]
+		[Tooltip("若开启，实例化位置会在 RandomizeMin 与 RandomizeMax 之间随机")]
 		public bool RandomizePosition = false;
-		/// the minimum value we'll randomize our position with
-		[Tooltip("the minimum value we'll randomize our position with")]
+		/// 位置随机范围最小值
+		[Tooltip("位置随机范围最小值")]
 		[MMFCondition("RandomizePosition", true)]
 		public Vector3 RandomizedPositionMin = Vector3.zero; 
-		/// the maximum value we'll randomize our position with
-		[Tooltip("the maximum value we'll randomize our position with")]
+		/// 位置随机范围最大值
+		[Tooltip("位置随机范围最大值")]
 		[MMFCondition("RandomizePosition", true)]
 		public Vector3 RandomizedPositionMax = Vector3.one;
 
 		[MMFInspectorGroup("Parent", true, 47)]
-		/// if specified, the instantiated object will be parented to this transform 
-		[Tooltip("if specified, the instantiated object will be parented to this transform ")]
+		/// 若指定该项，实例化对象会被挂到此 Transform 下
+		[Tooltip("若指定该项，实例化对象会被挂到此 Transform 下")]
 		public Transform ParentTransform;
 
 		[MMFInspectorGroup("Object Pool", true, 40)]
 		/// whether or not we should create automatically an object pool for this object
-		[Tooltip("whether or not we should create automatically an object pool for this object")]
+		[Tooltip("是否为该对象自动创建对象池")]
 		[FormerlySerializedAs("VfxCreateObjectPool")]
 		public bool CreateObjectPool;
 		/// the initial and planned size of this object pool
-		[Tooltip("the initial and planned size of this object pool")]
+		[Tooltip("该对象池的初始/计划容量")]
 		[MMFCondition("CreateObjectPool", true)]
 		[FormerlySerializedAs("VfxObjectPoolSize")]
 		public int ObjectPoolSize = 5;
 		/// whether or not to create a new pool even if one already exists for that same prefab
-		[Tooltip("whether or not to create a new pool even if one already exists for that same prefab")]
+		[Tooltip("即使该 Prefab 已存在对象池，是否仍强制创建新池")]
 		[MMFCondition("CreateObjectPool", true)] 
 		public bool MutualizePools = false;
 		/// the transform the pool of objects will be parented to
-		[Tooltip("the transform the pool of objects will be parented to")]
+		[Tooltip("对象池中实例要挂接到的父 Transform")]
 		[MMFCondition("CreateObjectPool", true)] 
 		public Transform PoolParentTransform;
 
@@ -263,3 +264,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

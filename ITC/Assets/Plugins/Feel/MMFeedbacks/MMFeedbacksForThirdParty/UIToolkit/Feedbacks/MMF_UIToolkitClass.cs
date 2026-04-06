@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -8,10 +8,11 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you change the class of an element on a target UI Document
+	/// 这个反馈可修改目标 UI Document 中元素的 class 列表。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the class of an element on a target UI Document")]
+	[FeedbackHelp("这个反馈可修改目标 UI Document 中元素的 class 列表。")]
+	[System.Serializable]
 	[FeedbackPath("UI Toolkit/UITK Class")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitClass : MMF_UIToolkit
@@ -19,15 +20,15 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public enum Modes { AddToClassList, EnableInClassList, ToggleInClassList, RemoveFromClassList, ClearClassList}
 
 		[Header("Class Manipulation")] 
-		/// whether to add, enable, toggle, remove or clear the class list
-		[Tooltip("whether to add, enable, toggle, remove or clear the class list")]
+		/// 对 class 列表执行的操作：添加、启用、切换、移除或清空。
+		[Tooltip("对 class 列表执行的操作：添加、启用、切换、移除或清空。")]
 		public Modes Mode = Modes.AddToClassList;
-		/// the name of the class to add, enable, toggle or remove
-		[Tooltip("the name of the class to add, enable, toggle or remove")]
+		/// 要添加、启用、切换或移除的 class 名称。
+		[Tooltip("要添加、启用、切换或移除的 class 名称。")]
 		[MMFEnumCondition("Mode", (int)Modes.AddToClassList, (int)Modes.EnableInClassList, (int)Modes.ToggleInClassList, (int)Modes.RemoveFromClassList)]
 		public string ClassName = "";
-		/// in EnableInClassList mode, whether to enable or disable the class
-		[Tooltip("in EnableInClassList mode, whether to enable or disable the class")]
+		/// 在 EnableInClassList 模式下，决定该 class 是启用还是禁用。
+		[Tooltip("在 EnableInClassList 模式下，决定该 class 是启用还是禁用。")]
 		[MMFEnumCondition("Mode", (int)Modes.EnableInClassList)]
 		public bool Enable = true;
 		

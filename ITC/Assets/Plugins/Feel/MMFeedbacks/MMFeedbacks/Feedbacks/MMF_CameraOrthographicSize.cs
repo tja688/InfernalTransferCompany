@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.FeedbacksForThirdParty;
 using MoreMountains.Tools;
@@ -13,8 +13,9 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Camera/Orthographic Size")]
-	[FeedbackHelp("This feedback lets you control a camera's orthographic size over time. You'll need a MMCameraOrthographicSizeShaker on your camera.")]
+	[FeedbackHelp("此反馈可让你随时间控制相机的正交尺寸。要让它生效，你需要在相机上添加 MMCameraOrthographicSizeShaker。")]
 	public class MMF_CameraOrthographicSize : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -32,25 +33,25 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Orthographic Size", true, 41)]
 		/// the duration of the shake, in seconds
-		[Tooltip("the duration of the shake, in seconds")]
+		[Tooltip("抖动的持续时间，单位为秒")]
 		public float Duration = 2f;
 		/// whether or not to reset shaker values after shake
-		[Tooltip("whether or not to reset shaker values after shake")]
+		[Tooltip("抖动结束后是否重置抖动器的数值")]
 		public bool ResetShakerValuesAfterShake = true;
 		/// whether or not to reset the target's values after shake
-		[Tooltip("whether or not to reset the target's values after shake")]
+		[Tooltip("抖动结束后是否重置目标的数值")]
 		public bool ResetTargetValuesAfterShake = true;
 		/// whether or not to add to the initial value
-		[Tooltip("whether or not to add to the initial value")]
+		[Tooltip("是否在初始值基础上叠加")]
 		public bool RelativeOrthographicSize = false;
 		/// the curve used to animate the intensity value on
-		[Tooltip("the curve used to animate the intensity value on")]
+		[Tooltip("用于驱动强度动画的曲线")]
 		public AnimationCurve ShakeOrthographicSize = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重新映射到的值")]
 		public float RemapOrthographicSizeZero = 5f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重新映射到的值")]
 		public float RemapOrthographicSizeOne = 10f;
 
 		/// <summary>

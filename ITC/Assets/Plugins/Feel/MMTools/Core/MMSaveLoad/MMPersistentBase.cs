@@ -13,15 +13,15 @@ namespace MoreMountains.Tools
 	{
 		[Header("Save")] 
 		/// whether or not this object should be saved
-		[Tooltip("whether or not this object should be saved")]
+		[Tooltip("是否保存该对象的数据")]
 		public bool SaveActive = true;
 
 		[Header("ID")]
 		/// an optional suffix to add to the GUID, to make it more readable
-		[Tooltip("an optional suffix to add to the GUID, to make it more readable")]
+		[Tooltip("追加到 GUID 的可选后缀，仅用于提升可读性")]
 		public string UniqueIDSuffix;
 		/// the object's unique ID
-		[Tooltip("the object's unique ID")]
+		[Tooltip("对象的唯一 ID")]
 		[SerializeField]
 		[MMReadOnly]
 		protected string _guid;

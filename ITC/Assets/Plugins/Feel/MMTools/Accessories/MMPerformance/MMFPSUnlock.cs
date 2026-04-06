@@ -13,20 +13,20 @@ namespace MoreMountains.Tools
 	public class MMFPSUnlock : MonoBehaviour
 	{
 		/// the target FPS you want the game to run at, that's up to how many times Update will run every second
-		[Tooltip("the target FPS you want the game to run at, that's up to how many times Update will run every second")]
+		[Tooltip("目标 FPS（每秒更新/渲染上限）。注意：当 VSyncCount > 0 时，此值通常会被垂直同步限制覆盖")]
 		public int TargetFPS = 300;
 
 		/// the number of frames to wait before rendering the next one. 0 will render every frame, 1 will render every 2 frames, 5 will render every 5 frames, etc
-		[Tooltip("the number of frames to wait before rendering the next one. 0 will render every frame, 1 will render every 2 frames, 5 will render every 5 frames, etc")]
+		[Tooltip("渲染帧间隔。0 表示每帧都渲染，1 表示每 2 帧渲染一次，5 表示每 5 帧渲染一次")]
 		public int RenderFrameInterval = 0;
 
 		[Range(0, 2)]
 		/// whether vsync should be enabled or not (on a 60Hz screen, 1 : 60fps, 2 : 30fps, 0 : don't wait for vsync)
-		[Tooltip("whether vsync should be enabled or not (on a 60Hz screen, 1 : 60fps, 2 : 30fps, 0 : don't wait for vsync)")]
+		[Tooltip("垂直同步限制设置（60Hz屏举例：1=60fps，2=30fps，0=不等待垂直同步）。开启后会并覆盖目标帧率的效果")]
 		public int VSyncCount = 0;
 
 		/// if this is true, the user can press a number key to change the target FPS (1 : 10fps, 2 : 20fps, etc)
-		[Tooltip("if this is true, the user can press a number key to change the target FPS (1 : 10fps, 2 : 20fps, etc)")]
+		[Tooltip("是否启用数字键快捷切换目标帧率（1=10帧/秒，2=20帧/秒... 9=90帧/秒，0=300帧/秒）")]
 		public bool EnableNumberShortcuts = false;
 
 		/// <summary>

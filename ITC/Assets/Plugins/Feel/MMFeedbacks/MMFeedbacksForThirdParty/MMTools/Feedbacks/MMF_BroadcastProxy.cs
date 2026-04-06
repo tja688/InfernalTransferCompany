@@ -10,15 +10,15 @@ namespace MoreMountains.Feedbacks
 	public class MMF_BroadcastProxy : MonoBehaviour
 	{
 		/// the channel on which to broadcast
-		[Tooltip("the channel on which to broadcast")]
+		[Tooltip("要广播到的通道")]
 		[MMReadOnly]
 		public int Channel;
 		/// a debug view of the current level being broadcasted
-		[Tooltip("a debug view of the current level being broadcasted")]
+		[Tooltip("当前广播数值的调试预览")]
 		[MMReadOnly]
 		public float DebugLevel;
 		/// whether or not a broadcast is in progress (will be false while the value is not changing, and thus not broadcasting)
-		[Tooltip("whether or not a broadcast is in progress (will be false while the value is not changing, and thus not broadcasting)")]
+		[Tooltip("当前是否正在广播中（当数值未变化、因此不会发送广播时，该值为 false）")]
 		[MMReadOnly]
 		public bool BroadcastInProgress = false;
 

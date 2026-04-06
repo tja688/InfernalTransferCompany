@@ -219,7 +219,8 @@ namespace MoreMountains.Tools
 		{
 			currentTime = MMMaths.Remap(currentTime, initialTime, endTime, 0f, 1f);
 			currentTime = curve.Evaluate(currentTime);
-			return startValue + (long)currentTime * (endValue - startValue);
+			float interpolatedValue = startValue + currentTime * (endValue - startValue);
+			return (long)interpolatedValue;
 		}
 
 		public static Vector2 Tween(float currentTime, float initialTime, float endTime, Vector2 startValue, Vector2 endValue, AnimationCurve curve)

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,10 +7,11 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you change the image tint of an element on a target UI Document
+	/// 这个反馈可修改目标 UI Document 中元素的图片染色。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the image tint of an element on a target UI Document")]
+	[FeedbackHelp("这个反馈可修改目标 UI Document 中元素的图片染色。")]
+	[System.Serializable]
 	[FeedbackPath("UI Toolkit/UITK Image Tint")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitImageTint : MMF_UIToolkitColorBase

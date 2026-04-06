@@ -19,23 +19,23 @@ namespace MoreMountains.FeedbacksForThirdParty
 	{
 		[Header("Bindings")]
 		/// the position of the camera
-		[Tooltip("the position of the camera")]
+		[Tooltip("相机的位置")]
 		public Transform CameraTransform;
 		/// a list of all possible targets
-		[Tooltip("a list of all possible targets")]
+		[Tooltip("所有可选目标的列表")]
 		public Transform[] FocusTargets;
 		/// an offset to apply to the focus target
-		[Tooltip("an offset to apply to the focus target")]
+		[Tooltip("应用到对焦目标上的偏移量")]
 		public Vector3 Offset;
 
 		[Header("Setup")]
 		/// the current target of this auto focus
-		[Tooltip("the current target of this auto focus")]
+		[Tooltip("当前自动对焦目标")]
 		public float FocusTargetID;
         
 		[Header("Desired Aperture")]
 		/// the aperture to work with
-		[Tooltip("the aperture to work with")]
+		[Tooltip("要使用的光圈值")]
 		[Range(0.1f, 20f)]
 		public float Aperture = 0.1f;
 

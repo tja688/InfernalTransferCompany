@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -8,10 +8,11 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you set the visibility of an element on a target UI Document
+	/// 这个反馈可设置目标 UI Document 中元素的可见性。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you set the visibility of an element on a target UI Document")]
+	[FeedbackHelp("这个反馈可设置目标 UI Document 中元素的可见性。")]
+	[System.Serializable]
 	[FeedbackPath("UI Toolkit/UITK Visible")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitVisible : MMF_UIToolkitBoolBase
@@ -19,11 +20,11 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public enum Modes { Set, Toggle }
 		
 		[Header("Visible")]
-		/// the selected mode (set : sets the object visible or not, toggle : toggles the object's visibility)
-		[Tooltip("the selected mode (set : sets the object visible or not, toggle : toggles the object's visibility)")]
+		/// 所选模式：Set 直接设置对象是否可见；Toggle 在可见与不可见之间切换。
+		[Tooltip("所选模式：Set 直接设置对象是否可见；Toggle 在可见与不可见之间切换。")]
 		public Modes Mode = Modes.Set;
-		/// whether to set the object visible (true) or not
-		[Tooltip("whether to set the object visible (true) or not")]
+		/// 是否将对象设为可见（true）。
+		[Tooltip("是否将对象设为可见（true）。")]
 		[MMFEnumCondition("Mode", (int)Modes.Set)]
 		public bool Visible = false;
 		

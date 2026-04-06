@@ -16,7 +16,7 @@ namespace MoreMountains.Tools
 		protected bool _initialized;
 		
 		/// a label you can set to organize your AI Actions, not used by anything else 
-		[Tooltip("a label you can set to organize your AI Actions, not used by anything else")]
+		[Tooltip("用于整理 AI Action 的标签，不会被其他系统使用")]
 		public string Label;
 		public abstract void PerformAction();
 		public virtual bool ActionInProgress { get; set; }

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -8,26 +8,27 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you change the border color of an element on a target UI Document
+	/// 这个反馈可修改目标 UI Document 中元素的边框颜色。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the border color of an element on a target UI Document")]
+	[FeedbackHelp("这个反馈可修改目标 UI Document 中元素的边框颜色。")]
+	[System.Serializable]
 	[FeedbackPath("UI Toolkit/UITK Border Color")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitBorderColor : MMF_UIToolkitColorBase
 	{
 		[MMFInspectorGroup("Borders", true, 55, true)]
-		/// whether or not the feedback should modify the color of the left border
-		[Tooltip("whether or not the feedback should modify the color of the left border")]
+		/// 此反馈是否修改左边框颜色。
+		[Tooltip("此反馈是否修改左边框颜色。")]
 		public bool BorderLeft = true;
-		/// whether or not the feedback should modify the color of the right border
-		[Tooltip("whether or not the feedback should modify the color of the right border")]
+		/// 此反馈是否修改右边框颜色。
+		[Tooltip("此反馈是否修改右边框颜色。")]
 		public bool BorderRight = true;
-		/// whether or not the feedback should modify the color of the bottom border
-		[Tooltip("whether or not the feedback should modify the color of the bottom border")]
+		/// 此反馈是否修改下边框颜色。
+		[Tooltip("此反馈是否修改下边框颜色。")]
 		public bool BorderBottom = true;
-		/// whether or not the feedback should modify the color of the top border
-		[Tooltip("whether or not the feedback should modify the color of the top border")]
+		/// 此反馈是否修改上边框颜色。
+		[Tooltip("此反馈是否修改上边框颜色。")]
 		public bool BorderTop = true;
 		
 		protected override void ApplyColor(Color newColor)

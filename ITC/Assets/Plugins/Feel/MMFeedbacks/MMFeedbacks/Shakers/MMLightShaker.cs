@@ -14,55 +14,55 @@ namespace MoreMountains.Feedbacks
 	{
 		[MMInspectorGroup("Light", true, 37)]
 		/// the light to affect when playing the feedback
-		[Tooltip("the light to affect when playing the feedback")]
+		[Tooltip("播放反馈时要作用的 `Light`。")]
 		public Light BoundLight;
 		/// whether or not that light should be turned off on start
-		[Tooltip("whether or not that light should be turned off on start")]
+		[Tooltip("若启用，在开始时会先关闭该 `Light`。")]
 		public bool StartsOff = true;
 		/// whether or not the values should be relative or not
-		[Tooltip("whether or not the values should be relative or not")]
+		[Tooltip("这些数值是否以相对方式应用；若禁用，则按绝对值应用。")]
 		public bool RelativeValues = true;
 
 		[MMInspectorGroup("Color", true, 41)]
 		/// whether or not this shaker should modify color 
-		[Tooltip("whether or not this shaker should modify color")]
+		[Tooltip("此抖动器是否修改颜色。")]
 		public bool ModifyColor = true;
 		/// the colors to apply to the light over time
-		[Tooltip("the colors to apply to the light over time")]
+		[Tooltip("随时间应用到 `Light` 上的颜色。")]
 		public Gradient ColorOverTime;
 
 		[MMInspectorGroup("Intensity", true, 40)]
 		/// the intensity to apply to the light over time
 		/// the curve to tween the intensity on
-		[Tooltip("the intensity to apply to the light over time")]
+		[Tooltip("随时间应用到 `Light` 上的强度。")]
 		public AnimationCurve IntensityCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
 		/// the value to remap the intensity curve's 0 to
-		[Tooltip("the value to remap the intensity curve's 0 to")]
+		[Tooltip("将强度曲线的 `0` 重映射到的目标值。")]
 		public float RemapIntensityZero = 0f;
 		/// the value to remap the intensity curve's 1 to
-		[Tooltip("the value to remap the intensity curve's 1 to")]
+		[Tooltip("将强度曲线的 `1` 重映射到的目标值。")]
 		public float RemapIntensityOne = 1f;
 
 		[MMInspectorGroup("Range", true, 39)]
 		/// the range to apply to the light over time
-		[Tooltip("the range to apply to the light over time")]
+		[Tooltip("随时间应用到 `Light` 上的范围。")]
 		public AnimationCurve RangeCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
 		/// the value to remap the range curve's 0 to
-		[Tooltip("the value to remap the range curve's 0 to")]
+		[Tooltip("将范围曲线的 `0` 重映射到的目标值。")]
 		public float RemapRangeZero = 0f;
 		/// the value to remap the range curve's 0 to
-		[Tooltip("the value to remap the range curve's 0 to")]
+		[Tooltip("将范围曲线的 `0` 重映射到的目标值。")]
 		public float RemapRangeOne = 10f;
 
 		[MMInspectorGroup("Shadow Strength", true, 38)]
 		/// the range to apply to the light over time
-		[Tooltip("the range to apply to the light over time")]
+		[Tooltip("随时间应用到 `Light` 上的范围。")]
 		public AnimationCurve ShadowStrengthCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
 		/// the value to remap the shadow strength's curve's 0 to
-		[Tooltip("the value to remap the shadow strength's curve's 0 to")]
+		[Tooltip("将阴影强度曲线的 `0` 重映射到的目标值。")]
 		public float RemapShadowStrengthZero = 0f;
 		/// the value to remap the shadow strength's curve's 1 to
-		[Tooltip("the value to remap the shadow strength's curve's 1 to")]
+		[Tooltip("将阴影强度曲线的 `1` 重映射到的目标值。")]
 		public float RemapShadowStrengthOne = 1f;
 
 		protected Color _initialColor;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,33 +14,33 @@ namespace MoreMountains.Feedbacks
 	{
 		[Header("Target")]
 		/// the target scriptable object to write to
-		[Tooltip("the target scriptable object to write to")]
+		[Tooltip("要写入的目标 脚本化对象")]
 		public MMSequence SequenceScriptableObject;
 
 		[Header("Recording")]
 		/// whether this recorder is recording right now or not
 		[MMFReadOnly]
-		[Tooltip("whether this recorder is recording right now or not")]
+		[Tooltip("该记录器当前是否正在录制")]
 		public bool Recording;
 		/// whether any silence between the start of the recording and the first press should be removed or not
-		[Tooltip("whether any silence between the start of the recording and the first press should be removed or not")]
+		[Tooltip("是否移除从录制开始到第一次按下之间的静音区段")]
 		public bool RemoveInitialSilence = true;
 		/// whether this recording should write on top of existing entries or not
-		[Tooltip("whether this recording should write on top of existing entries or not")]
+		[Tooltip("此次录制是否覆盖现有条目")]
 		public bool AdditiveRecording = false;
 		/// whether this recorder should start recording when entering play mode
-		[Tooltip("whether this recorder should start recording when entering play mode")]
+		[Tooltip("进入 Play Mode 时是否自动开始录制")]
 		public bool StartRecordingOnGameStart = false;
 		/// the offset to apply to entries
-		[Tooltip("the offset to apply to entries")]
+		[Tooltip("应用到条目的偏移量")]
 		public float RecordingStartOffset = 0f;
 
 		[Header("Recorder Keys")]
 		/// the key binding for recording start
-		[Tooltip("the key binding for recording start")]
+		[Tooltip("开始录制的按键绑定")]
 		public KeyCode StartRecordingHotkey = KeyCode.Home;
 		/// the key binding for recording stop
-		[Tooltip("the key binding for recording stop")]
+		[Tooltip("停止录制的按键绑定")]
 		public KeyCode StopRecordingHotkey = KeyCode.End;
 
 		protected MMSequenceNote _note;

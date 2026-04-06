@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Tools;
@@ -11,8 +11,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback allows you to chain any number of target MMF Players and play them in sequence, with optional delays before and after
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to chain any number of target MMF Players and play them in sequence, with optional delays before and after")]
+	[FeedbackHelp("此反馈可让你串联任意数量的目标 MMF_Player，并按顺序播放，还可在前后分别附加可选延迟。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Feedbacks/MMF Player Chain")]
 	public class MMF_PlayerChain : MMF_Feedback
 	{
@@ -23,17 +24,17 @@ namespace MoreMountains.Feedbacks
 		public class PlayerChainItem
 		{
 			/// the target MMF Player 
-			[Tooltip("the target MMF Player")]
+			[Tooltip("目标反馈播放器")]
 			public MMF_Player TargetPlayer;
 			/// a delay in seconds to wait for before playing this MMF Player (x) and after (y)
-			[Tooltip("a delay in seconds to wait for before playing this MMF Player (x) and after (y)")]
+			[Tooltip("在播放此 MMF_Player 前（x）与后（y）的延迟（秒）")]
 			[MMVector("Before", "After")]
 			public Vector2 Delay;
 			/// whether this player is active in the list or not. Inactive players will be skipped when playing the chain of players
-			[Tooltip("whether this player is active in the list or not. Inactive players will be skipped when playing the chain of players")]
+			[Tooltip("该条目在列表中是否启用；禁用条目在链式播放时会被跳过")]
 			public bool Inactive = false;
 			/// if this is true, the sequence will be blocked until this player has completed playing
-			[Tooltip("if this is true, the sequence will be blocked until this player has completed playing")]
+			[Tooltip("若开启，序列会阻塞，直到该 Player 播放完成。")]
 			public bool WaitUntilComplete = true;
 		}
 		
@@ -71,7 +72,7 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Feedbacks", true, 79)]
 		/// the list of MMF Player that make up the chain. The chain's items will be played from index 0 to the last in the list
-		[Tooltip("the list of MMF Player that make up the chain. The chain's items will be played from index 0 to the last in the list")]
+		[Tooltip("构成链条的 MMF_Player 列表。播放顺序为从索引 0 到末尾。")]
 		public List<PlayerChainItem> Players;
 
 		/// <summary>
@@ -182,3 +183,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

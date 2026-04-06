@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-#if (MM_TEXTMESHPRO || MM_UGUI2)
+using UnityEngine;
+#if MM_UGUI2
 using TMPro;
 #endif
 using UnityEngine.Scripting.APIUpdating;
@@ -7,11 +7,12 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.Feedbacks
 {
 	/// <summary>
-	/// This feedback will let you change the text of a target TMP text component
+	/// 这个反馈可修改目标 TMP 文本组件的内容。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the text of a target TMP text component")]
-	#if (MM_TEXTMESHPRO || MM_UGUI2)
+	[System.Serializable]
+	[FeedbackHelp("这个反馈可修改目标 TMP 文本组件的内容。")]
+	#if MM_UGUI2
 	[FeedbackPath("TextMesh Pro/TMP Text")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.TextMeshPro")]
@@ -21,23 +22,23 @@ namespace MoreMountains.Feedbacks
 		public static bool FeedbackTypeAuthorized = true;
 		#if UNITY_EDITOR
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.TMPColor; } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetTMPText be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈需要指定 TargetTMPText 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
-		#if UNITY_EDITOR && (MM_TEXTMESHPRO || MM_UGUI2)
+		#if UNITY_EDITOR && MM_UGUI2
 		public override bool EvaluateRequiresSetup() { return (TargetTMPText == null); }
 		public override string RequiredTargetText { get { return TargetTMPText != null ? TargetTMPText.name : "";  } }
 		#endif
         
-		#if (MM_TEXTMESHPRO || MM_UGUI2)
+		#if MM_UGUI2
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetTMPText = FindAutomatedTarget<TMP_Text>();
 
 		[MMFInspectorGroup("TextMeshPro Change Text", true, 12, true)]
-		/// the target TMP_Text component we want to change the text on
-		[Tooltip("the target TMP_Text component we want to change the text on")]
+		/// 要修改文本内容的目标 TMP_Text 组件。
+		[Tooltip("要修改文本内容的目标 TMP_Text 组件。")]
 		public TMP_Text TargetTMPText;
-		/// the new text to replace the old one with
-		[Tooltip("the new text to replace the old one with")]
+		/// 用于替换旧文本的新内容。
+		[Tooltip("用于替换旧文本的新内容。")]
 		[TextArea]
 		public string NewText = "Hello World";
 		#endif
@@ -51,7 +52,7 @@ namespace MoreMountains.Feedbacks
 		/// <param name="feedbacksIntensity"></param>
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			if (!Active || !FeedbackTypeAuthorized)
 			{
 				return;
@@ -75,7 +76,7 @@ namespace MoreMountains.Feedbacks
 			{
 				return;
 			}
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			TargetTMPText.text = _initialText;
 			#endif
 		}

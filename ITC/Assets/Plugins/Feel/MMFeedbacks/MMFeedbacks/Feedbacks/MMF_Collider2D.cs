@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,12 +6,14 @@ using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks
 {
+	#if MM_PHYSICS2D
 	/// <summary>
 	/// This feedback will let you enable/disable/toggle a target collider 2D, or change its trigger status
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you enable/disable/toggle a target collider 2D, or change its trigger status")]
+	[FeedbackHelp("此反馈可让你启用、禁用或切换目标 Collider2D，也可以修改它的 Trigger 状态。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("GameObject/Collider2D")]
 	public class MMF_Collider2D : MMF_Feedback
 	{
@@ -22,7 +24,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.GameObjectColor; } }
 		public override bool EvaluateRequiresSetup() { return (TargetCollider2D == null); }
 		public override string RequiredTargetText { get { return TargetCollider2D != null ? TargetCollider2D.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetCollider2D be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先设置a TargetCollider2D才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetCollider2D = FindAutomatedTarget<Collider2D>();
@@ -32,7 +34,7 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Collider 2D", true, 12, true)]
 		/// the collider to act upon
-		[Tooltip("the collider to act upon")]
+		[Tooltip("要作用的碰撞体")]
 		public Collider2D TargetCollider2D;
 		/// the effect the feedback will have on the target collider's status 
 		public Modes Mode = Modes.Disable;
@@ -123,4 +125,6 @@ namespace MoreMountains.Feedbacks
 			}
 		}
 	}
+	#endif
 }
+

@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will trigger a MMGameEvent of the specified name when played
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will trigger a MMGameEvent of the specified name when played")]
+	[FeedbackHelp("此反馈在播放时会触发指定名称的 MMGameEvent。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("Events/MMGameEvent")]
 	public class MMF_MMGameEvent : MMF_Feedback
 	{
@@ -22,7 +23,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.EventsColor; } }
 		public override bool EvaluateRequiresSetup() { return (MMGameEventName == ""); }
 		public override string RequiredTargetText { get { return MMGameEventName;  } }
-		public override string RequiresSetupText { get { return "This feedback requires that you specify a MMGameEventName below."; } }
+		public override string RequiresSetupText { get { return "此反馈需要先填写 MMGameEventName 才能正常工作。"; } }
 		#endif
 
 		[MMFInspectorGroup("MMGameEvent", true, 57, true)]

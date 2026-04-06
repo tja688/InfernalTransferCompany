@@ -19,122 +19,122 @@ namespace MoreMountains.Feedbacks
 
 		[Header("Type")]
 		/// the position mode : none, random or ping pong - none won't do anything, random will randomize min and max bounds, ping pong will oscillate between min and max bounds
-		[Tooltip("the position mode : none, random or ping pong - none won't do anything, random will randomize min and max bounds, ping pong will oscillate between min and max bounds")]
+		[Tooltip("位置模式：`无`、`随机值` 或 `乒乓球`。`无`不会产生任何效果；`随机值`会在最小/最大边界之间随机；`乒乓球`会在最小/最大边界之间来回振荡。")]
 		public WiggleTypes WiggleType = WiggleTypes.Random;
 		/// if this is true, unscaled delta time, otherwise regular delta time
-		[Tooltip("if this is true, unscaled delta time, otherwise regular delta time")]
+		[Tooltip("若启用，则使用不受时间缩放影响的时间对应的 deltaTime；否则使用常规 deltaTime。")]
 		public bool UseUnscaledTime = false;
 		/// a multiplier to apply to all time related operations, allowing you to speed up or slow down the wiggle
-		[Tooltip("a multiplier to apply to all time related operations, allowing you to speed up or slow down the wiggle")]
+		[Tooltip("应用到所有时间相关运算上的倍率，可用于加快或减慢 wiggle 效果。")]
 		public float TimeMultiplier = 1f;
 		
 		/// whether or not this object should start wiggling automatically on Start()
-		[Tooltip("whether or not this object should start wiggling automatically on Start()")]
+		[Tooltip("此对象是否在 `Start()` 时自动开始 wiggle。")]
 		public bool StartWigglingAutomatically = true;
 		/// if this is true, position will be ping ponged with an ease in/out curve
-		[Tooltip("if this is true, position will be ping ponged with an ease in/out curve")]
+		[Tooltip("若启用，位置在 PingPong 往返时会套用 ease in/out 曲线。")]
 		public bool SmoothPingPong = true;
 
 		[Header("Speed")]
 		/// Whether or not the position's speed curve will be used
-		[Tooltip("Whether or not the position's speed curve will be used")]
+		[Tooltip("是否使用位置的速度曲线。")]
 		public bool UseSpeedCurve = false;
 		/// an animation curve to define the speed over time from one position to the other (x), and the actual position (y), allowing for overshoot
-		[Tooltip("an animation curve to define the speed over time from one position to the other (x), and the actual position (y), allowing for overshoot")]
+		[Tooltip("用于定义从一个位置移动到另一个位置时速度变化的曲线。横轴（x）表示时间进度，纵轴（y）表示实际位置值，因此也支持超调。")]
 		public AnimationCurve SpeedCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
 
 		[Header("Frequency")]
 		/// the minimum time (in seconds) between two position changes
-		[Tooltip("the minimum time (in seconds) between two position changes")]
+		[Tooltip("两次位置变化之间的最短时间，单位为秒。")]
 		public float FrequencyMin = 0f;
 		/// the maximum time (in seconds) between two position changes
-		[Tooltip("the maximum time (in seconds) between two position changes")]
+		[Tooltip("两次位置变化之间的最长时间，单位为秒。")]
 		public float FrequencyMax = 1f;
 
 		[Header("Amplitude")]
 		/// the minimum position the object can have
-		[Tooltip("the minimum position the object can have")]
+		[Tooltip("该对象允许达到的最小位置。")]
 		public Vector3 AmplitudeMin = Vector3.zero;
 		/// the maximum position the object can have
-		[Tooltip("the maximum position the object can have")]
+		[Tooltip("该对象允许达到的最大位置。")]
 		public Vector3 AmplitudeMax = Vector3.one;
 		/// if this is true, amplitude will be relative, otherwise world space
-		[Tooltip("if this is true, amplitude will be relative, otherwise world space")]
+		[Tooltip("若启用，振幅按相对值应用；若禁用，则按世界空间数值应用。")]
 		public bool RelativeAmplitude = true;
 		/// if this is true, all amplitude values will match the x amplitude value
-		[Tooltip("if this is true, all amplitude values will match the x amplitude value")]
+		[Tooltip("若启用，所有轴的振幅都会与 X 轴振幅保持一致。")]
 		public bool UniformValues = false;
 		/// if this is true, when randomizing amplitude, the resulting vector's length will be forced to match ForcedVectorLength
-		[Tooltip("if this is true, when randomizing amplitude, the resulting vector's length will be forced to match ForcedVectorLength")]
+		[Tooltip("若启用，在随机化振幅时，结果向量的长度会被强制设为 `ForcedVectorLength`。")]
 		public bool ForceVectorLength = false;
 		/// the length of the randomized amplitude if ForceVectorLength is true
-		[Tooltip("the length of the randomized amplitude if ForceVectorLength is true")]
+		[Tooltip("当 `ForceVectorLength` 为 true 时，随机振幅向量会被强制使用的长度。")]
 		[MMCondition("ForceVectorLength", true)]
 		public float ForcedVectorLength = 1f;
 
 		[Header("Curve")]
 		/// a curve to animate this property on
-		[Tooltip("a curve to animate this property on")]
+		[Tooltip("用于驱动该属性变化的曲线。")]
 		public AnimationCurve Curve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
 		/// the minimum value to randomize the curve's zero remap to
-		[Tooltip("the minimum value to randomize the curve's zero remap to")]
+		[Tooltip("将曲线 `0` 端重映射值随机化时允许的最小值。")]
 		public Vector3 RemapCurveZeroMin = Vector3.zero;
 		/// the maximum value to randomize the curve's zero remap to
-		[Tooltip("the maximum value to randomize the curve's zero remap to")]
+		[Tooltip("将曲线 `0` 端重映射值随机化时允许的最大值。")]
 		public Vector3 RemapCurveZeroMax = Vector3.zero;
 		/// the minimum value to randomize the curve's one remap to
-		[Tooltip("the minimum value to randomize the curve's one remap to")]
+		[Tooltip("将曲线 `1` 端重映射值随机化时允许的最小值。")]
 		public Vector3 RemapCurveOneMin = Vector3.one;
 		/// the maximum value to randomize the curve's one remap to
-		[Tooltip("the maximum value to randomize the curve's one remap to")]
+		[Tooltip("将曲线 `1` 端重映射值随机化时允许的最大值。")]
 		public Vector3 RemapCurveOneMax = Vector3.one;
 		/// whether or not to add the initial value of this property to the curve's outcome
-		[Tooltip("whether or not to add the initial value of this property to the curve's outcome")]
+		[Tooltip("是否把该属性的初始值叠加到曲线结果上。若启用，曲线结果会在初始值基础上偏移。")]
 		public bool RelativeCurveAmplitude = true;
 		/// whether or not the curve should be read from left to right, then right to left
-		[Tooltip("whether or not the curve should be read from left to right, then right to left")]
+		[Tooltip("曲线是否先从左到右读取，再从右到左读取。若启用，会形成往返播放效果。")]
 		public bool CurvePingPong = false;
 
 		[Header("Pause")]
 		/// the minimum time to spend between two random positions
-		[Tooltip("the minimum time to spend between two random positions")]
+		[Tooltip("两个随机位置之间停留的最短时间。")]
 		public float PauseMin = 0f;
 		/// the maximum time to spend between two random positions
-		[Tooltip("the maximum time to spend between two random positions")]
+		[Tooltip("两个随机位置之间停留的最长时间。")]
 		public float PauseMax = 0f;
 
 		[Header("Limited Time")]
 		/// if this is true, this property will only animate for the specified time
-		[Tooltip("if this is true, this property will only animate for the specified time")]
+		[Tooltip("若启用，此属性只会在指定时间内执行动画；时间结束后将停止。")]
 		public bool LimitedTime = false;
 		/// the maximum time left
-		[Tooltip("the maximum time left")]
+		[Tooltip("可用的最大剩余时间。")]
 		public float LimitedTimeTotal;
 		/// the animation curve to use to decrease the effect of the wiggle as time goes
-		[Tooltip("the animation curve to use to decrease the effect of the wiggle as time goes")]
+		[Tooltip("用于随着时间推移逐渐减弱 wiggle 效果的曲线。")]
 		public AnimationCurve LimitedTimeFalloff = AnimationCurve.Linear(0f, 1f, 1f, 0f);
 		/// if this is true, original position will be restored when time left reaches zero
-		[Tooltip("if this is true, original position will be restored when time left reaches zero")]
+		[Tooltip("若启用，当剩余时间归零时会恢复原始位置。")]
 		public bool LimitedTimeResetValue = true;
 		/// the actual time left
-		[Tooltip("the actual time left")]
+		[Tooltip("当前实际剩余时间。")]
 		[MMFReadOnly]
 		public float LimitedTimeLeft;        
 
 		[Header("Noise Frequency")]
 		/// the minimum time between two changes of noise frequency
-		[Tooltip("the minimum time between two changes of noise frequency")]
+		[Tooltip("两次噪声频率变化之间的最短时间。")]
 		public Vector3 NoiseFrequencyMin = Vector3.zero;
 		/// the maximum time between two changes of noise frequency
-		[Tooltip("the maximum time between two changes of noise frequency")]
+		[Tooltip("两次噪声频率变化之间的最长时间。")]
 		public Vector3 NoiseFrequencyMax = Vector3.one;
 
 		[Header("Noise Shift")]
 		/// how much the noise should be shifted at minimum
-		[Tooltip("how much the noise should be shifted at minimum")]
+		[Tooltip("噪声最小偏移量。")]
 		public Vector3 NoiseShiftMin = Vector3.zero;
 		/// how much the noise should be shifted at maximum
-		[Tooltip("how much the noise should be shifted at maximum")]
+		[Tooltip("噪声最大偏移量。")]
 		public Vector3 NoiseShiftMax = Vector3.zero;
 
 
@@ -194,29 +194,29 @@ namespace MoreMountains.Feedbacks
 		/// the possible update modes
 		public enum UpdateModes { Update, FixedUpdate, LateUpdate }
 
-		/// the selected update mode
-		[Tooltip("the selected update mode")]
+		/// 当前选择的更新模式。
+		[Tooltip("当前选择的更新模式。")]
 		public UpdateModes UpdateMode = UpdateModes.Update;
-		/// whether or not position wiggle is active
-		[Tooltip("whether or not position wiggle is active")]
+		/// 是否启用位置 wiggle。
+		[Tooltip("是否启用位置摆动。")]
 		public bool PositionActive = false;
-		/// whether or not rotation wiggle is active
-		[Tooltip("whether or not rotation wiggle is active")]
+		/// 是否启用旋转 wiggle。
+		[Tooltip("是否允许旋转摆动。")]
 		public bool RotationActive = false;
-		/// whether or not scale wiggle is active
-		[Tooltip("whether or not scale wiggle is active")]
+		/// 是否启用缩放 wiggle。
+		[Tooltip("是否允许缩放摆动。")]
 		public bool ScaleActive = false;
-		/// all public info related to position wiggling
-		[Tooltip("all public info related to position wiggling")]
+		/// 与位置 wiggle 相关的所有公开设置。
+		[Tooltip("与位置 wiggle 相关的所有公开设置。")]
 		public WiggleProperties PositionWiggleProperties;
-		/// all public info related to rotation wiggling
-		[Tooltip("all public info related to rotation wiggling")]
+		/// 与旋转 wiggle 相关的所有公开设置。
+		[Tooltip("与旋转 wiggle 相关的所有公开设置。")]
 		public WiggleProperties RotationWiggleProperties;
-		/// all public info related to scale wiggling
-		[Tooltip("all public info related to scale wiggling")]
+		/// 与缩放 wiggle 相关的所有公开设置。
+		[Tooltip("与缩放 wiggle 相关的所有公开设置。")]
 		public WiggleProperties ScaleWiggleProperties;
-		/// a debug duration used in conjunction with the debug buttons
-		[Tooltip("a debug duration used in conjunction with the debug buttons")]
+		/// 与调试按钮配合使用的调试时长。
+		[Tooltip("与调试按钮配合使用的调试时长。")]
 		public float DebugWiggleDuration = 2f;
 
 		protected InternalWiggleProperties _positionInternalProperties;
@@ -261,6 +261,10 @@ namespace MoreMountains.Feedbacks
 		/// </summary>
 		public virtual void Initialization()
 		{
+			if (PositionWiggleProperties == null) { PositionWiggleProperties = new WiggleProperties(); }
+			if (RotationWiggleProperties == null) { RotationWiggleProperties = new WiggleProperties(); }
+			if (ScaleWiggleProperties == null) { ScaleWiggleProperties = new WiggleProperties(); }
+			
 			_positionInternalProperties.initialValue = transform.localPosition;
 			_positionInternalProperties.startValue = this.transform.localPosition;
 

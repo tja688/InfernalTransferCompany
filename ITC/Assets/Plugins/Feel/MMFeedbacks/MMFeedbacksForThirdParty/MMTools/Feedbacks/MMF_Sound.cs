@@ -11,9 +11,10 @@ namespace MoreMountains.Feedbacks
 {
 	[ExecuteAlways]
 	[AddComponentMenu("")]
+	[System.Serializable]
 	[FeedbackPath("Audio/Sound")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
-	[FeedbackHelp("WARNING: this is a very simple feedback, that will let you play a sound. Nothing wrong with it being simple of course, but if you want more features, you'll want to look at the MMSoundManager Sound feedback.\n\nThis feedback lets you play the specified AudioClip, either via event (you'll need something in your scene to catch a MMSfxEvent, for example a MMSoundManager), or cached (AudioSource gets created on init, and is then ready to be played), or on demand (instantiated on Play). For all these methods you can define a random volume between min/max boundaries (just set the same value in both fields if you don't want randomness), random pitch, and an optional AudioMixerGroup.")]
+	[FeedbackHelp("警告：这是一个非常基础的声音反馈，只负责播放声音。若你需要更完整的控制能力（如轨道控制、淡变、Solo、更细分的播放选项），建议改用 MMSoundManager Sound 反馈。\n\n此反馈可播放指定的 AudioClip，可通过 Event 模式（场景中需要有对象接收 MMSfxEvent，例如 MMSoundManager）、Cached 模式（初始化时创建并缓存 AudioSource）、OnDemand 模式（每次 Play 时按需创建），或 Pool 模式（从对象池复用 AudioSource）进行播放。若 RandomSfx 非空，会优先于单个 Sfx。无论使用哪种方式，你都可以设置随机音量范围（若不想随机，将最小值与最大值设为相同）、随机音高，以及可选的 AudioMixerGroup。")]
 	public class MMF_Sound : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -44,7 +45,7 @@ namespace MoreMountains.Feedbacks
 			return requiresSetup;
 		}
 		public override string RequiredTargetText { get { return Sfx != null ? Sfx.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that you set an Audio clip in its Sfx slot below, or one or more clips in the Random Sfx array."; } }
+		public override string RequiresSetupText { get { return "此反馈至少需要在下方 Sfx 指定一个 AudioClip，或在 RandomSfx 数组中提供一个或多个 AudioClip。"; } }
 		#endif
 		public override bool HasRandomness => true;
 		/// the duration of this feedback is the duration of the clip being played
@@ -60,11 +61,11 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Sound", true, 14, true)]
 		/// the sound clip to play
-		[Tooltip("the sound clip to play")]
+		[Tooltip("要播放的 AudioClip。若下方 RandomSfx 非空，播放时会优先使用 RandomSfx。")]
 		public AudioClip Sfx;
 
 		/// an array to pick a random sfx from
-		[Tooltip("an array to pick a random sfx from")]
+		[Tooltip("用于随机挑选音效片段的 AudioClip 数组。若非空，将覆盖上方 Sfx。")]
 		public AudioClip[] RandomSfx;
 
 		/// a test button used to play the sound in inspector
@@ -74,104 +75,104 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Play Method", true, 27)]
 		/// the play method to use when playing the sound (event, cached or on demand)
-		[Tooltip("the play method to use when playing the sound (event, cached or on demand)")]
+		[Tooltip("播放声音时使用的方式：事件（发送事件）、缓存（缓存音频源）、一经请求（重复创建）、水池（对象池复用）。")]
 		public PlayMethods PlayMethod = PlayMethods.Event;
 		/// the size of the pool when in Pool mode
-		[Tooltip("the size of the pool when in Pool mode")]
+		[Tooltip("Pool 模式下对象池的大小（仅在 PlayMethod=Pool 时生效）。")]
 		[MMFEnumCondition("PlayMethod", (int)PlayMethods.Pool)]
 		public int PoolSize = 10;
 		/// in event mode, whether to use legacy events (MMSfxEvent) or the current events (MMSoundManagerSoundPlayEvent)
-		[Tooltip("in event mode, whether to use legacy events (MMSfxEvent) or the current events (MMSoundManagerSoundPlayEvent)")]
+		[Tooltip("在 Event 模式下，决定使用旧版事件（MMSfxEvent）还是当前事件（MMSoundManagerSoundPlayEvent）。")]
 		[MMFEnumCondition("PlayMethod", (int)PlayMethods.Event)]
 		public bool UseLegacyEventsMode = false;
 		/// if this is true, calling Stop on this feedback will also stop the sound from playing further
-		[Tooltip("if this is true, calling Stop on this feedback will also stop the sound from playing further")]
+		[Tooltip("若启用，对该反馈调用 Stop 时，也会一并停止声音继续播放")]
 		public bool StopSoundOnFeedbackStop = true;
 		
 		[MMFInspectorGroup("Sound Properties", true, 28)]
         
 		[Header("Volume")]
 		/// the minimum volume to play the sound at
-		[Tooltip("the minimum volume to play the sound at")]
+		[Tooltip("播放时随机音量范围的最小值。若与最大值相同则不随机。")]
 		[Range(0f,2f)]
 		public float MinVolume = 1f;
 		/// the maximum volume to play the sound at
-		[Tooltip("the maximum volume to play the sound at")]
+		[Tooltip("播放时随机音量范围的最大值。若与最小值相同则不随机。")]
 		[Range(0f,2f)]
 		public float MaxVolume = 1f;
 
 		[Header("Pitch")]
 		/// the minimum pitch to play the sound at
-		[Tooltip("the minimum pitch to play the sound at")]
+		[Tooltip("播放时随机音高范围的最小值。若与最大值相同则不随机。")]
 		[Range(-3f,3f)]
 		public float MinPitch = 1f;
 		/// the maximum pitch to play the sound at
-		[Tooltip("the maximum pitch to play the sound at")]
+		[Tooltip("播放时随机音高范围的最大值。若与最小值相同则不随机。")]
 		[Range(-3f,3f)]
 		public float MaxPitch = 1f;
 
 		[Header("Mixer")]
 		/// the audiomixer to play the sound with (optional)
-		[Tooltip("the audiomixer to play the sound with (optional)")]
+		[Tooltip("播放该声音时使用的 AudioMixer（可选）")]
 		public AudioMixerGroup SfxAudioMixerGroup;
 		/// the audiosource priority
-		[Tooltip("the audiosource priority, to be specified if needed between 0 (highest) and 256")] 
+		[Tooltip("AudioSource 的优先级；若有需要，可在 0（最高）到 256 之间指定")] 
 		public int Priority = 128;
 
 		[MMFInspectorGroup("Spatial Settings", true, 33, false, true)]
 		/// Pans a playing sound in a stereo way (left or right). This only applies to sounds that are Mono or Stereo.
-		[Tooltip("Pans a playing sound in a stereo way (left or right). This only applies to sounds that are Mono or Stereo.")]
+		[Tooltip("设置立体声声像（左/右）。仅对 Mono 或 Stereo 声音有效。")]
 		[Range(-1f,1f)]
 		public float PanStereo;
 		/// Sets how much this AudioSource is affected by 3D spatialisation calculations (attenuation, doppler etc). 0.0 makes the sound full 2D, 1.0 makes it full 3D.
-		[Tooltip("Sets how much this AudioSource is affected by 3D spatialisation calculations (attenuation, doppler etc). 0.0 makes the sound full 2D, 1.0 makes it full 3D.")]
+		[Tooltip("设置 3D 空间化混合比例（衰减、Doppler 等）。0 表示完全 2D，1 表示完全 3D。")]
 		[Range(0f,1f)]
 		public float SpatialBlend;
 		
 		[MMFInspectorGroup("3D Sound Settings", true, 37, false, true)]
 		/// Sets the Doppler scale for this AudioSource.
-		[Tooltip("Sets the Doppler scale for this AudioSource.")]
+		[Tooltip("设置此音频源的多普勒强度。")]
 		[Range(0f,5f)]
 		public float DopplerLevel = 1f;
 		/// Sets the spread angle (in degrees) of a 3d stereo or multichannel sound in speaker space.
-		[Tooltip("Sets the spread angle (in degrees) of a 3d stereo or multichannel sound in speaker space.")]
+		[Tooltip("设置 3D 立体声/多声道在扬声器空间中的扩散角度（度）。")]
 		[Range(0,360)]
 		public int Spread = 0;
 		/// Sets/Gets how the AudioSource attenuates over distance.
-		[Tooltip("Sets/Gets how the AudioSource attenuates over distance.")]
+		[Tooltip("设置音频源的距离衰减模式。")]
 		public AudioRolloffMode RolloffMode = AudioRolloffMode.Logarithmic;
 		/// Within the Min distance the AudioSource will cease to grow louder in volume.
-		[Tooltip("Within the Min distance the AudioSource will cease to grow louder in volume.")]
+		[Tooltip("最小距离。位于该距离内时，声音不再继续变大。")]
 		public float MinDistance = 1f;
 		/// (Logarithmic rolloff) MaxDistance is the distance a sound stops attenuating at.
-		[Tooltip("(Logarithmic rolloff) MaxDistance is the distance a sound stops attenuating at.")]
+		[Tooltip("最大距离。在对数衰减模式下，超过该距离后声音不再继续衰减。")]
 		public float MaxDistance = 500f;
 		/// whether or not to use a custom curve for custom volume rolloff
-		[Tooltip("whether or not to use a custom curve for custom volume rolloff")]
+		[Tooltip("是否使用自定义音量衰减曲线。开启后才会使用下方曲线。")]
 		public bool UseCustomRolloffCurve = false;
 		/// the curve to use for custom volume rolloff if UseCustomRolloffCurve is true
-		[Tooltip("the curve to use for custom volume rolloff if UseCustomRolloffCurve is true")]
+		[Tooltip("自定义音量衰减曲线（仅在 UseCustomRolloffCurve 开启时生效）。")]
 		[MMFCondition("UseCustomRolloffCurve", true)]
 		public AnimationCurve CustomRolloffCurve;
 		/// whether or not to use a custom curve for spatial blend
-		[Tooltip("whether or not to use a custom curve for spatial blend")]
+		[Tooltip("是否使用自定义 Spatial Blend 曲线。开启后才会使用下方曲线。")]
 		public bool UseSpatialBlendCurve = false;
 		/// the curve to use for custom spatial blend if UseSpatialBlendCurve is true
-		[Tooltip("the curve to use for custom spatial blend if UseSpatialBlendCurve is true")]
+		[Tooltip("自定义 Spatial Blend 曲线（仅在 UseSpatialBlendCurve 开启时生效）。")]
 		[MMFCondition("UseSpatialBlendCurve", true)]
 		public AnimationCurve SpatialBlendCurve;
 		/// whether or not to use a custom curve for reverb zone mix
-		[Tooltip("whether or not to use a custom curve for reverb zone mix")]
+		[Tooltip("是否使用自定义 Reverb Zone Mix 曲线。开启后才会使用下方曲线。")]
 		public bool UseReverbZoneMixCurve = false;
 		/// the curve to use for custom reverb zone mix if UseReverbZoneMixCurve is true
-		[Tooltip("the curve to use for custom reverb zone mix if UseReverbZoneMixCurve is true")]
+		[Tooltip("自定义 Reverb Zone Mix 曲线（仅在 UseReverbZoneMixCurve 开启时生效）。")]
 		[MMFCondition("UseReverbZoneMixCurve", true)]
 		public AnimationCurve ReverbZoneMixCurve;
 		/// whether or not to use a custom curve for spread
-		[Tooltip("whether or not to use a custom curve for spread")]
+		[Tooltip("是否使用自定义 Spread 曲线。开启后才会使用下方曲线。")]
 		public bool UseSpreadCurve = false;
 		/// the curve to use for custom spread if UseSpreadCurve is true
-		[Tooltip("the curve to use for custom spread if UseSpreadCurve is true")]
+		[Tooltip("自定义 Spread 曲线（仅在 UseSpreadCurve 开启时生效）。")]
 		[MMFCondition("UseSpreadCurve", true)]
 		public AnimationCurve SpreadCurve;
 
@@ -198,6 +199,10 @@ namespace MoreMountains.Feedbacks
 		protected override void CustomInitialization(MMF_Player owner)
 		{
 			base.CustomInitialization(owner);
+			if (RandomSfx == null)
+			{
+				RandomSfx = Array.Empty<AudioClip>();
+			}
 			if ((PlayMethod == PlayMethods.Cached) && (_cachedAudioSource == null))
 			{
 				_cachedAudioSource = CreateAudioSource(owner.gameObject, "CachedFeedbackAudioSource");
@@ -484,6 +489,10 @@ namespace MoreMountains.Feedbacks
 			float volume = Random.Range(MinVolume, MaxVolume);
 			float pitch = Random.Range(MinPitch, MaxPitch);
 			GameObject temporaryAudioHost = new GameObject("EditorTestAS_WillAutoDestroy");
+			if (!Application.isPlaying)
+			{
+				temporaryAudioHost.AddComponent<MMForceDestroyInPlayMode>();
+			}
 			SceneManager.MoveGameObjectToScene(temporaryAudioHost.gameObject, Owner.gameObject.scene);
 			temporaryAudioHost.transform.position = Owner.transform.position;
 			_editorAudioSource = temporaryAudioHost.AddComponent<AudioSource>() as AudioSource;

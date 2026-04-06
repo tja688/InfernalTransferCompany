@@ -13,29 +13,29 @@ namespace MoreMountains.Tools
      
 		[Header("Draw Axis")]
 		/// the axis on which to draw the circle
-		[Tooltip("the axis on which to draw the circle")]
+		[Tooltip("圆形绘制所在的法线轴（X/Y/Z）")]
 		public DrawAxis Axis = DrawAxis.Z;
 		/// the distance by which to push the circle on the draw axis
-		[Tooltip("the distance by which to push the circle on the draw axis")]
+		[Tooltip("沿绘制轴方向的偏移距离")]
 		public float NormalOffset = 0;
         
 		[Header("Geometry")]
 		/// the amount of segments on the line renderer. More segments, more smoothness, more performance cost
-		[Tooltip("the amount of segments on the line renderer. More segments, more smoothness, more performance cost")]
+		[Tooltip("LineRenderer 分段数。越大越平滑，但性能开销也越高")]
 		[Range(0, 2000)]
 		public int PositionsCount = 60;
      
 		[Header("Shape")]
 		/// the length of the circle's horizontal radius
-		[Tooltip("the length of the circle's horizontal radius")]
+		[Tooltip("圆的水平半径长度")]
 		public float HorizontalRadius = 10;
 		/// the length of the circle's vertical radius
-		[Tooltip("the length of the circle's vertical radius")]
+		[Tooltip("圆的垂直半径长度")]
 		public float VerticalRadius = 10;
 
 		[Header("Debug")]
 		/// if this is true, the circle will be redrawn every time you change a value in the inspector, otherwise you'll have to call the DrawCircle method (or press the debug button below)
-		[Tooltip("if this is true, the circle will be redrawn every time you change a value in the inspector, otherwise you'll have to call the DrawCircle method (or press the debug button below)")]
+		[Tooltip("开启后每次在 Inspector 修改参数都会自动重绘；关闭后需手动调用 DrawCircle 或点击下方调试按钮")]
 		public bool AutoRedrawOnValuesChange = false;
 		/// a test button used to call the DrawCircle method
 		[MMInspectorButton("DrawCircle")]

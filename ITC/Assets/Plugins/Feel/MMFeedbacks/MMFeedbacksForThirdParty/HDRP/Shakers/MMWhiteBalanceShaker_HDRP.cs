@@ -18,32 +18,32 @@ namespace MoreMountains.FeedbacksForThirdParty
 	public class MMWhiteBalanceShaker_HDRP : MMShaker
 	{
 		/// whether or not to add to the initial value
-		[Tooltip("whether or not to add to the initial value")]
+		[Tooltip("是否在初始值基础上叠加")]
 		public bool RelativeValues = true;
 
 		[MMInspectorGroup("Temperature", true, 47)]
 		/// the curve used to animate the temperature value on
-		[Tooltip("the curve used to animate the temperature value on")]
+		[Tooltip("用于驱动色温值变化的曲线")]
 		public AnimationCurve ShakeTemperature = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(-100f, 100f)]
 		public float RemapTemperatureZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-100f, 100f)]
 		public float RemapTemperatureOne = 100f;
 
 		[MMInspectorGroup("Tint", true, 48)]
 		/// the curve used to animate the tint value on
-		[Tooltip("the curve used to animate the tint value on")]
+		[Tooltip("用于驱动色调值变化的曲线")]
 		public AnimationCurve ShakeTint = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(-100f, 100f)]
 		public float RemapTintZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-100f, 100f)]
 		public float RemapTintOne = 100f;
 

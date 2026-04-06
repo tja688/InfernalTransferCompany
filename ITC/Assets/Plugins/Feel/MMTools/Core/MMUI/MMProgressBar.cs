@@ -3,7 +3,7 @@
 using UnityEngine.UI;
 #endif
 using System.Collections;
-#if (MM_TEXTMESHPRO || MM_UGUI2)
+#if MM_UGUI2
 using TMPro;
 #endif
 using UnityEngine.Events;
@@ -32,103 +32,103 @@ namespace MoreMountains.Tools
         
 		[MMInspectorGroup("Bindings", true, 10)]
 		/// optional - the ID of the player associated to this bar
-		[Tooltip("optional - the ID of the player associated to this bar")]
+		[Tooltip("可选：与该进度条关联的玩家 ID")]
 		public string PlayerID;
 		/// the main, foreground bar
-		[Tooltip("the main, foreground bar")]
+		[Tooltip("主进度条（前景条）")]
 		public Transform ForegroundBar;
 		/// the delayed bar that will show when moving from a value to a new, lower value
-		[Tooltip("the delayed bar that will show when moving from a value to a new, lower value")]
+		[Tooltip("当数值下降时显示的延迟条")]
 		[FormerlySerializedAs("DelayedBar")] 
 		public Transform DelayedBarDecreasing;
 		/// the delayed bar that will show when moving from a value to a new, higher value
-		[Tooltip("the delayed bar that will show when moving from a value to a new, higher value")]
+		[Tooltip("当数值上升时显示的延迟条")]
 		public Transform DelayedBarIncreasing;
         
 		[MMInspectorGroup("Fill Settings", true, 11)]
 		/// the local scale or fillamount value to reach when the value associated to the bar is at 0%
 		[FormerlySerializedAs("StartValue")] 
 		[Range(0f,1f)]
-		[Tooltip("the local scale or fillamount value to reach when the value associated to the bar is at 0%")]
+		[Tooltip("当进度为 0% 时，localScale 或 fillAmount 应达到的值")]
 		public float MinimumBarFillValue = 0f;
 		/// the local scale or fillamount value to reach when the bar is full
 		[FormerlySerializedAs("EndValue")] 
 		[Range(0f,1f)]
-		[Tooltip("the local scale or fillamount value to reach when the bar is full")]
+		[Tooltip("当进度为满值时，localScale 或 fillAmount 应达到的值")]
 		public float MaximumBarFillValue = 1f;
 		/// whether or not to initialize the value of the bar on start
-		[Tooltip("whether or not to initialize the value of the bar on start")]
+		[Tooltip("是否在 Start 时初始化进度条数值")]
 		public bool SetInitialFillValueOnStart = false;
 		/// the initial value of the bar
 		[MMCondition("SetInitialFillValueOnStart", true)]
 		[Range(0f,1f)]
-		[Tooltip("the initial value of the bar")]
+		[Tooltip("进度条初始值")]
 		public float InitialFillValue = 0f;
 		/// the direction this bar moves to
-		[Tooltip("the direction this bar moves to")]
+		[Tooltip("进度条填充方向")]
 		public BarDirections BarDirection = BarDirections.LeftToRight;
 		/// the foreground bar's fill mode
-		[Tooltip("the foreground bar's fill mode")]
+		[Tooltip("前景条填充模式")]
 		public FillModes FillMode = FillModes.LocalScale;
 		/// defines whether the bar will work on scaled or unscaled time (whether or not it'll keep moving if time is slowed down for example)
-		[Tooltip("defines whether the bar will work on scaled or unscaled time (whether or not it'll keep moving if time is slowed down for example)")]
+		[Tooltip("定义进度条使用 scaled time 还是 unscaled time（例如慢动作时是否仍按原速变化）")]
 		public TimeScales TimeScale = TimeScales.UnscaledTime;
 		/// the selected fill animation mode
-		[Tooltip("the selected fill animation mode")]
+		[Tooltip("当前选择的填充动画模式")]
 		public BarFillModes BarFillMode = BarFillModes.SpeedBased;
 
 		[MMInspectorGroup("Foreground Bar Settings", true, 12)]
 		/// whether or not the foreground bar should lerp
-		[Tooltip("whether or not the foreground bar should lerp")]
+		[Tooltip("前景条是否启用 lerp 插值")]
 		public bool LerpForegroundBar = true;
 		/// the speed at which to lerp the foreground bar
-		[Tooltip("the speed at which to lerp the foreground bar")]
+		[Tooltip("前景条 线性插值 速度")]
 		[MMCondition("LerpForegroundBar", true)]
 		public float LerpForegroundBarSpeedDecreasing = 15f;
 		/// the speed at which to lerp the foreground bar if value is increasing
-		[Tooltip("the speed at which to lerp the foreground bar if value is increasing")]
+		[Tooltip("当前景条数值上升时的 lerp 速度")]
 		[FormerlySerializedAs("LerpForegroundBarSpeed")]
 		[MMCondition("LerpForegroundBar", true)]
 		public float LerpForegroundBarSpeedIncreasing = 15f;
 		/// the speed at which to lerp the foreground bar if speed is decreasing
-		[Tooltip("the speed at which to lerp the foreground bar if speed is decreasing")]
+		[Tooltip("当前景条数值下降时的 lerp 速度")]
 		[MMCondition("LerpForegroundBar", true)]
 		public float LerpForegroundBarDurationDecreasing = 0.2f;
 		/// the duration each update of the foreground bar should take (only if in fixed duration bar fill mode)
-		[Tooltip("the duration each update of the foreground bar should take (only if in fixed duration bar fill mode)")]
+		[Tooltip("前景条每次更新的持续时长（仅在 Fixed Duration 填充模式下生效）")]
 		[MMCondition("LerpForegroundBar", true)]
 		public float LerpForegroundBarDurationIncreasing = 0.2f;
 		/// the curve to use when animating the foreground bar fill decreasing
-		[Tooltip("the curve to use when animating the foreground bar fill decreasing")]
+		[Tooltip("前景条数值下降时使用的填充曲线")]
 		[MMCondition("LerpForegroundBar", true)]
 		public AnimationCurve LerpForegroundBarCurveDecreasing = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 		/// the curve to use when animating the foreground bar fill increasing
-		[Tooltip("the curve to use when animating the foreground bar fill increasing")]
+		[Tooltip("前景条数值上升时使用的填充曲线")]
 		[MMCondition("LerpForegroundBar", true)]
 		public AnimationCurve LerpForegroundBarCurveIncreasing = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
 		[MMInspectorGroup("Delayed Bar Decreasing", true, 13)]
 		
 		/// the delay before the delayed bar moves (in seconds)
-		[Tooltip("the delay before the delayed bar moves (in seconds)")]
+		[Tooltip("延迟条开始移动前的延迟（秒）")]
 		[FormerlySerializedAs("Delay")] 
 		public float DecreasingDelay = 1f;
 		/// whether or not the delayed bar's animation should lerp
-		[Tooltip("whether or not the delayed bar's animation should lerp")]
+		[Tooltip("延迟条动画是否启用 lerp 插值")]
 		[FormerlySerializedAs("LerpDelayedBar")] 
 		public bool LerpDecreasingDelayedBar = true;
 		/// the speed at which to lerp the delayed bar
-		[Tooltip("the speed at which to lerp the delayed bar")]
+		[Tooltip("延迟条 线性插值 速度")]
 		[FormerlySerializedAs("LerpDelayedBarSpeed")] 
 		[MMCondition("LerpDecreasingDelayedBar", true)]
 		public float LerpDecreasingDelayedBarSpeed = 15f;
 		/// the duration each update of the foreground bar should take (only if in fixed duration bar fill mode)
-		[Tooltip("the duration each update of the foreground bar should take (only if in fixed duration bar fill mode)")]
+		[Tooltip("前景条每次更新的持续时长（仅在 Fixed Duration 填充模式下生效）")]
 		[FormerlySerializedAs("LerpDelayedBarDuration")] 
 		[MMCondition("LerpDecreasingDelayedBar", true)]
 		public float LerpDecreasingDelayedBarDuration = 0.2f;
 		/// the curve to use when animating the delayed bar fill
-		[Tooltip("the curve to use when animating the delayed bar fill")]
+		[Tooltip("延迟条填充动画曲线")]
 		[FormerlySerializedAs("LerpDelayedBarCurve")] 
 		[MMCondition("LerpDecreasingDelayedBar", true)]
 		public AnimationCurve LerpDecreasingDelayedBarCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
@@ -136,59 +136,59 @@ namespace MoreMountains.Tools
 		[MMInspectorGroup("Delayed Bar Increasing", true, 18)]
 		
 		/// the delay before the delayed bar moves (in seconds)
-		[Tooltip("the delay before the delayed bar moves (in seconds)")]
+		[Tooltip("延迟条开始移动前的延迟（秒）")]
 		public float IncreasingDelay = 1f;
 		/// whether or not the delayed bar's animation should lerp
-		[Tooltip("whether or not the delayed bar's animation should lerp")]
+		[Tooltip("延迟条动画是否启用 lerp 插值")]
 		public bool LerpIncreasingDelayedBar = true;
 		/// the speed at which to lerp the delayed bar
-		[Tooltip("the speed at which to lerp the delayed bar")]
+		[Tooltip("延迟条 线性插值 速度")]
 		[MMCondition("LerpIncreasingDelayedBar", true)]
 		public float LerpIncreasingDelayedBarSpeed = 15f;
 		/// the duration each update of the foreground bar should take (only if in fixed duration bar fill mode)
-		[Tooltip("the duration each update of the foreground bar should take (only if in fixed duration bar fill mode)")]
+		[Tooltip("前景条每次更新的持续时长（仅在 Fixed Duration 填充模式下生效）")]
 		[MMCondition("LerpIncreasingDelayedBar", true)]
 		public float LerpIncreasingDelayedBarDuration = 0.2f;
 		/// the curve to use when animating the delayed bar fill
-		[Tooltip("the curve to use when animating the delayed bar fill")]
+		[Tooltip("延迟条填充动画曲线")]
 		[MMCondition("LerpIncreasingDelayedBar", true)]
 		public AnimationCurve LerpIncreasingDelayedBarCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
 		[MMInspectorGroup("Bump", true, 14)]
 		/// whether or not the bar should "bump" when changing value
-		[Tooltip("whether or not the bar should 'bump' when changing value")]
+		[Tooltip("数值变化时是否触发进度条“弹动（bump）”效果")]
 		public bool BumpScaleOnChange = true;
 		/// whether or not the bar should bump when its value increases
-		[Tooltip("whether or not the bar should bump when its value increases")]
+		[Tooltip("数值上升时是否触发弹动")]
 		public bool BumpOnIncrease = false;
 		/// whether or not the bar should bump when its value decreases
-		[Tooltip("whether or not the bar should bump when its value decreases")]
+		[Tooltip("数值下降时是否触发弹动")]
 		public bool BumpOnDecrease = false;
 		/// the duration of the bump animation
-		[Tooltip("the duration of the bump animation")]
+		[Tooltip("弹动动画持续时长")]
 		public float BumpDuration = 0.2f;
 		/// whether or not the bar should flash when bumping
-		[Tooltip("whether or not the bar should flash when bumping")]
+		[Tooltip("弹动时是否同时闪烁")]
 		public bool ChangeColorWhenBumping = true;
 		/// whether or not to store the initial bar color before a bump
-		[Tooltip("whether or not to store the initial bar color before a bump")]
+		[Tooltip("弹动前是否记录进度条初始颜色")]
 		public bool StoreBarColorOnPlay = true;
 		/// the color to apply to the bar when bumping
-		[Tooltip("the color to apply to the bar when bumping")]
+		[Tooltip("弹动时应用到进度条的颜色")]
 		[MMCondition("ChangeColorWhenBumping", true)]
 		public Color BumpColor = Color.white;
 		/// the curve to map the bump animation on
-		[Tooltip("the curve to map the bump animation on")]
+		[Tooltip("弹动动画使用的曲线")]
 		[FormerlySerializedAs("BumpAnimationCurve")]
 		public AnimationCurve BumpScaleAnimationCurve = new AnimationCurve(new Keyframe(1, 1), new Keyframe(0.3f, 1.05f), new Keyframe(1, 1));
 		/// the curve to map the bump animation color animation on
-		[Tooltip("the curve to map the bump animation color animation on")]
+		[Tooltip("弹动颜色动画使用的曲线")]
 		public AnimationCurve BumpColorAnimationCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
 		/// if this is true, the BumpIntensityMultiplier curve will be evaluated to apply a multiplier to the bump intensity 
-		[Tooltip("if this is true, the BumpIntensityMultiplier curve will be evaluated to apply a multiplier to the bump intensity")]
+		[Tooltip("若开启，将评估 BumpIntensityMultiplier 曲线来对弹动强度施加额外倍率")]
 		public bool ApplyBumpIntensityMultiplier = false;
 		/// the curve to map the bump's intensity on. x is the delta of the bump, y is the associated multiplier
-		[Tooltip("the curve to map the bump's intensity on. x is the normalized delta of the bump (from -1:-100% to 1:100%), y is the associated multiplier")]
+		[Tooltip("弹动强度映射曲线：x 为标准化变化量（-1:-100% 到 1:100%），y 为对应乘数")]
 		[MMCondition("ApplyBumpIntensityMultiplier", true)]
 		public AnimationCurve BumpIntensityMultiplier = new AnimationCurve(new Keyframe(-1, 1), new Keyframe(1, 1));
 		/// whether or not the bar is bumping right now
@@ -197,57 +197,57 @@ namespace MoreMountains.Tools
 		[MMInspectorGroup("Events", true, 16)] 
         
 		/// an event to trigger every time the bar bumps
-		[Tooltip("an event to trigger every time the bar bumps")]
+		[Tooltip("每次发生弹动时触发的事件")]
 		public UnityEvent OnBump;
 		/// an event to trigger every time the bar bumps, with its bump intensity (based on BumpDeltaMultiplier) in parameter
-		[Tooltip("an event to trigger every time the bar bumps, with its bump intensity (based on BumpDeltaMultiplier) in parameter")]
+		[Tooltip("每次弹动时触发的事件，并携带弹动强度参数（基于 BumpDeltaMultiplier）")]
 		public UnityEvent<float> OnBumpIntensity;
 		/// an event to trigger every time the bar starts decreasing
-		[Tooltip("an event to trigger every time the bar starts decreasing")]
+		[Tooltip("进度条开始下降时触发的事件")]
 		public UnityEvent OnBarMovementDecreasingStart;
 		/// an event to trigger every time the bar stops decreasing
-		[Tooltip("an event to trigger every time the bar stops decreasing")]
+		[Tooltip("进度条停止下降时触发的事件")]
 		public UnityEvent OnBarMovementDecreasingStop;
 		/// an event to trigger every time the bar starts increasing
-		[Tooltip("an event to trigger every time the bar starts increasing")]
+		[Tooltip("进度条开始上升时触发的事件")]
 		public UnityEvent OnBarMovementIncreasingStart;
 		/// an event to trigger every time the bar stops increasing
-		[Tooltip("an event to trigger every time the bar stops increasing")]
+		[Tooltip("进度条停止上升时触发的事件")]
 		public UnityEvent OnBarMovementIncreasingStop;
 
 		[MMInspectorGroup("Text", true, 20)] 
 		/// a Text object to update with the bar's value
-		[Tooltip("a Text object to update with the bar's value")]
+		[Tooltip("用于显示进度值的 Text 组件")]
 		public Text PercentageText;
-		#if (MM_TEXTMESHPRO || MM_UGUI2)
+		#if MM_UGUI2
 		/// a TMPro text object to update with the bar's value
-		[Tooltip("a TMPro text object to update with the bar's value")]
+		[Tooltip("用于显示进度值的 TMPro 文本组件")]
 		public TMP_Text PercentageTextMeshPro;
 		#endif
 
 		/// a prefix to always add to the bar's value display
-		[Tooltip("a prefix to always add to the bar's value display")]
+		[Tooltip("显示进度值时固定添加的前缀")]
 		public string TextPrefix;
 		/// a suffix to always add to the bar's value display
-		[Tooltip("a suffix to always add to the bar's value display")]
+		[Tooltip("显示进度值时固定添加的后缀")]
 		public string TextSuffix;
 		/// a value multiplier to always apply to the bar's value when displaying it
-		[Tooltip("a value multiplier to always apply to the bar's value when displaying it")]
+		[Tooltip("显示进度值时固定应用的数值乘数")]
 		public float TextValueMultiplier = 1f;
 		/// the format in which the text should display
-		[Tooltip("the format in which the text should display")]
-		public string TextFormat = "{000}";
+		[Tooltip("文本显示格式")]
+		public string TextFormat = "000";
 		/// whether or not to display the total after the current value 
-		[Tooltip("whether or not to display the total after the current value")]
+		[Tooltip("是否在当前值后显示总值")]
 		public bool DisplayTotal = false;
 		/// if DisplayTotal is true, the separator to put between the current value and the total
-		[Tooltip("if DisplayTotal is true, the separator to put between the current value and the total")]
+		[Tooltip("当 DisplayTotal 为 true 时，当前值与总值之间使用的分隔符")]
 		[MMCondition("DisplayTotal", true)]
 		public string TotalSeparator = " / ";
 
 		[MMInspectorGroup("Debug", true, 15)]
 		/// the value the bar will move to if you press the DebugSet button
-		[Tooltip("the value the bar will move to if you press the DebugSet button")]
+		[Tooltip("点击 DebugSet 按钮时，进度条将移动到的目标值")]
 		[Range(0f, 1f)] 
 		public float DebugNewTargetValue;
 
@@ -264,19 +264,19 @@ namespace MoreMountains.Tools
         
 		[MMInspectorGroup("Debug Read Only", true, 19)]
 		/// the current progress of the bar, ideally read only
-		[Tooltip("the current progress of the bar, ideally read only")]
+		[Tooltip("进度条当前进度（建议只读）")]
 		[Range(0f,1f)]
 		public float BarProgress;
 		/// the value towards which the bar is currently interpolating, ideally read only
-		[Tooltip("the value towards which the bar is currently interpolating, ideally read only")]
+		[Tooltip("进度条当前正在插值逼近的目标值（建议只读）")]
 		[Range(0f,1f)]
 		public float BarTarget;
 		/// the current progress of the delayed bar increasing
-		[Tooltip("the current progress of the delayed bar increasing")]
+		[Tooltip("上升延迟条当前进度")]
 		[Range(0f,1f)]
 		public float DelayedBarIncreasingProgress;
 		/// the current progress of the delayed bar decreasing
-		[Tooltip("the current progress of the delayed bar decreasing")]
+		[Tooltip("下降延迟条当前进度")]
 		[Range(0f,1f)]
 		public float DelayedBarDecreasingProgress;
 
@@ -490,7 +490,7 @@ namespace MoreMountains.Tools
 			_isDelayedBarDecreasingNotNull = DelayedBarDecreasing != null;
 			_isDelayedBarIncreasingNotNull = DelayedBarIncreasing != null;
 			_isPercentageTextNotNull = PercentageText != null;
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			_isPercentageTextMeshProNotNull = PercentageTextMeshPro != null;
 			#endif
 			_initialScale = this.transform.localScale;
@@ -519,6 +519,15 @@ namespace MoreMountains.Tools
 			{
 				SetBar01(InitialFillValue);
 			}
+		}
+
+		/// <summary>
+		/// Call this method to set a new initial color at runtime, which will be used as a base for the bump color changes
+		/// </summary>
+		/// <param name="newInitialColor"></param>
+		public virtual void SetInitialColor(Color newInitialColor)
+		{
+			_initialColor = newInitialColor;
 		}
 
 		protected virtual void StoreInitialColor()
@@ -606,7 +615,7 @@ namespace MoreMountains.Tools
 			{
 				PercentageText.text = _updatedText;
 			}
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			if (_isPercentageTextMeshProNotNull)
 			{
 				PercentageTextMeshPro.text = _updatedText;

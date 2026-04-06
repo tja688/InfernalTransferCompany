@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,11 +18,11 @@ namespace MoreMountains.Feedbacks
 		static public void Unregister(Delegate callback) { OnEvent -= callback; }
 
 		public delegate void Delegate(MMChannelData channelData, Vector3 spawnPosition, string value, Vector3 direction, float intensity,
-			bool forceLifetime = false, float lifetime = 1f, bool forceColor = false, Gradient animateColorGradient = null, bool useUnscaledTime = false);
+			bool forceLifetime = false, float lifetime = 1f, bool forceColor = false, Gradient animateColorGradient = null, bool useUnscaledTime = false, Transform attachmentTransform = null);
 		static public void Trigger(MMChannelData channelData, Vector3 spawnPosition, string value, Vector3 direction, float intensity,
-			bool forceLifetime = false, float lifetime = 1f, bool forceColor = false, Gradient animateColorGradient = null, bool useUnscaledTime = false)
+			bool forceLifetime = false, float lifetime = 1f, bool forceColor = false, Gradient animateColorGradient = null, bool useUnscaledTime = false, Transform attachmentTransform = null)
 		{
-			OnEvent?.Invoke(channelData, spawnPosition, value, direction, intensity, forceLifetime, lifetime, forceColor, animateColorGradient, useUnscaledTime);
+			OnEvent?.Invoke(channelData, spawnPosition, value, direction, intensity, forceLifetime, lifetime, forceColor, animateColorGradient, useUnscaledTime, attachmentTransform);
 		} 
 	}
 	#endregion
@@ -42,63 +42,61 @@ namespace MoreMountains.Feedbacks
         
 		/// whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what.
 		/// MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable
-		[Tooltip("whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what. " +
-		         "MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable")]
+		[Tooltip("监听通道是使用 int 定义，还是使用 MMChannel ScriptableObject 定义。 int 配置更简单，但项目一大就容易变乱，也更难记住每个数字代表什么。 MMChannel 可脚本化对象要求您提前创建它们，但带有可读的名称，并且更具可扩展性")]
 		public MMChannelModes ChannelMode = MMChannelModes.Int;
 		/// the channel to listen to - has to match the one on the feedback
-		[Tooltip("the channel to listen to - has to match the one on the feedback")]
+		[Tooltip("要监听的通道，必须与反馈上设置的通道一致")]
 		[MMEnumCondition("ChannelMode", (int)MMChannelModes.Int)]
 		public int Channel = 0;
 		/// the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel,
 		/// right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name
-		[Tooltip("the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel, " +
-		         "right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name")]
+		[Tooltip("要使反馈默认也必须引用此预设器，相关的反馈也必须引用同一个通道资源定义才能接收事件。创建通道资源，右键单击项目中的任意位置（通常在数据文件夹中）并转到 更多山脉 > 通道资源，然后使用唯一名称的命名它")]
 		[MMEnumCondition("ChannelMode", (int)MMChannelModes.MMChannel)]
 		public MMChannel MMChannelDefinition = null;
 		/// whether or not this spawner can spawn at this time
-		[Tooltip("whether or not this spawner can spawn at this time")]
+		[Tooltip("产卵者当前是否允许生成")]
 		public bool CanSpawn = true;
 		/// whether or not this spawner should spawn objects on unscaled time
-		[Tooltip("whether or not this spawner should spawn objects on unscaled time")]
+		[Tooltip("该 Spawner 是否使用不受时间缩放影响的时间来生成对象")]
 		public bool UseUnscaledTime = false;
         
 		[MMInspectorGroup("Pooler", true, 24)]
 
 		/// the selected pooler mode (single prefab or multiple ones)
-		[Tooltip("the selected pooler mode (single prefab or multiple ones)")]
+		[Tooltip("当前选择的对象池管理器模式（单 Prefab 或多个 Prefab）")]
 		public PoolerModes PoolerMode = PoolerModes.Simple;
 		/// the prefab to spawn (ignored if in multiple mode)
-		[Tooltip("the prefab to spawn (ignored if in multiple mode)")]
+		[Tooltip("要生成的 Prefab（在 Multiple 模式下会被忽略）")]
 		public MMFloatingText PooledSimpleMMFloatingText;
 		/// the prefabs to spawn (ignored if in simple mode)
-		[Tooltip("the prefabs to spawn (ignored if in simple mode)")]
+		[Tooltip("要生成的 Prefab 列表（在 Simple 模式下会被忽略）")]
 		public List<MMFloatingText> PooledMultipleMMFloatingText;
 		/// the amount of objects to pool to avoid having to instantiate them at runtime. Should be bigger than the max amount of texts you plan on having on screen at any given moment
-		[Tooltip("the amount of objects to pool to avoid having to instantiate them at runtime. Should be bigger than the max amount of texts you plan on having on screen at any given moment")]
+		[Tooltip("预先放入对象池的对象数量，用于避免运行时频繁实例化。建议设置得大于你预计屏幕上任意时刻可能同时存在的最大文字数量")]
 		public int PoolSize = 20;
 		/// whether or not to nest the waiting pools
-		[Tooltip("whether or not to nest the waiting pools")]
+		[Tooltip("是否将待机对象池嵌套到父节点下")]
 		public bool NestWaitingPool = true;
 		/// whether or not to mutualize the waiting pools
-		[Tooltip("whether or not to mutualize the waiting pools")]
+		[Tooltip("是否让待机对象池共用")]
 		public bool MutualizeWaitingPools = true;
 		/// whether or not the text pool can expand if the pool is empty
-		[Tooltip("whether or not the text pool can expand if the pool is empty")]
+		[Tooltip("当对象池为空时，文字对象池是否允许自动扩容")]
 		public bool PoolCanExpand = true;
 
 		[MMInspectorGroup("Spawn Settings", true, 14)]
 
 		/// the random min and max lifetime duration for the spawned texts (in seconds)
-		[Tooltip("the random min and max lifetime duration for the spawned texts (in seconds)")]
+		[Tooltip("生成文字生命周期的随机最小值与最大值（单位为秒）")]
 		[MMVector("Min", "Max")] 
 		public Vector2 Lifetime = Vector2.one;
         
 		[Header("Spawn Position Offset")]
 		/// the random min position at which to spawn the text, relative to its intended spawn position
-		[Tooltip("the random min position at which to spawn the text, relative to its intended spawn position")]
+		[Tooltip("相对其预期生成位置的随机最小生成偏移")]
 		public Vector3 SpawnOffsetMin = Vector3.zero;
 		/// the random max position at which to spawn the text, relative to its intended spawn position
-		[Tooltip("the random max position at which to spawn the text, relative to its intended spawn position")]
+		[Tooltip("相对其预期生成位置的随机最大生成偏移")]
 		public Vector3 SpawnOffsetMax = Vector3.zero;
 
 		[MMInspectorGroup("Animate Position", true, 15)] 
@@ -106,57 +104,57 @@ namespace MoreMountains.Feedbacks
 		[Header("Movement")]
 
 		/// whether or not to animate the movement of spawned texts
-		[Tooltip("whether or not to animate the movement of spawned texts")]
+		[Tooltip("是否为生成的文字播放位移动画")]
 		public bool AnimateMovement = true;
 		/// whether or not to animate the X movement of spawned texts
-		[Tooltip("whether or not to animate the X movement of spawned texts")]
+		[Tooltip("是否为生成文字的 X 方向播放位移动画")]
 		public bool AnimateX = false;
 		/// the value to which the x movement curve's zero should be remapped to, randomized between its min and max - put the same value in both min and max if you don't want any randomness
-		[Tooltip("the value to which the x movement curve's zero should be remapped to, randomized between its min and max - put the same value in both min and max if you don't want any randomness")]
+		[Tooltip("将 X 位移曲线 0 端重新映射到的值，会在 min 与 max 之间随机；若不需要随机，请将两者设为相同")]
 		[MMCondition("AnimateX", true)] 
 		[MMVector("Min", "Max")]
 		public Vector2 RemapXZero = Vector2.zero;
 		/// the value to which the x movement curve's one should be remapped to, randomized between its min and max - put the same value in both min and max if you don't want any randomness
-		[Tooltip("the value to which the x movement curve's one should be remapped to, randomized between its min and max - put the same value in both min and max if you don't want any randomness")]
+		[Tooltip("将 X 位移曲线 1 端重新映射到的值，会在 min 与 max 之间随机；若不需要随机，请将两者设为相同")]
 		[MMCondition("AnimateX", true)] 
 		[MMVector("Min", "Max")]
 		public Vector2 RemapXOne = Vector2.one;
 		/// the curve on which to animate the x movement
-		[Tooltip("the curve on which to animate the x movement")]
+		[Tooltip("用于驱动 X 方向移动的曲线")]
 		[MMCondition("AnimateX", true)]
 		public AnimationCurve AnimateXCurve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(1f, 1f));
 		/// whether or not to animate the Y movement of spawned texts
-		[Tooltip("whether or not to animate the Y movement of spawned texts")]
+		[Tooltip("是否为生成文字的 Y 方向播放位移动画")]
 		public bool AnimateY = true;
 		/// the value to which the y movement curve's zero should be remapped to, randomized between its min and max - put the same value in both min and max if you don't want any randomness
-		[Tooltip("the value to which the y movement curve's zero should be remapped to, randomized between its min and max - put the same value in both min and max if you don't want any randomness")]
+		[Tooltip("将 Y 位移曲线 0 端重新映射到的值，会在 min 与 max 之间随机；若不需要随机，请将两者设为相同")]
 		[MMCondition("AnimateY", true)] 
 		[MMVector("Min", "Max")]
 		public Vector2 RemapYZero = Vector2.zero;
 		/// the value to which the y movement curve's one should be remapped to, randomized between its min and max - put the same value in both min and max if you don't want any randomness
-		[Tooltip("the value to which the y movement curve's one should be remapped to, randomized between its min and max - put the same value in both min and max if you don't want any randomness")]
+		[Tooltip("将 Y 位移曲线 1 端重新映射到的值，会在 min 与 max 之间随机；若不需要随机，请将两者设为相同")]
 		[MMCondition("AnimateY", true)]
 		[MMVector("Min", "Max")]
 		public Vector2 RemapYOne = new Vector2(5f, 5f);
 		/// the curve on which to animate the y movement
-		[Tooltip("the curve on which to animate the y movement")]
+		[Tooltip("用于驱动 Y 方向移动的曲线")]
 		[MMCondition("AnimateY", true)]
 		public AnimationCurve AnimateYCurve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(1f, 1f));
 		/// whether or not to animate the Z movement of spawned texts
-		[Tooltip("whether or not to animate the Z movement of spawned texts")]
+		[Tooltip("是否为生成文字的 Z 方向播放位移动画")]
 		public bool AnimateZ = false;
 		/// the value to which the z movement curve's zero should be remapped to, randomized between its min and max - put the same value in both min and max if you don't want any randomness
-		[Tooltip("the value to which the z movement curve's zero should be remapped to, randomized between its min and max - put the same value in both min and max if you don't want any randomness")]
+		[Tooltip("将 Z 位移曲线 0 端重新映射到的值，会在 min 与 max 之间随机；若不需要随机，请将两者设为相同")]
 		[MMCondition("AnimateZ", true)] 
 		[MMVector("Min", "Max")]
 		public Vector2 RemapZZero = Vector2.zero;
 		/// the value to which the z movement curve's one should be remapped to, randomized between its min and max - put the same value in both min and max if you don't want any randomness
-		[Tooltip("the value to which the z movement curve's one should be remapped to, randomized between its min and max - put the same value in both min and max if you don't want any randomness")]
+		[Tooltip("将 Z 位移曲线 1 端重新映射到的值，会在 min 与 max 之间随机；若不需要随机，请将两者设为相同")]
 		[MMCondition("AnimateZ", true)] 
 		[MMVector("Min", "Max")]
 		public Vector2 RemapZOne = Vector2.one;
 		/// the curve on which to animate the z movement
-		[Tooltip("the curve on which to animate the z movement")]
+		[Tooltip("用于驱动 Z 方向移动的曲线")]
 		[MMCondition("AnimateZ", true)]
 		public AnimationCurve AnimateZCurve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(1f, 1f));
         
@@ -165,112 +163,112 @@ namespace MoreMountains.Feedbacks
 		[Header("Alignment")]
 
 		/// the selected alignment mode (whether the spawned text should have a fixed alignment, orient to match the initial spawn direction, or its movement curve)
-		[Tooltip("the selected alignment mode (whether the spawned text should have a fixed alignment, orient to match the initial spawn direction, or its movement curve)")]
+		[Tooltip("当前选择的对齐模式（生成的文字是保持固定朝向、对齐初始生成方向，还是跟随其移动曲线朝向）")]
 		public AlignmentModes AlignmentMode = AlignmentModes.Fixed;
 		/// when in fixed mode, the direction in which to keep the spawned texts
-		[Tooltip("when in fixed mode, the direction in which to keep the spawned texts")]
+		[Tooltip("在 Fixed 模式下，生成文字应保持的方向")]
 		[MMEnumCondition("AlignmentMode", (int)AlignmentModes.Fixed)]
 		public Vector3 FixedAlignment = Vector3.up;
 
 		[Header("Billboard")]
 
 		/// whether or not spawned texts should always face the camera
-		[Tooltip("whether or not spawned texts should always face the camera")]
+		[Tooltip("生成的文字是否始终朝向相机")]
 		public bool AlwaysFaceCamera;
 		/// whether or not this spawner should automatically grab the main camera on start
-		[Tooltip("whether or not this spawner should automatically grab the main camera on start")]
+		[Tooltip("该 Spawner 是否在启动时自动获取主相机")]
 		[MMCondition("AlwaysFaceCamera", true)]
 		public bool AutoGrabMainCameraOnStart = true;
 		/// if not in auto grab mode, the camera to use for billboards
-		[Tooltip("if not in auto grab mode, the camera to use for billboards")]
+		[Tooltip("若未启用自动获取模式，用于 Billboard 的相机")]
 		[MMCondition("AlwaysFaceCamera", true)]
 		public Camera TargetCamera;
                 
 		[MMInspectorGroup("Animate Scale", true, 46)]
 
 		/// whether or not to animate the scale of spawned texts
-		[Tooltip("whether or not to animate the scale of spawned texts")]
+		[Tooltip("是否为生成文字播放缩放动画")]
 		public bool AnimateScale = true;
 		/// the value to which the scale curve's zero should be remapped to
-		[Tooltip("the value to which the scale curve's zero should be remapped to")]
+		[Tooltip("将缩放曲线 0 端重新映射到的值")]
 		[MMCondition("AnimateScale", true)]
 		public Vector2 RemapScaleZero = Vector2.zero;
 		/// the value to which the scale curve's one should be remapped to
-		[Tooltip("the value to which the scale curve's one should be remapped to")]
+		[Tooltip("将缩放曲线 1 端重新映射到的值")]
 		[MMCondition("AnimateScale", true)]
 		public Vector2 RemapScaleOne = Vector2.one;
 		/// the curve on which to animate the scale
-		[Tooltip("the curve on which to animate the scale")]
+		[Tooltip("用于驱动缩放的曲线")]
 		[MMCondition("AnimateScale", true)]
 		public AnimationCurve AnimateScaleCurve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(0.15f, 1f), new Keyframe(0.85f, 1f), new Keyframe(1f, 0f));
         
 		[MMInspectorGroup("Animate Color", true, 55)]
 
 		/// whether or not to animate the spawned text's color over time
-		[Tooltip("whether or not to animate the spawned text's color over time")]
+		[Tooltip("是否让生成文字的颜色随时间变化")]
 		public bool AnimateColor = false;
 		/// the gradient over which to animate the spawned text's color over time
-		[Tooltip("the gradient over which to animate the spawned text's color over time")]
+		[Tooltip("用于驱动生成文字颜色随时间变化的渐变")]
 		[GradientUsage(true)]
 		public Gradient AnimateColorGradient = new Gradient();
 
 		[MMInspectorGroup("Animate Opacity", true, 45)]
 
 		/// whether or not to animate the opacity of the spawned texts
-		[Tooltip("whether or not to animate the opacity of the spawned texts")]
+		[Tooltip("是否为生成文字播放透明度动画")]
 		public bool AnimateOpacity = true;
 		/// the value to which the opacity curve's zero should be remapped to
-		[Tooltip("the value to which the opacity curve's zero should be remapped to")]
+		[Tooltip("将透明度曲线 0 端重新映射到的值")]
 		[MMCondition("AnimateOpacity", true)]
 		public Vector2 RemapOpacityZero = Vector2.zero;
 		/// the value to which the opacity curve's one should be remapped to
-		[Tooltip("the value to which the opacity curve's one should be remapped to")]
+		[Tooltip("将透明度曲线 1 端重新映射到的值")]
 		[MMCondition("AnimateOpacity", true)]
 		public Vector2 RemapOpacityOne = Vector2.one;
 		/// the curve on which to animate the opacity
-		[Tooltip("the curve on which to animate the opacity")]
+		[Tooltip("用于驱动透明度的曲线")]
 		[MMCondition("AnimateOpacity", true)]
 		public AnimationCurve AnimateOpacityCurve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(0.2f, 1f), new Keyframe(0.8f, 1f), new Keyframe(1f, 0f));
 
 		[MMInspectorGroup("Intensity Multipliers", true, 45)]
 
 		/// whether or not the intensity multiplier should impact lifetime
-		[Tooltip("whether or not the intensity multiplier should impact lifetime")]
+		[Tooltip("强度乘数是否影响生命周期")]
 		public bool IntensityImpactsLifetime = false;
 		/// when getting an intensity multiplier, the value by which to multiply the lifetime
-		[Tooltip("when getting an intensity multiplier, the value by which to multiply the lifetime")]
+		[Tooltip("应用强度乘数时，对生命周期施加的乘数")]
 		[MMCondition("IntensityImpactsLifetime", true)]
 		public float IntensityLifetimeMultiplier = 1f;
 		/// whether or not the intensity multiplier should impact movement
-		[Tooltip("whether or not the intensity multiplier should impact movement")]
+		[Tooltip("强度乘数是否影响移动")]
 		public bool IntensityImpactsMovement = false;
 		/// when getting an intensity multiplier, the value by which to multiply the movement values
-		[Tooltip("when getting an intensity multiplier, the value by which to multiply the movement values")]
+		[Tooltip("应用强度乘数时，对移动数值施加的乘数")]
 		[MMCondition("IntensityImpactsMovement", true)]
 		public float IntensityMovementMultiplier = 1f;
 		/// whether or not the intensity multiplier should impact scale
-		[Tooltip("whether or not the intensity multiplier should impact scale")]
+		[Tooltip("强度乘数是否影响缩放")]
 		public bool IntensityImpactsScale = false;
 		/// when getting an intensity multiplier, the value by which to multiply the scale values
-		[Tooltip("when getting an intensity multiplier, the value by which to multiply the scale values")]
+		[Tooltip("应用强度乘数时，对缩放数值施加的乘数")]
 		[MMCondition("IntensityImpactsScale", true)]
 		public float IntensityScaleMultiplier = 1f;
 
 		[MMInspectorGroup("Debug", true, 12)]
 
 		/// a random value to display when pressing the TestSpawnOne button
-		[Tooltip("a random value to display when pressing the TestSpawnOne button")]
+		[Tooltip("按下 TestSpawnOne 按钮时要显示的随机值")]
 		public Vector2Int DebugRandomValue = new Vector2Int(100, 500);
 		/// the min and max bounds within which to pick a value to output when pressing the TestSpawnMany button
-		[Tooltip("the min and max bounds within which to pick a value to output when pressing the TestSpawnMany button")]
+		[Tooltip("按下 TestSpawnMany 按钮时，用于随机输出数值的最小/最大范围")]
 		[MMVector("Min", "Max")] 
 		public Vector2 DebugInterval = new Vector2(0.3f, 0.5f);
 		/// a button used to test the spawn of one text
-		[Tooltip("a button used to test the spawn of one text")]
+		[Tooltip("用于测试生成单个文字的按钮")]
 		[MMInspectorButton("TestSpawnOne")]
 		public bool TestSpawnOneBtn;
 		/// a button used to start/stop the spawn of texts at regular intervals
-		[Tooltip("a button used to start/stop the spawn of texts at regular intervals")]
+		[Tooltip("用于按固定间隔开始/停止生成文字的按钮")]
 		[MMInspectorButton("TestSpawnMany")]
 		public bool TestSpawnManyBtn;
         
@@ -403,8 +401,9 @@ namespace MoreMountains.Feedbacks
 		/// <param name="lifetime"></param>
 		/// <param name="forceColor"></param>
 		/// <param name="animateColorGradient"></param>
-		protected virtual void Spawn(string value, Vector3 position, Vector3 direction, float intensity = 1f,
-			bool forceLifetime = false, float lifetime = 1f, bool forceColor = false, Gradient animateColorGradient = null)
+		public virtual void Spawn(string value, Vector3 position, Vector3 direction, float intensity = 1f,
+			bool forceLifetime = false, float lifetime = 1f, bool forceColor = false, Gradient animateColorGradient = null, 
+			Transform attachmentTransform = null)
 		{
 			if (!CanSpawn)
 			{
@@ -454,11 +453,14 @@ namespace MoreMountains.Feedbacks
 			// we activate the object
 			nextGameObject.gameObject.SetActive(true);
 			nextGameObject.gameObject.MMGetComponentNoAlloc<MMPoolableObject>().TriggerOnSpawnComplete();
-
+			
 			// we position the object
 			nextGameObject.transform.position = this.transform.position + _spawnOffset;
 
 			_floatingText = nextGameObject.MMGetComponentNoAlloc<MMFloatingText>();
+
+			_floatingText.FollowTarget.Target = attachmentTransform;
+			
 			_floatingText.SetUseUnscaledTime(UseUnscaledTime, true);
 			_floatingText.ResetPosition();
 			_floatingText.SetProperties(value, _lifetime, _direction, AnimateMovement, 
@@ -484,7 +486,7 @@ namespace MoreMountains.Feedbacks
 		/// <param name="forceColor"></param>
 		/// <param name="animateColorGradient"></param>
 		public virtual void OnMMFloatingTextSpawnEvent(MMChannelData channelData, Vector3 spawnPosition, string value, Vector3 direction, float intensity,
-			bool forceLifetime = false, float lifetime = 1f, bool forceColor = false, Gradient animateColorGradient = null, bool useUnscaledTime = false)
+			bool forceLifetime = false, float lifetime = 1f, bool forceColor = false, Gradient animateColorGradient = null, bool useUnscaledTime = false, Transform attachmentTransform = null)
 		{
 			if (!MMChannel.Match(channelData, ChannelMode, Channel, MMChannelDefinition))
 			{
@@ -492,7 +494,7 @@ namespace MoreMountains.Feedbacks
 			}
 
 			UseUnscaledTime = useUnscaledTime;
-			Spawn(value, spawnPosition, direction, intensity, forceLifetime, lifetime, forceColor, animateColorGradient);
+			Spawn(value, spawnPosition, direction, intensity, forceLifetime, lifetime, forceColor, animateColorGradient, attachmentTransform);
 		}
     
 		/// <summary>

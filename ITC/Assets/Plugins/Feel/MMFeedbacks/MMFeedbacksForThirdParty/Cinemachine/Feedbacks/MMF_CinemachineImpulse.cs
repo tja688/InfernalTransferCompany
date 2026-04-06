@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MoreMountains.Feedbacks;
@@ -12,12 +12,13 @@ using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
+	[System.Serializable]
 	[AddComponentMenu("")]
 	#if MM_CINEMACHINE || MM_CINEMACHINE3
 	[FeedbackPath("Camera/Cinemachine Impulse")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.Cinemachine")]
-	[FeedbackHelp("This feedback lets you trigger a Cinemachine Impulse event. You'll need a Cinemachine Impulse Listener on your camera for this to work.")]
+	[FeedbackHelp("这个反馈可触发一个 Cinemachine Impulse 事件。要让它生效，你的相机上需要挂有 Cinemachine Impulse Listener。")]
 	public class MMF_CinemachineImpulse : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -32,20 +33,20 @@ namespace MoreMountains.FeedbacksForThirdParty
 
 		#if MM_CINEMACHINE || MM_CINEMACHINE3
 		[MMFInspectorGroup("Cinemachine Impulse", true, 28)]
-		/// the impulse definition to broadcast
-		[Tooltip("the impulse definition to broadcast")]
+		/// 要广播的 impulse 定义。
+		[Tooltip("要的广播冲击定义。")]
 		public CinemachineImpulseDefinition m_ImpulseDefinition = new CinemachineImpulseDefinition();
-		/// the velocity to apply to the impulse shake
-		[Tooltip("the velocity to apply to the impulse shake")]
+		/// 应用到 impulse 抖动上的速度。
+		[Tooltip("应用于冲击上的速度。")]
 		public Vector3 Velocity;
-		/// whether or not to clear impulses (stopping camera shakes) when the Stop method is called on that feedback
-		[Tooltip("whether or not to clear impulses (stopping camera shakes) when the Stop method is called on that feedback")]
+		/// 当此反馈调用 Stop 方法时，是否清除 impulse（即停止相机震动）。
+		[Tooltip("当此反馈调用 Stop 方法时，是否清除 impulse（即停止相机震动）。")]
 		public bool ClearImpulseOnStop = false;
 		#endif
 		
 		[Header("Gizmos")]
-		/// whether or not to draw gizmos to showcase the various distance properties of this feedback, when applicable. Dissipation distance in blue, impact radius in yellow.
-		[Tooltip("whether or not to draw gizmos to showcase the various distance properties of this feedback, when applicable. Dissipation distance in blue, impact radius in yellow.")]
+		/// 在适用时，是否绘制 gizmos 来展示此反馈的各项距离参数。蓝色表示 Dissipation Distance，黄色表示 Impact Radius。
+		[Tooltip("在适用时，是否有较远的小玩意来显示反馈的元件距离参数。蓝色表示耗散距离，黄色表示影响半径。")]
 		public bool DrawGizmos = false;
 		
 		#if MM_CINEMACHINE

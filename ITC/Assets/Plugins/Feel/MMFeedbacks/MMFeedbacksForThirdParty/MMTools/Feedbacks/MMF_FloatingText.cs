@@ -15,13 +15,13 @@ namespace MoreMountains.Feedbacks
 	/// directly hooked to the Health component, letting you display damage taken.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will request the spawn of a floating text, usually to signify damage, but not necessarily. " +
-	              "This requires that a MMFloatingTextSpawner be correctly setup in the scene, otherwise nothing will happen. " +
-	              "To do so, create a new empty object, add a MMFloatingTextSpawner to it. Drag (at least) one MMFloatingText prefab into its PooledSimpleMMFloatingText slot. " +
-	              "You'll find such prefabs already made in the MMTools/Tools/MMFloatingText/Prefabs folder, but feel free to create your own. " +
-	              "Using that feedback will always spawn the same text. While this may be what you want, if you're using the Corgi Engine or TopDown Engine, you'll find dedicated versions " +
-	              "directly hooked to the Health component, letting you display damage taken.")]
+	[FeedbackHelp("此反馈会请求生成一个 Floating Text，通常用于表示伤害，但并不局限于此。 " +
+	              "要让它生效，场景中必须正确配置 MMFloatingTextSpawner，否则不会发生任何事。 " +
+	              "做法是创建一个新的空对象，为其添加 MMFloatingTextSpawner，然后至少拖入一个 MMFloatingText 预制体到它的 PooledSimpleMMFloatingText 槽位。 " +
+	              "你可以在 MMTools/Tools/MMFloatingText/Prefabs 文件夹中找到现成预制体，也完全可以自行创建。 " +
+	              "直接使用该反馈时，每次生成的都会是同一段文本。若这正是你需要的效果，那没有问题；如果你在使用 Corgi Engine 或 TopDown Engine，也可以改用与 Health 组件直接联动的专用版本，以显示实际受到的伤害值。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("UI/Floating Text")]
 	public class MMF_FloatingText : MMF_Feedback
 	{
@@ -42,52 +42,55 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Floating Text", true, 64)]
 		/// the Intensity to spawn this text with, will act as a lifetime/movement/scale multiplier based on the spawner's settings
-		[Tooltip("the Intensity to spawn this text with, will act as a lifetime/movement/scale multiplier based on the spawner's settings")]
+		[Tooltip("生成该文本时使用的强度，会根据 Spawner 的设置作为生命周期 / 位移 / 缩放的倍率")]
 		public float Intensity = 1f;
 		/// the value to display when spawning this text
-		[Tooltip("the value to display when spawning this text")]
+		[Tooltip("生成文本时要显示的值")]
 		public string Value = "100";
 		/// if this is true, the intensity passed to this feedback will be the value displayed
-		[Tooltip("if this is true, the intensity passed to this feedback will be the value displayed")]
+		[Tooltip("若启用，传入该反馈的强度会直接作为显示值")]
 		public bool UseIntensityAsValue = false;
 		
 		/// the possible methods that can be applied to the output value (when using intensity as the output value, string values won't get rounded) 
 		public enum RoundingMethods { NoRounding, Round, Ceil, Floor }
 		
 		/// the rounding methods to apply to the output value (when using intensity as the output value, string values won't get rounded)
-		[Tooltip("the rounding methods to apply to the output value (when using intensity as the output value, string values won't get rounded)")]
+		[Tooltip("输出值采用的取整方式（当使用强度作为输出值时，字符串类型不会参与取整）")]
 		[MMFInspectorGroup("Rounding", true, 68)]
 		public RoundingMethods RoundingMethod = RoundingMethods.NoRounding;
 
 		[MMFInspectorGroup("Color", true, 65)]
 		/// whether or not to force a color on the new text, if not, the default colors of the spawner will be used
-		[Tooltip("whether or not to force a color on the new text, if not, the default colors of the spawner will be used")]
+		[Tooltip("是否强制为新文本指定颜色；若关闭，则使用 Spawner 的默认颜色")]
 		public bool ForceColor = false;
 		/// the gradient to apply over the lifetime of the text
-		[Tooltip("the gradient to apply over the lifetime of the text")]
+		[Tooltip("文本整个生命周期内使用的渐变色")]
 		[GradientUsage(true)]
 		public Gradient AnimateColorGradient = new Gradient();
 
 		[MMFInspectorGroup("Lifetime", true, 66)]
 		/// whether or not to force a lifetime on the new text, if not, the default colors of the spawner will be used
-		[Tooltip("whether or not to force a lifetime on the new text, if not, the default colors of the spawner will be used")]
+		[Tooltip("是否强制指定新文本的生命周期；若关闭，则使用 Spawner 的默认生命周期设置")]
 		public bool ForceLifetime = false;
 		/// the forced lifetime for the spawned text
-		[Tooltip("the forced lifetime for the spawned text")]
+		[Tooltip("生成文本时强制使用的生命周期")]
 		[MMFCondition("ForceLifetime", true)]
 		public float Lifetime = 0.5f;
 
 		[MMFInspectorGroup("Position", true, 67)]
 		/// where to spawn the new text (at the position of the feedback, or on a specified Transform)
-		[Tooltip("where to spawn the new text (at the position of the feedback, or on a specified Transform)")]
+		[Tooltip("新文本的生成位置（可在反馈当前位置生成，或在指定 Transform 上生成）")]
 		public PositionModes PositionMode = PositionModes.FeedbackPosition;
 		/// in transform mode, the Transform on which to spawn the new floating text
-		[Tooltip("in transform mode, the Transform on which to spawn the new floating text")]
+		[Tooltip("变换模式下，用于生成新的 浮动文本 的 变换")]
 		[MMFEnumCondition("PositionMode", (int)PositionModes.TargetTransform)]
 		public Transform TargetTransform;
 		/// the direction to apply to the new floating text (leave it to 0 to let the Spawner decide based on its settings)
-		[Tooltip("the direction to apply to the new floating text (leave it to 0 to let the Spawner decide based on its settings)")]
+		[Tooltip("施加给新 Floating Text 的方向（设为 0 时交由 Spawner 按自身设置决定）")]
 		public Vector3 Direction = Vector3.zero;
+		/// a transform to attach the floating text to for the duration of its lifetime. it will then move relative to it
+		[Tooltip("在文本生命周期内要附着到的 Transform。附着后文本会相对该 Transform 进行移动。")]
+		public Transform AttachmentTransform;
 
 		protected Vector3 _playPosition;
 		protected string _value;
@@ -133,7 +136,8 @@ namespace MoreMountains.Feedbacks
 			
 			_value = UseIntensityAsValue ? feedbacksIntensity.ToString() : Value;
 			
-			MMFloatingTextSpawnEvent.Trigger(ChannelData, _playPosition, _value, Direction, Intensity * intensityMultiplier, ForceLifetime, Lifetime, ForceColor, AnimateColorGradient, ComputedTimescaleMode == TimescaleModes.Unscaled);
+			MMFloatingTextSpawnEvent.Trigger(ChannelData, _playPosition, _value, Direction, Intensity * intensityMultiplier, ForceLifetime, Lifetime, ForceColor, AnimateColorGradient, 
+				ComputedTimescaleMode == TimescaleModes.Unscaled, AttachmentTransform);
 		}
 
 		protected virtual float ApplyRounding(float value)

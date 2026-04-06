@@ -22,24 +22,24 @@ namespace MoreMountains.FeedbacksForThirdParty
 
 		[MMInspectorGroup("Bloom Intensity", true, 42)]
 		/// the curve used to animate the intensity value on
-		[Tooltip("the curve used to animate the intensity value on")]
+		[Tooltip("用于驱动强度值变化的曲线")]
 		public AnimationCurve ShakeIntensity = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		public float RemapIntensityZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		public float RemapIntensityOne = 1f;
 
 		[MMInspectorGroup("Bloom Threshold", true, 43)]
 		/// the curve used to animate the threshold value on
-		[Tooltip("the curve used to animate the threshold value on")]
+		[Tooltip("用于驱动阈值数值变化的曲线")]
 		public AnimationCurve ShakeThreshold = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		public float RemapThresholdZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		public float RemapThresholdOne = 0f;
 
 		#if MM_HDRP

@@ -14,8 +14,9 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("Audio/MMSoundManager Save and Load")]
-	[FeedbackHelp("This feedback will let you trigger save, load, and reset on MMSoundManager settings. You will need a MMSoundManager in your scene for this to work.")]
+	[FeedbackHelp("此反馈可触发 MMSoundManager 设置的保存、加载与重置。要生效，场景中必须存在 MMSoundManager。")]
 	public class MMF_MMSoundManagerSaveLoad : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -31,7 +32,7 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("MMSoundManager Save and Load", true, 30)]
 		/// the selected mode to interact with save settings on the MMSoundManager
-		[Tooltip("the selected mode to interact with save settings on the MMSoundManager")]
+		[Tooltip("要对 MMSoundManager 设置执行的操作模式：Save、Load 或 Reset。")]
 		public Modes Mode = Modes.Save;
         
 		/// <summary>

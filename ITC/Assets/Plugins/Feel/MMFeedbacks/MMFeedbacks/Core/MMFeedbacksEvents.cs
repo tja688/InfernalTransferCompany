@@ -40,7 +40,7 @@ namespace  MoreMountains.Feedbacks
 		static public void Register(Delegate callback) { OnEvent += callback; }
 		static public void Unregister(Delegate callback) { OnEvent -= callback; }
 
-		public enum EventTypes { Play, Pause, Resume, ChangeDirection, Complete, SkipToTheEnd, RestoreInitialValues, Loop, Enable, Disable, InitializationComplete }
+		public enum EventTypes { Play, Pause, Resume, ChangeDirection, Complete, SkipToTheEnd, RestoreInitialValues, Loop, Enable, Disable, InitializationComplete, Stop }
 		public delegate void Delegate(MMFeedbacks source, EventTypes type);
 		static public void Trigger(MMFeedbacks source, EventTypes type)
 		{
@@ -72,42 +72,45 @@ namespace  MoreMountains.Feedbacks
 	[Serializable]
 	public class MMFeedbacksEvents
 	{
-		/// whether or not this MMFeedbacks should fire MMFeedbacksEvents
-		[Tooltip("whether or not this MMFeedbacks should fire MMFeedbacksEvents")] 
+		/// 是否让此 `MMFeedbacks` 触发 `MMFeedbacksEvents`。
+		[Tooltip("是否让该`反馈组`触发`反馈组事件`。")] 
 		public bool TriggerMMFeedbacksEvents = false; 
-		/// whether or not this MMFeedbacks should fire Unity Events
-		[Tooltip("whether or not this MMFeedbacks should fire Unity Events")] 
+		/// 是否让此 `MMFeedbacks` 触发 Unity Events。
+		[Tooltip("是否让这个`反馈组`触发统一事件。")] 
 		public bool TriggerUnityEvents = true;
-		/// This event will fire every time this MMFeedbacks gets played
-		[Tooltip("This event will fire every time this MMFeedbacks gets played")]
+		/// 每次此 `MMFeedbacks` 被播放时都会触发此事件。
+		[Tooltip("每次此 `MMFeedbacks` 被播放时都会触发此事件。")]
 		public UnityEvent OnPlay;
-		/// This event will fire every time this MMFeedbacks starts a holding pause
-		[Tooltip("This event will fire every time this MMFeedbacks starts a holding pause")]
+		/// 每次此 `MMFeedbacks` 开始进入 holding pause 时都会触发此事件。
+		[Tooltip("每次此 `MMFeedbacks` 开始进入 holding pause 时都会触发此事件。")]
 		public UnityEvent OnPause;
-		/// This event will fire every time this MMFeedbacks resumes after a holding pause
-		[Tooltip("This event will fire every time this MMFeedbacks resumes after a holding pause")]
+		/// 每次通过 `StopFeedbacks` 方法停止此 `MMFeedbacks` 时都会触发此事件。
+		[Tooltip("每次通过 `StopFeedbacks` 方法停止此 `MMFeedbacks` 时都会触发此事件。")]
+		public UnityEvent OnStop;
+		/// 每次此 `MMFeedbacks` 在 holding pause 后恢复执行时都会触发此事件。
+		[Tooltip("每次此 `MMFeedbacks` 在 holding pause 后恢复执行时都会触发此事件。")]
 		public UnityEvent OnResume;
-		/// This event will fire every time this MMFeedbacks changes its play direction
+		/// 每次此 `MMFeedbacks` 切换播放方向时都会触发此事件。
 		[FormerlySerializedAs("OnRevert")] 
-		[Tooltip("This event will fire every time this MMFeedbacks changes its play direction")]
+		[Tooltip("每次此 `MMFeedbacks` 切换播放方向时都会触发此事件。")]
 		public UnityEvent OnChangeDirection;
-		/// This event will fire every time this MMFeedbacks plays its last MMFeedback
-		[Tooltip("This event will fire every time this MMFeedbacks plays its last MMFeedback")]
+		/// 每次此 `MMFeedbacks` 播放到最后一个 `MMFeedback` 时都会触发此事件。
+		[Tooltip("每次此 `MMFeedbacks` 播放到最后一个 `MMFeedback` 时都会触发此事件。")]
 		public UnityEvent OnComplete;
-		/// This event will fire every time this MMFeedbacks gets restored to its initial values
-		[Tooltip("This event will fire every time this MMFeedbacks gets restored to its initial values")]
+		/// 每次此 `MMFeedbacks` 恢复初始值时都会触发此事件。
+		[Tooltip("每次此 `MMFeedbacks` 恢复初始值时都会触发此事件。")]
 		public UnityEvent OnRestoreInitialValues;
-		/// This event will fire every time this MMFeedbacks gets skipped to the end
-		[Tooltip("This event will fire every time this MMFeedbacks gets skipped to the end")]
+		/// 每次此 `MMFeedbacks` 被跳到结尾时都会触发此事件。
+		[Tooltip("每次此 `MMFeedbacks` 被跳到结尾时都会触发此事件。")]
 		public UnityEvent OnSkipToTheEnd;
-		/// This event will fire after the MMF Player is done initializing
-		[Tooltip("This event will fire after the MMF Player is done initializing")]
+		/// `MMF_Player` 完成初始化后会触发此事件。
+		[Tooltip("`MMF_Player` 完成初始化后会触发此事件。")]
 		public UnityEvent OnInitializationComplete;
-		/// This event will fire every time this MMFeedbacks' game object gets enabled
-		[Tooltip("This event will fire every time this MMFeedbacks' game object gets enabled")]
+		/// 每次此 `MMFeedbacks` 所在 GameObject 被启用时都会触发此事件。
+		[Tooltip("每次此 `MMFeedbacks` 所在 GameObject 被启用时都会触发此事件。")]
 		public UnityEvent OnEnable;
-		/// This event will fire every time this MMFeedbacks' game object gets disabled
-		[Tooltip("This event will fire every time this MMFeedbacks' game object gets disabled")]
+		/// 每次此 `MMFeedbacks` 所在 GameObject 被禁用时都会触发此事件。
+		[Tooltip("每次此 `MMFeedbacks` 所在 GameObject 被禁用时都会触发此事件。")]
 		public UnityEvent OnDisable;
 
 		public virtual bool OnPlayIsNull { get; protected set; }
@@ -120,6 +123,7 @@ namespace  MoreMountains.Feedbacks
 		public virtual bool OnInitializationCompleteIsNull { get; protected set; }
 		public virtual bool OnEnableIsNull { get; protected set; }
 		public virtual bool OnDisableIsNull { get; protected set; }
+		public virtual bool OnStopIsNull { get; protected set; }
 
 		/// <summary>
 		/// On init we store for each event whether or not we have one to invoke
@@ -136,6 +140,7 @@ namespace  MoreMountains.Feedbacks
 			OnInitializationCompleteIsNull = OnInitializationComplete == null;
 			OnEnableIsNull = OnEnable == null;
 			OnDisableIsNull = OnDisable == null;
+			OnStopIsNull = OnStop == null;
 		}
 
 		/// <summary>
@@ -301,6 +306,23 @@ namespace  MoreMountains.Feedbacks
 			if (TriggerMMFeedbacksEvents)
 			{
 				MMFeedbacksEvent.Trigger(source, MMFeedbacksEvent.EventTypes.Disable);
+			}
+		}
+
+		/// <summary>
+		/// Fires stop events if needed
+		/// </summary>
+		/// <param name="source"></param>
+		public virtual void TriggerOnStop(MMF_Player source)
+		{
+			if (!OnDisableIsNull && TriggerUnityEvents)
+			{
+				OnStop.Invoke();
+			}
+
+			if (TriggerMMFeedbacksEvents)
+			{
+				MMFeedbacksEvent.Trigger(source, MMFeedbacksEvent.EventTypes.Stop);
 			}
 		}
 	}

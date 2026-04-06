@@ -14,8 +14,9 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("Audio/MMSoundManager Track Fade")]
-	[FeedbackHelp("This feedback will let you fade all the sounds on a specific track at once. You will need a MMSoundManager in your scene for this to work.")]
+	[FeedbackHelp("此反馈可一次性对指定轨道上的所有声音执行淡入/淡出。要生效，场景中必须存在 MMSoundManager。")]
 	public class MMF_MMSoundManagerTrackFade : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -31,17 +32,17 @@ namespace MoreMountains.Feedbacks
         
 		[MMFInspectorGroup("MMSoundManager Track Fade", true, 30)]
 		/// the track to fade the volume on
-		[Tooltip("the track to fade the volume on")]
+		[Tooltip("要执行音量淡变的目标轨道。")]
 		public MMSoundManager.MMSoundManagerTracks Track;
 		/// the duration of the fade, in seconds
-		[Tooltip("the duration of the fade, in seconds")]
+		[Tooltip("淡变持续时间，单位为秒。")]
 		public float FadeDuration = 1f;
 		/// the volume to reach at the end of the fade
-		[Tooltip("the volume to reach at the end of the fade")]
+		[Tooltip("淡变结束时要达到的目标音量。")]
 		[Range(MMSoundManagerSettings._minimalVolume,MMSoundManagerSettings._maxVolume)]
 		public float FinalVolume = MMSoundManagerSettings._minimalVolume;
 		/// the tween to operate the fade on
-		[Tooltip("the tween to operate the fade on")]
+		[Tooltip("淡变过程使用的 Tween 曲线。")]
 		public MMTweenType FadeTween = new MMTweenType(MMTween.MMTweenCurve.EaseInOutQuartic);
         
 		/// <summary>

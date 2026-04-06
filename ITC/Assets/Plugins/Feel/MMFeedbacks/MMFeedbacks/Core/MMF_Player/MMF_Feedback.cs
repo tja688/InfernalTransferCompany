@@ -19,15 +19,18 @@ namespace MoreMountains.Feedbacks
 		public const string _automaticSetupGroupName = "Automatic Setup";
 		
 		[MMFInspectorGroup("Feedback Settings", true, 0, false, true)]
-		/// whether or not this feedback is active
-		[Tooltip("whether or not this feedback is active")]
+		/// 此 feedback 是否启用。
+		[Tooltip("此反馈是否启用。")]
 		public bool Active = true;
 
 		[HideInInspector] public int UniqueID;
 
-		/// the name of this feedback to display in the inspector
-		[Tooltip("the name of this feedback to display in the inspector")]
+		/// 此 feedback 在 Inspector 中显示的名称。
+		[Tooltip("此反馈在 Inspector 中显示的名称。")]
 		public string Label = "MMFeedback";
+
+		/// you can override this when creating a custom feedback to have it behave differently and display a different label 
+		public virtual string GetLabel() => Label;
 
 		/// the original label of this feedback, used to display next to the custom label in case we set one
 		[MMFHidden]
@@ -35,94 +38,90 @@ namespace MoreMountains.Feedbacks
 
 		/// whether to broadcast this feedback's message using an int or a scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what.
 		/// MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable
-		[Tooltip(
-			"whether to broadcast this feedback's message using an int or a scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what. " +
-			"MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable")]
+		[Tooltip("决定此反馈是通过 `int` 还是 `MMChannel` ScriptableObject 来广播消息。`int` 配置简单，但项目变大后容易混乱，也不便记忆每个数字的含义；`MMChannel` 需要预先创建资源，但名称可读性更高，也更易扩展。")]
 		public MMChannelModes ChannelMode = MMChannelModes.Int;
 
-		/// the ID of the channel on which this feedback will communicate 
-		[Tooltip("the ID of the channel on which this feedback will communicate")]
+		/// 此 feedback 通信所使用的频道 ID。 
+		[Tooltip("此反馈通信所使用的通道 ID。")]
 		[MMEnumCondition("ChannelMode", (int)MMChannelModes.Int)]
 		public int Channel = 0;
 
 		/// the MMChannel definition asset to use to broadcast this feedback. The shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel,
 		/// right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name
-		[Tooltip(
-			"the MMChannel definition asset to use to broadcast this feedback. The shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel, " +
-			"right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name")]
+		[Tooltip("用于此广播反馈的`通道资源`定义资源。要接收必须引用此反馈事件的增益器同一个`通道资源`。若要创建`通道资源`，可在项目视图中右键（通常在数据文件夹中），选择更多山脉 > 通道资源，并说明命名。")]
 		[MMEnumCondition("ChannelMode", (int)MMChannelModes.MMChannel)]
 		public MMChannel MMChannelDefinition = null;
 
-		/// the chance of this feedback happening (in percent : 100 : happens all the time, 0 : never happens, 50 : happens once every two calls, etc)
+		/// 此 feedback 的触发概率（百分比）。`100` 表示每次都触发，`0` 表示永不触发，`50` 大致表示两次触发中出现一次。
 		[Tooltip(
-			"the chance of this feedback happening (in percent : 100 : happens all the time, 0 : never happens, 50 : happens once every two calls, etc)")]
+			"此 feedback 的触发概率（百分比）。`100` 表示每次都触发，`0` 表示永不触发，`50` 大致表示两次触发中出现一次。")]
 		[Range(0, 100)]
 		public float Chance = 100f;
 
-		/// use this color to customize the background color of the feedback in the MMF_Player's list
-		[Tooltip("use this color to customize the background color of the feedback in the MMF_Player's list")]
+		/// 用于自定义此 feedback 在 `MMF_Player` 列表中的背景颜色。
+		[Tooltip("用于自定义此反馈在 `MMF_Player` 列表中的背景颜色。")]
 		public virtual Color DisplayColor => Color.black;
 
-		/// a number of timing-related values (delay, repeat, etc)
-		[Tooltip("a number of timing-related values (delay, repeat, etc)")]
+		/// 与时间相关的一组设置，例如延迟、重复等。
+		[Tooltip("与时间相关的一组设置，例如延迟、重复等。")]
 		public MMFeedbackTiming Timing;
 		
-		/// a set of settings letting you define automated target acquisition for this feedback, to (for example) automatically grab the target on this game object, or a parent, a child, or on a reference holder
-		[Tooltip("a set of settings letting you define automated target acquisition for this feedback, to (for example) automatically grab the target on this game object, or a parent, a child, or on a reference holder")]
+		/// 用于定义此 feedback 的自动目标获取规则，例如自动从当前 GameObject、父物体、子物体或 Reference Holder 上抓取目标。
+		[Tooltip("用于定义此反馈的自动目标获取规则，例如自动从当前 GameObject、父物体、子物体或 Reference Holder 上抓取目标。")]
 		public MMFeedbackTargetAcquisition AutomatedTargetAcquisition;
 		
 		[MMFInspectorGroup(_randomnessGroupName, true, 58, false, true)]
-		/// if this is true, intensity will be multiplied by a random value on play, picked between RandomMultiplier.x and RandomMultiplier.y
+		/// 若启用，播放时会把强度乘以一个随机值，该值取自 `RandomMultiplier.x` 到 `RandomMultiplier.y` 之间。
 		[Tooltip(
-			"if this is true, intensity will be multiplied by a random value on play, picked between RandomMultiplier.x and RandomMultiplier.y")]
+			"若启用，播放时会把强度乘以一个随机值，该值取自 `RandomMultiplier.x` 到 `RandomMultiplier.y` 之间。")]
 		public bool RandomizeOutput = false;
 
-		/// a random value (randomized between its x and y) by which to multiply the output of this feedback, if RandomizeOutput is true
+		/// 当 `RandomizeOutput` 为 true 时，用于乘到此 feedback 输出结果上的随机倍率范围（`x` 为最小值，`y` 为最大值）。
 		[Tooltip(
-			"a random value (randomized between its x and y) by which to multiply the output of this feedback, if RandomizeOutput is true")]
+			"当 `RandomizeOutput` 为 true 时，用于乘到此 feedback 输出结果上的随机倍率范围（`x` 为最小值，`y` 为最大值）。")]
 		[MMFCondition("RandomizeOutput", true)]
 		[MMFVector("Min", "Max")]
 		public Vector2 RandomMultiplier = new Vector2(0.8f, 1f);
 
-		/// if this is true, this feedback's duration will be multiplied by a random value on play, picked between RandomDurationMultiplier.x and RandomDurationMultiplier.y
+		/// 若启用，此 feedback 的时长在播放时会乘以一个随机倍率，取值范围为 `RandomDurationMultiplier.x` 到 `RandomDurationMultiplier.y`。
 		[Tooltip(
-			"if this is true, this feedback's duration will be multiplied by a random value on play, picked between RandomDurationMultiplier.x and RandomDurationMultiplier.y")]
+			"若启用，此 feedback 的时长在播放时会乘以一个随机倍率，取值范围为 `RandomDurationMultiplier.x` 到 `RandomDurationMultiplier.y`。")]
 		public bool RandomizeDuration = false;
 
-		/// a random value (randomized between its x and y) by which to multiply the duration of this feedback, if RandomizeDuration is true
+		/// 当 `RandomizeDuration` 为 true 时，用于乘到此 feedback 时长上的随机倍率范围（`x` 为最小值，`y` 为最大值）。
 		[Tooltip(
-			"a random value (randomized between its x and y) by which to multiply the duration of this feedback, if RandomizeDuration is true")]
+			"当 `RandomizeDuration` 为 true 时，用于乘到此 feedback 时长上的随机倍率范围（`x` 为最小值，`y` 为最大值）。")]
 		[MMFCondition("RandomizeDuration", true)]
 		[MMFVector("Min", "Max")]
 		public Vector2 RandomDurationMultiplier = new Vector2(0.5f, 2f);
 
 		[MMFInspectorGroup(_rangeGroupName, true, 47)]
-		/// if this is true, only shakers within the specified range will respond to this feedback
-		[Tooltip("if this is true, only shakers within the specified range will respond to this feedback")]
+		/// 若启用，只有位于指定范围内的 shaker 会响应此 feedback。
+		[Tooltip("若启用，只有位于指定范围内的抖动器会响应此反馈。")]
 		public bool UseRange = false;
 
-		/// when in UseRange mode, only shakers within that distance will respond to this feedback
-		[Tooltip("when in UseRange mode, only shakers within that distance will respond to this feedback")]
+		/// 在 `UseRange` 模式下，只有距离不超过该值的 shaker 会响应此 feedback。
+		[Tooltip("在 `UseRange` 模式下，只有距离不超过该值的抖动器会响应此反馈。")]
 		public float RangeDistance = 5f;
 
-		/// when in UseRange mode, whether or not to modify the shake intensity based on the RangeFallOff curve  
-		[Tooltip("when in UseRange mode, whether or not to modify the shake intensity based on the RangeFallOff curve")]
+		/// 在 `UseRange` 模式下，是否根据 `RangeFallOff` 曲线衰减 shake 强度。  
+		[Tooltip("在 `UseRange` 模式下，是否根据 `RangeFallOff` 曲线衰减抖动强度。")]
 		public bool UseRangeFalloff = false;
 
-		/// the animation curve to use to define falloff (on the x 0 represents the range center, 1 represents the max distance to it)
+		/// 用于定义衰减的动画曲线。横轴 `x` 中，`0` 表示范围中心，`1` 表示最大作用距离。
 		[Tooltip(
-			"the animation curve to use to define falloff (on the x 0 represents the range center, 1 represents the max distance to it)")]
+			"用于定义衰减的动画曲线。横轴 `x` 中，`0` 表示范围中心，`1` 表示最大作用距离。")]
 		public AnimationCurve RangeFalloff = new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(1f, 0f));
 
-		/// the values to remap the falloff curve's y axis' 0 and 1
-		[Tooltip("the values to remap the falloff curve's y axis' 0 and 1")] 
+		/// 将衰减曲线 `y` 轴上 `0` 和 `1` 重映射到的目标值。
+		[Tooltip("将衰减曲线 `y` 轴上 `0` 和 `1` 重映射到的目标值。")] 
 		[MMFVector("Zero", "One")]
 		public Vector2 RemapRangeFalloff = new Vector2(0f, 1f);
 		
 		[MMFInspectorGroup(_automaticSetupGroupName, true, 49, false, true)]
 		
-		/// a button used to attempt an auto shaker setup for this feedback, adding whatever shaker it requires to function to the scene
-		[Tooltip("a button used to attempt an auto shaker setup for this feedback, adding whatever shaker it requires to function to the scene")]
+		/// 用于尝试自动为此 feedback 完成 shaker 配置的按钮，会把所需 shaker 自动添加到场景中。
+		[Tooltip("用于尝试自动为此反馈完成抖动器配置的按钮，会把所需抖动器自动添加到场景中。")]
 		public MMF_Button AutomaticShakerSetupButton;
 
 		/// the Owner of the feedback, as defined when calling the Initialization method
@@ -141,7 +140,7 @@ namespace MoreMountains.Feedbacks
 		/// if this is true, this feedback will wait until all previous feedbacks have run, then run all previous feedbacks again
 		public virtual bool LooperPause => false;
 
-		/// if this is true, this feedback will pause and wait until Resume() is called on its parent MMFeedbacks to resume execution
+		/// if this is true, this feedback will pause and wait until ResumeFeedbacks() is called on its parent MMF_Player to resume execution
 		public virtual bool ScriptDrivenPause { get; set; }
 
 		/// if this is a positive value, the feedback will auto resume after that duration if it hasn't been resumed via script already
@@ -420,6 +419,8 @@ namespace MoreMountains.Feedbacks
 
 		/// a ChannelData object, ready to pass to an event
 		public virtual MMChannelData ChannelData => _channelData.Set(ChannelMode, Channel, MMChannelDefinition);
+		
+		public virtual bool InInitialDelay { get; set; }
 
 		protected float _lastPlayTimestamp = -float.MaxValue;
 		protected int _playsLeft;
@@ -471,6 +472,7 @@ namespace MoreMountains.Feedbacks
 
 			SetIndexInFeedbacksList(index);
 			ResetCooldown();
+			InInitialDelay = false;
 			Timing.PlayCount = 0;
 			_initialized = true;
 			Owner = owner;
@@ -613,7 +615,9 @@ namespace MoreMountains.Feedbacks
 		/// <returns></returns>
 		protected virtual IEnumerator PlayCoroutine(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
+			InInitialDelay = true;
 			yield return WaitFor(ApplyTimeMultiplier(Timing.InitialDelay));
+			InInitialDelay = false;
 			RegularPlay(position, feedbacksIntensity);
 		}
 
@@ -686,7 +690,6 @@ namespace MoreMountains.Feedbacks
 		{
 			Timing.PlayCount++;
 			_lastPlayTimestamp = FeedbackTime;
-			OnBeforeDriveTarget(position, intensity);
 			CustomPlayFeedback(position, intensity);
 		}
 
@@ -725,18 +728,20 @@ namespace MoreMountains.Feedbacks
 		{
 			if (Timing.Sequence == null)
 			{
+				float time = InScaledTimescaleMode ? Time.time : Time.unscaledTime;
 				TriggerCustomPlay(position, feedbacksIntensity);
-				float repeatStartTime = Time.time;
+				float repeatStartTime = time;
 					
 				float repeatDuration = Timing.DelayBetweenRepeats + FeedbackDuration;
 				if (_repeatOffset <= Timing.DelayBetweenRepeats)
 				{
 					repeatDuration = Timing.DelayBetweenRepeats + FeedbackDuration - _repeatOffset;	
 				}
-					
+				
 				yield return WaitFor(repeatDuration);
 				yield return null;
-				_repeatOffset = (Time.time - repeatStartTime - repeatDuration);
+				time = InScaledTimescaleMode ? Time.time : Time.unscaledTime;
+				_repeatOffset = (time - repeatStartTime - (Timing.DelayBetweenRepeats + FeedbackDuration));
 			}
 			else
 			{
@@ -863,6 +868,8 @@ namespace MoreMountains.Feedbacks
 			}
 
 			_playsLeft = Timing.NumberOfRepeats + 1;
+			_lastPlayTimestamp = -1f;
+			
 			if (Timing.InterruptsOnStop)
 			{
 				CustomStopFeedback(position, feedbacksIntensity);
@@ -1067,7 +1074,7 @@ namespace MoreMountains.Feedbacks
 			{
 				float delayBetweenRepeats = ApplyTimeMultiplier(Timing.DelayBetweenRepeats);
 
-				totalTime += (Timing.NumberOfRepeats * delayBetweenRepeats);
+				totalTime += Timing.NumberOfRepeats * (FeedbackDuration + delayBetweenRepeats);
 			}
 				
 			_totalDuration = totalTime;
@@ -1179,23 +1186,6 @@ namespace MoreMountains.Feedbacks
 		/// This method describes what happens when the feedback gets reset
 		/// </summary>
 		protected virtual void CustomReset() { }
-
-		/// <summary>
-		/// This method is called before CustomPlayFeedback, allowing feedbacks to notify about target driving.
-		/// Override this method in your feedback to broadcast events when you're about to drive a target.
-		/// For example, you can broadcast: "I'm about to drive target GameObject X" or "I'm about to drive target Component Y"
-		/// </summary>
-		/// <param name="position">The position at which the feedback is playing</param>
-		/// <param name="feedbacksIntensity">The intensity of the feedback</param>
-		protected virtual void OnBeforeDriveTarget(Vector3 position, float feedbacksIntensity = 1.0f)
-		{
-			// 默认实现为空，子类可以重写此方法来广播目标驱动事件
-			// 例如：
-			// if (TargetGameObject != null)
-			// {
-			//     YourCustomEventSystem.BroadcastTargetDrive(this, TargetGameObject);
-			// }
-		}
 
 		/// <summary>
 		/// Use this method to initialize any custom attributes you may have

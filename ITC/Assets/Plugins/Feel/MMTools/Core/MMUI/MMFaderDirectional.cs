@@ -16,39 +16,39 @@ namespace MoreMountains.Tools
 
 		[MMInspectorGroup("Identification", true, 122)] 
 		/// the ID for this fader (0 is default), set more IDs if you need more than one fader
-		[Tooltip("the ID for this fader (0 is default), set more IDs if you need more than one fader")]
+		[Tooltip("此 Fader 的 ID（默认 0）。如果场景中有多个 Fader，请设置不同 ID 以便定向控制")]
 		public int ID;
 
 		[MMInspectorGroup("Directional Fader", true, 123)]
 		/// the direction this fader should move in when fading in
-		[Tooltip("the direction this fader should move in when fading in")]
+		[Tooltip("淡入时 Fader 的移动方向")]
 		public Directions FadeInDirection = Directions.LeftToRight;
 		/// the direction this fader should move in when fading out
-		[Tooltip("the direction this fader should move in when fading out")]
+		[Tooltip("淡出时 Fader 的移动方向")]
 		public Directions FadeOutDirection = Directions.LeftToRight;
         
 		[MMInspectorGroup("Timing", true, 124)]
 		/// the default duration of the fade in/out
-		[Tooltip("the default duration of the fade in/out")]
+		[Tooltip("淡入/淡出的默认持续时间")]
 		public float DefaultDuration = 0.2f;
 		/// the default curve to use for this fader
-		[Tooltip("the default curve to use for this fader")]
+		[Tooltip("该 Fader 默认使用的插值曲线")]
 		public MMTweenType DefaultTween = new MMTweenType(MMTween.MMTweenCurve.LinearTween);
 		/// whether or not the fade should happen in unscaled time 
-		[Tooltip("whether or not the fade should happen in unscaled time")]
+		[Tooltip("淡入淡出是否使用 unscaled time（不受 Time.timeScale 影响）")]
 		public bool IgnoreTimescale = true;
 		/// whether or not to automatically disable this fader on init
-		[Tooltip("whether or not to automatically disable this fader on init")]
+		[Tooltip("初始化时是否自动禁用该 Fader")]
 		public bool DisableOnInit = true;
 
 		[MMInspectorGroup("Delay", true, 127)]
 		/// a delay (in seconds) to apply before playing this fade
-		[Tooltip("a delay (in seconds) to apply before playing this fade")]
+		[Tooltip("播放本次 Fade 前要等待的延迟（秒）")]
 		public float InitialDelay = 0f;
 
 		[MMInspectorGroup("Interaction", true, 125)]
 		/// whether or not the fader should block raycasts when visible
-		[Tooltip("whether or not the fader should block raycasts when visible")]
+		[Tooltip("推子 可见时是否波形 用户界面 射线（荧光检测）")]
 		public bool ShouldBlockRaycasts = false; 
 
 		/// the width of the fader

@@ -14,26 +14,26 @@ namespace MoreMountains.Feedbacks
 	{
 		[MMInspectorGroup("SpriteRenderer", true, 39)]
 		/// the SpriteRenderer to affect when playing the feedback
-		[Tooltip("the SpriteRenderer to affect when playing the feedback")]
+		[Tooltip("播放反馈时要作用的`精灵渲染器`。")]
 		public SpriteRenderer BoundSpriteRenderer;
 		/// whether or not that SpriteRenderer should be turned off on start
-		[Tooltip("whether or not that SpriteRenderer should be turned off on start")]
+		[Tooltip("若启用，在开始时会先关闭该 `SpriteRenderer`。")]
 		public bool StartsOff = true;
 
 		[MMInspectorGroup("Color", true, 40)]
 		/// whether or not this shaker should modify color 
-		[Tooltip("whether or not this shaker should modify color")]
+		[Tooltip("此抖动器是否修改颜色。")]
 		public bool ModifyColor = true;
 		/// the colors to apply to the SpriteRenderer over time
-		[Tooltip("the colors to apply to the SpriteRenderer over time")]
+		[Tooltip("随时间应用到 `SpriteRenderer` 上的颜色。")]
 		public Gradient ColorOverTime;
 
 		[MMInspectorGroup("Flip", true, 41)]
 		/// whether or not to flip the sprite on X
-		[Tooltip("whether or not to flip the sprite on X")]
+		[Tooltip("是否在 X 轴上翻转精灵。")]
 		public bool FlipX = false;
 		/// whether or not to flip the sprite on Y
-		[Tooltip("whether or not to flip the sprite on Y")]
+		[Tooltip("是否在 Y 轴上翻转精灵。")]
 		public bool FlipY = false;
 
 		protected Color _initialColor;

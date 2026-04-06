@@ -33,6 +33,18 @@ namespace MoreMountains.Tools
 			return OnEvent?.Invoke(clip, options);
 		}
 
+#if UNITY_6000_0_OR_NEWER
+		static public AudioSource Trigger(AudioClip audioClip, MMSoundManager.MMSoundManagerTracks mmSoundManagerTrack, Vector3 location, 
+			bool loop = false, float volume = 1.0f, int ID = 0,
+			bool fade = false, float fadeInitialVolume = 0f, float fadeDuration = 1f, MMTweenType fadeTween = null,
+			bool persistent = false,
+			AudioSource recycleAudioSource = null, AudioMixerGroup audioGroup = null,
+			float pitch = 1f, float panStereo = 0f, float spatialBlend = 0.0f,  
+			bool soloSingleTrack = false, bool soloAllTracks = false, bool autoUnSoloOnEnd = false,  
+			bool bypassEffects = false, bool bypassListenerEffects = false, bool bypassReverbZones = false, int priority = 128, float reverbZoneMix = 1f,
+			float dopplerLevel = 1f, int spread = 0, AudioRolloffMode rolloffMode = AudioRolloffMode.Logarithmic, float minDistance = 1f, float maxDistance = 500f, 
+			AudioResource audioResourceToPlay = null)
+#else
 		static public AudioSource Trigger(AudioClip audioClip, MMSoundManager.MMSoundManagerTracks mmSoundManagerTrack, Vector3 location, 
 			bool loop = false, float volume = 1.0f, int ID = 0,
 			bool fade = false, float fadeInitialVolume = 0f, float fadeDuration = 1f, MMTweenType fadeTween = null,
@@ -42,6 +54,7 @@ namespace MoreMountains.Tools
 			bool soloSingleTrack = false, bool soloAllTracks = false, bool autoUnSoloOnEnd = false,  
 			bool bypassEffects = false, bool bypassListenerEffects = false, bool bypassReverbZones = false, int priority = 128, float reverbZoneMix = 1f,
 			float dopplerLevel = 1f, int spread = 0, AudioRolloffMode rolloffMode = AudioRolloffMode.Logarithmic, float minDistance = 1f, float maxDistance = 500f)
+#endif
 		{
 			MMSoundManagerPlayOptions options = MMSoundManagerPlayOptions.Default;
 			options.MmSoundManagerTrack = mmSoundManagerTrack;

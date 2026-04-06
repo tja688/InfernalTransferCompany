@@ -11,8 +11,9 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// This feedback allows you to control bloom intensity and threshold over time. It requires you have in your scene an object with a Volume with Bloom active, and a MMBloomShaker_URP component.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to control bloom intensity and threshold over time. It requires you have in your scene an object with a Volume " +
-	              "with Bloom active, and a MMBloomShaker_URP component.")]
+	[System.Serializable]
+	[FeedbackHelp("此反馈可让你随时间控制 Channel Mixer 的红、绿、蓝通道。它要求你的场景中存在一个带有 Volume 的对象，且该对象" +
+	              "已启用 Channel Mixer，并挂有 MMChannelMixerShaker_URP 组件。")]
 	#if MM_URP
 	[FeedbackPath("PostProcess/Channel Mixer URP")]
 	#endif
@@ -35,54 +36,54 @@ namespace MoreMountains.FeedbacksForThirdParty
 
 		[MMFInspectorGroup("Channel Mixer", true, 41)]
 		/// the duration of the shake, in seconds
-		[Tooltip("the duration of the shake, in seconds")]
+		[Tooltip("抖动持续时间，单位为秒")]
 		public float ShakeDuration = 1f;
 		/// whether or not to add to the initial intensity
-		[Tooltip("whether or not to add to the initial intensity")]
+		[Tooltip("是否在初始强度基础上叠加")]
 		public bool RelativeIntensity = true;
 		/// whether or not to reset shaker values after shake
-		[Tooltip("whether or not to reset shaker values after shake")]
+		[Tooltip("抖动结束后是否重置抖动器的数值")]
 		public bool ResetShakerValuesAfterShake = true;
 		/// whether or not to reset the target's values after shake
-		[Tooltip("whether or not to reset the target's values after shake")]
+		[Tooltip("抖动结束后是否重置目标对象的数值")]
 		public bool ResetTargetValuesAfterShake = true;
         
 		[MMFInspectorGroup("Red", true, 42)]
 		/// the curve used to animate the red value on
-		[Tooltip("the curve used to animate the red value on")]
+		[Tooltip("用于驱动红色通道数值变化的曲线")]
 		public AnimationCurve ShakeRed = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(-200f, 200f)]
 		public float RemapRedZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-200f, 200f)]
 		public float RemapRedOne = -200f;
 
 		[MMFInspectorGroup("Green", true, 43)]
 		/// the curve used to animate the green value on
-		[Tooltip("the curve used to animate the green value on")]
+		[Tooltip("用于驱动绿色通道数值变化的曲线")]
 		public AnimationCurve ShakeGreen = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(-200f, 200f)]
 		public float RemapGreenZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-200f, 200f)]
 		public float RemapGreenOne = 200f;
 
 		[MMFInspectorGroup("Blue", true, 44)]
 		/// the curve used to animate the blue value on
-		[Tooltip("the curve used to animate the blue value on")]
+		[Tooltip("用于驱动蓝色通道数值变化的曲线")]
 		public AnimationCurve ShakeBlue = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(-200f, 200f)]
 		public float RemapBlueZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-200f, 200f)]
 		public float RemapBlueOne = 200f;
 

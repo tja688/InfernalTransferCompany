@@ -31,23 +31,23 @@ namespace MoreMountains.Tools
 	public class MMMultipleObjectPooler : MMObjectPooler
 	{
 		/// the list of objects to pool
-		[Tooltip("the list of objects to pool")]
+		[Tooltip("要纳入对象池的对象列表")]
 		public List<MMMultipleObjectPoolerObject> Pool;
-		[MMInformation("A MultipleObjectPooler is a reserve of objects, to be used by a Spawner. When asked, it will return an object from the pool (ideally an inactive one) chosen based on the pooling method you've chosen.\n- OriginalOrder will spawn objects in the order you've set them in the inspector (from top to bottom)\n- OriginalOrderSequential will do the same, but will empty each pool before moving to the next object\n- RandomBetweenObjects will pick one object from the pool, at random, but ignoring its pool size, each object has equal chances to get picked\n- PoolSizeBased randomly choses one object from the pool, based on its pool size probability (the larger the pool size, the higher the chances it'll get picked)'...",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("MultipleObjectPooler 是供 Spawner 使用的对象储备池。每次请求时，它会按你选择的池化策略返回一个对象（理想情况下是未激活对象）。\n- OriginalOrder：按 Inspector 中的顺序（从上到下）依次取对象\n- OriginalOrderSequential：同样按顺序，但会先用尽当前对象池，再切到下一个\n- RandomBetweenObjects：在各对象类型之间等概率随机（忽略各自池大小）\n- PoolSizeBased：按池大小加权随机（池越大，被选中概率越高）",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
 		/// the chosen pooling method
-		[Tooltip("the chosen pooling method")]
+		[Tooltip("当前选择的池化策略")]
 		public MMPoolingMethods PoolingMethod = MMPoolingMethods.RandomPoolSizeBased;
-		[MMInformation("If you set CanPoolSameObjectTwice to false, the Pooler will try to prevent the same object from being pooled twice to avoid repetition. This will only affect random pooling methods, not ordered pooling.",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("当 CanPoolSameObjectTwice 设为 false 时，Pooler 会尽量避免连续两次取到同一对象以减少重复。注意：该限制仅对随机池化策略生效，对顺序池化无效。",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
 		/// whether or not the same object can be pooled twice in a row. If you set CanPoolSameObjectTwice to false, the Pooler will try to prevent the same object from being pooled twice to avoid repetition. This will only affect random pooling methods, not ordered pooling.
-		[Tooltip("whether or not the same object can be pooled twice in a row. If you set CanPoolSameObjectTwice to false, the Pooler will try to prevent the same object from being pooled twice to avoid repetition. This will only affect random pooling methods, not ordered pooling.")]
+		[Tooltip("是否允许连续两次取到同一对象。若关闭，系统会尽量避免重复；该规则仅影响随机池化，不影响顺序池化。")]
 		public bool CanPoolSameObjectTwice = true;
 		/// a unique name that should match on all MMMultipleObjectPoolers you want to use together
-		[Tooltip("a unique name that should match on all MMMultipleObjectPoolers you want to use together")]
+		[Tooltip("用于联合使用的唯一名称。要互相配合的 MMMultipleObjectPooler 需要使用同名。")]
 		[MMCondition("MutualizeWaitingPools", true)]
 		public string MutualizedPoolName = "";
 		
 		/// if CanPoolSameObjectTwice is set to false, this determines up to how many times we'll iterate to try and find a different object
-		[Tooltip("if CanPoolSameObjectTwice is set to false, this determines up to how many times we'll iterate to try and find a different object")]
+		[Tooltip("当 CanPoolSameObjectTwice 为 false 时，用于限制“尝试寻找不同对象”的最大迭代次数")]
 		[MMCondition("CanPoolSameObjectTwice", true, true)]
 		public float OverflowAmount = 10f;
 		
@@ -167,11 +167,8 @@ namespace MoreMountains.Tools
 			{
 				return null;
 			}
-
-			bool initialStatus = typeOfObject.activeSelf;
-			typeOfObject.SetActive(false);
-			GameObject newGameObject = (GameObject)Instantiate(typeOfObject);
-			typeOfObject.SetActive(initialStatus);
+			
+			GameObject newGameObject = (GameObject)MMGameObjectExtensions.MMInstantiateDisabled(typeOfObject);
 			SceneManager.MoveGameObjectToScene(newGameObject, this.gameObject.scene);
 			if (NestWaitingPool)
 			{
@@ -234,7 +231,22 @@ namespace MoreMountains.Tools
 			MMMultipleObjectPoolerObject searchedObject = GetPoolObject(Pool[_currentIndex].GameObjectToPool);
 
 			if (_currentIndex >= _objectPool.PooledGameObjects.Count) { return null; }
-			if (!searchedObject.Enabled) { _currentIndex++; return null; }
+
+			int searchIterations = 0;
+			while (!searchedObject.Enabled)
+			{
+				_currentIndex++;
+				searchIterations++;
+				if (_currentIndex >= Pool.Count)
+				{
+					ResetCurrentIndex ();
+				}
+				if (searchIterations > Pool.Count)
+				{
+					return null;
+				}
+				searchedObject = GetPoolObject(Pool[_currentIndex].GameObjectToPool);
+			}
 
 			// if the object is already active, we need to find another one
 			if (_objectPool.PooledGameObjects[_currentIndex].gameObject.activeInHierarchy)
@@ -285,7 +297,23 @@ namespace MoreMountains.Tools
 			MMMultipleObjectPoolerObject searchedObject = GetPoolObject(Pool[_currentIndex].GameObjectToPool);
 
 			if (_currentIndex >= _objectPool.PooledGameObjects.Count) { return null; }
-			if (!searchedObject.Enabled) { _currentIndex++; _currentCount = 0; return null; }
+			
+			int searchIterations = 0;
+			while (!searchedObject.Enabled)
+			{
+				_currentIndex++;
+				searchIterations++;
+				if (_currentIndex >= Pool.Count)
+				{
+					ResetCurrentIndex ();
+				}
+				if (searchIterations > Pool.Count)
+				{
+					_currentCount = 0;
+					return null;
+				}
+				searchedObject = GetPoolObject(Pool[_currentIndex].GameObjectToPool);
+			}
 
 
 			// if the object is already active, we need to find another one
@@ -413,6 +441,22 @@ namespace MoreMountains.Tools
 			// we pick one of the objects in the original pool at random
 			int randomIndex = UnityEngine.Random.Range(0, Pool.Count);
 			
+			int searchIterations = 0;
+			while (!PoolObjectEnabled(Pool[randomIndex].GameObjectToPool))
+			{
+				randomIndex++;
+				searchIterations++;
+				if (randomIndex >= Pool.Count)
+				{
+					randomIndex = 0;
+				}
+				if (searchIterations > Pool.Count)
+				{
+					_currentCount = 0;
+					return null;
+				}
+			}
+			
 			int overflowCounter=0;
 
 			// if we can't pool the same object twice, we'll loop for a while to try and get another one
@@ -519,7 +563,8 @@ namespace MoreMountains.Tools
 
 				if (GetPoolObject(FindObject(searchedName,_objectPool.PooledGameObjects)).PoolCanExpand)
 				{
-					return AddOneObjectToThePool(searchedObject);
+					GameObject addObject = GetPoolObject(Pool[_currentIndex].GameObjectToPool).GameObjectToPool;
+					return AddOneObjectToThePool(addObject);
 				}
 			}
 

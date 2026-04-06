@@ -22,51 +22,51 @@ namespace MoreMountains.FeedbacksForThirdParty
 
 		[MMInspectorGroup("Post Exposure", true, 44)]
 		/// the curve used to animate the focus distance value on
-		[Tooltip("the curve used to animate the focus distance value on")]
+		[Tooltip("用于驱动焦点距离值变化的曲线")]
 		public AnimationCurve ShakePostExposure = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		public float RemapPostExposureZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		public float RemapPostExposureOne = 1f;
 
 		[MMInspectorGroup("Hue Shift", true, 45)]
 		/// the curve used to animate the aperture value on
-		[Tooltip("the curve used to animate the aperture value on")]
+		[Tooltip("用于驱动光圈值变化的曲线")]
 		public AnimationCurve ShakeHueShift = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
 		[Range(-180f, 180f)]
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		public float RemapHueShiftZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-180f, 180f)]
 		public float RemapHueShiftOne = 180f;
 
 		[MMInspectorGroup("Saturation", true, 46)]
 		/// the curve used to animate the focal length value on
-		[Tooltip("the curve used to animate the focal length value on")]
+		[Tooltip("用于驱动焦距值变化的曲线")]
 		public AnimationCurve ShakeSaturation = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(-100f, 100f)]
 		public float RemapSaturationZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-100f, 100f)]
 		public float RemapSaturationOne = 100f;
 
 		[MMInspectorGroup("Contrast", true, 47)]
 		/// the curve used to animate the focal length value on
-		[Tooltip("the curve used to animate the focal length value on")]
+		[Tooltip("用于驱动焦距值变化的曲线")]
 		public AnimationCurve ShakeContrast = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(-100f, 100f)]
 		public float RemapContrastZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-100f, 100f)]
 		public float RemapContrastOne = 100f;
         
@@ -74,19 +74,19 @@ namespace MoreMountains.FeedbacksForThirdParty
  
 		[MMInspectorGroup("Color Filter", true, 48)]
 		/// the color filter mode to work with (none, over a gradient, or interpolate to a destination color
-		[Tooltip("the color filter mode to work with (none, over a gradient, or interpolate to a destination color")]
+		[Tooltip("颜色滤镜工作模式（none、按渐变变化，或插值到目标颜色）")]
 		public ColorFilterModes ColorFilterMode = ColorFilterModes.None;
 		/// the gradient over which to modify the color filter
-		[Tooltip("the gradient over which to modify the color filter")]
+		[Tooltip("用于修改颜色滤镜的渐变")]
 		[MMFEnumCondition("ColorFilterMode", (int)ColorFilterModes.Gradient)]
 		[GradientUsage(true)]
 		public Gradient ColorFilterGradient;
 		/// the destination color to match when in Interpolate mode
-		[Tooltip("the destination color to match when in Interpolate mode")]
+		[Tooltip("Interpolate 模式下要匹配的目标颜色")]
 		[MMFEnumCondition("ColorFilterMode", (int) ColorFilterModes.Interpolate)]
 		public Color ColorFilterDestination = Color.yellow;
 		/// the curve over which to interpolate the color filter
-		[Tooltip("the curve over which to interpolate the color filter")]
+		[Tooltip("颜色滤镜插值时使用的曲线")]
 		[MMFEnumCondition("ColorFilterMode", (int) ColorFilterModes.Interpolate)]
 		public AnimationCurve ColorFilterCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 

@@ -9,8 +9,9 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// This feedback will let you pilot a Global PostProcessing Volume AutoBlend component. A GPPVAB component is placed on a PostProcessing Volume, and will let you control and blend its weight over time on demand.    
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you pilot a Global PostProcessing Volume AutoBlend component. " +
-	              "A GPPVAB component is placed on a PostProcessing Volume, and will let you control and blend its weight over time on demand.")]
+	[System.Serializable]
+	[FeedbackHelp("此反馈可用于驱动 Global PostProcessing Volume AutoBlend 组件。" +
+	              "GPPVAB 组件挂在 PostProcessing Volume 上，可让你按需随时间控制并混合它的权重。")]
 	#if MM_POSTPROCESSING
 	[FeedbackPath("PostProcess/Global PP Volume Auto Blend")]
 	#endif
@@ -21,7 +22,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		#if UNITY_EDITOR
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.PostProcessColor; } }
 		public override string RequiredTargetText { get { return TargetAutoBlend != null ? TargetAutoBlend.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetAutoBlend be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先指定 TargetAutoBlend 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetAutoBlend = FindAutomatedTarget<MMGlobalPostProcessingVolumeAutoBlend>();
@@ -60,33 +61,33 @@ namespace MoreMountains.FeedbacksForThirdParty
                
 		[MMFInspectorGroup("PostProcess Volume Blend", true, 53, true)]
 		/// the target auto blend to pilot with this feedback
-		[Tooltip("the target auto blend to pilot with this feedback")]
+		[Tooltip("此反馈要驱动的自动混合目标")]
 		public MMGlobalPostProcessingVolumeAutoBlend TargetAutoBlend;
 		/// the chosen mode
-		[Tooltip("the chosen mode")]
+		[Tooltip("所选模式")]
 		public Modes Mode = Modes.Default;
 		/// the chosen action when in default mode
-		[Tooltip("the chosen action when in default mode")]
+		[Tooltip("默认模式下要执行的操作")]
 		[MMFEnumCondition("Mode", (int)Modes.Default)]
 		public Actions BlendAction = Actions.Blend;
 		/// the duration of the blend, in seconds when in override mode
-		[Tooltip("the duration of the blend, in seconds when in override mode")]
+		[Tooltip("Override 模式下的混合持续时间（秒）")]
 		[MMFEnumCondition("Mode", (int)Modes.Override)]
 		public float BlendDuration = 1f;
 		/// the curve to apply to the blend
-		[Tooltip("the curve to apply to the blend")]
+		[Tooltip("应用到混合过程中的曲线")]
 		[MMFEnumCondition("Mode", (int)Modes.Override)]
 		public AnimationCurve BlendCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1f));
 		/// the weight to blend from
-		[Tooltip("the weight to blend from")]
+		[Tooltip("混合起始权重")]
 		[MMFEnumCondition("Mode", (int)Modes.Override)]
 		public float InitialWeight = 0f;
 		/// the weight to blend to
-		[Tooltip("the weight to blend to")]
+		[Tooltip("混合目标权重")]
 		[MMFEnumCondition("Mode", (int)Modes.Override)]
 		public float FinalWeight = 1f;
 		/// whether or not to reset to the initial value at the end of the shake
-		[Tooltip("whether or not to reset to the initial value at the end of the shake")]
+		[Tooltip("抖动结束时是否恢复为初始值")]
 		[MMFEnumCondition("Mode", (int)Modes.Override)]
 		public bool ResetToInitialValueOnEnd = true;
         

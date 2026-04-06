@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using System.Collections;
+using UnityEngine;
 #if MM_CINEMACHINE
 using Cinemachine;
 #elif MM_CINEMACHINE3
@@ -26,17 +27,16 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public virtual float GetDeltaTime() { return (TimescaleMode == TimescaleModes.Scaled) ? Time.deltaTime : Time.unscaledDeltaTime; }
         
 		[Header("Priority Listener")]
-		[Tooltip("whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what. " +
-		         "MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable")]
+		[Tooltip("选择使用 int 通道还是 MMChannel ScriptableObject 通道来接收事件。int 配置更简单，但项目变大后容易混乱，不利于记忆每个数字对应什么。" +
+		         "MMChannel 需要预先创建，但具备可读名称，后期也更容易维护和扩展。")]
 		public MMChannelModes ChannelMode = MMChannelModes.Int;
-		/// the channel to listen to - has to match the one on the feedback
-		[Tooltip("the channel to listen to - has to match the one on the feedback")]
+		/// 要监听的通道，必须与反馈上发送的通道一致。
+		[Tooltip("要监听的通道，必须与反馈上发送的通道一致。")]
 		[MMFEnumCondition("ChannelMode", (int)MMChannelModes.Int)]
 		public int Channel = 0;
 		/// the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel,
-		/// right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name
-		[Tooltip("the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel, " +
-		         "right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name")]
+		/// 在 Project 视图中任意位置（通常是 Data 文件夹）右键，选择 MoreMountains > MMChannel，然后为它起一个唯一名称。
+		[Tooltip("用于监听事件的通道资源。要让目标反馈驱动这个通道器，反馈也必须引用同一个通道资源；否则将收不到事件。要创建通道资源，请在项目视图中的任何位置（通常是数据文件夹）右键，选择 更多山脉 > 通道资源，然后为它起一个唯一的名称。")]
 		[MMFEnumCondition("ChannelMode", (int)MMChannelModes.MMChannel)]
 		public MMChannel MMChannelDefinition = null;
 
@@ -72,13 +72,20 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// <param name="resetValuesAfterTransition"></param>
 		public virtual void OnMMCinemachinePriorityEvent(MMChannelData channelData, bool forceMaxPriority, int newPriority, bool forceTransition, CinemachineBlendDefinition blendDefinition, bool resetValuesAfterTransition, TimescaleModes timescaleMode, bool restore = false)
 		{
+			StartCoroutine(OnMMCinemachinePriorityEventCo(channelData, forceMaxPriority, newPriority, forceTransition,
+				blendDefinition, resetValuesAfterTransition, timescaleMode, restore));
+		}
+
+		protected virtual IEnumerator OnMMCinemachinePriorityEventCo(MMChannelData channelData, bool forceMaxPriority, int newPriority, bool forceTransition, CinemachineBlendDefinition blendDefinition, bool resetValuesAfterTransition, TimescaleModes timescaleMode, bool restore = false)
+		{
+			yield return null;
 			TimescaleMode = timescaleMode;
 			if (MMChannel.Match(channelData, ChannelMode, Channel, MMChannelDefinition))
 			{
 				if (restore)
 				{
 					SetPriority(_initialPriority);	
-					return;
+					yield break;
 				}
 				SetPriority(newPriority);
 			}
@@ -89,7 +96,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 					if (restore)
 					{
 						SetPriority(_initialPriority);	
-						return;
+						yield break;;
 					}
 					SetPriority(0);
 				}

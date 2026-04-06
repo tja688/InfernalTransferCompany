@@ -21,18 +21,18 @@ namespace MoreMountains.FeedbacksForThirdParty
 	public class MMCinemachineFieldOfViewShaker : MMShaker
 	{
 		[MMInspectorGroup("Field of view", true, 41)]
-		/// whether or not to add to the initial value
-		[Tooltip("whether or not to add to the initial value")]
+		/// 是否按相对值应用。若启用，会在初始视野角基础上叠加；若禁用，则直接使用下方数值。
+		[Tooltip("是否按相对值应用。若启用，会在初始视野角基础上叠加；若禁用，则直接使用下方数值。")]
 		public bool RelativeFieldOfView = false;
-		/// the curve used to animate the intensity value on
-		[Tooltip("the curve used to animate the intensity value on")]
+		/// 用于驱动视野角变化的曲线。
+		[Tooltip("用于驱动视野角变化的曲线。")]
 		public AnimationCurve ShakeFieldOfView = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
-		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		/// 将曲线 0 端重新映射到的值。
+		[Tooltip("将曲线 0 端重新映射到的值。")]
 		[Range(0f, 179f)]
 		public float RemapFieldOfViewZero = 60f;
-		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		/// 将曲线 1 端重新映射到的值。
+		[Tooltip("将曲线 1 端重新映射到的值。")]
 		[Range(0f, 179f)]
 		public float RemapFieldOfViewOne = 120f;
 

@@ -25,40 +25,40 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// None : nothing will happen,
 		/// gradient : evaluates the color over time on that gradient, from left to right,
 		/// interpolate : lerps from the current color to the destination one 
-		[Tooltip("the selected mode :" +
-		         "Instant : the value will change instantly to the target one," +
-		         "Curve : the value will be interpolated along the curve," +
-		         "interpolate : lerps from the current value to the destination one ")]
+		[Tooltip("所选模式：" +
+		         "Instant：数值会立即切换到目标值；" +
+		         "Curve：数值会沿曲线进行插值变化；" +
+		         "ToDestination：从当前值插值到目标值。")]
 		public Modes Mode = Modes.Interpolate;
-		/// whether or not the value should be applied relatively to the initial value
-		[Tooltip("whether or not the value should be applied relatively to the initial value")]
+		/// 该值是否基于初始值相对应用。若启用，输入值会在初始值基础上叠加；若关闭，则按绝对值应用。
+		[Tooltip("该值是否基于初始值相对应用。若启用，输入值会在初始值基础上叠加；若关闭，则按绝对值应用。")]
 		[MMFEnumCondition("Mode", (int)Modes.Interpolate, (int)Modes.Instant)]
 		public bool RelativeValue = false;
-		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		/// 若启用，即使当前反馈仍在执行中，再次调用也会重新触发；若关闭，在本次播放结束前新的 Play 调用将被忽略。
+		[Tooltip("若启用，即使当前反馈仍在执行中，再次调用也会重新触发；若关闭，在本次播放结束前新的 Play 调用将被忽略。")] 
 		public bool AllowAdditivePlays = false;
-		/// how long the color of the text should change over time
-		[Tooltip("how long the color of the text should change over time")]
+		/// 数值/颜色随时间变化时的持续时间。
+		[Tooltip("数值/颜色随时间变化时的持续时间。")]
 		[MMFEnumCondition("Mode", (int)Modes.Interpolate, (int)Modes.ToDestination)]
 		public float Duration = 0.2f;
-		/// the value to apply when in instant mode
-		[Tooltip("the value to apply when in instant mode")]
+		/// Instant 模式下要应用的值。
+		[Tooltip("即时模式下要应用的价值。")]
 		[MMFEnumCondition("Mode", (int)Modes.Instant)]
 		public float InstantValue = 1f;
 
-		/// the curve to use when interpolating towards the destination value
-		[Tooltip("the curve to use when interpolating towards the destination value")]
+		/// 插值到目标值时使用的曲线。
+		[Tooltip("插值到目标值时使用的曲线。")]
 		public MMTweenType Curve = new MMTweenType(MMTween.MMTweenCurve.EaseInCubic, "", "Mode", (int)Modes.Interpolate, (int)Modes.ToDestination);
-		/// the value to which the curve's 0 should be remapped
-		[Tooltip("the value to which the curve's 0 should be remapped")]
+		/// 将曲线 0 端重新映射到的值。
+		[Tooltip("将曲线 0 端重新映射到的值。")]
 		[MMFEnumCondition("Mode", (int)Modes.Interpolate)]
 		public float CurveRemapZero = 0f;
-		/// the value to which the curve's 1 should be remapped
-		[Tooltip("the value to which the curve's 1 should be remapped")]
+		/// 将曲线 1 端重新映射到的值。
+		[Tooltip("将曲线 1 端重新映射到的值。")]
 		[MMFEnumCondition("Mode", (int)Modes.Interpolate)]
 		public float CurveRemapOne = 1f;
-		/// the value to aim towards when in ToDestination mode
-		[Tooltip("the value to aim towards when in ToDestination mode")]
+		/// ToDestination 模式下要逼近的目标值。
+		[Tooltip("ToDestination 模式下要逼近的目标值。")]
 		[MMFEnumCondition("Mode", (int)Modes.ToDestination)]
 		public float DestinationValue = 1f;
 

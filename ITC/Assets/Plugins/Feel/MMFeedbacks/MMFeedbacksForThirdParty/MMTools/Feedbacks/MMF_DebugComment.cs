@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback doesn't do anything by default, it's just meant as a comment, you can store text in it for future reference, maybe to remember how you setup a particular MMFeedbacks. Optionally it can also output that comment to the console on Play.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback doesn't do anything by default, it's just meant as a comment, you can store text in it for future reference, maybe to remember how you setup a particular MMFeedbacks. Optionally it can also output that comment to the console on Play.")]
+	[FeedbackHelp("此反馈默认不会执行任何操作，它更像是一条注释，你可以在其中记录文本，方便以后回看，例如备注某个 MMFeedbacks 的配置思路。你也可以选择在 Play 时将这条注释输出到控制台。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("Debug/Comment")]
 	public class MMF_DebugComment : MMF_Feedback
 	{
@@ -24,15 +25,15 @@ namespace MoreMountains.Feedbacks
      
 		[MMFInspectorGroup("Comment", true, 61)]
 		/// the comment / note associated to this feedback 
-		[Tooltip("the comment / note associated to this feedback")]
+		[Tooltip("与该反馈关联的注释 / 备注")]
 		[TextArea(10,30)] 
 		public string Comment;
 
 		/// if this is true, the comment will be output to the console on Play 
-		[Tooltip("if this is true, the comment will be output to the console on Play")]
+		[Tooltip("若启用，Play 时会将该注释输出到控制台")]
 		public bool LogComment = false;
 		/// the color of the message when in DebugLogTime mode
-		[Tooltip("the color of the message when in DebugLogTime mode")]
+		[Tooltip("处于 DebugLogTime 模式时消息显示的颜色")]
 		[MMCondition("LogComment", true)]
 		public Color DebugColor = Color.gray;
         

@@ -219,55 +219,55 @@ namespace MoreMountains.Tools
 		[MMInspectorGroup("Playlist Songs", true, 18)]
         
 		/// the channel on which to broadcast orders for this playlist
-		[Tooltip("the channel on which to broadcast orders for this playlist")]
+		[Tooltip("用于向该播放列表广播控制指令的频道（channel）")]
 		public int Channel = 0;
 		/// the songs that this playlist will play
-		[Tooltip("the songs that this playlist will play")]
+		[Tooltip("该播放列表要播放的歌曲集合")]
 		public List<MMPlaylistSong> Songs;
 
 		[MMInspectorGroup("Settings", true, 13)]
 		
 		/// whether this should play in random order or not
-		[Tooltip("whether this should play in random order or not")]
+		[Tooltip("是否按随机顺序播放")]
 		public bool RandomOrder = false;
 		/// if this is true, random seed will be randomized by the system clock
-		[Tooltip("if this is true, random seed will be randomized by the system clock")]
+		[Tooltip("若开启，随机种子将基于系统时钟自动随机化")]
 		[MMCondition("RandomOrder", true)]
 		public bool RandomizeOrderSeed = true;
 		/// whether this playlist should play and loop as a whole forever or not
-		[Tooltip("whether this playlist should play and loop as a whole forever or not")]
+		[Tooltip("该播放列表是否整体循环并持续播放")]
 		public bool Endless = true;
 		/// whether this playlist should auto play on start or not
-		[Tooltip("whether this playlist should auto play on start or not")]
+		[Tooltip("该播放列表是否在启动时自动播放")]
 		public bool PlayOnStart = true;
 		/// a global volume multiplier to apply when playing a song
-		[Tooltip("a global volume multiplier to apply when playing a song")]
+		[Tooltip("播放歌曲时应用的全局音量乘数")]
 		public float VolumeMultiplier = 1f;
 		/// if this is true, this playlist will automatically pause/resume OnApplicationPause, useful if you've prevented your game from running in the background
-		[Tooltip("if this is true, this playlist will automatically pause/resume OnApplicationPause, useful if you've prevented your game from running in the background")]
+		[Tooltip("若开启，在 OnApplicationPause 时会自动暂停/恢复播放（适用于应用切后台时）")]
 		public bool AutoHandleApplicationPause = true;
 		
 		[MMInspectorGroup("Persistence", true, 32)]
 		/// if this is true, this playlist will persist from scene to scene
-		[Tooltip("if this is true, this playlist will persist from scene to scene")]
+		[Tooltip("若开启，该播放列表会跨场景持久存在")]
 		public bool Persistent = false;
 		/// if this is true, this singleton will auto detach if it finds itself parented on awake
-		[Tooltip("if this is true, this singleton will auto detach if it finds itself parented on awake")]
+		[Tooltip("若开启，Singleton 在 Awake 时若检测到自己有父物体，会自动从父物体分离（detach）")]
 		[MMCondition("Persistent", true)]
 		public bool AutomaticallyUnparentOnAwake = true;
 
 		[MMInspectorGroup("Status", true, 14)]
 		
 		/// the current state of the playlist, debug display only
-		[Tooltip("the current state of the playlist, debug display only")]
+		[Tooltip("播放列表当前状态（仅调试显示）")]
 		[MMReadOnly]
 		public PlaylistStates DebugCurrentState = PlaylistStates.Idle;
 		/// the index we're currently playing
-		[Tooltip("the index we're currently playing")]
+		[Tooltip("当前播放索引")]
 		[MMReadOnly]
 		public int CurrentlyPlayingIndex = -1;
 		/// the name of the song that is currently playing
-		[Tooltip("the name of the song that is currently playing")]
+		[Tooltip("当前正在播放的歌曲名")]
 		[MMReadOnly]
 		public string CurrentSongName;
 		/// the current state of this playlist
@@ -289,7 +289,7 @@ namespace MoreMountains.Tools
 		[MMInspectorButton("PlayNextSong")]
 		public bool NextButton;
 		/// the index of the song to play when pressing the PlayTargetSong button
-		[Tooltip("the index of the song to play when pressing the PlayTargetSong button")]
+		[Tooltip("点击 PlayTargetSong 按钮时要播放的歌曲索引")]
 		public int TargetSongIndex = 0;
 		/// a next song test button
 		[MMInspectorButton("PlayTargetSong")]

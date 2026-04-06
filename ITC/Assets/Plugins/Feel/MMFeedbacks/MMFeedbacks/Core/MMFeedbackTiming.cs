@@ -19,56 +19,56 @@ namespace MoreMountains.Feedbacks
 		public enum PlayDirections { FollowMMFeedbacksDirection, OppositeMMFeedbacksDirection, AlwaysNormal, AlwaysRewind }
 
 		[Header("Timescale")]
-		/// whether we're working on scaled or unscaled time
-		[Tooltip("whether we're working on scaled or unscaled time")]
+		/// 决定这里使用 `scaled time` 还是 `unscaled time`。
+		[Tooltip("决定这里使用 `受时间缩放影响的时间` 还是 `不受时间缩放影响的时间`。")]
 		public TimescaleModes TimescaleMode = TimescaleModes.Scaled;
         
 		[Header("Exceptions")]
-		/// if this is true, holding pauses won't wait for this feedback to finish 
-		[Tooltip("if this is true, holding pauses won't wait for this feedback to finish")]
+		/// 若启用，`Holding Pause` 不会等待这个 feedback 执行完毕。 
+		[Tooltip("若启用，`Holding Pause` 不会等待这个反馈执行完毕。")]
 		public bool ExcludeFromHoldingPauses = false;
-		/// whether to count this feedback in the parent MMFeedbacks(Player) total duration or not
-		[Tooltip("whether to count this feedback in the parent MMFeedbacks(Player) total duration or not")]
+		/// 是否将此 feedback 计入父级 `MMFeedbacks/MMF_Player` 的总时长。
+		[Tooltip("是否将此反馈计入父级 `MMFeedbacks/MMF_Player` 的总持续时间。")]
 		public bool ContributeToTotalDuration = true;
 
 		[Header("Delays")]
-		/// the initial delay to apply before playing the delay (in seconds)
-		[Tooltip("the initial delay to apply before playing the delay (in seconds)")]
+		/// 正式播放前要施加的初始延迟，单位为秒。
+		[Tooltip("正式播放前要施加的初始延迟，单位为秒。")]
 		public float InitialDelay = 0f;
-		/// the cooldown duration mandatory between two plays
-		[Tooltip("the cooldown duration mandatory between two plays")]
+		/// 两次播放之间必须等待的冷却时长。
+		[Tooltip("两次播放之间必须等待的冷却时长。")]
 		public float CooldownDuration = 0f;
 
 		[Header("Stop")]
-		/// if this is true, this feedback will interrupt itself when Stop is called on its parent MMFeedbacks, otherwise it'll keep running
-		[Tooltip("if this is true, this feedback will interrupt itself when Stop is called on its parent MMFeedbacks, otherwise it'll keep running")]
+		/// 若启用，当父级 `MMFeedbacks` 调用 `Stop` 时，此 feedback 会被中断；否则它会继续执行到结束。
+		[Tooltip("若启用，当父级 `MMFeedbacks` 调用 `Stop` 时，此反馈会被中断；否则它会继续执行到结束。")]
 		public bool InterruptsOnStop = true;
 
 		[Header("Repeat")]
-		/// the repeat mode, whether the feedback should be played once, multiple times, or forever
-		[Tooltip("the repeat mode, whether the feedback should be played once, multiple times, or forever")]
+		/// 重复播放设置，决定此 feedback 是只播放一次、重复多次，还是无限循环。
+		[Tooltip("重复播放设置，决定此反馈是只播放一次、重复多次，还是无限循环。")]
 		public int NumberOfRepeats = 0;
-		/// if this is true, the feedback will be repeated forever
-		[Tooltip("if this is true, the feedback will be repeated forever")]
+		/// 若启用，此 feedback 会无限重复播放。
+		[Tooltip("若启用，此反馈会无限重复播放。")]
 		public bool RepeatForever = false;
-		/// the delay (in seconds) between two firings of this feedback. This doesn't include the duration of the feedback. 
-		[Tooltip("the delay (in seconds) between two firings of this feedback. This doesn't include the duration of the feedback.")]
+		/// 两次触发此 feedback 之间的间隔，单位为秒。注意：这里不包含 feedback 自身的持续时间。 
+		[Tooltip("两次触发此反馈之间的间隔，单位为秒。注意：这里不包含反馈自身的持续时间。")]
 		public float DelayBetweenRepeats = 1f;
 
 		[Header("PlayCount")]
-		/// the number of times this feedback's been played since its initialization (or last reset if SetPlayCountToZeroOnReset is true) 
-		[Tooltip("the number of times this feedback's been played since its initialization (or last reset if SetPlayCountToZeroOnReset is true)")]
+		/// 自初始化以来，此 feedback 已经播放的次数；若 `SetPlayCountToZeroOnReset` 为 true，则按最近一次重置后开始计数。 
+		[Tooltip("自初始化以来，此反馈已经播放的次数；若 `SetPlayCountToZeroOnReset` 为 true，则按最近一次重置后开始计数。")]
 		[MMFReadOnly]
 		public int PlayCount = 0;
-		/// whether or not to limit the amount of times this feedback can be played. beyond that amount, it won't play anymore 
-		[Tooltip("whether or not to limit the amount of times this feedback can be played. beyond that amount, it won't play anymore")]
+		/// 是否限制此 feedback 的最大播放次数。达到上限后将不再播放。 
+		[Tooltip("是否限制此反馈的最大播放次数。达到上限后将不再播放。")]
 		public bool LimitPlayCount = false;
-		/// if LimitPlayCount is true, the maximum amount of times this feedback can be played
-		[Tooltip("if LimitPlayCount is true, the maximum amount of times this feedback can be played")]
+		/// 当 `LimitPlayCount` 为 true 时，此 feedback 允许播放的最大次数。
+		[Tooltip("当 `LimitPlayCount` 为 true 时，此反馈允许播放的最大次数。")]
 		[MMFCondition("LimitPlayCount", true)]
 		public int MaxPlayCount = 3;
-		/// if LimitPlayCount is true, whether or not to reset the play count to zero when the feedback is reset
-		[Tooltip("if LimitPlayCount is true, whether or not to reset the play count to zero when the feedback is reset")]
+		/// 当 `LimitPlayCount` 为 true 时，决定在重置 feedback 时是否把播放计数清零。
+		[Tooltip("当 `LimitPlayCount` 为 true 时，决定在重置反馈时是否把播放计数清零。")]
 		[MMFCondition("LimitPlayCount", true)]
 		public bool SetPlayCountToZeroOnReset = false;
 		
@@ -77,10 +77,7 @@ namespace MoreMountains.Feedbacks
 		/// - always (default) : this feedback will always play
 		/// - OnlyWhenForwards : this feedback will only play if the host MMFeedbacks is played in the top to bottom direction (forwards)
 		/// - OnlyWhenBackwards : this feedback will only play if the host MMFeedbacks is played in the bottom to top direction (backwards)
-		[Tooltip("this defines how this feedback should play when the host MMFeedbacks is played :" +
-		         "- always (default) : this feedback will always play" +
-		         "- OnlyWhenForwards : this feedback will only play if the host MMFeedbacks is played in the top to bottom direction (forwards)" +
-		         "- OnlyWhenBackwards : this feedback will only play if the host MMFeedbacks is played in the bottom to top direction (backwards)")]
+		[Tooltip("- 规定当假设`反馈组`播放时，此反馈在什么条件下会执行： - 始终（默认）：此反馈最会播放。 - 仅当假设`反馈组`以前进方向（从上到下）播放时才会执行。 - 最多后退时：仅当假设`反馈组`以后退方向（从下到上）播放时才会执行。")]
 		public MMFeedbacksDirectionConditions MMFeedbacksDirectionCondition = MMFeedbacksDirectionConditions.Always;
 		/// this defines the way this feedback will play. It can play in its normal direction, or in rewind (a sound will play backwards, 
 		/// an object normally scaling up will scale down, a curve will be evaluated from right to left, etc)
@@ -88,42 +85,37 @@ namespace MoreMountains.Feedbacks
 		/// - OppositeMMFeedbacksDirection : will play in rewind when the host MMFeedbacks is played forwards, and normally when played backwards
 		/// - Always Normal : will always play normally, regardless of the direction of the host MMFeedbacks
 		/// - Always Rewind : will always play in rewind, regardless of the direction of the host MMFeedbacks
-		[Tooltip("this defines the way this feedback will play. It can play in its normal direction, or in rewind (a sound will play backwards," +
-		         " an object normally scaling up will scale down, a curve will be evaluated from right to left, etc)" +
-		         "- BasedOnMMFeedbacksDirection : will play normally when the host MMFeedbacks is played forwards, in rewind when it's played backwards" +
-		         "- OppositeMMFeedbacksDirection : will play in rewind when the host MMFeedbacks is played forwards, and normally when played backwards" +
-		         "- Always Normal : will always play normally, regardless of the direction of the host MMFeedbacks" +
-		         "- Always Rewind : will always play in rewind, regardless of the direction of the host MMFeedbacks")]
+		[Tooltip("定义此反馈的播放。既可以按正常播放，也可以倒放（如声音会倒放、未知放大的物体会缩小、轮廓会从右往左读取等）。 - 紧接着反馈方向组：补充`反馈组`正向播放时方向正常执行，反向播放时方向倒放。 - 与反馈方向组则：补充`反馈组`正向播放时倒放，向后播放时正常执行。始终倒放：无论前进方向如何，总是按倒放方向播放。")]
 		public PlayDirections PlayDirection = PlayDirections.FollowMMFeedbacksDirection;
 
 		[Header("Intensity")]
-		/// if this is true, intensity will be constant, even if the parent MMFeedbacks is played at a lower intensity
-		[Tooltip("if this is true, intensity will be constant, even if the parent MMFeedbacks is played at a lower intensity")]
+		/// 若启用，即使父级 `MMFeedbacks` 以较低强度播放，此 feedback 仍会以恒定强度执行。
+		[Tooltip("若启用，即使父级 `MMFeedbacks` 以较低强度播放，此反馈仍会以恒定强度执行。")]
 		public bool ConstantIntensity = false;
-		/// if this is true, this feedback will only play if its intensity is higher or equal to IntensityIntervalMin and lower than IntensityIntervalMax
-		[Tooltip("if this is true, this feedback will only play if its intensity is higher or equal to IntensityIntervalMin and lower than IntensityIntervalMax")]
+		/// 若启用，只有当当前强度 `>= IntensityIntervalMin` 且 `< IntensityIntervalMax` 时，此 feedback 才会播放。
+		[Tooltip("若启用，只有当当前强度 `>= IntensityIntervalMin` 且 `< IntensityIntervalMax` 时，此反馈才会播放。")]
 		public bool UseIntensityInterval = false;
-		/// the minimum intensity required for this feedback to play
-		[Tooltip("the minimum intensity required for this feedback to play")]
+		/// 此 feedback 允许播放所需的最小强度。
+		[Tooltip("此反馈允许播放所需的最小强度。")]
 		[MMFCondition("UseIntensityInterval", true)]
 		public float IntensityIntervalMin = 0f;
-		/// the maximum intensity required for this feedback to play
-		[Tooltip("the maximum intensity required for this feedback to play")]
+		/// 此 feedback 允许播放的最大强度上限。
+		[Tooltip("此反馈允许播放的最大强度上限。")]
 		[MMFCondition("UseIntensityInterval", true)]
 		public float IntensityIntervalMax = 0f;
 
 		[Header("Sequence")]
-		/// A MMSequence to use to play these feedbacks on
-		[Tooltip("A MMSequence to use to play these feedbacks on")]
+		/// 用于播放这些 feedback 的 `MMSequence`。
+		[Tooltip("使用这些播放器反馈的`反馈序列`。")]
 		public MMSequence Sequence;
-		/// The MMSequence's TrackID to consider
-		[Tooltip("The MMSequence's TrackID to consider")]
+		/// 要使用的 `MMSequence` 轨道 ID。
+		[Tooltip("要使用‘反馈序列’的轨道编号。")]
 		public int TrackID = 0;
-		/// whether or not to use the quantized version of the target sequence
-		[Tooltip("whether or not to use the quantized version of the target sequence")]
+		/// 是否使用目标序列的量化版本。
+		[Tooltip("是否使用目标序列的量化版本。")]
 		public bool Quantized = false;
-		/// if using the quantized version of the target sequence, the BPM to apply to the sequence when playing it
-		[Tooltip("if using the quantized version of the target sequence, the BPM to apply to the sequence when playing it")]
+		/// 若使用目标序列的量化版本，这里定义播放该序列时采用的 BPM。
+		[Tooltip("若使用目标序列的量化版本，这里定义播放该序列时采用的 BPM。")]
 		[MMFCondition("Quantized", true)]
 		public int TargetBPM = 120;
 		

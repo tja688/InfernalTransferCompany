@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
@@ -9,8 +9,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback allows you to control one or more target MMF Players
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to control one or more target MMF Players")]
+	[FeedbackHelp("此反馈可让你控制一个或多个目标 MMF_Player。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Feedbacks/MMF Player Control")]
 	public class MMF_PlayerControl : MMF_Feedback
 	{
@@ -98,10 +99,10 @@ namespace MoreMountains.Feedbacks
 		[MMFInspectorGroup("MMF Player", true, 79)]
         
 		/// a list of target MMF_Players to play
-		[Tooltip("a specific MMFeedbacks / MMF_Player to play")]
+		[Tooltip("要播放的特定反馈组/反馈播放器")]
 		public List<MMF_Player> TargetPlayers;
 		/// if this is true, this feedback will be considered as Playing while any of the target players are still Playing
-		[Tooltip("if this is true, this feedback will be considered as Playing while any of the target players are still Playing")]
+		[Tooltip("若开启标题，当任何目标玩家仍在玩时，此反馈将被视为正在玩")]
 		public bool WaitForTargetPlayersToFinish = true;
 
 		public Modes Mode = Modes.PlayFeedbacks;
@@ -113,6 +114,10 @@ namespace MoreMountains.Feedbacks
 		protected override void CustomInitialization(MMF_Player owner)
 		{
 			base.CustomInitialization(owner);
+			if (TargetPlayers == null)
+			{
+				TargetPlayers = new List<MMF_Player>();
+			}
 		}
 
 		/// <summary>

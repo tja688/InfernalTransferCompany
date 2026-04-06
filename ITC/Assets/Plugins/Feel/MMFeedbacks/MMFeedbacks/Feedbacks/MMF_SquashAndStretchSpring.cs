@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Tools;
@@ -14,8 +14,9 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Transform/Squash and Stretch Spring")]
-	[FeedbackHelp("This feedback will let you animate the scale of the target object over time, with a spring + squash and stretch effect")]
+	[FeedbackHelp("此反馈可让你以弹簧加 Squash and Stretch 的方式，为目标对象的缩放制作随时间变化的动画。")]
 	public class MMF_SquashAndStretchSpring : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -25,7 +26,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.TransformColor; } }
 		public override bool EvaluateRequiresSetup() { return (AnimateScaleTarget == null); }
 		public override string RequiredTargetText { get { return AnimateScaleTarget != null ? AnimateScaleTarget.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that an AnimateScaleTarget be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先设置 AnimateScaleTarget 才能正常工作。你可以在下方进行设置。"; } }
 		public override bool HasCustomInspectors { get { return true; } }
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
@@ -40,44 +41,44 @@ namespace MoreMountains.Feedbacks
 		
 		[MMFInspectorGroup("Target", true, 12, true)]
 		/// the object to animate
-		[Tooltip("the object to animate")]
+		[Tooltip("要执行动画的对象")]
 		public Transform AnimateScaleTarget;
 		/// spring duration is determined by the spring (and could be impacted real time), so it's up to you to determine how long this feedback should last, from the point of view of its parent MMF Player
-		[Tooltip("spring duration is determined by the spring (and could be impacted real time), so it's up to you to determine how long this feedback should last, from the point of view of its parent MMF Player")]
+		[Tooltip("弹簧的实际衰减时长由弹簧参数与运行状态决定（可能实时变化）。此处 DeclaredDuration 仅用于告知父 MMF_Player 此反馈应占用的时长，不会强制截断弹簧。")]
 		public float DeclaredDuration = 0f;
 		/// the axis on which to operate squashing and stretching
-		[Tooltip("the axis on which to operate squashing and stretching")]
+		[Tooltip("挤压/拉伸的作用轴。")]
 		public PossibleAxis Axis = PossibleAxis.XtoYZ;
 		
 		[MMFInspectorGroup("Spring Settings", true, 18)]
 		/// the dumping ratio determines how fast the spring will evolve after a disturbance. At a low value, it'll oscillate for a long time, while closer to 1 it'll stop oscillating quickly
-		[Tooltip("the dumping ratio determines how fast the spring will evolve after a disturbance. At a low value, it'll oscillate for a long time, while closer to 1 it'll stop oscillating quickly")]
+		[Tooltip("阻尼比决定弹簧受扰动后的衰减速度：值越小，振荡越久；越接近 1，停止越快。")]
 		[Range(0.01f, 1f)]
 		public float Damping = 0.4f;
 		/// the frequency determines how fast the spring will oscillate when disturbed, low frequency means less oscillations per second, high frequency means more oscillations per second
-		[Tooltip("the frequency determines how fast the spring will oscillate when disturbed, low frequency means less oscillations per second, high frequency means more oscillations per second")]
+		[Tooltip("频率决定弹簧受扰动后的振荡快慢：频率越低，每秒振荡次数越少；频率越高，每秒振荡次数越多。")]
 		public float Frequency = 6f;
 		
 		[MMFInspectorGroup("Spring Mode", true, 19)]
 		/// the chosen mode for this spring. MoveTo will move the target the specified scale (randomized between min and max). MoveToAdditive will add the specified scale (randomized between min and max) to the target's current scale. Bump will bump the target's scale by the specified power (randomized between min and max)
-		[Tooltip("the chosen mode for this spring. MoveTo will move the target the specified scale (randomized between min and max). MoveToAdditive will add the specified scale (randomized between min and max) to the target's current scale. Bump will bump the target's scale by the specified power (randomized between min and max)")]
+		[Tooltip("弹簧模式：移动到目标缩放移动到 [移动平稳, 移动顶峰] 的随机值；即时移动 包装随机值急剧到当前缩放；冲击将按 [冲击缩放, 冲击缩放顶] 的随机值施加一次冲击。")]
 		public Modes Mode = Modes.Bump;
 		/// the min value from which to pick a random target value when in MoveTo or MoveToAdditive modes
-		[Tooltip("the min value from which to pick a random target value when in MoveTo or MoveToAdditive modes")]
+		[Tooltip("在 MoveTo / MoveToAdditive 模式下，用于随机目标缩放的最小值（与最大值相同则不随机）。")]
 		[MMFEnumCondition("Mode", (int)Modes.MoveTo, (int)Modes.MoveToAdditive)]
 		public float MoveToMin = 1f;
 		/// the max value from which to pick a random target value when in MoveTo or MoveToAdditive modes
-		[Tooltip("the max value from which to pick a random target value when in MoveTo or MoveToAdditive modes")]
+		[Tooltip("在 MoveTo / MoveToAdditive 模式下，用于随机目标缩放的最大值（与最小值相同则不随机）。")]
 		[MMFEnumCondition("Mode", (int)Modes.MoveTo, (int)Modes.MoveToAdditive)]
 		public float MoveToMax = 2f;
 
 		/// the min value from which to pick a random bump amount when in Bump mode
-		[Tooltip("the min value from which to pick a random bump amount when in Bump mode")]
+		[Tooltip("在 Bump 模式下，用于随机冲击幅度的最小值（与最大值相同则不随机）。")]
 		[MMFEnumCondition("Mode", (int)Modes.Bump)]
 		public float BumpScaleMin = 20f;
 
 		/// the max value from which to pick a random bump amount when in Bump mode
-		[Tooltip("the max value from which to pick a random bump amount when in Bump mode")]
+		[Tooltip("在 Bump 模式下，用于随机冲击幅度的最大值（与最小值相同则不随机）。")]
 		[MMFEnumCondition("Mode", (int)Modes.Bump)]
 		public float BumpScaleMax = 30f;
 

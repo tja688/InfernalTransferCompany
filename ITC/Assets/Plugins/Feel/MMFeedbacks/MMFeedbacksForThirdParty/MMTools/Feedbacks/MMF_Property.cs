@@ -11,10 +11,9 @@ namespace MoreMountains.Feedbacks
 	/// to update that property over time
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you target (almost) any property, on any object in your scene. " +
-	              "It also works on scriptable objects. Drag an object, select a property, and setup your feedback " +
-	              "to update that property over time.")]
+	[FeedbackHelp("此反馈可作用于场景中（几乎）任意对象的任意属性，也支持 ScriptableObject。拖入对象、选择属性后，即可配置该反馈以随时间更新该属性。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("GameObject/Property")]
 	public class MMF_Property : MMF_Feedback
 	{
@@ -26,7 +25,8 @@ namespace MoreMountains.Feedbacks
 		#if UNITY_EDITOR
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.GameObjectColor; } }
 		public override bool EvaluateRequiresSetup() { return (Target == null); }
-		public override string RequiresSetupText { get { return "This feedback requires that a Target be set to be able to work properly. You can set one below."; } }
+		public override string RequiredTargetText { get { return Target != null ? Target.TargetObject.name+" - "+Target.TargetPropertyName : "";  } }
+		public override string RequiresSetupText { get { return "此反馈必须先指定 Target 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 		public override bool HasRandomness => true;
 		public override bool CanForceInitialValue => true;
@@ -38,48 +38,48 @@ namespace MoreMountains.Feedbacks
         
 		[MMFInspectorGroup("Target Property", true, 12)]
 		/// the receiver to write the level to
-		[Tooltip("the receiver to write the level to")]
+		[Tooltip("用于写入该数值的接收器")]
 		public MMPropertyReceiver Target;
 
 		[MMFInspectorGroup("Mode", true, 29)]
 		/// whether the feedback should affect the target property instantly or over a period of time
-		[Tooltip("whether the feedback should affect the target property instantly or over a period of time")]
+		[Tooltip("该反馈应立即影响目标属性，还是在一段时间内逐步生效")]
 		public Modes Mode = Modes.OverTime;
 		/// how long the target property should change over time
-		[Tooltip("how long the target property should change over time")]
+		[Tooltip("目标属性在渐变模式下持续变化的时间")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ToDestination)]
 		public float Duration = 0.2f;
 		/// whether or not that target property should be turned off on start
-		[Tooltip("whether or not that target property should be turned off on start")]
+		[Tooltip("开始时是否应关闭该目标属性")]
 		public bool StartsOff = false;
 		/// whether or not the values should be relative or not
-		[Tooltip("whether or not the values should be relative or not")]
+		[Tooltip("数值是否采用相对模式")]
 		public bool RelativeValues = true;
 		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		[Tooltip("若启用，即使该反馈仍在执行中，再次调用也会立刻重新触发；若关闭，则当前一次播放结束前会阻止新的 Play 调用。")] 
 		public bool AllowAdditivePlays = false;
 		/// if this is true, initial value will be computed for every play, otherwise only once, on initialization
-		[Tooltip("if this is true, initial value will be computed for every play, otherwise only once, on initialization")]
+		[Tooltip("若启用，将在每次播放时重新计算初始值；若关闭，仅在初始化时计算一次。")]
 		public bool DetermineInitialValueOnPlay = false;
 
 		[MMFInspectorGroup("Level", true, 30)]
 		/// the curve to tween the intensity on
-		[Tooltip("the curve to tween the intensity on")]
+		[Tooltip("用于驱动强度补间的曲线")]
 		public MMTweenType LevelCurve = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0)), "", "Mode", (int)Modes.OverTime, (int)Modes.ToDestination);
 		/// the value to remap the intensity curve's 0 to
-		[Tooltip("the value to remap the intensity curve's 0 to")]
+		[Tooltip("将强度曲线的 0 重映射到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public float RemapLevelZero = 0f;
 		/// the value to remap the intensity curve's 1 to
-		[Tooltip("the value to remap the intensity curve's 1 to")]
+		[Tooltip("将强度曲线的 1 重映射到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public float RemapLevelOne = 1f;
 		/// the value to move the intensity to in instant mode
-		[Tooltip("the value to move the intensity to in instant mode")]
+		[Tooltip("Instant 模式下强度将直接设置到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.Instant)]
 		public float InstantLevel;
 		/// the value towards which to animate when in ToDestination mode
-		[Tooltip("the value towards which to animate when in ToDestination mode")]
+		[Tooltip("ToDestination 模式下要过渡到的目标值。")]
 		[MMFEnumCondition("Mode", (int)Modes.ToDestination)]
 		public float ToDestinationLevel = 5f;
 
@@ -93,6 +93,12 @@ namespace MoreMountains.Feedbacks
 		protected override void CustomInitialization(MMF_Player owner)
 		{
 			base.CustomInitialization(owner);
+			
+			if (Target == null)
+			{
+				Debug.LogWarning("[Property Feedback] The property feedback on "+Owner.name+" doesn't have a Target, it won't work. You need to specify one in its inspector.");
+				return;
+			}
 
 			Target.Initialization(Owner.gameObject);
 			GetInitialIntensity(); 
@@ -121,7 +127,7 @@ namespace MoreMountains.Feedbacks
 		/// <param name="feedbacksIntensity"></param>
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
-			if (!Active || !FeedbackTypeAuthorized)
+			if (!Active || !FeedbackTypeAuthorized || (Target == null))
 			{
 				return;
 			}

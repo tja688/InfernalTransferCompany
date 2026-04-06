@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +13,7 @@ namespace MoreMountains.Feedbacks
 	public class MMAudioSourceSequencer : MMSequencer
 	{
 		/// the list of audio sources to play (one per track)
-		[Tooltip("the list of audio sources to play (one per track)")]
+		[Tooltip("要播放的 AudioSource 列表（每条轨道一个）")]
 		public List<AudioSource> AudioSources;
                 
 		/// <summary>

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 #if MM_UI
 using UnityEngine.UI;
@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will let you change the color of a target Graphic over time.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the color of a target Graphic over time.")]
+	[FeedbackHelp("此反馈可让你随时间修改目标 Graphic 的颜色。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("UI/Graphic")]
 	public class MMF_Graphic : MMF_Feedback
 	{
@@ -22,7 +23,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.UIColor; } }
 		public override bool EvaluateRequiresSetup() { return (TargetGraphic == null); }
 		public override string RequiredTargetText { get { return TargetGraphic != null ? TargetGraphic.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetGraphic be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈需要先指定 TargetGraphic 才能正常工作，可在下方设置。"; } }
 		#endif
 
 		/// the duration of this feedback is the duration of the Graphic, or 0 if instant
@@ -36,34 +37,34 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Graphic", true, 54, true)]
 		/// the Graphic to affect when playing the feedback
-		[Tooltip("the Graphic to affect when playing the feedback")]
+		[Tooltip("播放该反馈时要作用的 Graphic")]
 		public Graphic TargetGraphic;
 		/// whether the feedback should affect the Graphic instantly or over a period of time
-		[Tooltip("whether the feedback should affect the Graphic instantly or over a period of time")]
+		[Tooltip("作用模式：`Instant` 会立即应用；`OverTime` 会在 `Duration` 时长内渐变。")]
 		public Modes Mode = Modes.OverTime;
 		/// how long the Graphic should change over time
-		[Tooltip("how long the Graphic should change over time")]
+		[Tooltip("在 `OverTime` 模式下，颜色变化持续时间（秒）。")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public float Duration = 0.2f;
 		/// whether or not that Graphic should be turned off on start
-		[Tooltip("whether or not that Graphic should be turned off on start")]
+		[Tooltip("初始化时是否将目标 Graphic 关闭。")]
 		public bool StartsOff = false;
 		/// if this is true, the target will be disabled when this feedbacks is stopped
-		[Tooltip("if this is true, the target will be disabled when this feedbacks is stopped")] 
+		[Tooltip("若开启，调用 Stop 时会关闭目标 Graphic。")]
 		public bool DisableOnStop = false;
         
 		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		[Tooltip("若开启此项，即使该反馈仍在执行中，再次调用也会立即触发；若关闭此项，在当前播放结束前将阻止新的 Play 调用")] 
 		public bool AllowAdditivePlays = false;
 		/// whether or not to modify the color of the Graphic
-		[Tooltip("whether or not to modify the color of the Graphic")]
+		[Tooltip("是否修改目标图形的颜色。")]
 		public bool ModifyColor = true;
 		/// the colors to apply to the Graphic over time
-		[Tooltip("the colors to apply to the Graphic over time")]
+		[Tooltip("在 `OverTime` 模式下用于驱动颜色变化的渐变。")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public Gradient ColorOverTime;
 		/// the color to move to in instant mode
-		[Tooltip("the color to move to in instant mode")]
+		[Tooltip("在 Instant 模式下要切换到的颜色")]
 		[MMFEnumCondition("Mode", (int)Modes.Instant)]
 		public Color InstantColor;
 
@@ -85,7 +86,15 @@ namespace MoreMountains.Feedbacks
 				{
 					Turn(false);
 				}
-				_initialInstantColor = TargetGraphic.color;
+
+				if (TargetGraphic == null)
+				{
+					Debug.LogWarning("[Graphic Feedback] The graphic feedback on "+Owner.name+" doesn't have a Target Graphic, it won't work. You need to specify a graphic in its inspector.");
+				}
+				else
+				{
+					_initialInstantColor = TargetGraphic.color;	
+				}
 			}
 		}
 
@@ -96,7 +105,7 @@ namespace MoreMountains.Feedbacks
 		/// <param name="feedbacksIntensity"></param>
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
-			if (!Active || !FeedbackTypeAuthorized)
+			if (!Active || !FeedbackTypeAuthorized || (TargetGraphic == null))
 			{
 				return;
 			}

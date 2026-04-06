@@ -1,7 +1,7 @@
-﻿using MoreMountains.Tools;
+using MoreMountains.Tools;
 using UnityEngine;
 using System.Collections;
-#if (MM_TEXTMESHPRO || MM_UGUI2)
+#if MM_UGUI2
 using TMPro;
 #endif
 using UnityEngine.Scripting.APIUpdating;
@@ -12,8 +12,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback lets you tweak the softness of a TMP text over time
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback lets you tweak the softness of a TMP text over time.")]
-	#if (MM_TEXTMESHPRO || MM_UGUI2)
+	[System.Serializable]
+	[FeedbackHelp("这个反馈可随时间微调 TMP 文本的柔化程度。")]
+	#if MM_UGUI2
 	[FeedbackPath("TextMesh Pro/TMP Softness")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.TextMeshPro")]
@@ -25,9 +26,9 @@ namespace MoreMountains.Feedbacks
 		/// sets the inspector color for this feedback
 		#if UNITY_EDITOR
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.TMPColor; } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetTMPText be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈需要指定 TargetTMPText 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
-		#if UNITY_EDITOR && (MM_TEXTMESHPRO || MM_UGUI2)
+		#if UNITY_EDITOR && MM_UGUI2
 		public override bool EvaluateRequiresSetup() { return (TargetTMPText == null); }
 		public override string RequiredTargetText { get { return TargetTMPText != null ? TargetTMPText.name : "";  } }
 		#endif
@@ -36,44 +37,44 @@ namespace MoreMountains.Feedbacks
 		/// the duration of this feedback is the duration of the transition, or 0 if instant
 		public override float FeedbackDuration { get { return (Mode == MMFeedbackBase.Modes.Instant) ? 0f : ApplyTimeMultiplier(Duration); } set { Duration = value; } }
 
-		#if (MM_TEXTMESHPRO || MM_UGUI2)
+		#if MM_UGUI2
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetTMPText = FindAutomatedTarget<TMP_Text>();
 
 		[MMFInspectorGroup("Target", true, 12, true)]
-		/// the TMP_Text component to control
-		[Tooltip("the TMP_Text component to control")]
+		/// 要控制的 TMP_Text 组件。
+		[Tooltip("要控制的文本组件。")]
 		public TMP_Text TargetTMPText;
 		#endif
 
 		[MMFInspectorGroup("Softness", true, 13)]
-		/// whether or not values should be relative
-		[Tooltip("whether or not values should be relative")]
+		/// 是否按相对值应用。若启用，会在当前值基础上叠加；若禁用，则直接使用绝对值。
+		[Tooltip("是否按相对值应用。若启用，会在当前值基础上叠加；若禁用，则直接使用绝对值。")]
 		public bool RelativeValues = true;
-		/// the selected mode
-		[Tooltip("the selected mode")]
+		/// 所选模式。
+		[Tooltip("所选模式。")]
 		public MMFeedbackBase.Modes Mode = MMFeedbackBase.Modes.OverTime;
-		/// the duration of the feedback, in seconds
-		[Tooltip("the duration of the feedback, in seconds")]
+		/// 反馈持续时间（秒）。
+		[Tooltip("反馈持续时间（秒）。")]
 		[MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
 		public float Duration = 0.5f;
-		/// the curve to tween on
-		[Tooltip("the curve to tween on")]
+		/// 用于执行补间的曲线。
+		[Tooltip("用于执行补间的曲线。")]
 		public MMTweenType SoftnessCurve = new MMTweenType(new AnimationCurve(new Keyframe(0, 0f), new Keyframe(0.3f, 1f), new Keyframe(1, 0f)), "", "Mode", (int)MMFeedbackBase.Modes.OverTime);
-		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		/// 将曲线 0 端重新映射到的值。
+		[Tooltip("将曲线 0 端重新映射到的值。")]
 		[MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
 		public float RemapZero = 0f;
-		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		/// 将曲线 1 端重新映射到的值。
+		[Tooltip("将曲线 1 端重新映射到的值。")]
 		[MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
 		public float RemapOne = 1f;
-		/// the value to move to in instant mode
-		[Tooltip("the value to move to in instant mode")]
+		/// Instant 模式下要移动到的值。
+		[Tooltip("即时模式下要移动到的值。")]
 		[MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.Instant)]
 		public float InstantSoftness;
-		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		/// 若启用，即使当前反馈仍在执行中，再次调用也会重新触发；若关闭，在本次播放结束前新的 Play 调用将被忽略。
+		[Tooltip("若启用，即使当前反馈仍在执行中，再次调用也会重新触发；若关闭，在本次播放结束前新的 Play 调用将被忽略。")] 
 		public bool AllowAdditivePlays = false;
 
 		protected float _initialSoftness;
@@ -91,7 +92,12 @@ namespace MoreMountains.Feedbacks
 			{
 				return;
 			}
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
+			if (TargetTMPText == null)
+			{
+				Debug.LogWarning("[TMP Softness Feedback] The TMP Softness feedback on "+Owner.name+" doesn't have a TargetTMPText, it won't work. You need to specify one in its inspector.");
+				return;
+			}
 			_initialSoftness = TargetTMPText.fontMaterial.GetFloat(ShaderUtilities.ID_OutlineSoftness);
 			#endif
 		}
@@ -103,7 +109,7 @@ namespace MoreMountains.Feedbacks
 		/// <param name="feedbacksIntensity"></param>
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			if (TargetTMPText == null)
 			{
 				return;
@@ -172,7 +178,7 @@ namespace MoreMountains.Feedbacks
 
 		protected virtual void SetValue(float time)
 		{
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			float intensity = MMTween.Tween(time, 0f, 1f, RemapZero, RemapOne, SoftnessCurve);
 			float newValue = intensity;
 			if (RelativeValues)
@@ -193,7 +199,7 @@ namespace MoreMountains.Feedbacks
 			{
 				return;
 			}
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			TargetTMPText.fontMaterial.SetFloat(ShaderUtilities.ID_OutlineSoftness, _initialSoftness);
 			TargetTMPText.UpdateMeshPadding();
 			#endif

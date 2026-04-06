@@ -23,28 +23,28 @@ namespace MoreMountains.Tools
 		public enum ButtonStates { Off, ButtonDown, ButtonPressed, ButtonUp }
 		[Header("Binding")]
 		/// The method(s) to call when the axis gets pressed down
-		[Tooltip("The method(s) to call when the axis gets pressed down")]
+		[Tooltip("轴首次被按下时要调用的方法")]
 		public UnityEvent AxisPressedFirstTime;
 		/// The method(s) to call when the axis gets released
-		[Tooltip("The method(s) to call when the axis gets released")]
+		[Tooltip("轴释放时要调用的方法")]
 		public UnityEvent AxisReleased;
 		/// The method(s) to call while the axis is being pressed
-		[Tooltip("The method(s) to call while the axis is being pressed")]
+		[Tooltip("轴持续按下期间要调用的方法")]
 		public AxisEvent AxisPressed;
 
 		[Header("Pressed Behaviour")]
-		[MMInformation("Here you can set the opacity of the button when it's pressed. Useful for visual feedback.",MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("你可以在这里设置轴被按下时的透明度，用于提供更明显的视觉反馈。",MMInformationAttribute.InformationType.Info,false)]
 		/// the new opacity to apply to the canvas group when the axis is pressed
-		[Tooltip("the new opacity to apply to the canvas group when the axis is pressed")]
+		[Tooltip("轴被按下时要应用到 CanvasGroup 的透明度")]
 		public float PressedOpacity = 0.5f;
 		/// the value to send the bound method when the axis is pressed
-		[Tooltip("the value to send the bound method when the axis is pressed")]
+		[Tooltip("轴按下时传递给绑定方法的值")]
 		public float AxisValue;
 
 		[Header("Mouse Mode")]
-		[MMInformation("If you set this to true, you'll need to actually press the axis for it to be triggered, otherwise a simple hover will trigger it (better for touch input).", MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("如果将此项设为 true，必须真的按下这个轴才会触发；否则仅仅悬停就会触发（更适合触控输入）。", MMInformationAttribute.InformationType.Info,false)]
 		/// If you set this to true, you'll need to actually press the axis for it to be triggered, otherwise a simple hover will trigger it (better for touch input).
-		[Tooltip("If you set this to true, you'll need to actually press the axis for it to be triggered, otherwise a simple hover will trigger it (better for touch input).")]
+		[Tooltip("如果将此项设为 true，必须真的按下这个轴才会触发；否则仅仅悬停就会触发（更适合触控输入）。")]
 		public bool MouseMode = false;
 
 		public virtual ButtonStates CurrentState { get; protected set; }

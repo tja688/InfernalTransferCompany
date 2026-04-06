@@ -21,60 +21,60 @@ namespace MoreMountains.FeedbacksForThirdParty
 
 		[MMInspectorGroup("Post Exposure", true, 40)]
 		/// the curve used to animate the focus distance value on
-		[Tooltip("the curve used to animate the focus distance value on")]
+		[Tooltip("用于驱动焦点距离值变化的曲线")]
 		public AnimationCurve ShakePostExposure = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		public float RemapPostExposureZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		public float RemapPostExposureOne = 1f;
 
 		[MMInspectorGroup("Hue Shift", true, 49)]
 		/// the curve used to animate the aperture value on
-		[Tooltip("the curve used to animate the aperture value on")]
+		[Tooltip("用于驱动光圈值变化的曲线")]
 		public AnimationCurve ShakeHueShift = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(-180f, 180f)]
 		public float RemapHueShiftZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-180f, 180f)]
 		public float RemapHueShiftOne = 180f;
 
 		[MMInspectorGroup("Saturation", true, 48)]
 		/// the curve used to animate the focal length value on
-		[Tooltip("the curve used to animate the focal length value on")]
+		[Tooltip("用于驱动焦距值变化的曲线")]
 		public AnimationCurve ShakeSaturation = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(-100f, 100f)]
 		public float RemapSaturationZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-100f, 100f)]
 		public float RemapSaturationOne = 100f;
 
 		[MMInspectorGroup("Contrast", true, 47)]
 		/// the curve used to animate the focal length value on
-		[Tooltip("the curve used to animate the focal length value on")]
+		[Tooltip("用于驱动焦距值变化的曲线")]
 		public AnimationCurve ShakeContrast = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(-100f, 100f)]
 		public float RemapContrastZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-100f, 100f)]
 		public float RemapContrastOne = 100f;
 
 		[MMFInspectorGroup("Color Filter", true, 50)]
 		/// if this is true, the color filter will be animated over the gradient below
-		[Tooltip("if this is true, the color filter will be animated over the gradient below")]
+		[Tooltip("若启用此项，颜色滤镜将按下方渐变随时间变化")]
 		public bool ShakeColorFilter = false;
 		/// the gradient to use to animate the color filter over time
-		[Tooltip("the gradient to use to animate the color filter over time")]
+		[Tooltip("用于随时间驱动颜色滤镜变化的渐变")]
 		[GradientUsage(true)]
 		public Gradient ColorFilterGradient;
         

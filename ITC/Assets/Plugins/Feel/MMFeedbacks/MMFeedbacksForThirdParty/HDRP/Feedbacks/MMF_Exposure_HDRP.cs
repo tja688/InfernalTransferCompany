@@ -13,13 +13,14 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// with Exposure active, and a MMExposureShaker_HDRP component.
 	/// </summary>
 	[AddComponentMenu("")]
+	[System.Serializable]
 	#if MM_HDRP
 	[FeedbackPath("PostProcess/Exposure HDRP")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.HDRP")]
-	[FeedbackHelp("This feedback allows you to control Exposure intensity over time. " +
-	              "It requires you have in your scene an object with a Volume " +
-	              "with Exposure active, and a MMExposureShaker_HDRP component.")]
+	[FeedbackHelp("此反馈可让你随时间控制 Exposure 强度。" +
+	              "它要求你的场景中存在一个带有 Volume 的对象，且该对象" +
+	              "已启用 Exposure，并挂有 MMExposureShaker_HDRP 组件。")]
 	public class MMF_Exposure_HDRP : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -38,27 +39,27 @@ namespace MoreMountains.FeedbacksForThirdParty
 
 		[MMFInspectorGroup("Exposure", true, 17)]
 		/// the duration of the shake, in seconds
-		[Tooltip("the duration of the shake, in seconds")]
+		[Tooltip("抖动持续时间，单位为秒")]
 		public float Duration = 0.2f;
 		/// whether or not to reset shaker values after shake
-		[Tooltip("whether or not to reset shaker values after shake")]
+		[Tooltip("抖动结束后是否重置抖动器的数值")]
 		public bool ResetShakerValuesAfterShake = true;
 		/// whether or not to reset the target's values after shake
-		[Tooltip("whether or not to reset the target's values after shake")]
+		[Tooltip("抖动结束后是否重置目标对象的数值")]
 		public bool ResetTargetValuesAfterShake = true;
 
 		[MMFInspectorGroup("Intensity", true, 18)]
 		/// the curve to animate the intensity on
-		[Tooltip("the curve to animate the intensity on")]
+		[Tooltip("用于驱动强度变化的曲线")]
 		public AnimationCurve FixedExposure = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0)); 
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		public float RemapFixedExposureZero = 8.5f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		public float RemapFixedExposureOne = 6f;
 		/// whether or not to add to the initial intensity
-		[Tooltip("whether or not to add to the initial intensity")]
+		[Tooltip("是否在初始强度基础上叠加")]
 		public bool RelativeFixedExposure = false;
 
 		/// <summary>

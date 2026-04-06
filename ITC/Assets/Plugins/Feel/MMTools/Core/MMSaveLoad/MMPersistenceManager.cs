@@ -19,33 +19,33 @@ namespace MoreMountains.Tools
 		[Header("Persistence")]
 		/// A persistence ID used to identify the data associated to this manager.
 		/// Usually you'll want to leave this to its default value.
-		[Tooltip("A persistence ID used to identify the data associated to this manager. Usually you'll want to leave this to its default value.")]
+		[Tooltip("用于标识与该管理器关联持久化数据的 Persistence ID。通常建议保持默认值。")]
 		public string PersistenceID = "MMPersistency";
 
 		[Header("Events")]
 		/// whether or not this manager should listen for save events. If you set this to false, you'll have to call SaveToMemory or SaveFromMemoryToFile manually
-		[Tooltip("whether or not this manager should listen for save events. If you set this to false, you'll have to call SaveToMemory or SaveFromMemoryToFile manually")] 
+		[Tooltip("是否监听 Save 事件。若关闭，你必须手动调用 SaveToMemory 或 SaveFromMemoryToFile。")] 
 		public bool ListenForSaveEvents = true;
 		/// whether or not this manager should listen for load events. If you set this to false, you'll have to call LoadFromMemory or LoadFromFileToMemory manually
-		[Tooltip("whether or not this manager should listen for load events. If you set this to false, you'll have to call LoadFromMemory or LoadFromFileToMemory manually")] 
+		[Tooltip("是否监听 Load 事件。若关闭，你必须手动调用 LoadFromMemory 或 LoadFromFileToMemory。")] 
 		public bool ListenForLoadEvents = true;
 		/// whether or not this manager should listen for save to memory events. If you set this to false, you'll have to call SaveToMemory manually
-		[Tooltip("whether or not this manager should listen for save to memory events. If you set this to false, you'll have to call SaveToMemory manually")]
+		[Tooltip("是否监听 SaveToMemory 事件。若关闭，你必须手动调用 SaveToMemory。")]
 		public bool ListenForSaveToMemoryEvents = true;
 		/// whether or not this manager should listen for load from memory events. If you set this to false, you'll have to call LoadFromMemory manually
-		[Tooltip("whether or not this manager should listen for load from memory events. If you set this to false, you'll have to call LoadFromMemory manually")]
+		[Tooltip("是否监听 LoadFromMemory 事件。若关闭，你必须手动调用 LoadFromMemory。")]
 		public bool ListenForLoadFromMemoryEvents = true;
 		/// whether or not this manager should listen for save to file events. If you set this to false, you'll have to call SaveFromMemoryToFile manually
-		[Tooltip("whether or not this manager should listen for save to file events. If you set this to false, you'll have to call SaveFromMemoryToFile manually")]
+		[Tooltip("是否监听 SaveToFile 事件。若关闭，你必须手动调用 SaveFromMemoryToFile。")]
 		public bool ListenForSaveToFileEvents = true;
 		/// whether or not this manager should listen for load from file events. If you set this to false, you'll have to call LoadFromFileToMemory manually
-		[Tooltip("whether or not this manager should listen for load from file events. If you set this to false, you'll have to call LoadFromFileToMemory manually")]
+		[Tooltip("是否监听 LoadFromFile 事件。若关闭，你必须手动调用 LoadFromFileToMemory。")]
 		public bool ListenForLoadFromFileEvents = true;
 		/// whether or not this manager should save data to file on save events
-		[Tooltip("whether or not this manager should save data to file on save events")]
+		[Tooltip("收到 Save 事件时，是否将内存数据写入文件")]
 		public bool SaveToFileOnSaveEvents = true;
 		/// whether or not this manager should load data from file on load events
-		[Tooltip("whether or not this manager should load data from file on load events")]
+		[Tooltip("收到 Load 事件时，是否先从文件读取到内存")]
 		public bool LoadFromFileOnLoadEvents = true;
 		
 		/// the debug buttons below are only meant to be used at runtime

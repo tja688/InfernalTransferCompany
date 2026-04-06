@@ -12,17 +12,17 @@ namespace MoreMountains.Tools
 	public class MMSMPlaylistSong
 	{
 		/// the name of the song, used only for organizational purposes in the inspector
-		[Tooltip("the name of the song, used only for organizational purposes in the inspector")]
+		[Tooltip("歌曲名称，仅用于 Inspector 内组织与识别")]
 		public string Name;
 		/// the clip to play when this song plays
-		[Tooltip("the clip to play when this song plays")]
+		[Tooltip("该歌曲播放时使用的音频剪辑")]
 		public AudioClip Clip;
 		/// the amount of time this song's been played
-		[Tooltip("the amount of time this song's been played")]
+		[Tooltip("该歌曲累计被播放的次数")]
 		[MMReadOnly] 
 		public int PlayCount;
 		/// the many options to control this song
-		[Tooltip("the many options to control this song")]
+		[Tooltip("用于控制该歌曲的选项")]
 		public MMSoundManagerPlayOptions Options;
 
 		/// <summary>
@@ -43,33 +43,33 @@ namespace MoreMountains.Tools
 		
 		[Header("Play Modes")]
 		/// the sound manager track on which to play this playlist's songs
-		[Tooltip("the sound manager track on which to play this playlist's songs")]
+		[Tooltip("该播放列表歌曲输出到的 SoundManager 轨道")]
 		public MMSoundManager.MMSoundManagerTracks Track = MMSoundManager.MMSoundManagerTracks.Music;
 		/// the order in which to play songs (top to bottom, bottom to top, random, or random while trying to maintain playcount across songs
-		[Tooltip("the order in which to play songs (top to bottom, bottom to top, random, or random while trying to maintain playcount across songs")]
+		[Tooltip("歌曲播放顺序（从上到下、从下到上、随机、或尽量均衡各歌曲播放次数的随机）")]
 		public PlayOrders PlayOrder = PlayOrders.Normal;
 		/// if this is true, random seed will be randomized by the system clock
-		[Tooltip("if this is true, random seed will be randomized by the system clock")]
+		[Tooltip("若开启，随机种子将基于系统时钟自动随机化")]
 		[MMEnumCondition("PlayOrder", (int)PlayOrders.Random, (int)PlayOrders.RandomUnique)]
 		public bool RandomizeOrderSeed = true;
 		/// whether to play this playlist forever, only once, or play songs until total playcount reaches MaxAmountOfPlays
-		[Tooltip("whether to play this playlist forever, only once, or play songs until total playcount reaches MaxAmountOfPlays")]
+		[Tooltip("播放模式：无限循环、仅播放一轮，或播放到总次数达到 MaxAmountOfPlays")]
 		public PlayModes PlayMode = PlayModes.PlayForever;
 		/// when in PlayXTimes mode, the max amount of plays before this playlist ends
-		[Tooltip("when in PlayXTimes mode, the max amount of plays before this playlist ends")]
+		[Tooltip("在 PlayXTimes 模式下，播放列表结束前允许的最大播放次数")]
 		[MMEnumCondition("PlayMode", (int)PlayModes.PlayXTimes)]
 		public int MaxAmountOfPlays = 10;
 		/// a playlist to switch to when reaching the end of this playlist
-		[Tooltip("a playlist to switch to when reaching the end of this playlist")]
+		[Tooltip("当前播放列表结束时要切换到的下一个播放列表")]
 		[MMEnumCondition("PlayMode",(int)PlayModes.PlayOnce, (int)PlayModes.PlayXTimes)]
 		public MMSMPlaylist NextPlaylist;
 		/// the list of songs to play on this playlist
-		[Tooltip("the list of songs to play on this playlist")]
+		[Tooltip("该播放列表中的歌曲列表")]
 		public List<MMSMPlaylistSong> Songs;
 		
 		[Header("Debug")]
 		/// the total number of times songs in this playlist have been played 
-		[Tooltip("the total number of times songs in this playlist have been played ")]
+		[Tooltip("该播放列表内歌曲被播放的总次数")]
 		[MMReadOnly] 
 		public int PlayCount;
 
@@ -132,9 +132,16 @@ namespace MoreMountains.Tools
 			switch (PlayOrder)
 			{
 				case PlayOrders.Random:
-					while (newIndex == currentSongIndex)
+					if (Songs.Count > 1)
 					{
-						newIndex = Random.Range(0, Songs.Count);
+						while (newIndex == currentSongIndex)
+						{
+							newIndex = Random.Range(0, Songs.Count);
+						}
+					}
+					else
+					{
+						newIndex = 0;
 					}
 					return newIndex;
 				
@@ -156,9 +163,16 @@ namespace MoreMountains.Tools
 					
 					if (allPlayed)
 					{
-						while (newIndex == currentSongIndex)
+						if (Songs.Count > 1)
 						{
-							newIndex = Random.Range(0, Songs.Count);
+							while (newIndex == currentSongIndex)
+							{
+								newIndex = Random.Range(0, Songs.Count);
+							}	
+						}
+						else
+						{
+							newIndex = 0;
 						}
 					}
 					else

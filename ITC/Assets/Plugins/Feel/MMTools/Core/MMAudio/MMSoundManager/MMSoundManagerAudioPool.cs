@@ -39,15 +39,7 @@ namespace MoreMountains.Tools
 
 			for (int i = 0; i < poolSize; i++)
 			{
-				GameObject temporaryAudioHost = new GameObject("MMAudioSourcePool_"+i);
-				SceneManager.MoveGameObjectToScene(temporaryAudioHost.gameObject, parent.gameObject.scene);
-				AudioSource tempSource = temporaryAudioHost.AddComponent<AudioSource>();
-				MMFollowTarget followTarget = temporaryAudioHost.AddComponent<MMFollowTarget>();
-				followTarget.enabled = false;
-				followTarget.DisableSelfOnSetActiveFalse = true;
-				temporaryAudioHost.transform.SetParent(parent);
-				temporaryAudioHost.SetActive(false);
-				_pool.Add(tempSource);
+				AddOneObjectToThePool(i, parent, false);
 			}
 		}
 
@@ -59,23 +51,56 @@ namespace MoreMountains.Tools
 		/// <returns></returns>
 		public virtual IEnumerator AutoDisableAudioSource(float duration, AudioSource source, AudioClip clip, bool doNotAutoRecycleIfNotDonePlaying, float playbackTime, float playbackDuration)
 		{
-			while (source.time == 0 && source.isPlaying)
+			if (clip != null)
 			{
-				yield return null;
+				while (source.time == 0 && source.isPlaying)
+				{
+					yield return null;
+				}
 			}
+#if UNITY_6000_0_OR_NEWER
+			if (source.resource != null)
+			{
+				while (source.isPlaying)
+				{
+					yield return null;
+				}
+			}
+#endif
 			float initialWait = (playbackDuration > 0) ? playbackDuration : duration;
 			yield return MMCoroutine.WaitForUnscaled(initialWait);
-			if (source.clip != clip)
+			if ((clip != null) && (source.clip != clip))
 			{
 				yield break;
 			}
 			if (doNotAutoRecycleIfNotDonePlaying)
 			{
-				float maxTime = (playbackDuration > 0) ? playbackTime + playbackDuration : source.clip.length;
-				while ((source.time != 0) && (source.time <= maxTime))
+				float maxTime = 0;
+				if (clip != null)
 				{
-					yield return null;
+					 maxTime = (playbackDuration > 0) ? playbackTime + playbackDuration : source.clip.length;	
 				}
+				else
+				{
+					maxTime = playbackTime + playbackDuration;
+				}
+				
+				if (clip != null)
+				{
+					while ((source.time != 0) && (source.time <= maxTime))
+					{
+						yield return null;
+					}
+				}
+#if UNITY_6000_0_OR_NEWER
+				if (source.resource != null)
+				{
+					while (source.isPlaying)
+					{
+						yield return null;
+					}
+				}
+#endif
 			}
 			source.gameObject.SetActive(false);
 		}
@@ -99,16 +124,25 @@ namespace MoreMountains.Tools
 
 			if (poolCanExpand)
 			{
-				GameObject temporaryAudioHost = new GameObject("MMAudioSourcePool_"+_pool.Count);
-				SceneManager.MoveGameObjectToScene(temporaryAudioHost.gameObject, parent.gameObject.scene);
-				AudioSource tempSource = temporaryAudioHost.AddComponent<AudioSource>();
-				temporaryAudioHost.transform.SetParent(parent);
-				temporaryAudioHost.SetActive(true);
-				_pool.Add(tempSource);
+				AudioSource tempSource = AddOneObjectToThePool(_pool.Count, parent, true);
 				return tempSource;
 			}
 
 			return null;
+		}
+
+		protected virtual AudioSource AddOneObjectToThePool(int index, Transform parent, bool active)
+		{
+			GameObject temporaryAudioHost = new GameObject("MMAudioSourcePool_"+index);
+			SceneManager.MoveGameObjectToScene(temporaryAudioHost.gameObject, parent.gameObject.scene);
+			AudioSource tempSource = temporaryAudioHost.AddComponent<AudioSource>();
+			MMFollowTarget followTarget = temporaryAudioHost.AddComponent<MMFollowTarget>();
+			followTarget.enabled = false;
+			followTarget.DisableSelfOnSetActiveFalse = true;
+			temporaryAudioHost.transform.SetParent(parent);
+			temporaryAudioHost.SetActive(active);
+			_pool.Add(tempSource);
+			return tempSource;
 		}
 
 		/// <summary>

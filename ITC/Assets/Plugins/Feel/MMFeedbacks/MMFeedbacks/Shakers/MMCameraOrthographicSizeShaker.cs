@@ -13,17 +13,17 @@ namespace MoreMountains.Feedbacks
 	public class MMCameraOrthographicSizeShaker : MMShaker
 	{
 		[MMInspectorGroup("Orthographic Size", true, 37)]
-		/// whether or not to add to the initial value
-		[Tooltip("whether or not to add to the initial value")]
+		/// 是否叠加到初始值上。
+		[Tooltip("是否叠加到初始值上。")]
 		public bool RelativeOrthographicSize = false;
-		/// the curve used to animate the intensity value on
-		[Tooltip("the curve used to animate the intensity value on")]
+		/// 用于驱动强度数值变化的曲线。
+		[Tooltip("用于驱动强度数值变化的曲线。")]
 		public AnimationCurve ShakeOrthographicSize = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
-		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		/// 将曲线的 `0` 值重映射到的目标值。
+		[Tooltip("将曲线的 `0` 值重映射到的目标值。")]
 		public float RemapOrthographicSizeZero = 5f;
-		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		/// 将曲线的 `1` 值重映射到的目标值。
+		[Tooltip("将曲线的 `1` 值重映射到的目标值。")]
 		public float RemapOrthographicSizeOne = 10f;
 
 		protected Camera _targetCamera;

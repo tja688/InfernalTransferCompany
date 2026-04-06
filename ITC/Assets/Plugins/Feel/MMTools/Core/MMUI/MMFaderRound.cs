@@ -15,31 +15,40 @@ namespace MoreMountains.Tools
 		public CameraModes CameraMode = CameraModes.Main;
 		[MMEnumCondition("CameraMode",(int)CameraModes.Override)]
 		/// the camera to pick the position from (usually the "regular" game camera)
+		[Tooltip("用于取屏幕位置的摄像机（通常是常规游戏相机）")]
 		public Camera TargetCamera;
-		/// the background to fade 
+		/// the background to fade
+		[Tooltip("要执行淡入淡出的背景")] 
 		public RectTransform FaderBackground;
 		/// the mask used to draw a hole in the background that will get faded / scaled
+		[Tooltip("用于在背景上挖洞并参与缩放/淡入淡出的遮罩")]
 		public RectTransform FaderMask;
 
 		[MMInspectorGroup("Identification", true, 122)] 
 		/// the ID for this fader (0 is default), set more IDs if you need more than one fader
+		[Tooltip("此 Fader 的 ID（默认 0）。如果场景中有多个 Fader，请设置不同 ID 以便区分")]
 		public int ID;
 		
 		[MMInspectorGroup("Mask", true, 127)]
 		[MMVector("min", "max")]
 		/// the mask's scale at minimum and maximum opening
+		[Tooltip("遮罩开口最小值与最大值时对应的缩放")]
 		public Vector2 MaskScale;
 		
 		[MMInspectorGroup("Timing", true, 124)]
 		/// the default duration of the fade in/out
+		[Tooltip("淡入/淡出的默认持续时间")]
 		public float DefaultDuration = 0.2f;
 		/// the default curve to use for this fader
+		[Tooltip("该 Fader 默认使用的插值曲线")]
 		public MMTweenType DefaultTween = new MMTweenType(MMTween.MMTweenCurve.LinearTween);
-		/// whether or not the fade should happen in unscaled time 
+		/// whether or not the fade should happen in unscaled time
+		[Tooltip("淡入淡出是否使用 unscaled time（不受 Time.timeScale 影响）")] 
 		public bool IgnoreTimescale = true;
 		
 		[MMInspectorGroup("Interaction", true, 125)]
 		/// whether or not the fader should block raycasts when visible
+		[Tooltip("推子 可见时是否波形 用户界面 射线（荧光检测）")]
 		public bool ShouldBlockRaycasts = false;
 		
 		[MMInspectorGroup("Debug", true, 126)]
@@ -49,14 +58,12 @@ namespace MoreMountains.Tools
 			new bool[] { true, true, true, true },
 			new string[] { "main-call-to-action", "", "", "" })]
 		public bool DebugToolbar;
+		
 		protected CanvasGroup _canvasGroup;
-
 		protected float _initialScale;
 		protected float _currentTargetScale;
-
 		protected float _currentDuration;
 		protected MMTweenType _currentCurve;
-
 		protected bool _fading = false;
 		protected float _fadeStartedAt;
 

@@ -1,8 +1,8 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Tools;
 using UnityEngine;
-#if (MM_TEXTMESHPRO || MM_UGUI2)
+#if MM_UGUI2
 using TMPro;
 #endif
 using UnityEngine.Scripting.APIUpdating;
@@ -10,11 +10,12 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.Feedbacks
 {
 	/// <summary>
-	/// This feedback will let you update a TMP text value over time, with a long value going from A to B over time, on a curve
+	/// 这个反馈可让 TMP 文本中的 long 数值沿曲线随时间从 A 变化到 B。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you update a TMP text value over time, with a long value going from A to B over time, on a curve")]
-	#if (MM_TEXTMESHPRO || MM_UGUI2)
+	[System.Serializable]
+	[FeedbackHelp("这个反馈可让 TMP 文本中的 long 数值沿曲线随时间从 A 变化到 B。")]
+	#if MM_UGUI2
 	[FeedbackPath("TextMesh Pro/TMP Count To Long")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.TextMeshPro")]
@@ -24,9 +25,9 @@ namespace MoreMountains.Feedbacks
 		public static bool FeedbackTypeAuthorized = true;
 		#if UNITY_EDITOR
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.TMPColor; } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetTMPText be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈需要指定 TargetTMPText 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
-		#if UNITY_EDITOR && (MM_TEXTMESHPRO || MM_UGUI2)
+		#if UNITY_EDITOR && MM_UGUI2
 		public override bool EvaluateRequiresSetup() { return (TargetTMPText == null); }
 		public override string RequiredTargetText { get { return TargetTMPText != null ? TargetTMPText.name : "";  } }
 		#endif
@@ -34,34 +35,34 @@ namespace MoreMountains.Feedbacks
 		/// the duration of this feedback is the duration of the scale animation
 		public override float FeedbackDuration { get { return ApplyTimeMultiplier(Duration); } set { Duration = value; } }
         
-		#if (MM_TEXTMESHPRO || MM_UGUI2)
+		#if MM_UGUI2
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetTMPText = FindAutomatedTarget<TMP_Text>();
 
 		[MMFInspectorGroup("TextMeshPro Target Text", true, 12, true)]
-		/// the target TMP_Text component we want to change the text on
-		[Tooltip("the target TMP_Text component we want to change the text on")]
+		/// 要修改文本内容的目标 TMP_Text 组件。
+		[Tooltip("要修改文本内容的目标 TMP_Text 组件。")]
 		public TMP_Text TargetTMPText;
 		#endif
         
 		[MMFInspectorGroup("Count Settings", true, 13)]
-		/// the value from which to count from
-		[Tooltip("the value from which to count from")]
+		/// 计数起始值。
+		[Tooltip("计数起始值。")]
 		public long CountFrom = 0;
-		/// the value to count towards
-		[Tooltip("the value to count towards")]
+		/// 计数目标值。
+		[Tooltip("计数目标值。")]
 		public long CountTo = 100000001;
-		/// the curve on which to animate the count
-		[Tooltip("the curve on which to animate the count")]
-		public MMTweenType CountingCurve = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0)));
-		/// the duration of the count, in seconds
-		[Tooltip("the duration of the count, in seconds")]
+		/// 用于驱动计数变化的曲线。
+		[Tooltip("用于驱动计数变化的曲线。")]
+		public MMTweenType CountingCurve = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1f)));
+		/// 计数持续时间（秒）。
+		[Tooltip("计数持续时间（秒）。")]
 		public float Duration = 5f;
-		/// the format with which to display the count
-		[Tooltip("the format with which to display the count")]
+		/// 计数显示格式。
+		[Tooltip("计数显示格式。")]
 		public string Format = "00.00";
-		/// the minimum frequency (in seconds) at which to refresh the text field
-		[Tooltip("the minimum frequency (in seconds) at which to refresh the text field")]
+		/// 刷新文本字段的最小间隔（秒）。
+		[Tooltip("刷新文本字段的最小间隔（秒）。")]
 		public float MinRefreshFrequency = 0f;
 
 		protected string _newText;
@@ -82,7 +83,7 @@ namespace MoreMountains.Feedbacks
 				return;
 			}
 
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			if (TargetTMPText == null)
 			{
 				return;
@@ -126,7 +127,7 @@ namespace MoreMountains.Feedbacks
 		protected virtual void UpdateText(long currentValue)
 		{
 			_newText = currentValue.ToString(Format);
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			TargetTMPText.text = _newText;
 			#endif
 		}
@@ -167,7 +168,7 @@ namespace MoreMountains.Feedbacks
 			{
 				return;
 			}
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			TargetTMPText.text = _initialText;
 			#endif
 		}

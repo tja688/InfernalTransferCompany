@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using MoreMountains.Feedbacks;
 #if MM_CINEMACHINE
 using Cinemachine;
@@ -13,17 +13,18 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// This feedback will let you change the priorities of your cameras. 
 	/// It requires a bit of setup : adding a MMCinemachinePriorityListener to your different cameras, with unique Channel values on them.
 	/// Optionally, you can add a MMCinemachinePriorityBrainListener on your Cinemachine Brain to handle different transition types and durations.
-	/// Then all you have to do is pick a channel and a new priority on your feedback, and play it. Magic transition!
+	/// 之后只需要在反馈上指定通道和新的优先级并播放即可，镜头就会自动完成切换。
 	/// </summary>
 	[AddComponentMenu("")]
 	#if MM_CINEMACHINE || MM_CINEMACHINE3
+	[System.Serializable]
 	[FeedbackPath("Camera/Cinemachine Transition")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.Cinemachine")]
-	[FeedbackHelp("This feedback will let you change the priorities of your cameras. It requires a bit of setup : " +
-	              "adding a MMCinemachinePriorityListener to your different cameras, with unique Channel values on them. " +
-	              "Optionally, you can add a MMCinemachinePriorityBrainListener on your Cinemachine Brain to handle different transition types and durations. " +
-	              "Then all you have to do is pick a channel and a new priority on your feedback, and play it. Magic transition!")]
+	[FeedbackHelp("这个反馈可修改相机的优先级，但需要先做一些设置：" +
+	              "给不同相机添加 MMCinemachinePriorityListener，并为它们设置各自唯一的通道值。" +
+	              "你也可以选择在 Cinemachine Brain 上添加 MMCinemachinePriorityBrainListener，用来处理不同的过渡类型和持续时间。" +
+	              "之后只需要在反馈上指定通道和新的优先级并播放即可，镜头就会自动完成切换。")]
 	public class MMF_CinemachineTransition : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -52,37 +53,37 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public override bool HasChannel => true;
 
 		[MMFInspectorGroup("Cinemachine Transition", true, 52)]
-		/// the selected mode (either via event, or via direct binding of a specific camera)
-		[Tooltip("the selected mode (either via event, or via direct binding of a specific camera)")]
+		/// 选择工作模式：通过事件触发，或直接绑定某个特定相机。
+		[Tooltip("选择工作模式：通过事件触发，或直接绑定某个特定相机。")]
 		public Modes Mode = Modes.Event;
 		#if MM_CINEMACHINE
-		/// the virtual camera to target
-		[Tooltip("the virtual camera to target")]
+		/// 要作用的虚拟相机。
+		[Tooltip("要作用的虚拟相机。")]
 		[MMFEnumCondition("Mode", (int)Modes.Binding)]
 		public CinemachineVirtualCamera TargetVirtualCamera;
 		#elif MM_CINEMACHINE3 
-		/// the Cinemachine camera to target
-		[Tooltip("the Cinemachine camera to target")]
+		/// 要作用的 Cinemachine 相机。
+		[Tooltip("要作用的 电影机 相机。")]
 		[MMFEnumCondition("Mode", (int)Modes.Binding)]
 		public CinemachineCamera TargetCinemachineCamera;
 		#endif
-		/// whether or not to reset the target's values after shake
-		[Tooltip("whether or not to reset the target's values after shake")]
+		/// 抖动结束后是否将目标值恢复到初始状态。
+		[Tooltip("抖动结束后是否将目标值恢复到初始状态。")]
 		public bool ResetValuesAfterTransition = true;
 
 		[Header("Priority")]
-		/// the new priority to apply to all virtual cameras on the specified channel
-		[Tooltip("the new priority to apply to all virtual cameras on the specified channel")]
+		/// 要应用到指定通道中所有虚拟相机上的新优先级。
+		[Tooltip("要应用到指定通道中所有虚拟相机上的新优先级。")]
 		public int NewPriority = 10;
-		/// whether or not to force all virtual cameras on other channels to reset their priority to zero
-		[Tooltip("whether or not to force all virtual cameras on other channels to reset their priority to zero")]
+		/// 是否强制将其他通道中的所有虚拟相机优先级重置为 0。若开启，其他通道相机会被压低优先级。
+		[Tooltip("是否强制将其他通道中的所有虚拟相机优先级重置为 0。若开启，其他通道相机会被压低优先级。")]
 		public bool ForceMaxPriority = true;
-		/// whether or not to apply a new blend
-		[Tooltip("whether or not to apply a new blend")]
+		/// 是否强制应用新的 Blend 设置。若关闭，则继续使用当前已有的过渡设置。
+		[Tooltip("是否强制应用新的 Blend 设置。若关闭，则继续使用当前已有的过渡设置。")]
 		public bool ForceTransition = false;
 		#if MM_CINEMACHINE || MM_CINEMACHINE3
-		/// the new blend definition to apply
-		[Tooltip("the new blend definition to apply")]
+		/// 要应用的新 Blend 定义。
+		[Tooltip("要应用的新混合定义。")]
 		[MMFCondition("ForceTransition", true)]
 		public CinemachineBlendDefinition BlendDefintion;
 

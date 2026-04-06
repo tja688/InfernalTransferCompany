@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will trigger a one time play on a target FloatController
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback lets you trigger a fade event.")]
+	[FeedbackHelp("此反馈可触发一次淡入淡出事件。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("Camera/Fade")]
 	public class MMF_Fade : MMF_Feedback
 	{
@@ -35,45 +36,45 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Fade", true, 43)]
 		/// the type of fade we want to use when this feedback gets played
-		[Tooltip("the type of fade we want to use when this feedback gets played")]
+		[Tooltip("该反馈播放时要使用的淡入淡出类型")]
 		public FadeTypes FadeType;
 		/// the ID of the fader(s) to pilot
-		[Tooltip("the ID of the fader(s) to pilot")]
+		[Tooltip("要控制的淡入淡出器 ID")]
 		public int ID = 0;
 		/// the duration (in seconds) of the fade
-		[Tooltip("the duration (in seconds) of the fade")]
+		[Tooltip("淡入淡出的持续时间（秒）")]
 		public float Duration = 1f;
 		/// the curve to use for this fade
-		[Tooltip("the curve to use for this fade")]
+		[Tooltip("该淡入淡出要使用的曲线")]
 		public MMTweenType Curve = new MMTweenType(MMTween.MMTweenCurve.EaseInCubic);
 		/// whether or not this fade should ignore timescale
-		[Tooltip("whether or not this fade should ignore timescale")]
+		[Tooltip("该淡入淡出是否忽略时间缩放")]
 		public bool IgnoreTimeScale = true;
 
 		[Header("Custom")]
 		/// the target alpha we're aiming for with this fade
-		[Tooltip("the target alpha we're aiming for with this fade")]
+		[Tooltip("此次淡入淡出要达到的目标 Alpha")]
 		public float TargetAlpha;
 
 		[Header("Position")]
 		/// the chosen way to position the fade 
-		[Tooltip("the chosen way to position the fade")]
+		[Tooltip("淡入淡出中心位置的确定方式")]
 		public PositionModes PositionMode = PositionModes.FeedbackPosition;
 		/// the transform on which to center the fade
-		[Tooltip("the transform on which to center the fade")]
+		[Tooltip("用于作为淡入淡出中心的 Transform")]
 		[MMFEnumCondition("PositionMode", (int)PositionModes.Transform)]
 		public Transform TargetTransform;
 		/// the coordinates on which to center the fadet
-		[Tooltip("the coordinates on which to center the fade")]
+		[Tooltip("用于作为淡入淡出中心的坐标")]
 		[MMFEnumCondition("PositionMode", (int)PositionModes.WorldPosition)]
 		public Vector3 TargetPosition;
 		/// the position offset to apply when centering the fade
-		[Tooltip("the position offset to apply when centering the fade")]
+		[Tooltip("定位淡入淡出中心时要额外施加的位置偏移")]
 		public Vector3 PositionOffset;
 
 		[Header("Optional Target")] 
 		/// this field lets you bind a specific MMFader to this feedback. If left empty, the feedback will trigger a MMFadeEvent instead, targeting all matching faders. If you fill it, only that specific fader will be targeted.
-		[Tooltip("this field lets you bind a specific MMFader to this feedback. If left empty, the feedback will trigger a MMFadeEvent instead, targeting all matching faders. If you fill it, only that specific fader will be targeted.")]
+		[Tooltip("此字段可将该反馈绑定到一个指定的 MMFader。若留空，则反馈会改为触发 MMFadeEvent，并作用于所有匹配的淡入淡出器；若填写，则只会作用于这个指定的淡入淡出器。")]
 		public MMFader TargetFader;
 
 		/// the duration of this feedback is the duration of the fade

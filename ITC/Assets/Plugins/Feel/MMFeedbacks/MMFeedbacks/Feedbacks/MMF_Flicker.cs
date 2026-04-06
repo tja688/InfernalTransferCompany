@@ -1,4 +1,5 @@
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -11,8 +12,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will make the bound renderer flicker for the set duration when played (and restore its initial color when stopped)
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback lets you flicker the color of a specified renderer (sprite, mesh, etc) for a certain duration, at the specified octave, and with the specified color. Useful when a character gets hit, for example (but so much more!).")]
+	[FeedbackHelp("此反馈可让指定 Renderer（Sprite、Mesh 等）在一段时间内以指定周期在原色与 FlickerColor 之间闪烁。可用于受击反馈等场景。可按材质索引精确作用；启用 UseMaterialPropertyBlocks 时将改为通过属性块写值，不直接改材质实例。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Renderer/Flicker")]
 	public class MMF_Flicker : MMF_Feedback
 	{
@@ -23,7 +25,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.RendererColor; } }
 		public override bool EvaluateRequiresSetup() => (BoundRenderer == null);
 		public override string RequiredTargetText => BoundRenderer != null ? BoundRenderer.name : "";
-		public override string RequiresSetupText => "This feedback requires that a BoundRenderer be set to be able to work properly. You can set one below.";
+		public override string RequiresSetupText => "此反馈需要先设置 BoundRenderer 才能正常工作。请在下方指定目标 Renderer。";
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => BoundRenderer = FindAutomatedTarget<Renderer>();
@@ -35,37 +37,37 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Flicker", true, 61, true)]
 		/// the renderer to flicker when played
-		[Tooltip("the renderer to flicker when played")]
+		[Tooltip("播放时要点亮的主渲染器")]
 		public Renderer BoundRenderer;
 		/// more renderers to flicker when played
-		[Tooltip("more renderers to flicker when played")]
+		[Tooltip("播放时额外一起闪烁的 Renderer 列表")]
 		public List<Renderer> ExtraBoundRenderers;
 		/// the selected mode to flicker the renderer 
-		[Tooltip("the selected mode to flicker the renderer")]
+		[Tooltip("闪烁模式：Color 使用材质颜色；PropertyName 使用指定着色器属性")]
 		public Modes Mode = Modes.Color;
 		/// the name of the property to target
 		[MMFEnumCondition("Mode", (int)Modes.PropertyName)]
-		[Tooltip("the name of the property to target")]
+		[Tooltip("目标着色器属性名（仅在 Mode = PropertyName 时生效）")]
 		public string PropertyName = "_Tint";
 		/// the duration of the flicker when getting damage
-		[Tooltip("the duration of the flicker when getting damage")]
+		[Tooltip("闪烁总时长（秒）")]
 		public float FlickerDuration = 0.2f;
 		/// the duration of the period for the flicker
-		[Tooltip("the duration of the period for the flicker")]
+		[Tooltip("闪烁周期（秒）。值越小闪烁越快")]
 		[FormerlySerializedAs("FlickerOctave")]
 		public float FlickerPeriod = 0.04f;
 		/// the color we should flicker the sprite to 
-		[Tooltip("the color we should flicker the sprite to")]
+		[Tooltip("闪烁到的目标颜色")]
 		[ColorUsage(true, true)]
 		public Color FlickerColor = new Color32(255, 20, 20, 255);
 		/// the list of material indexes we want to flicker on the target renderer. If left empty, will only target the material at index 0 
-		[Tooltip("the list of material indexes we want to flicker on the target renderer. If left empty, will only target the material at index 0")]
+		[Tooltip("要作用的材质索引列表。留空时默认只作用索引 0 的材质")]
 		public int[] MaterialIndexes;
 		/// if this is true, this component will use material property blocks instead of working on an instance of the material.
-		[Tooltip("if this is true, this component will use material property blocks instead of working on an instance of the material.")] 
+		[Tooltip("若开启此项，该组件将使用 Material Property Block，而不是直接操作材质实例")] 
 		public bool UseMaterialPropertyBlocks = false;
 		/// if using material property blocks on a sprite renderer, you'll want to make sure the sprite texture gets passed to the block when updating it. For that, you need to specify your sprite's material's shader's texture property name. If you're not working with a sprite renderer, you can safely ignore this.
-		[Tooltip("if using material property blocks on a sprite renderer, you'll want to make sure the sprite texture gets passed to the block when updating it. For that, you need to specify your sprite's material's shader's texture property name. If you're not working with a sprite renderer, you can safely ignore this.")]
+		[Tooltip("当对 SpriteRenderer 使用 MaterialPropertyBlock 时，需要把贴图一并写回属性块，避免精灵贴图丢失。这里填写贴图属性名（常见为 _MainTex）。非 SpriteRenderer 可忽略。")]
 		[MMCondition("UseMaterialPropertyBlocks", true)]
 		public string SpriteRendererTextureProperty = "_MainTex";
 
@@ -99,6 +101,15 @@ namespace MoreMountains.Feedbacks
 		/// <param name="owner"></param>
 		protected override void CustomInitialization(MMF_Player owner)
 		{
+			if (MaterialIndexes == null)
+			{
+				MaterialIndexes = Array.Empty<int>();
+			}
+			if (ExtraBoundRenderers == null)
+			{
+				ExtraBoundRenderers = new List<Renderer>();
+			}
+			
 			// init material indexes
 			if (MaterialIndexes.Length == 0)
 			{
@@ -175,10 +186,14 @@ namespace MoreMountains.Feedbacks
 			}
 			if (BoundRenderer == null)
 			{
-				Debug.LogWarning("[MMFeedbackFlicker] The flicker feedback on "+Owner.name+" doesn't have a bound renderer, it won't work. You need to specify a renderer to flicker in its inspector.");
+				Debug.LogWarning("[Flicker Feedback] The flicker feedback on "+Owner.name+" doesn't have a bound renderer, it won't work. You need to specify a renderer to flicker in its inspector.");
+			}
+
+			if (BoundRenderer != null)
+			{
+				_spriteRenderer = BoundRenderer.GetComponent<SpriteRenderer>();	
 			}
 			
-			_spriteRenderer = BoundRenderer.GetComponent<SpriteRenderer>();
 			_spriteRenderers = new List<SpriteRenderer>();
 			foreach (Renderer renderer in ExtraBoundRenderers)
 			{

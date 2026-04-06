@@ -8,8 +8,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback lets you control the opacity of a canvas group over time
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback lets you control the opacity of a canvas group over time.")]
+	[FeedbackHelp("此反馈可随时间控制 CanvasGroup 的透明度。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("UI/CanvasGroup")]
 	public class MMF_CanvasGroup : MMF_FeedbackBase
 	{
@@ -18,7 +19,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.UIColor; } }
 		public override bool EvaluateRequiresSetup() { return (TargetCanvasGroup == null); }
 		public override string RequiredTargetText { get { return TargetCanvasGroup != null ? TargetCanvasGroup.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetCanvasGroup be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先指定 TargetCanvasGroup 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
 		public override bool CanForceInitialValue => true;
@@ -26,25 +27,29 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Canvas Group", true, 12, true)]
 		/// the receiver to write the level to
-		[Tooltip("the receiver to write the level to")]
+		[Tooltip("用于写入该数值的接收器")]
 		public CanvasGroup TargetCanvasGroup;
         
 		/// the curve to tween the opacity on
-		[Tooltip("the curve to tween the opacity on")]
-		[MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
+		[Tooltip("用于驱动透明度补间的曲线")]
+		[MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime, (int)Modes.ToDestination)] 
 		public MMTweenType AlphaCurve = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0)));
 		/// the value to remap the opacity curve's 0 to
-		[Tooltip("the value to remap the opacity curve's 0 to")]
+		[Tooltip("将透明度曲线的 0 重映射到的值")]
 		[MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
 		public float RemapZero = 0f;
 		/// the value to remap the opacity curve's 1 to
-		[Tooltip("the value to remap the opacity curve's 1 to")]
+		[Tooltip("将透明度曲线的 1 重映射到的值")]
 		[MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
 		public float RemapOne = 1f;
 		/// the value to move the opacity to in instant mode
-		[Tooltip("the value to move the opacity to in instant mode")]
+		[Tooltip("Instant 模式下透明度将直接设置到的值")]
 		[MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.Instant)]
 		public float InstantAlpha;
+		/// the value to move the opacity to in destination mode
+		[Tooltip("ToDestination 模式下透明度要过渡到的目标值")]
+		[MMFEnumCondition("Mode", (int)Modes.ToDestination)]
+		public float DestinationAlpha;
 
 		public override void OnAddFeedback()
 		{
@@ -70,6 +75,7 @@ namespace MoreMountains.Feedbacks
 			target.RemapLevelZero = RemapZero;
 			target.RemapLevelOne = RemapOne;
 			target.InstantLevel = InstantAlpha;
+			target.ToDestinationLevel = DestinationAlpha;
 
 			_targets.Add(target);
 		}

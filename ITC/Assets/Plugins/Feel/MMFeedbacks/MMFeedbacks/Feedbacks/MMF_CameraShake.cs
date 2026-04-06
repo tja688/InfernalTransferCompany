@@ -1,4 +1,4 @@
-﻿using MoreMountains.FeedbacksForThirdParty;
+using MoreMountains.FeedbacksForThirdParty;
 using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
@@ -9,9 +9,10 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will send a shake event when played
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("Define camera shake properties (duration in seconds, amplitude and frequency), and this will broadcast a MMCameraShakeEvent with these same settings. " +
+	[FeedbackHelp("Define camera shake properties (持续时间 单位为秒, amplitude and frequency), and this will broadcast a MMCameraShakeEvent with these same settings. " +
 	              "You'll need to add a MMCameraShaker on your camera for this to work (or a MMCinemachineCameraShaker component on your virtual camera if you're using Cinemachine). " +
 	              "Note that although this event and system was built for cameras in mind, you could technically use it to shake other objects as well.")]
+	[System.Serializable]
 	[FeedbackPath("Camera/Camera Shake")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
 	public class MMF_CameraShake : MMF_Feedback
@@ -33,10 +34,10 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Camera Shake", true, 57)]
 		/// whether or not this shake should repeat forever, until stopped
-		[Tooltip("whether or not this shake should repeat forever, until stopped")]
+		[Tooltip("此抖动是否应持续循环，直到被停止")]
 		public bool RepeatUntilStopped = false;
 		/// the properties of the shake (duration, intensity, frequenc)
-		[Tooltip("the properties of the shake (duration, intensity, frequenc)")]
+		[Tooltip("抖动参数（持续时间、强度、频率）")]
 		public MMCameraShakeProperties CameraShakeProperties = new MMCameraShakeProperties(0.1f, 0.2f, 40f);
 
 		/// <summary>
@@ -114,3 +115,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

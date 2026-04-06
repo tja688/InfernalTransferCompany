@@ -18,19 +18,19 @@ namespace MoreMountains.Tools
 		
 		[Header("Properties")]
 		/// whether or not to save this object's position
-		[Tooltip("whether or not to save this object's position")]
+		[Tooltip("是否保存该对象的位置")]
 		public bool SavePosition = true;
 		/// whether or not to save this object's rotation
-		[Tooltip("whether or not to save this object's rotation")]
+		[Tooltip("是否保存该对象的旋转")]
 		public bool SaveLocalRotation = true;
 		/// whether or not to save this object's scale
-		[Tooltip("whether or not to save this object's scale")]
+		[Tooltip("是否保存该对象的缩放")]
 		public bool SaveLocalScale = true;
 		/// whether or not to save this object's active state
-		[Tooltip("whether or not to save this object's active state")]
+		[Tooltip("是否保存该对象的激活状态（active state）")]
 		public bool SaveActiveState = true;
 		/// whether or not to save this object's components' enabled states
-		[Tooltip("whether or not to save this object's components' enabled states")]
+		[Tooltip("是否保存该对象上各组件的 enabled 状态")]
 		public bool SaveEnabledStates = false;
 		
 		/// <summary>

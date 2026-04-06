@@ -22,93 +22,95 @@ namespace MoreMountains.Tools
 		public enum Timescales { Regular, Unscaled }
 		public enum Modes { Rigidbody, Rigidbody2D, Position }
 
-		[MMInformation("This component will apply squash and stretch based on velocity (either position based or computed from a Rigidbody. It has to be put on an intermediary level in the hierarchy, between the logic (top level) and the model (bottom level).", MMInformationAttribute.InformationType.Info, false)]
+		[MMInformation("该组件会基于速度应用 Squash & Stretch（速度可来自位置差分、Rigidbody 或 Rigidbody2D）。它应挂在层级中间层：上层为逻辑对象，下层为模型对象。建议该中间层仅保留一个子物体以避免变形异常。", MMInformationAttribute.InformationType.Info, false)]
 		[Header("Velocity Detection")]
 		/// the possible ways to get velocity from
-		[Tooltip("the possible ways to get velocity from")]
+		[Tooltip("速度来源模式：Rigidbody、Rigidbody2D 或 Position（由位移差分计算）")]
 		public Modes Mode = Modes.Position;
 		/// whether we should use deltaTime or unscaledDeltaTime
-		[Tooltip("whether we should use deltaTime or unscaledDeltaTime")]
+		[Tooltip("时间基准：常规使用 增量时间，非缩放使用 未缩放的DeltaTime")]
 		public Timescales Timescale = Timescales.Regular;
 
 		[Header("Settings")]
 		/// the intensity of the squash and stretch
-		[Tooltip("the intensity of the squash and stretch")]
+		[Tooltip("形变强度系数")]
 		public float Intensity = 0.02f;
 		/// the maximum velocity of your parent object, used to remap the computed one
-		[Tooltip("the maximum velocity of your parent object, used to remap the computed one")]
+		[Tooltip("父对象的最大参考速度，用于将当前速度重映射到 0~1 区间")]
 		public float MaximumVelocity = 1f;
 
 		[Header("Rescale")]
 		/// the minimum scale to apply to this object
-		[Tooltip("the minimum scale to apply to this object")]
+		[Tooltip("允许应用到该对象的最小缩放")]
 		public Vector3 MinimumScale = new Vector3(0.5f, 0.5f, 0.5f);
 		/// the maximum scale to apply to this object
-		[Tooltip("the maximum scale to apply to this object")]
+		[Tooltip("允许应用到该对象的最大缩放")]
 		public Vector3 MaximumScale = new Vector3(2f, 2f, 2f);
 		/// whether or not to rescale on the x axis
-		[Tooltip("whether or not to rescale on the x axis")]
+		[Tooltip("是否允许在 X 轴上缩放")]
 		public bool RescaleX = true;
 		/// whether or not to rescale on the y axis
-		[Tooltip("whether or not to rescale on the y axis")]
+		[Tooltip("是否允许在 Y 轴上缩放")]
 		public bool RescaleY = true;
 		/// whether or not to rescale on the z axis
-		[Tooltip("whether or not to rescale on the z axis")]
+		[Tooltip("是否允许在 Z 轴上缩放")]
 		public bool RescaleZ = true;
 		/// whether or not to rotate the transform to align with the current direction
-		[Tooltip("whether or not to rotate the transform to align with the current direction")]
+		[Tooltip("是否自动旋转，使对象朝向与当前运动方向对齐")]
 		public bool RotateToMatchDirection = true;
 
 		[Header("Squash")]
 		/// if this is true, the object will squash once velocity goes below the specified threshold
-		[Tooltip("if this is true, the object will squash once velocity goes below the specified threshold")]
+		[Tooltip("开启后，当速度从阈值以上降到阈值以下时会触发一次 Squash（停止挤压）")]
 		public bool AutoSquashOnStop = false;
 		/// the curve to apply when squashing the object (this describes scale on x and z, will be inverted for y to maintain mass)
-		[Tooltip("the curve to apply when squashing the object (this describes scale on x and z, will be inverted for y to maintain mass)")]
+		[Tooltip("Squash 曲线（定义 X/Z 轴变化；Y 轴会反向应用以保持体积观感）")]
 		public AnimationCurve SquashCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1f), new Keyframe(1, 0f));
 		/// the velocity threshold after which a squash can be triggered if the object stops
-		[Tooltip("the velocity threshold after which a squash can be triggered if the object stops")]
+		[Tooltip("停止触发 Squash 的速度阈值；只有先超过该阈值再降到其下才会触发")]
 		public float SquashVelocityThreshold = 0.1f;
 		/// the maximum duration of the squash (will be reduced if velocity is low)
-		[Tooltip("the maximum duration of the squash (will be reduced if velocity is low)")]
+		[Tooltip("Squash 持续时间范围（速度越低，实际持续时间会越短）")]
 		[MMVector("Min","Max")]
 		public Vector2 SquashDuration = new Vector2(0.25f, 0.5f);
 		/// the maximum intensity of the squash
-		[Tooltip("the maximum intensity of the squash")]
+		[Tooltip("Squash 强度范围（会按触发时速度映射）")]
 		[MMVector("Min", "Max")]
 		public Vector2 SquashIntensity = new Vector2(0f, 1f);
 
 		[Header("Spring")] 
 		/// whether or not to add extra spring to the squash and stretch
-		[Tooltip("whether or not to add extra spring to the squash and stretch")]
+		[Tooltip("是否叠加弹簧平滑效果；开启后 SpringDamping 与 SpringFrequency 才生效")]
 		public bool Spring = false;
 		/// the damping to apply to the spring
-		[Tooltip("the damping to apply to the spring")]
+		[Tooltip("弹簧阻尼系数（仅 Spring 开启时生效）")]
 		[MMCondition("Spring", true)]
 		public float SpringDamping = 0.3f;
 		/// the spring's frequency
-		[Tooltip("the spring's frequency")]
+		[Tooltip("弹簧频率（仅 Spring 开启时生效）")]
 		[MMCondition("Spring", true)] 
 		public float SpringFrequency = 3f;
         
 		[Header("Debug")]
 		[MMReadOnly]
 		/// the current velocity of the parent object
-		[Tooltip("the current velocity of the parent object")]
+		[Tooltip("父对象当前速度（调试只读）")]
 		public Vector3 Velocity;
 		[MMReadOnly]
 		/// the remapped velocity
-		[Tooltip("the remapped velocity")]
+		[Tooltip("重映射后的速度值（调试只读）")]
 		public float RemappedVelocity;
 		[MMReadOnly]
 		/// the current velocity magnitude
-		[Tooltip("the current velocity magnitude")]
+		[Tooltip("当前速度标量（调试只读）")]
 		public float VelocityMagnitude;
 
 		public virtual float TimescaleTime { get { return (Timescale == Timescales.Regular) ? Time.time : Time.unscaledTime; } }
 		public virtual float TimescaleDeltaTime { get { return (Timescale == Timescales.Regular) ? Time.deltaTime : Time.unscaledDeltaTime; } }
 
+		#if MM_PHYSICS2D
 		protected Rigidbody2D _rigidbody2D;
+		#endif
 		protected Rigidbody _rigidbody;
 		protected Transform _childTransform;
 		protected Transform _parentTransform;
@@ -144,7 +146,9 @@ namespace MoreMountains.Tools
 			_springScale = _initialScale;
 
 			_rigidbody = this.transform.parent.GetComponent<Rigidbody>();
+			#if MM_PHYSICS2D
 			_rigidbody2D = this.transform.parent.GetComponent<Rigidbody2D>();
+			#endif
 
 			_childTransform = this.transform.GetChild(0).transform;
 			_parentTransform = this.transform.parent.GetComponent<Transform>();
@@ -190,7 +194,9 @@ namespace MoreMountains.Tools
 					break;
 
 				case Modes.Rigidbody2D:
+					#if MM_PHYSICS2D
 					Velocity = _rigidbody2D.velocity;
+					#endif
 					break;
 
 				case Modes.Position:

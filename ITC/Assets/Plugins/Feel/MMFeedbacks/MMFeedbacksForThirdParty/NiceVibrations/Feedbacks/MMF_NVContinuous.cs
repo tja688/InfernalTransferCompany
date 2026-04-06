@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using MoreMountains.Feedbacks;
 #if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
@@ -9,14 +9,15 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// Add this feedback to play a continuous haptic of the specified amplitude and frequency over a certain duration. This feedback will also let you randomize these, and modulate them over time.
+	/// 添加这个反馈后，可按指定 amplitude 与 frequency 播放一段持续型 haptic。它也支持对这些参数进行随机化，并可在播放过程中实时调制。
 	/// </summary>
 	[AddComponentMenu("")]
+	[System.Serializable]
 	#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
 	[FeedbackPath("Haptics/Haptic Continuous")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.NiceVibrations")]
-	[FeedbackHelp("Add this feedback to play a continuous haptic of the specified amplitude and frequency over a certain duration. This feedback will also let you randomize these, and modulate them over time.")]
+	[FeedbackHelp("添加这个反馈后，可按指定 amplitude 与 frequency 播放一段持续型 haptic。它也支持对这些参数进行随机化，并可在播放过程中实时调制。")]
 	public class MMF_NVContinuous : MMF_Feedback
 	{
 		#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
@@ -28,49 +29,49 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public override float FeedbackDuration { get { return ApplyTimeMultiplier(_duration); } set { _duration = value; } }
         
 		[MMFInspectorGroup("Haptic Amplitude", true, 31)]
-		/// the minimum amplitude at which this clip should play (amplitude will be randomized between MinAmplitude and MaxAmplitude)
-		[Tooltip("the minimum amplitude at which this clip should play (amplitude will be randomized between MinAmplitude and MaxAmplitude)")]
+		/// 此 haptic 播放时的最小 amplitude（实际会在 MinAmplitude 和 MaxAmplitude 之间随机）。
+		[Tooltip("此 haptic 播放时的最小 amplitude（实际会在 MinAmplitude 和 MaxAmplitude 之间随机）。")]
 		[Range(0f, 1f)]
 		public float MinAmplitude = 1f;
-		/// the maximum amplitude at which this clip should play (amplitude will be randomized between MinAmplitude and MaxAmplitude)
-		[Tooltip("the maximum amplitude at which this clip should play (amplitude will be randomized between MinAmplitude and MaxAmplitude)")]
+		/// 此 haptic 播放时的最大 amplitude（实际会在 MinAmplitude 和 MaxAmplitude 之间随机）。
+		[Tooltip("此 haptic 播放时的最大 amplitude（实际会在 MinAmplitude 和 MaxAmplitude 之间随机）。")]
 		[Range(0f, 1f)]
 		public float MaxAmplitude = 1f;
         
 		[MMFInspectorGroup("Haptic Frequency", true, 32)]
-		/// the minimum frequency at which this clip should play (frequency will be randomized between MinFrequency and MaxFrequency)
-		[Tooltip("the minimum frequency at which this clip should play (frequency will be randomized between MinFrequency and MaxFrequency)")]
+		/// 此 haptic 播放时的最小 frequency（实际会在 MinFrequency 和 MaxFrequency 之间随机）。
+		[Tooltip("此 haptic 播放时的最小 frequency（实际会在 MinFrequency 和 MaxFrequency 之间随机）。")]
 		[Range(0f, 1f)]
 		public float MinFrequency = 1f;
-		/// the maximum frequency at which this clip should play (frequency will be randomized between MinFrequency and MaxFrequency)
-		[Tooltip("the maximum frequency at which this clip should play (frequency will be randomized between MinFrequency and MaxFrequency)")]
+		/// 此 haptic 播放时的最大 frequency（实际会在 MinFrequency 和 MaxFrequency 之间随机）。
+		[Tooltip("此 haptic 播放时的最大 frequency（实际会在 MinFrequency 和 MaxFrequency 之间随机）。")]
 		[Range(0f, 1f)]
 		public float MaxFrequency = 1f;
         
 		[MMFInspectorGroup("Duration", true, 33)]
-		/// the minimum duration at which this clip should play (duration will be randomized between MinDuration and MaxDuration)
-		[Tooltip("the minimum duration at which this clip should play (duration will be randomized between MinDuration and MaxDuration)")]
+		/// 此 haptic 播放时的最短持续时间（实际会在 MinDuration 和 MaxDuration 之间随机）。
+		[Tooltip("此 haptic 播放时的最短持续时间（实际会在 MinDuration 和 MaxDuration 之间随机）。")]
 		public float MinDuration = 1f;
-		/// the maximum duration at which this clip should play (duration will be randomized between MinDuration and MaxDuration)
-		[Tooltip("the maximum duration at which this clip should play (duration will be randomized between MinDuration and MaxDuration)")]
+		/// 此 haptic 播放时的最长持续时间（实际会在 MinDuration 和 MaxDuration 之间随机）。
+		[Tooltip("此 haptic 播放时的最长持续时间（实际会在 MinDuration 和 MaxDuration 之间随机）。")]
 		public float MaxDuration = 1f;
         
 		[MMFInspectorGroup("Real-time Modulation", true, 34)]
-		/// whether or not to modulate the haptic signal at runtime
-		[Tooltip("whether or not to modulate the haptic signal at runtime")]
+		/// 是否在运行时调制 haptic 信号。
+		[Tooltip("是否在运行时调制 haptic 信号。")]
 		public bool UseRealTimeModulation = false;
-		/// if UseRealTimeModulation:true, the curve along which to modulate amplitude for this continuous haptic, over its total duration
-		[Tooltip("if UseRealTimeModulation:true, the curve along which to modulate amplitude for this continuous haptic, over its total duration")]
+		/// 若启用 UseRealTimeModulation，则使用这条曲线在整个持续时间内调制 amplitude。
+		[Tooltip("若启用 UseRealTimeModulation，则使用这条曲线在整个持续时间内调制 amplitude。")]
 		[MMFCondition("UseRealTimeModulation", true)]
 		public AnimationCurve AmplitudeMultiplication = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1f), new Keyframe(1, 0f));
-		/// if UseRealTimeModulation:true, the curve along which to modulate frequency for this continuous haptic, over its total duration
-		[Tooltip("if UseRealTimeModulation:true, the curve along which to modulate frequency for this continuous haptic, over its total duration")]
+		/// 若启用 UseRealTimeModulation，则使用这条曲线在整个持续时间内调制 frequency。
+		[Tooltip("若启用 UseRealTimeModulation，则使用这条曲线在整个持续时间内调制 frequency。")]
 		[MMFCondition("UseRealTimeModulation", true)]
 		public AnimationCurve ShiftFrequency = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1f), new Keyframe(1, 0f));
 
 		[MMFInspectorGroup("Settings", true, 16)]
-		/// a set of settings you can tweak to specify how and when exactly this haptic should play
-		[Tooltip("a set of settings you can tweak to specify how and when exactly this haptic should play")]
+		/// 一组可调设置，用来精确控制这个 haptic 何时播放以及如何播放。
+		[Tooltip("一组可调设置，用来精确控制这个 haptic 何时播放以及如何播放。")]
 		public MMFeedbackNVSettings HapticSettings;
         
 		protected Coroutine _coroutine;
@@ -83,7 +84,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// <param name="feedbacksIntensity"></param>
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
-			if (!Active || !FeedbackTypeAuthorized || !HapticSettings.CanPlay())
+			if (!Active || !FeedbackTypeAuthorized || HapticSettings == null || !HapticSettings.CanPlay())
 			{
 				return;
 			}

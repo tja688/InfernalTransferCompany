@@ -24,261 +24,261 @@ namespace MoreMountains.Tools
 
 		[Header("Target")]
 		/// the type of renderer to pilot
-		[Tooltip("the type of renderer to pilot")]
+		[Tooltip("要控制的渲染器类型")]
 		public TargetTypes TargetType = TargetTypes.Renderer;
 		/// the renderer with the shader you want to control
-		[Tooltip("the renderer with the shader you want to control")]
+		[Tooltip("要控制其着色器的渲染器")]
 		[MMEnumCondition("TargetType",(int)TargetTypes.Renderer)]
 		public Renderer TargetRenderer;
 		/// the ID of the material in the Materials array on the target renderer (usually 0)
-		[Tooltip("the ID of the material in the Materials array on the target renderer (usually 0)")]
+		[Tooltip("目标 Renderer 的 Materials 数组中要控制的材质索引（通常为 0）")]
 		[MMEnumCondition("TargetType", (int)TargetTypes.Renderer)]
 		public int TargetMaterialID = 0;
 		/// the Image with the shader you want to control
-		[Tooltip("the Image with the shader you want to control")]
+		[Tooltip("要控制其着色器的图像")]
 		[MMEnumCondition("TargetType", (int)TargetTypes.Image)]
 		public Image TargetImage;
 		/// if this is true, the 'materialForRendering' for this Image will be used, instead of the regular material
-		[Tooltip("if this is true, the 'materialForRendering' for this Image will be used, instead of the regular material")]
+		[Tooltip("若开启，将使用该 Image 的 materialForRendering，而不是常规 material")]
 		[MMEnumCondition("TargetType", (int)TargetTypes.Image)]
 		public bool UseMaterialForRendering = false;
 		/// the RawImage with the shader you want to control
-		[Tooltip("the RawImage with the shader you want to control")]
+		[Tooltip("要控制其着色器的原始图像")]
 		[MMEnumCondition("TargetType", (int)TargetTypes.RawImage)]
 		public RawImage TargetRawImage;
 		/// the Text with the shader you want to control
-		[Tooltip("the Text with the shader you want to control")]
+		[Tooltip("要控制其着色器的文本")]
 		[MMEnumCondition("TargetType", (int)TargetTypes.Text)]
 		public Text TargetText;
 		/// if this is true, material will be cached on Start
-		[Tooltip("if this is true, material will be cached on Start")]
+		[Tooltip("若开启，会在 Start 时缓存材质引用")]
 		public bool CacheMaterial = true;
 		/// if this is true, an instance of the material will be created on start so that this controller only affects its target
-		[Tooltip("if this is true, an instance of the material will be created on start so that this controller only affects its target")]
+		[Tooltip("若开启，会在启动时实例化材质，使该控制器只影响当前目标；关闭则可能影响共享该材质的其他对象")]
 		public bool CreateMaterialInstance = false;
 		/// the EXACT name of the property to affect
-		[Tooltip("the EXACT name of the property to affect")]
+		[Tooltip("要控制的属性“精确名称”（必须与 Shader 属性名完全一致）")]
 		public string TargetPropertyName;
 		/// the type of the property to affect
-		[Tooltip("the type of the property to affect")]
+		[Tooltip("要控制的属性类型")]
 		public PropertyTypes PropertyType = PropertyTypes.Float;
 		/// whether or not to affect its x component
-		[Tooltip("whether or not to affect its x component")]
+		[Tooltip("是否控制该属性的 x 分量")]
 		[MMEnumCondition("PropertyType", (int)PropertyTypes.Vector)]
 		public bool X;
 		/// whether or not to affect its y component
-		[Tooltip("whether or not to affect its y component")]
+		[Tooltip("是否控制该属性的 y 分量")]
 		[MMEnumCondition("PropertyType", (int)PropertyTypes.Vector)]
 		public bool Y;
 		/// whether or not to affect its z component
-		[Tooltip("whether or not to affect its z component")]
+		[Tooltip("是否控制该属性的 z 分量")]
 		[MMEnumCondition("PropertyType", (int)PropertyTypes.Vector)]
 		public bool Z;
 		/// whether or not to affect its w component
-		[Tooltip("whether or not to affect its w component")]
+		[Tooltip("是否控制该属性的 w 分量")]
 		[MMEnumCondition("PropertyType", (int)PropertyTypes.Vector)]
 		public bool W;
 
 		[Header("Color")]
 		/// whether to move from a color to another, or to evalute colors on a ramp
-		[Tooltip("whether to move from a color to another, or to evalute colors on a ramp")]
+		[Tooltip("颜色控制模式：在两种颜色间插值，或在色带（ramp）上取样")]
 		public ColorModes ColorMode = ColorModes.TwoColors;
 		/// the ramp along which to lerp when in ramp color mode
-		[Tooltip("the ramp along which to lerp when in ramp color mode")]
+		[Tooltip("RampColor 模式下用于取样/插值的色带")]
 		[GradientUsage(true)]
 		public Gradient ColorRamp;
 		/// the color to lerp from	
-		[Tooltip("the color to lerp from")]
+		[Tooltip("颜色插值起点")]
 		[ColorUsage(true, true)]
 		public Color FromColor = Color.black;
 		/// the color to lerp to	
-		[Tooltip("the color to lerp to")]
+		[Tooltip("颜色插值终点")]
 		[ColorUsage(true, true)]
 		public Color ToColor = Color.white;
 
 		[Header("Global Settings")]
 		/// the control mode (ping pong or random)
-		[Tooltip("the control mode (ping pong or random)")]
+		[Tooltip("控制模式（乒乓球 或随机值）")]
 		public ControlModes ControlMode;
 		/// whether or not the updated value should be added to the initial one
-		[Tooltip("whether or not the updated value should be added to the initial one")]
+		[Tooltip("更新后的值是否叠加到初始值上")]
 		public bool AddToInitialValue = false;
 		/// whether or not to use unscaled time
-		[Tooltip("whether or not to use unscaled time")]
+		[Tooltip("是否使用未缩放时间（不受 时间.时间尺度 影响）")]
 		public bool UseUnscaledTime = true;
 		/// whether or not you want to revert to the InitialValue after the control ends
-		[Tooltip("whether or not you want to revert to the InitialValue after the control ends")]
+		[Tooltip("控制结束后是否回退到 InitialValue")]
 		public bool RevertToInitialValueAfterEnd = true;
 		/// if this is true, this component will use material property blocks instead of working on an instance of the material.
-		[Tooltip("if this is true, this component will use material property blocks instead of working on an instance of the material.")] 
+		[Tooltip("若开启，该组件将使用 MaterialPropertyBlock，而不是直接操作材质实例")] 
 		[MMEnumCondition("TargetType", (int)TargetTypes.Renderer)]
 		public bool UseMaterialPropertyBlocks = false;
 		/// if using material property blocks on a sprite renderer, you'll want to make sure the sprite texture gets passed to the block when updating it. For that, you need to specify your sprite's material's shader's texture property name. If you're not working with a sprite renderer, you can safely ignore this.
-		[Tooltip("if using material property blocks on a sprite renderer, you'll want to make sure the sprite texture gets passed to the block when updating it. For that, you need to specify your sprite's material's shader's texture property name. If you're not working with a sprite renderer, you can safely ignore this.")]
+		[Tooltip("在精灵渲染器 + 材质属性块场景下，请确保更新时把精灵纹理也写入块。因此需要填写精灵材质着色器的属性纹理名；非精灵渲染器可以忽略")]
 		[MMCondition("UseMaterialPropertyBlocks", true)]
 		public string SpriteRendererTextureProperty = "_MainTex";
 		/// whether or not to perform extra safety checks (safer, more costly)
-		[Tooltip("whether or not to perform extra safety checks (safer, more costly)")]
+		[Tooltip("是否执行额外安全检查（更安全但有额外开销）")]
 		public bool SafeMode = false;
 
 		[Header("Ping Pong")]
 		/// the curve to apply to the tween
-		[Tooltip("the curve to apply to the tween")]
+		[Tooltip("运用到该补间的曲线上")]
 		public MMTweenType Curve;
 		/// the minimum value for the ping pong
-		[Tooltip("the minimum value for the ping pong")]
+		[Tooltip("乒乓球的简单")]
 		public float MinValue = 0f;
 		/// the maximum value for the ping pong
-		[Tooltip("the maximum value for the ping pong")]
+		[Tooltip("乒乓球的巅峰")]
 		public float MaxValue = 5f;
 		/// the duration of one ping (or pong)
-		[Tooltip("the duration of one ping (or pong)")]
+		[Tooltip("一次 平（或 乒乓球）的持续时间")]
 		public float Duration = 1f;
 		/// the duration of the pause between two ping (or pongs) (in seconds)
-		[Tooltip("the duration of the pause between two ping (or pongs) (in seconds)")]
+		[Tooltip("两次 ping（或 pong）之间的停顿时长（秒）")]
 		public float PingPongPauseDuration = 1f;
 
 		[Header("Loop")]
 		/// the curve to apply to the tween
-		[Tooltip("the curve to apply to the tween")]
+		[Tooltip("运用到该补间的曲线上")]
 		public MMTweenType LoopCurve;
 		/// the start value for the loop tween
-		[Tooltip("the start value for the loop tween")]
+		[Tooltip("循环补间初始值")]
 		public float LoopStartValue = 0f;
 		/// the end value for the loop tween
-		[Tooltip("the end value for the loop tween")]
+		[Tooltip("循环补间结束值")]
 		public float LoopEndValue = 5f;
 		/// the duration of one loop
-		[Tooltip("the duration of one loop")]
+		[Tooltip("单次循环持续时间")]
 		public float LoopDuration = 1f;
 		/// the duration of the pause between two loops (in seconds)
-		[Tooltip("the duration of the pause between two loops (in seconds)")]
+		[Tooltip("两次循环之间的停顿时长（秒）")]
 		public float LoopPauseDuration = 1f;
 
 		[Header("Driven")]
 		/// the value that will be applied to the controlled float in driven mode 
-		[Tooltip("the value that will be applied to the controlled float in driven mode")]
+		[Tooltip("Driven 模式下要写入被控 float 的值")]
 		public float DrivenLevel = 0f;
 
 		[Header("Random")]
 		/// the noise amplitude
-		[Tooltip("the noise amplitude")]
+		[Tooltip("噪声幅度（振幅）")]
 		[MMVector("Min", "Max")]
 		public Vector2 Amplitude = new Vector2(0f,5f);
 		/// the noise frequency
-		[Tooltip("the noise frequency")]
+		[Tooltip("噪声频率（频率）")]
 		[MMVector("Min", "Max")]
 		public Vector2 Frequency = new Vector2(1f, 1f);
 		/// the noise shift
-		[Tooltip("the noise shift")]
+		[Tooltip("噪声偏移（转移）")]
 		[MMVector("Min", "Max")]
 		public Vector2 Shift = new Vector2(0f, 1f);
 
 		/// if this is true, will let you remap the noise value (without amplitude) to the bounds you've specified
-		[Tooltip("if this is true, will let you remap the noise value (without amplitude) to the bounds you've specified")]
+		[Tooltip("若开启，可将噪声值（不含振幅）重映射到你指定的边界范围")]
 		public bool RemapNoiseValues = false;
 		/// the value to which to remap the random's zero bound
-		[Tooltip("the value to which to remap the random's zero bound")]
+		[Tooltip("随机值 0 边界要重映射到的目标值")]
 		[MMCondition("RemapNoiseValues", true)]
 		public float RemapNoiseZero = 0f;
 		/// the value to which to remap the random's one bound
-		[Tooltip("the value to which to remap the random's one bound")]
+		[Tooltip("随机值 1 边界要重映射到的目标值")]
 		[MMCondition("RemapNoiseValues", true)]
 		public float RemapNoiseOne = 1f;
         
 		[Header("OneTime")]
 		/// the duration of the One Time shake
-		[Tooltip("the duration of the One Time shake")]
+		[Tooltip("一度 持续时间")]
 		public float OneTimeDuration = 1f;
 		/// the amplitude of the One Time shake (this will be multiplied by the curve's height)
-		[Tooltip("the amplitude of the One Time shake (this will be multiplied by the curve's height)")]
+		[Tooltip("OneTime 抖动振幅（会乘以曲线高度）")]
 		public float OneTimeAmplitude = 1f;
 		/// the low value to remap the normalized curve value to 
-		[Tooltip("the low value to remap the normalized curve value to")]
+		[Tooltip("标准化曲线值重映射下限")]
 		public float OneTimeRemapMin = 0f;
 		/// the high value to remap the normalized curve value to 
-		[Tooltip("the high value to remap the normalized curve value to")]
+		[Tooltip("标准化曲线值重映射上限")]
 		public float OneTimeRemapMax = 1f;
 		/// the curve to apply to the one time shake
-		[Tooltip("the curve to apply to the one time shake")]
+		[Tooltip("一次使用臀部的曲线")]
 		public AnimationCurve OneTimeCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		[MMInspectorButton("OneTime")]
 		/// a test button for the one time shake
-		[Tooltip("a test button for the one time shake")]
+		[Tooltip("用于一度测试脚趾的按钮")]
 		public bool OneTimeButton;
 		/// whether or not this controller should go back to sleep after a OneTime
-		[Tooltip("whether or not this controller should go back to sleep after a OneTime")]
+		[Tooltip("OneTime 播放后是否让该控制器回到休眠状态")]
 		public bool DisableAfterOneTime = false;
 		/// whether or not this controller should go back to sleep after a OneTime
-		[Tooltip("whether or not this controller should go back to sleep after a OneTime")]
+		[Tooltip("OneTime 播放后是否让该控制器回到休眠状态")]
 		public bool DisableGameObjectAfterOneTime = false;
 		/// whether or not to initialize the initial value to the current value on a OneTime play
-		[Tooltip("whether or not to initialize the initial value to the current value on a OneTime play")]
+		[Tooltip("触发 OneTime 时，是否把当前值写入并作为 InitialValue")]
 		public bool GetInitialValueOnOneTime = false;
 
 		[Header("AudioAnalyzer")]
 		/// the bound audio analyzer used to drive this controller
-		[Tooltip("the bound audio analyzer used to drive this controller")]
+		[Tooltip("用于驱动该控制器的绑定音频分析器")]
 		public MMAudioAnalyzer AudioAnalyzer;
 		/// the ID of the selected beat on the analyzer
-		[Tooltip("the ID of the selected beat on the analyzer")]
+		[Tooltip("分析器上所选节拍（beat）的 ID")]
 		public int BeatID;
 		/// the multiplier to apply to the value out of the analyzer
-		[Tooltip("the multiplier to apply to the value out of the analyzer")]
+		[Tooltip("对分析器输出值应用的乘数")]
 		public float AudioAnalyzerMultiplier = 1f;
 		/// the offset to apply to the value out of the analyzer
-		[Tooltip("the offset to apply to the value out of the analyzer")]
+		[Tooltip("对分析器输出值应用的偏移量")]
 		public float AudioAnalyzerOffset = 0f;
 		/// the speed at which to lerp the value
-		[Tooltip("the speed at which to lerp the value")]
+		[Tooltip("数值 线性插值 速度")]
 		public float AudioAnalyzerLerp = 60f;
 
 		[Header("ToDestination")]
 		/// the value to go to when in ToDestination mode
-		[Tooltip("the value to go to when in ToDestination mode")]
+		[Tooltip("ToDestination 模式下要到达的目标值")]
 		public float ToDestinationValue = 1f;
 		/// the duration of the ToDestination tween
-		[Tooltip("the duration of the ToDestination tween")]
+		[Tooltip("目的地 补间持续时间")]
 		public float ToDestinationDuration = 1f;
 		/// the curve to use to tween to the ToDestination value
-		[Tooltip("the curve to use to tween to the ToDestination value")]
+		[Tooltip("插值到 ToDestination 值时使用的曲线")]
 		public AnimationCurve ToDestinationCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 0.6f), new Keyframe(1f, 1f));
 		/// a test button for the one time shake
-		[Tooltip("a test button for the one time shake")]
+		[Tooltip("用于测试该模式的一次性触发按钮")]
 		[MMInspectorButton("ToDestination")]
 		public bool ToDestinationButton;
 		/// whether or not this controller should go back to sleep after a OneTime
-		[Tooltip("whether or not this controller should go back to sleep after a OneTime")]
+		[Tooltip("一次性触发后是否让该控制器回到休眠状态")]
 		public bool DisableAfterToDestination = false;
 
 		[Header("Debug")]
 		/// the initial value of the controlled float
-		[Tooltip("the initial value of the controlled float")]
+		[Tooltip("被控浮点数的初始值")]
 		[MMReadOnly]
 		public float InitialValue;
 		/// the current value of the controlled float
-		[Tooltip("the current value of the controlled float")]
+		[Tooltip("被控浮点数的当前值")]
 		[MMReadOnly]
 		public float CurrentValue;
 		/// the current value of the controlled float, normalized
-		[Tooltip("the current value of the controlled float, normalized")]
+		[Tooltip("被控 float 的当前值（标准化）")]
 		[MMReadOnly]
 		public float CurrentValueNormalized = 0f;
 		/// the current value of the controlled float	
-		[Tooltip("the current value of the controlled float")]
+		[Tooltip("被控浮点数的当前值")]
 		[MMReadOnly]
 		public Color InitialColor;
 
 		/// the ID of the property
-		[Tooltip("the ID of the property")]
+		[Tooltip("属性编号")]
 		[MMReadOnly]
 		public int PropertyID;
 		/// whether or not the property got found
-		[Tooltip("whether or not the property got found")]
+		[Tooltip("是否成功找到该属性")]
 		[MMReadOnly]
 		public bool PropertyFound = false;
 		/// the target material
-		[Tooltip("the target material")]
+		[Tooltip("目标材质")]
 		[MMReadOnly]
 		public Material TargetMaterial;
 
@@ -696,6 +696,14 @@ namespace MoreMountains.Tools
 						CurrentValue = (CurrentValueNormalized * 2.0f - 1.0f) * _randomAmplitude;
 					}
 					break;
+				case ControlModes.AudioAnalyzer:
+					CurrentValue = Mathf.Lerp(CurrentValue, AudioAnalyzer.Beats[BeatID].CurrentValue * AudioAnalyzerMultiplier + AudioAnalyzerOffset, AudioAnalyzerLerp * GetDeltaTime());
+					CurrentValueNormalized = Mathf.Clamp(AudioAnalyzer.Beats[BeatID].CurrentValue, 0f, 1f);
+					break;
+				case ControlModes.Driven:
+					CurrentValue = DrivenLevel;
+					CurrentValueNormalized = Mathf.Clamp(CurrentValue, 0f, 1f);
+					break;
 				case ControlModes.OneTime:
 					if (!_shaking)
 					{
@@ -705,14 +713,6 @@ namespace MoreMountains.Tools
 					CurrentValueNormalized = OneTimeCurve.Evaluate(_remappedTimeSinceStart);
 					CurrentValue = MMMaths.Remap(CurrentValueNormalized, 0f, 1f, OneTimeRemapMin, OneTimeRemapMax);
 					CurrentValue *= OneTimeAmplitude;
-					break;
-				case ControlModes.AudioAnalyzer:
-					CurrentValue = Mathf.Lerp(CurrentValue, AudioAnalyzer.Beats[BeatID].CurrentValue * AudioAnalyzerMultiplier + AudioAnalyzerOffset, AudioAnalyzerLerp * GetDeltaTime());
-					CurrentValueNormalized = Mathf.Clamp(AudioAnalyzer.Beats[BeatID].CurrentValue, 0f, 1f);
-					break;
-				case ControlModes.Driven:
-					CurrentValue = DrivenLevel;
-					CurrentValueNormalized = Mathf.Clamp(CurrentValue, 0f, 1f);
 					break;
 				case ControlModes.ToDestination:
 					if (!_shaking)
@@ -745,62 +745,94 @@ namespace MoreMountains.Tools
 
 			if ((ControlMode == ControlModes.OneTime) && _shaking && (GetTime() - _startedTimestamp > OneTimeDuration))
 			{
-				_shaking = false;
-				if (RevertToInitialValueAfterEnd)
-				{
-					CurrentValue = InitialValue;
-					if (PropertyType == PropertyTypes.Color)
-					{
-						_currentColor = InitialColor;
-					}
-				}
-				else
-				{
-					CurrentValue = OneTimeCurve.Evaluate(1f);
-					CurrentValue = MMMaths.Remap(CurrentValue, 0f, 1f, OneTimeRemapMin, OneTimeRemapMax);
-					CurrentValue *= OneTimeAmplitude;
-					if (AddToInitialValue)
-					{
-						CurrentValue += InitialValue;
-					}
-				}
-				SetValue(CurrentValue);
-				if (DisableAfterOneTime)
-				{
-					this.enabled = false;
-				}     
-				if (DisableGameObjectAfterOneTime)
-				{
-					this.gameObject.SetActive(false);
-				}
+				SetOneTimeFinalValue();
 				return;
 			}
 
 			if ((ControlMode == ControlModes.ToDestination) && _shaking && (GetTime() - _startedTimestamp > ToDestinationDuration))
 			{
-				_shaking = false;
-				FromColor = _fromColorStorage;
-				if (RevertToInitialValueAfterEnd)
-				{
-					CurrentValue = InitialValue;
-					if (PropertyType == PropertyTypes.Color)
-					{
-						_currentColor = InitialColor;
-					}
-				}
-				else
-				{
-					CurrentValue = ToDestinationValue;
-				}
-				SetValue(CurrentValue);
-				if (DisableAfterToDestination)
-				{
-					this.enabled = false;
-				}
+				SetToDestinationFinalValue();
 				return;
 			}
 
 			SetValue(CurrentValue);
+		}
+
+		/// <summary>
+		/// Sets the final value for this shader controller, only in OneTime or ToDestination modes
+		/// </summary>
+		public virtual void SetFinalValue()
+		{
+			switch (ControlMode)
+			{
+				case ControlModes.OneTime:
+					SetOneTimeFinalValue();
+					break;
+				case ControlModes.ToDestination:
+					SetToDestinationFinalValue();
+					break;
+			}
+		}
+
+		/// <summary>
+		/// Sets the final value, when in ToDestination control mode
+		/// </summary>
+		protected virtual void SetToDestinationFinalValue()
+		{
+			_shaking = false;
+			FromColor = _fromColorStorage;
+			if (RevertToInitialValueAfterEnd)
+			{
+				CurrentValue = InitialValue;
+				if (PropertyType == PropertyTypes.Color)
+				{
+					_currentColor = InitialColor;
+				}
+			}
+			else
+			{
+				CurrentValue = ToDestinationValue;
+			}
+			SetValue(CurrentValue);
+			if (DisableAfterToDestination)
+			{
+				this.enabled = false;
+			}
+		}
+
+		/// <summary>
+		/// Sets the final value, when in One Time control mode
+		/// </summary>
+		protected virtual void SetOneTimeFinalValue()
+		{
+			_shaking = false;
+			if (RevertToInitialValueAfterEnd)
+			{
+				CurrentValue = InitialValue;
+				if (PropertyType == PropertyTypes.Color)
+				{
+					_currentColor = InitialColor;
+				}
+			}
+			else
+			{
+				CurrentValue = OneTimeCurve.Evaluate(1f);
+				CurrentValue = MMMaths.Remap(CurrentValue, 0f, 1f, OneTimeRemapMin, OneTimeRemapMax);
+				CurrentValue *= OneTimeAmplitude;
+				if (AddToInitialValue)
+				{
+					CurrentValue += InitialValue;
+				}
+			}
+			SetValue(CurrentValue);
+			if (DisableAfterOneTime)
+			{
+				this.enabled = false;
+			}     
+			if (DisableGameObjectAfterOneTime)
+			{
+				this.gameObject.SetActive(false);
+			}
 		}
 
 		/// <summary>
@@ -826,8 +858,11 @@ namespace MoreMountains.Tools
 					return TargetMaterial.GetFloat(PropertyID);
 
 				case PropertyTypes.Vector:
-					return TargetMaterial.GetVector(PropertyID).x;                    
-
+					if (X) { return TargetMaterial.GetVector(PropertyID).x; }
+					if (Y) { return TargetMaterial.GetVector(PropertyID).y; }
+					if (Z) { return TargetMaterial.GetVector(PropertyID).z; }
+					if (W) { return TargetMaterial.GetVector(PropertyID).w; }
+					return TargetMaterial.GetVector(PropertyID).x;
 				case PropertyTypes.Keyword:
 					return TargetMaterial.IsKeywordEnabled(TargetPropertyName) ? 1f : 0f;
 

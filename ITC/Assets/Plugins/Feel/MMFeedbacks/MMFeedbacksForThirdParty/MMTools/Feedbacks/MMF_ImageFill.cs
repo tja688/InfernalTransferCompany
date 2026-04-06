@@ -12,8 +12,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will let you change the fill value of a target Image over time.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you modify the fill value of a target Image over time.")]
+	[FeedbackHelp("此反馈可随时间修改目标 Image 的 Fill 值。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("UI/Image Fill")]
 	public class MMF_ImageFill : MMF_Feedback
 	{
@@ -24,7 +25,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.UIColor; } }
 		public override bool EvaluateRequiresSetup() { return (BoundImage == null); }
 		public override string RequiredTargetText { get { return BoundImage != null ? BoundImage.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a BoundImage be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先指定 BoundImage 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 		public override bool HasCustomInspectors => true;
 		public override bool HasAutomatedTargetAcquisition => true;
@@ -36,41 +37,41 @@ namespace MoreMountains.Feedbacks
 		[MMFInspectorGroup("Target Image", true, 12, true)]
         
 		/// the Image to affect when playing the feedback
-		[Tooltip("the Image to affect when playing the feedback")]
+		[Tooltip("播放该反馈时要作用到的 Image")]
 		public Image BoundImage;
 
 		[MMFInspectorGroup("Image Fill Animation", true, 24)]
 		/// whether the feedback should affect the Image instantly or over a period of time
-		[Tooltip("whether the feedback should affect the Image instantly or over a period of time")]
+		[Tooltip("该反馈应立即影响 Image，还是在一段时间内逐步生效")]
 		public Modes Mode = Modes.OverTime;
 		/// how long the Image should change over time
-		[Tooltip("how long the Image should change over time")]
+		[Tooltip("Image 在渐变模式下持续变化的时间")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ToDestination)]
 		public float Duration = 0.2f;
 		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		[Tooltip("若启用，即使该反馈仍在执行中，再次调用也会立刻重新触发；若关闭，则当前一次播放结束前会阻止新的 Play 调用。")] 
 		public bool AllowAdditivePlays = false;
 		/// the fill to move to in instant mode
-		[Tooltip("the fill to move to in instant mode")]
+		[Tooltip("Instant 模式下 Fill 将直接设置到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.Instant)]
 		public float InstantFill = 1f;
 		/// the curve to use when interpolating towards the destination fill
-		[Tooltip("the curve to use when interpolating towards the destination fill")]
+		[Tooltip("插值到目标 Fill 时使用的曲线")]
 		public MMTweenType Curve = new MMTweenType(MMTween.MMTweenCurve.EaseInCubic, "", "Mode", (int)Modes.OverTime, (int)Modes.ToDestination);
 		/// the value to which the curve's 0 should be remapped
-		[Tooltip("the value to which the curve's 0 should be remapped")]
+		[Tooltip("曲线 0 端应重映射到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public float CurveRemapZero = 0f;
 		/// the value to which the curve's 1 should be remapped
-		[Tooltip("the value to which the curve's 1 should be remapped")]
+		[Tooltip("曲线 1 端应重映射到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public float CurveRemapOne = 1f;
 		/// the fill to aim towards when in ToDestination mode
-		[Tooltip("the fill to aim towards when in ToDestination mode")]
+		[Tooltip("ToDestination 模式下要过渡到的目标 Fill 值")]
 		[MMFEnumCondition("Mode", (int)Modes.ToDestination)]
 		public float DestinationFill = 1f;
 		/// if this is true, the target will be disabled when this feedbacks is stopped
-		[Tooltip("if this is true, the target will be disabled when this feedbacks is stopped")] 
+		[Tooltip("若启用，当该反馈被 Stop 时会禁用目标对象")] 
 		public bool DisableOnStop = false;
 
 		/// the duration of this feedback is the duration of the Image, or 0 if instant
@@ -84,6 +85,12 @@ namespace MoreMountains.Feedbacks
 		protected override void CustomInitialization(MMF_Player owner)
 		{
 			base.CustomInitialization(owner);
+			
+			if (BoundImage == null)
+			{
+				Debug.LogWarning("[Image Fill Feedback] The image fill feedback on "+Owner.name+" doesn't have a bound image, it won't work. You need to specify an image in its inspector.");
+				return;
+			}
 
 			if (Active)
 			{
@@ -98,7 +105,7 @@ namespace MoreMountains.Feedbacks
 		/// <param name="feedbacksIntensity"></param>
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
-			if (!Active || !FeedbackTypeAuthorized)
+			if (!Active || !FeedbackTypeAuthorized || (BoundImage == null))
 			{
 				return;
 			}

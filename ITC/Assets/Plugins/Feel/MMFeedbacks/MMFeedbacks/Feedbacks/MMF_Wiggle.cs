@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
@@ -9,8 +9,9 @@ namespace MoreMountains.Feedbacks
 	/// When played, this feedback will activate the Wiggle method of a MMWiggle object based on the selected settings, wiggling either its position, rotation, scale, or all of these.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback lets you trigger position, rotation and/or scale wiggles on an object equipped with a MMWiggle component, for the specified durations.")]
+	[FeedbackHelp("此反馈可让挂有 MMWiggle 组件的对象，在指定持续时间内触发位置、旋转和/或缩放摆动。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Transform/Wiggle")]
 	public class MMF_Wiggle : MMF_Feedback
 	{
@@ -21,38 +22,38 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.TransformColor; } }
 		public override bool EvaluateRequiresSetup() { return (TargetWiggle == null); }
 		public override string RequiredTargetText { get { return TargetWiggle != null ? TargetWiggle.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetWiggle be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先设置a TargetWiggle才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetWiggle = FindAutomatedTarget<MMWiggle>();
 
 		[MMFInspectorGroup("Target", true, 54, true)]
-		/// the Wiggle component to target
-		[Tooltip("the Wiggle component to target")]
+		/// 要控制的 Wiggle 组件
+		[Tooltip("要控制 摆动 组件")]
 		public MMWiggle TargetWiggle;
         
 		[MMFInspectorGroup("Position", true, 55)]
 		/// whether or not to wiggle position
-		[Tooltip("whether or not to wiggle position")]
+		[Tooltip("是否摆动位置")]
 		public bool WigglePosition = true;
 		/// the duration (in seconds) of the position wiggle
-		[Tooltip("the duration (in seconds) of the position wiggle")]
+		[Tooltip("位置 摆动 的持续时间（秒）")]
 		public float WigglePositionDuration;
 
 		[MMFInspectorGroup("Rotation", true, 26)]
 		/// whether or not to wiggle rotation
-		[Tooltip("whether or not to wiggle rotation")]
+		[Tooltip("是否摆动旋转")]
 		public bool WiggleRotation;
 		/// the duration (in seconds) of the rotation wiggle
-		[Tooltip("the duration (in seconds) of the rotation wiggle")]
+		[Tooltip("旋转 摆动 的持续时间（秒）")]
 		public float WiggleRotationDuration;
 
 		[MMFInspectorGroup("Scale", true, 57)]
 		/// whether or not to wiggle scale
-		[Tooltip("whether or not to wiggle scale")]
+		[Tooltip("是否有摆动秤")]
 		public bool WiggleScale;
 		/// the duration (in seconds) of the scale wiggle
-		[Tooltip("the duration (in seconds) of the scale wiggle")]
+		[Tooltip("缩放 摆动 的持续时间（秒）")]
 		public float WiggleScaleDuration;
 
 
@@ -126,3 +127,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

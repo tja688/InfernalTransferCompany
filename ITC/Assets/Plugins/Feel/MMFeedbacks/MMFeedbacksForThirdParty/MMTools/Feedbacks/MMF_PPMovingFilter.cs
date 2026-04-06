@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will trigger a post processing moving filter event, meant to be caught by a MMPostProcessingMovableFilter object
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will trigger a post processing moving filter event, meant to be caught by a MMPostProcessingMovableFilter object")]
+	[FeedbackHelp("此反馈会触发 Post Processing Moving Filter 事件，供 MMPostProcessingMovableFilter 接收并执行。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("PostProcess/PPMovingFilter")]
 	public class MMF_PPMovingFilter : MMF_Feedback
 	{
@@ -33,13 +34,13 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("PostProcessing Profile Moving Filter", true, 54)]
 		/// the selected mode for this feedback 
-		[Tooltip("the selected mode for this feedback")]
+		[Tooltip("该反馈当前使用的模式")]
 		public Modes Mode = Modes.Toggle;
 		/// the duration of the transition
-		[Tooltip("the duration of the transition")]
+		[Tooltip("过渡持续时间，单位为秒。")]
 		public float TransitionDuration = 1f;
 		/// the curve to move along to
-		[Tooltip("the curve to move along to")]
+		[Tooltip("过渡时使用的曲线。")]
 		public MMTweenType Curve = new MMTweenType(MMTween.MMTweenCurve.EaseInCubic);
 
 		protected bool _active = false;

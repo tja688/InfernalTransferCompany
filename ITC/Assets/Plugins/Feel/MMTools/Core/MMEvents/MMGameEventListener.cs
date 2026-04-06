@@ -10,10 +10,10 @@ namespace MoreMountains.Tools
 	{
 		[Header("MMGameEvent")] 
 		/// the name of the event you want to listen for
-		[Tooltip("the name of the event you want to listen for")]
+		[Tooltip("要监听的事件名称")]
 		public string EventName = "Load";
 		/// a UnityEvent hook you can use to call methods when the specified event gets triggered
-		[Tooltip("a UnityEvent hook you can use to call methods when the specified event gets triggered")]
+		[Tooltip("当指定事件被触发时会调用的 UnityEvent 回调，可在此绑定方法")]
 		public UnityEvent OnMMGameEvent;
 		
 		/// <summary>

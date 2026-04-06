@@ -16,67 +16,67 @@ namespace MoreMountains.Feedbacks
 
 		[MMInspectorGroup("Target", true, 41)]
 		/// whether this shaker should target Transforms or RectTransforms
-		[Tooltip("whether this shaker should target Transforms or RectTransforms")]
+		[Tooltip("此抖动器要作用于 `Transform` 还是 `RectTransform`。")]
 		public Modes Mode = Modes.Transform;
 		/// the transform to shake the scale of. If left blank, this component will target the transform it's put on.
-		[Tooltip("the transform to shake the scale of. If left blank, this component will target the transform it's put on.")]
+		[Tooltip("要进行缩放抖动的 `Transform`。若留空，则默认作用于挂载此组件的对象。")]
 		[MMEnumCondition("Mode", (int)Modes.Transform)]
 		public Transform TargetTransform;
 		/// the rect transform to shake the scale of. If left blank, this component will target the transform it's put on.
-		[Tooltip("the rect transform to shake the scale of. If left blank, this component will target the transform it's put on.")]
+		[Tooltip("要进行缩放抖动的 `RectTransform`。若留空，则默认作用于挂载此组件的对象。")]
 		[MMEnumCondition("Mode", (int)Modes.RectTransform)]
 		public RectTransform TargetRectTransform;
         
 		[MMInspectorGroup("Shake Settings", true, 42)]
 		/// the speed at which the transform should shake
-		[Tooltip("the speed at which the transform should shake")]
+		[Tooltip("缩放抖动的速度。")]
 		public float ShakeSpeed = 20f;
 		/// the maximum distance from its initial scale the transform will move to during the shake
-		[Tooltip("the maximum distance from its initial scale the transform will move to during the shake")]
+		[Tooltip("抖动过程中，相对初始缩放允许偏移的最大范围。")]
 		public float ShakeRange = 0.5f;
         
 		[MMInspectorGroup("Direction", true, 43)]
 		/// the direction along which to shake the transform's scale
-		[Tooltip("the direction along which to shake the transform's scale")]
+		[Tooltip("缩放抖动的主方向。")]
 		public Vector3 ShakeMainDirection = Vector3.up;
 		/// if this is true, instead of using ShakeMainDirection as the direction of the shake, a random vector3 will be generated, randomized between ShakeMainDirection and ShakeAltDirection
-		[Tooltip("if this is true, instead of using ShakeMainDirection as the direction of the shake, a random vector3 will be generated, randomized between ShakeMainDirection and ShakeAltDirection")]
+		[Tooltip("若启用，将不再直接使用 `ShakeMainDirection` 作为抖动方向，而是在 `ShakeMainDirection` 与 `ShakeAltDirection` 之间随机生成一个 `Vector3` 方向。")]
 		public bool RandomizeDirection = false;
 		/// when in RandomizeDirection mode, a vector against which to randomize the main direction
-		[Tooltip("when in RandomizeDirection mode, a vector against which to randomize the main direction")]
+		[Tooltip("在 `RandomizeDirection` 模式下，用于与主方向一起参与随机化的备用方向向量。")]
 		[MMCondition("RandomizeDirection", true)]
 		public Vector3 ShakeAltDirection = Vector3.up;
 		/// if this is true, a new direction will be randomized every time a shake happens
-		[Tooltip("if this is true, a new direction will be randomized every time a shake happens")]
+		[Tooltip("若启用，每次发生抖动时都会重新随机一次方向。")]
 		public bool RandomizeDirectionOnPlay = false;
 
 		[MMInspectorGroup("Directional Noise", true, 47)]
 		/// whether or not to add noise to the main direction
-		[Tooltip("whether or not to add noise to the main direction")]
+		[Tooltip("是否为主方向叠加噪声。")]
 		public bool AddDirectionalNoise = true;
 		/// when adding directional noise, noise strength will be randomized between this value and DirectionalNoiseStrengthMax
-		[Tooltip("when adding directional noise, noise strength will be randomized between this value and DirectionalNoiseStrengthMax")]
+		[Tooltip("启用方向噪声后，噪声强度会在该值与 `DirectionalNoiseStrengthMax` 之间随机。")]
 		[MMCondition("AddDirectionalNoise", true)]
 		public Vector3 DirectionalNoiseStrengthMin = new Vector3(0.25f, 0.25f, 0.25f);
 		/// when adding directional noise, noise strength will be randomized between this value and DirectionalNoiseStrengthMin
-		[Tooltip("when adding directional noise, noise strength will be randomized between this value and DirectionalNoiseStrengthMin")]
+		[Tooltip("启用方向噪声后，噪声强度会在 `DirectionalNoiseStrengthMin` 与该值之间随机。")]
 		[MMCondition("AddDirectionalNoise", true)]
 		public Vector3 DirectionalNoiseStrengthMax = new Vector3(0.25f, 0.25f, 0.25f);
         
 		[MMInspectorGroup("Randomness", true, 44)]
 		/// a unique seed you can use to get different outcomes when shaking more than one transform at once
-		[Tooltip("a unique seed you can use to get different outcomes when shaking more than one transform at once")]
+		[Tooltip("用于生成随机结果的唯一种子；当你同时抖动多个对象时，可借此让它们得到不同结果。")]
 		public Vector3 RandomnessSeed;
 		/// whether or not to generate a unique seed automatically on every shake
-		[Tooltip("whether or not to generate a unique seed automatically on every shake")]
+		[Tooltip("是否在每次抖动时自动生成新的唯一种子。若启用，上方手动设置的种子将被忽略。")]
 		public bool RandomizeSeedOnShake = true;
 
 		[MMInspectorGroup("One Time", true, 45)]
 		/// whether or not to use attenuation, which will impact the amplitude of the shake, along the defined curve
-		[Tooltip("whether or not to use attenuation, which will impact the amplitude of the shake, along the defined curve")]
+		[Tooltip("是否启用衰减。启用后，抖动强度会按照下方定义的曲线逐渐变化。")]
 		public bool UseAttenuation = true;
 		/// the animation curve used to define attenuation, impacting the amplitude of the shake
-		[Tooltip("the animation curve used to define attenuation, impacting the amplitude of the shake")]
+		[Tooltip("用于定义衰减的曲线，会直接影响抖动强度。")]
 		[MMCondition("UseAttenuation", true)]
 		public AnimationCurve AttenuationCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 

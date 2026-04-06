@@ -25,17 +25,15 @@ namespace MoreMountains.FeedbacksForThirdParty
 		[Header("Channel")]
 		/// whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what.
 		/// MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable
-		[Tooltip("whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what. " +
-		         "MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable")]
+		[Tooltip("是由监听整数定义的通道，还是监听由通道资源脚本化对象定义的通道。 密码配置简单，但项目变大后容易混乱，也更难记住每个数字对应的含义。 通道资源脚本化对象需要预先创建，但具有相同的名称，也更适合扩展。")]
 		public MMChannelModes ChannelMode = MMChannelModes.Int;
 		/// the channel to listen to - has to match the one on the feedback
-		[Tooltip("the channel to listen to - has to match the one on the feedback")]
+		[Tooltip("要监听的通道，必须与反馈上配置的通道一致")]
 		[MMEnumCondition("ChannelMode", (int)MMChannelModes.Int)]
 		public int Channel = 0;
 		/// the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel,
 		/// right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name
-		[Tooltip("the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel, " +
-		         "right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name")]
+		[Tooltip("要触发此通道器的输入也必须引用同一个通道资源定义，否则将无法接收到事件。要创建通道资源，请在工程任何位置（通常是数据文件夹）右键，选择 更多山脉 > 通道资源，然后说明命名一个名称。")]
 		[MMEnumCondition("ChannelMode", (int)MMChannelModes.MMChannel)]
 		public MMChannel MMChannelDefinition = null;
 
@@ -67,6 +65,9 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public bool Interruptable = true;
 		/// whether or not this blender should pick the current value as its starting point
 		public bool StartFromCurrentValue = true;
+		/// reset to initial value on end 
+		[Tooltip("结束时重置回初始值")]
+		public bool ResetToInitialValueOnEnd = false;
 
 		[Header("Tests")]
 		/// test blend button
@@ -190,7 +191,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 			else
 			{
 				// after end is reached
-				_volume.weight = _destination;
+				_volume.weight = ResetToInitialValueOnEnd ? _initial : _destination;
 				_blending = false;
 				if (DisableVolumeOnZeroWeight && (_volume.weight == 0f))
 				{
@@ -279,6 +280,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 					InitialWeight = shakeEvent.InitialWeight;
 					FinalWeight = shakeEvent.FinalWeight;    
 				}
+				ResetToInitialValueOnEnd = shakeEvent.ResetToInitialValueOnEnd;
 				Blend();
 			}
 			#endif
@@ -308,6 +310,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public AnimationCurve BlendCurve;
 		public float InitialWeight;
 		public float FinalWeight;
+		public bool ResetToInitialValueOnEnd;
 		public bool NormalPlayDirection;
 		public MMGlobalPostProcessingVolumeAutoBlend_URP.TimeScales TimeScale;
 
@@ -320,6 +323,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 			AnimationCurve blendCurve,
 			float initialWeight,
 			float finalWeight,
+			bool resetToInitialValueOnEnd,
 			bool normalPlayDirection,
 			MMGlobalPostProcessingVolumeAutoBlend_URP.TimeScales timeScale)
 		{
@@ -331,6 +335,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 			e.BlendCurve = blendCurve;
 			e.InitialWeight = initialWeight;
 			e.FinalWeight = finalWeight;
+			e.ResetToInitialValueOnEnd = resetToInitialValueOnEnd;
 			e.NormalPlayDirection = normalPlayDirection;
 			e.TimeScale = timeScale;
 			MMEventManager.TriggerEvent(e);

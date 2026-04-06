@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -8,10 +8,11 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you change the size an element on a target UI Document
+	/// 这个反馈可修改目标 UI Document 中元素的尺寸。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the size an element on a target UI Document")]
+	[FeedbackHelp("这个反馈可修改目标 UI Document 中元素的尺寸。")]
+	[System.Serializable]
 	[FeedbackPath("UI Toolkit/UITK Size")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitSize : MMF_UIToolkitVector2Base

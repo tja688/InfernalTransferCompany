@@ -1,4 +1,4 @@
-﻿using MoreMountains.FeedbacksForThirdParty;
+using MoreMountains.FeedbacksForThirdParty;
 using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
@@ -10,9 +10,10 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Camera/Field of View")]
 	[FeedbackHelp(
-		"This feedback lets you control a camera's field of view over time. You'll need a MMCameraFieldOfViewShaker on your camera.")]
+		"This 反馈 可让你 control a camera's field of view 随时间变化. You'll need a MMCameraFieldOfViewShaker on your camera.")]
 	public class MMF_CameraFieldOfView : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -39,32 +40,32 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Field of View", true, 37)]
 		/// the duration of the shake, in seconds
-		[Tooltip("the duration of the shake, in seconds")]
+		[Tooltip("抖动的持续时间，单位为秒")]
 		public float Duration = 2f;
 
 		/// whether or not to reset shaker values after shake
-		[Tooltip("whether or not to reset shaker values after shake")]
+		[Tooltip("抖动结束后是否重置抖动器的数值")]
 		public bool ResetShakerValuesAfterShake = true;
 
 		/// whether or not to reset the target's values after shake
-		[Tooltip("whether or not to reset the target's values after shake")]
+		[Tooltip("抖动结束后是否重置目标的数值")]
 		public bool ResetTargetValuesAfterShake = true;
 
 		/// whether or not to add to the initial value
-		[Tooltip("whether or not to add to the initial value")]
+		[Tooltip("是否在初始值基础上叠加")]
 		public bool RelativeFieldOfView = false;
 
 		/// the curve used to animate the intensity value on
-		[Tooltip("the curve used to animate the intensity value on")]
+		[Tooltip("用于驱动强度动画的曲线")]
 		public AnimationCurve ShakeFieldOfView =
 			new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")] [Range(0f, 179f)]
+		[Tooltip("将曲线 0 端重新映射到的值")] [Range(0f, 179f)]
 		public float RemapFieldOfViewZero = 60f;
 
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")] [Range(0f, 179f)]
+		[Tooltip("将曲线 1 端重新映射到的值")] [Range(0f, 179f)]
 		public float RemapFieldOfViewOne = 120f;
 
 		/// <summary>
@@ -153,3 +154,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

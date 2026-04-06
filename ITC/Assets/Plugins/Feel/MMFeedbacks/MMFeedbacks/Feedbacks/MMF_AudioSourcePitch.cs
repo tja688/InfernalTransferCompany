@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -11,8 +11,9 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Audio/AudioSource Pitch")]
-	[FeedbackHelp("This feedback lets you control the pitch of a target AudioSource over time.")]
+	[FeedbackHelp("此反馈可随时间控制目标 AudioSource 的音高（通过对应 Shaker / Channel 生效）。")]
 	public class MMF_AudioSourcePitch : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -29,27 +30,27 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("AudioSource Pitch", true, 77)]
 		/// the duration of the shake, in seconds
-		[Tooltip("the duration of the shake, in seconds")]
+		[Tooltip("抖动持续时间（秒）")]
 		public float Duration = 2f;
 		/// whether or not to reset shaker values after shake
-		[Tooltip("whether or not to reset shaker values after shake")]
+		[Tooltip("抖动结束后是否重置 Shaker 内部状态。关闭时，下一次触发会从上次末状态继续。")]
 		public bool ResetShakerValuesAfterShake = true;
 		/// whether or not to reset the target's values after shake
-		[Tooltip("whether or not to reset the target's values after shake")]
+		[Tooltip("抖动结束后是否把目标属性恢复到初始值。关闭时，目标会停留在最后一帧结果。")]
 		public bool ResetTargetValuesAfterShake = true;
 		/// whether or not to add to the initial value
-		[Tooltip("whether or not to add to the initial value")]
+		[Tooltip("是否以“相对模式”叠加到初始值。关闭时会按重映射后的绝对值驱动。")]
 		public bool RelativePitch = false;
 		/// the curve used to animate the intensity value on
-		[Tooltip("the curve used to animate the intensity value on")]
+		[Tooltip("用于驱动强度动画的曲线")]
 		public AnimationCurve PitchTween = new AnimationCurve(new Keyframe(0, 1f), new Keyframe(0.5f, 0f), new Keyframe(1, 1f));
 		/// the value to remap the curve's 0 to
 		[Range(-3f, 3f)]
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("曲线取值为 0 时映射到的目标值")]
 		public float RemapPitchZero = 0f;
 		/// the value to remap the curve's 1 to
 		[Range(-3f, 3f)]
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("曲线取值为 1 时映射到的目标值")]
 		public float RemapPitchOne = 1f;
 
 		/// <summary>

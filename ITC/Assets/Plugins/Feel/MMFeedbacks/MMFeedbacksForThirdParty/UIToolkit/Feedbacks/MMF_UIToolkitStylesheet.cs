@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -8,17 +8,18 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you change the stylesheet on a target UI Document
+	/// 这个反馈可替换目标 UI Document 使用的样式表。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the stylesheet on a target UI Document")]
+	[FeedbackHelp("这个反馈可替换目标 UI Document 使用的样式表。")]
+	[System.Serializable]
 	[FeedbackPath("UI Toolkit/UITK Stylesheet")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitStylesheet : MMF_UIToolkit
 	{
 		[Header("Stylesheet")] 
-		/// the new stylesheet to apply to the document
-		[Tooltip("the new stylesheet to apply to the document")]
+		/// 要应用到该 Document 的新样式表。
+		[Tooltip("要应用到该 Document 的新样式表。")]
 		public StyleSheet NewStylesheet;
 		
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1)

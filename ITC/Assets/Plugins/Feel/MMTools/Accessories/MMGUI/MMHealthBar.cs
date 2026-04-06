@@ -20,38 +20,38 @@ namespace MoreMountains.Tools
 		/// the possible timescales the bar can work on
 		public enum TimeScales { UnscaledTime, Time }
 
-		[MMInformation("Add this component to an object and it'll add a healthbar next to it to reflect its health level in real time. You can decide here whether the health bar should be drawn automatically or use a prefab.",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("把这个组件挂到对象上后，它会在对象旁边添加一个血条，用于实时反映生命值。你可以在这里决定血条是自动绘制，还是使用预制体。",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
 		/// whether the healthbar uses a prefab or is drawn automatically
-		[Tooltip("whether the healthbar uses a prefab or is drawn automatically")]
+		[Tooltip("决定血条是使用预制体、自动绘制，还是直接复用现有 MMProgressBar")]
 		public HealthBarTypes HealthBarType = HealthBarTypes.Drawn;
 		/// defines whether the bar will work on scaled or unscaled time (whether or not it'll keep moving if time is slowed down for example)
-		[Tooltip("defines whether the bar will work on scaled or unscaled time (whether or not it'll keep moving if time is slowed down for example)")]
+		[Tooltip("定义血条使用受时间缩放影响的时间，还是不受时间缩放影响的时间；例如时间变慢时，血条动画是否仍继续播放。")]
 		public TimeScales TimeScale = TimeScales.UnscaledTime;
 
 		[Header("Select a Prefab")]
-		[MMInformation("Select a prefab with a progress bar script on it. There is one example of such a prefab in Common/Prefabs/GUI.",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("选择一个挂有进度条脚本的预制体。`Common/Prefabs/GUI` 中提供了一个示例。",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
 		/// the prefab to use as the health bar
-		[Tooltip("the prefab to use as the health bar")]
+		[Tooltip("作为血条使用的预制体")]
 		public MMProgressBar HealthBarPrefab;
 
 		[Header("Existing MMProgressBar")]
 		/// the MMProgressBar this health bar should update 
-		[Tooltip("the MMProgressBar this health bar should update")]
+		[Tooltip("该血条要更新的MM进度条")]
 		public MMProgressBar TargetProgressBar;
 
 		[Header("Drawn Healthbar Settings ")]
-		[MMInformation("Set the size (in world units), padding, back and front colors of the healthbar.",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("设置血条的尺寸（世界单位）、内边距，以及前景、背景等颜色。",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
 		/// if the healthbar is drawn, its size in world units
-		[Tooltip("if the healthbar is drawn, its size in world units")]
+		[Tooltip("当血条为自动绘制时，它在世界空间中的尺寸")]
 		public Vector2 Size = new Vector2(1f,0.2f);
 		/// if the healthbar is drawn, the padding to apply to the foreground, in world units
-		[Tooltip("if the healthbar is drawn, the padding to apply to the foreground, in world units")]
+		[Tooltip("当血条为自动绘制时，前景条要应用的内边距（世界单位）")]
 		public Vector2 BackgroundPadding = new Vector2(0.01f,0.01f);
 		/// the rotation to apply to the MMHealthBarContainer when drawing it
-		[Tooltip("the rotation to apply to the MMHealthBarContainer when drawing it")]
+		[Tooltip("自动绘制时，要应用到 MMHealthBarContainer 的旋转")]
 		public Vector3 InitialRotationAngles;
 		/// if the healthbar is drawn, the color of its foreground
-		[Tooltip("if the healthbar is drawn, the color of its foreground")]
+		[Tooltip("自动绘制时，前景条使用的颜色")]
 		public Gradient ForegroundColor = new Gradient()
 		{
 			colorKeys = new GradientColorKey[2] {
@@ -60,7 +60,7 @@ namespace MoreMountains.Tools
 			},
 			alphaKeys = new GradientAlphaKey[2] {new GradientAlphaKey(1, 0),new GradientAlphaKey(1, 1)}};
 		/// if the healthbar is drawn, the color of its delayed bar
-		[Tooltip("if the healthbar is drawn, the color of its delayed bar")]
+		[Tooltip("自动绘制时，延迟条使用的颜色")]
 		public Gradient DelayedColor = new Gradient()
 		{
 			colorKeys = new GradientColorKey[2] {
@@ -70,7 +70,7 @@ namespace MoreMountains.Tools
 			alphaKeys = new GradientAlphaKey[2] { new GradientAlphaKey(1, 0), new GradientAlphaKey(1, 1) }
 		};
 		/// if the healthbar is drawn, the color of its border
-		[Tooltip("if the healthbar is drawn, the color of its border")]
+		[Tooltip("自动绘制时，边框使用的颜色")]
 		public Gradient BorderColor = new Gradient()
 		{
 			colorKeys = new GradientColorKey[2] {
@@ -80,7 +80,7 @@ namespace MoreMountains.Tools
 			alphaKeys = new GradientAlphaKey[2] { new GradientAlphaKey(1, 0), new GradientAlphaKey(1, 1) }
 		};
 		/// if the healthbar is drawn, the color of its background
-		[Tooltip("if the healthbar is drawn, the color of its background")]
+		[Tooltip("自动绘制时，背景使用的颜色")]
 		public Gradient BackgroundColor = new Gradient()
 		{
 			colorKeys = new GradientColorKey[2] {
@@ -90,85 +90,85 @@ namespace MoreMountains.Tools
 			alphaKeys = new GradientAlphaKey[2] { new GradientAlphaKey(1, 0), new GradientAlphaKey(1, 1) }
 		};
 		/// the name of the sorting layer to put this health bar on
-		[Tooltip("the name of the sorting layer to put this health bar on")]
+		[Tooltip("该血条要放置到的 Sorting Layer 名称")]
 		public string SortingLayerName = "UI";
 		/// the delay to apply to the delayed bar if drawn
-		[Tooltip("the delay to apply to the delayed bar if drawn")]
+		[Tooltip("自动绘制时，延迟条要使用的延迟")]
 		public float Delay = 0.5f;
 		/// whether or not the front bar should lerp
-		[Tooltip("whether or not the front bar should lerp")]
+		[Tooltip("前景条是否进行插值过渡")]
 		public bool LerpFrontBar = true;
 		/// the speed at which the front bar lerps
-		[Tooltip("the speed at which the front bar lerps")]
+		[Tooltip("前景条的插值速度")]
 		public float LerpFrontBarSpeed = 15f;
 		/// whether or not the delayed bar should lerp
-		[Tooltip("whether or not the delayed bar should lerp")]
+		[Tooltip("延迟条是否进行插值过渡")]
 		public bool LerpDelayedBar = true;
 		/// the speed at which the delayed bar lerps
-		[Tooltip("the speed at which the delayed bar lerps")]
+		[Tooltip("延迟条的插值速度")]
 		public float LerpDelayedBarSpeed = 15f;
 		/// if this is true, bumps the scale of the healthbar when its value changes
-		[Tooltip("if this is true, bumps the scale of the healthbar when its value changes")]
+		[Tooltip("若开启，血条数值变化时会触发缩放弹跳效果")]
 		public bool BumpScaleOnChange = true;
 		/// the duration of the bump animation
-		[Tooltip("the duration of the bump animation")]
+		[Tooltip("弹跳动画的持续时间")]
 		public float BumpDuration = 0.2f;
 		/// the animation curve to map the bump animation on
-		[Tooltip("the animation curve to map the bump animation on")]
+		[Tooltip("控制弹跳动画的曲线")]
 		public AnimationCurve BumpAnimationCurve = AnimationCurve.Constant(0,1,1);
 		
 		
 		/// the mode the bar should follow the target in
-		[Tooltip("the mode the bar should follow the target in")]
+		[Tooltip("血条跟随目标的更新模式")]
 		public MMFollowTarget.UpdateModes FollowTargetMode = MMFollowTarget.UpdateModes.LateUpdate;
 		/// if this is true, the drawn health bar will adapt its rotation to match the one of its target
-		[Tooltip("if this is true, the drawn health bar will adapt its rotation to match the one of its target")]
+		[Tooltip("若开启，自动绘制的血条会同步目标的旋转")]
 		public bool FollowRotation = false;
 		/// if this is true, the drawn health bar will adapt its scale to match the one of its target
-		[Tooltip("if this is true, the drawn health bar will adapt its scale to match the one of its target")]
+		[Tooltip("若开启，自动绘制的血条会同步目标的缩放")]
 		public bool FollowScale = true;
 		/// if this is true, the drawn health bar will be nested below the MMHealthBar
-		[Tooltip("if this is true, the drawn health bar will be nested below the MMHealthBar")]
+		[Tooltip("若开启，自动绘制的血条会作为 MMHealthBar 的子对象挂接在其下")]
 		public bool NestDrawnHealthBar = false;
 		/// if this is true, a MMBillboard component will be added to the progress bar to make sure it always looks towards the camera
-		[Tooltip("if this is true, a MMBillboard component will be added to the progress bar to make sure it always looks towards the camera")]
+		[Tooltip("若开启，会给进度条添加 MMBillboard 组件，以确保它始终朝向摄像机")]
 		public bool Billboard = false;
 
 		[Header("Death")]
 		/// a gameobject (usually a particle system) to instantiate when the healthbar reaches zero
-		[Tooltip("a gameobject (usually a particle system) to instantiate when the healthbar reaches zero")]
+		[Tooltip("当血条降为 0 时要实例化的 GameObject（通常是粒子系统）")]
 		public GameObject InstantiatedOnDeath;
 
 		[Header("Offset")]
-		[MMInformation("Set the offset (in world units), relative to the object's center, to which the health bar will be displayed.",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("设置血条相对于对象中心的显示偏移（世界单位）。",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
 		/// the offset to apply to the healthbar compared to the object's center
-		[Tooltip("the offset to apply to the healthbar compared to the object's center")]
+		[Tooltip("相对于对象中心应用到血条的偏移量")]
 		public Vector3 HealthBarOffset = new Vector3(0f,1f,0f);
 
 		[Header("Display")]
-		[MMInformation("Here you can define whether or not the healthbar should always be visible. If not, you can set here how long after a hit it'll remain visible.",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("在这里定义血条是否始终可见。若关闭，可进一步设置对象受击后血条还要保持可见多久。",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
 		/// whether or not the bar should be permanently displayed
-		[Tooltip("whether or not the bar should be permanently displayed")]
+		[Tooltip("血条是否始终显示")]
 		public bool AlwaysVisible = true;
 		/// the duration (in seconds) during which to display the bar
-		[Tooltip("the duration (in seconds) during which to display the bar")]
+		[Tooltip("血条显示的持续时间（秒）")]
 		public float DisplayDurationOnHit = 1f;
 		/// if this is set to true the bar will hide itself when it reaches zero
-		[Tooltip("if this is set to true the bar will hide itself when it reaches zero")]
+		[Tooltip("若开启，血条降为 0 时会自动隐藏")]
 		public bool HideBarAtZero = true;
 		/// the delay (in seconds) after which to hide the bar
-		[Tooltip("the delay (in seconds) after which to hide the bar")]
+		[Tooltip("延迟多久后隐藏血条（秒）")]
 		public float HideBarAtZeroDelay = 1f;
 
 		[Header("Test")] 
 		/// a test value to use when pressing the TestUpdateHealth button
-		[Tooltip("a test value to use when pressing the TestUpdateHealth button")]
+		[Tooltip("点击 TestUpdateHealth 按钮时使用的测试值")]
 		public float TestMinHealth = 0f;
 		/// a test value to use when pressing the TestUpdateHealth button
-		[Tooltip("a test value to use when pressing the TestUpdateHealth button")]
+		[Tooltip("点击 TestUpdateHealth 按钮时使用的测试值")]
 		public float TestMaxHealth = 100f;
 		/// a test value to use when pressing the TestUpdateHealth button
-		[Tooltip("a test value to use when pressing the TestUpdateHealth button")]
+		[Tooltip("点击 TestUpdateHealth 按钮时使用的测试值")]
 		public float TestCurrentHealth = 25f;
 		[MMInspectorButton("TestUpdateHealth")]
 		public bool TestUpdateHealthButton;

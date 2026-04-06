@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// Turns an object active or inactive at the various stages of the feedback
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to change the state of the target gameobject from active to inactive (or the opposite), on init, play, stop or reset. For each of these you can specify if you want to force a state (active or inactive), or toggle it (active becomes inactive, inactive becomes active).")]
+	[FeedbackHelp("此反馈可让你在 init、play、stop 或 reset 时切换目标 GameObject 的激活状态。每个阶段都可以选择强制设为启用/禁用，或执行切换；若选择切换，则启用会变为禁用，禁用会变为启用。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("GameObject/Set Active")]
 	public class MMF_SetActive : MMF_Feedback
 	{
@@ -47,53 +48,56 @@ namespace MoreMountains.Feedbacks
         
 		[MMFInspectorGroup("Set Active Target", true, 12, true)]
 		/// the gameobject we want to change the active state of
-		[Tooltip("the gameobject we want to change the active state of")]
+		[Tooltip("要修改激活状态的游戏对象")]
 		public GameObject TargetGameObject;
 		/// a list of extra gameobjects we want to change the active state of
-		[Tooltip("a list of extra gameobjects we want to change the active state of")]
+		[Tooltip("我们想要更改其活动状态的额外游戏对象的列表")]
 		public List<GameObject> ExtraTargetGameObjects = new List<GameObject>();
+		/// if this is true, the applied state will be the one you select below. if this is false the applied state will be impacted by the play direction (inverting the choice set below if playing in reverse)
+		[Tooltip("若开启一项，应用的状态将是您在下面选择的状态。如果为 false，则应用的状态将受到播放方向的影响（如果反向播放，则反转下面的选择集）")]
+		public bool IgnorePlayDirection = false;
         
 		[MMFInspectorGroup("States", true, 14)]
 		/// whether or not we should alter the state of the target object on init
-		[Tooltip("whether or not we should alter the state of the target object on init")]
+		[Tooltip("我们是否应该改变 init 上目标对象的状态")]
 		public bool SetStateOnInit = false;
 		[MMFCondition("SetStateOnInit", true)]
 		/// how to change the state on init
-		[Tooltip("how to change the state on init")]
+		[Tooltip("如何更改 init 上的状态")]
 		public PossibleStates StateOnInit = PossibleStates.Inactive;
 		/// whether or not we should alter the state of the target object on play
-		[Tooltip("whether or not we should alter the state of the target object on play")]
+		[Tooltip("我们是否应该改变游戏中目标对象的状态")]
 		public bool SetStateOnPlay = false;
 		/// how to change the state on play
-		[Tooltip("how to change the state on play")]
+		[Tooltip("如何更改播放状态")]
 		[MMFCondition("SetStateOnPlay", true)]
 		public PossibleStates StateOnPlay = PossibleStates.Inactive;
 		/// whether or not we should alter the state of the target object on stop
-		[Tooltip("whether or not we should alter the state of the target object on stop")]
+		[Tooltip("停止时是否修改目标对象的状态")]
 		public bool SetStateOnStop = false;
 		/// how to change the state on stop
-		[Tooltip("how to change the state on stop")]
+		[Tooltip("如何更改停止时的状态")]
 		[MMFCondition("SetStateOnStop", true)]
 		public PossibleStates StateOnStop = PossibleStates.Inactive;
 		/// whether or not we should alter the state of the target object on reset
-		[Tooltip("whether or not we should alter the state of the target object on reset")]
+		[Tooltip("我们是否应该在重置时改变目标对象的状态")]
 		public bool SetStateOnReset = false;
 		/// how to change the state on reset
-		[Tooltip("how to change the state on reset")]
+		[Tooltip("如何更改重置时的状态")]
 		[MMFCondition("SetStateOnReset", true)]
 		public PossibleStates StateOnReset = PossibleStates.Inactive;
 		/// whether or not we should alter the state of the target object on skip
-		[Tooltip("whether or not we should alter the state of the target object on skip")]
+		[Tooltip("我们是否应该在跳过时改变目标对象的状态")]
 		public bool SetStateOnSkip = false;
 		/// how to change the state on skip
-		[Tooltip("how to change the state on skip")]
+		[Tooltip("如何设置跳过时的状态")]
 		[MMFCondition("SetStateOnSkip", true)]
 		public PossibleStates StateOnSkip = PossibleStates.Inactive;
 		/// whether or not we should alter the state of the target object when the player this feedback belongs to is done playing all its feedbacks
-		[Tooltip("whether or not we should alter the state of the target object when the player this feedback belongs to is done playing all its feedbacks")]
+		[Tooltip("当该反馈所属的玩家播放完所有反馈后，我们是否应该改变目标对象的状态")]
 		public bool SetStateOnPlayerComplete = false;
 		/// how to change the state on player complete
-		[Tooltip("how to change the state on player complete")]
+		[Tooltip("如何更改播放器完成时的状态")]
 		[MMFCondition("SetStateOnPlayerComplete", true)]
 		public PossibleStates StateOnPlayerComplete = PossibleStates.Inactive;
 
@@ -242,9 +246,17 @@ namespace MoreMountains.Feedbacks
 			{
 				case PossibleStates.Active:
 					newState = NormalPlayDirection ? true : false;
+					if (IgnorePlayDirection)
+					{
+						newState = true;
+					}
 					break;
 				case PossibleStates.Inactive:
 					newState = NormalPlayDirection ? false : true;
+					if (IgnorePlayDirection)
+					{
+						newState = false;
+					}
 					break;
 				case PossibleStates.Toggle:
 					newState = !TargetGameObject.activeInHierarchy;
@@ -285,3 +297,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

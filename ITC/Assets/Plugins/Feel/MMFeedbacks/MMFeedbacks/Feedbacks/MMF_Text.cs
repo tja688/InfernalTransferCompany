@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 #if MM_UI
 using UnityEngine.UI;
@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback lets you control the contents of a target Text over time
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback lets you control the contents of a target Text over time.")]
+	[FeedbackHelp("此反馈可让你随时间控制目标 Text 的内容。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("UI/Text")]
 	public class MMF_Text : MMF_Feedback
 	{
@@ -24,17 +25,17 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.UIColor; } }
 		public override bool EvaluateRequiresSetup() { return (TargetText == null); }
 		public override string RequiredTargetText { get { return TargetText != null ? TargetText.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetText be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈需要先指定 TargetText 才能正常工作，可在下方设置。"; } }
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetText = FindAutomatedTarget<Text>();
 
 		[MMFInspectorGroup("Text", true, 76, true)]
 		/// the Text component to control
-		[Tooltip(" Text component to control")]
+		[Tooltip("要控制内容的目标 Text 组件。")]
 		public Text TargetText;
 		/// the new text to replace the old one with
-		[Tooltip("the new text to replace the old one with")]
+		[Tooltip("播放时要写入的新文本内容。")]
 		[TextArea]
 		public string NewText = "Hello World";
 

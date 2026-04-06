@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will let you animate the density, color, end and start distance of your scene's fog
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you animate the density, color, end and start distance of your scene's fog")]
+	[FeedbackHelp("此反馈可为场景雾效的密度、颜色、起始距离和结束距离制作动画。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("Renderer/Fog")]
 	public class MMF_Fog : MMF_Feedback
 	{
@@ -30,77 +31,77 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Fog", true, 24)]
 		/// whether the feedback should affect the sprite renderer instantly or over a period of time
-		[Tooltip("whether the feedback should affect the sprite renderer instantly or over a period of time")]
+		[Tooltip("该反馈应立即生效，还是在一段时间内逐步作用")]
 		public Modes Mode = Modes.OverTime;
 		/// how long the sprite renderer should change over time
-		[Tooltip("how long the sprite renderer should change over time")]
+		[Tooltip("该效果在渐变模式下持续变化的时间")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public float Duration = 2f;
 		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		[Tooltip("若启用，即使该反馈仍在执行中，再次调用也会立刻重新触发；若关闭，则当前一次播放结束前会阻止新的 Play 调用。")] 
 		public bool AllowAdditivePlays = false;
 
 		[MMFInspectorGroup("Fog Density", true, 25)]
 		/// whether or not to modify the fog's density
-		[Tooltip("whether or not to modify the fog's density")]
+		[Tooltip("是否修改雾的密度")]
 		public bool ModifyFogDensity = true;
 		/// a curve to use to animate the fog's density over time
-		[Tooltip("a curve to use to animate the fog's density over time")]
+		[Tooltip("用于随时间驱动雾密度变化的曲线")]
 		public MMTweenType DensityCurve = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0)));
 		/// the value to remap the fog's density curve zero value to
-		[Tooltip("the value to remap the fog's density curve zero value to")]
+		[Tooltip("将雾密度曲线 0 端重映射到的值")]
 		public float DensityRemapZero = 0.01f;
 		/// the value to remap the fog's density curve one value to
-		[Tooltip("the value to remap the fog's density curve one value to")]
+		[Tooltip("将雾密度曲线 1 端重映射到的值")]
 		public float DensityRemapOne = 0.05f;
 		/// the value to change the fog's density to when in instant mode
-		[Tooltip("the value to change the fog's density to when in instant mode")]
+		[Tooltip("Instant 模式下雾密度将直接设置到的值")]
 		public float DensityInstantChange;
         
 		[MMFInspectorGroup("Fog Start Distance", true, 26)]
 		/// whether or not to modify the fog's start distance
-		[Tooltip("whether or not to modify the fog's start distance")]
+		[Tooltip("是否修改雾的起始距离")]
 		public bool ModifyStartDistance = true;
 		/// a curve to use to animate the fog's start distance over time
-		[Tooltip("a curve to use to animate the fog's start distance over time")]
+		[Tooltip("用于随时间驱动雾起始距离变化的曲线")]
 		public MMTweenType StartDistanceCurve = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0)));
 		/// the value to remap the fog's start distance curve zero value to
-		[Tooltip("the value to remap the fog's start distance curve zero value to")]
+		[Tooltip("将雾起始距离曲线 0 端重映射到的值")]
 		public float StartDistanceRemapZero = 0f;
 		/// the value to remap the fog's start distance curve one value to
-		[Tooltip("the value to remap the fog's start distance curve one value to")]
+		[Tooltip("将雾起始距离曲线 1 端重映射到的值")]
 		public float StartDistanceRemapOne = 0f;
 		/// the value to change the fog's start distance to when in instant mode
-		[Tooltip("the value to change the fog's start distance to when in instant mode")]
+		[Tooltip("Instant 模式下雾起始距离将直接设置到的值")]
 		public float StartDistanceInstantChange;
         
 		[MMFInspectorGroup("Fog End Distance", true, 27)]
 		/// whether or not to modify the fog's end distance
-		[Tooltip("whether or not to modify the fog's end distance")]
+		[Tooltip("是否修改雾的结束距离")]
 		public bool ModifyEndDistance = true;
 		/// a curve to use to animate the fog's end distance over time
-		[Tooltip("a curve to use to animate the fog's end distance over time")]
+		[Tooltip("用于随时间驱动雾结束距离变化的曲线")]
 		public MMTweenType EndDistanceCurve = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0)));
 		/// the value to remap the fog's end distance curve zero value to
-		[Tooltip("the value to remap the fog's end distance curve zero value to")]
+		[Tooltip("将雾结束距离曲线 0 端重映射到的值")]
 		public float EndDistanceRemapZero = 0f;
 		/// the value to remap the fog's end distance curve one value to
-		[Tooltip("the value to remap the fog's end distance curve one value to")]
+		[Tooltip("将雾结束距离曲线 1 端重映射到的值")]
 		public float EndDistanceRemapOne = 300f;
 		/// the value to change the fog's end distance to when in instant mode
-		[Tooltip("the value to change the fog's end distance to when in instant mode")]
+		[Tooltip("Instant 模式下雾结束距离将直接设置到的值")]
 		public float EndDistanceInstantChange;
         
 		[MMFInspectorGroup("Fog Color", true, 28)]
 		/// whether or not to modify the fog's color
-		[Tooltip("whether or not to modify the fog's color")]
+		[Tooltip("是否修改雾的颜色")]
 		public bool ModifyColor = true;
 		/// the colors to apply to the sprite renderer over time
-		[Tooltip("the colors to apply to the sprite renderer over time")]
+		[Tooltip("随时间应用的颜色变化")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime)]
 		public Gradient ColorOverTime;
 		/// the color to move to in instant mode
-		[Tooltip("the color to move to in instant mode")]
+		[Tooltip("Instant 模式下要直接切换到的颜色")]
 		[MMFEnumCondition("Mode", (int)Modes.Instant)]
 		public Color InstantColor;
 
@@ -128,6 +129,11 @@ namespace MoreMountains.Feedbacks
 				_initialInstantStartDistance = RenderSettings.fogStartDistance;
 				_initialInstantEndDistance = RenderSettings.fogEndDistance;
 				_initialInstantDensity = RenderSettings.fogDensity;
+
+				if (ColorOverTime == null)
+				{
+					ColorOverTime = new Gradient();
+				}
 			}
 		}
 

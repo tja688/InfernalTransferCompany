@@ -21,38 +21,38 @@ namespace MoreMountains.FeedbacksForThirdParty
 
 		[MMInspectorGroup("Focus Distance", true, 49)]
 		/// the curve used to animate the focus distance value on
-		[Tooltip("the curve used to animate the focus distance value on")]
+		[Tooltip("用于驱动焦点距离值变化的曲线")]
 		public AnimationCurve ShakeFocusDistance = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		public float RemapFocusDistanceZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		public float RemapFocusDistanceOne = 3f;
 
 		[MMInspectorGroup("Aperture", true, 50)]
 		/// the curve used to animate the aperture value on
-		[Tooltip("the curve used to animate the aperture value on")]
+		[Tooltip("用于驱动光圈值变化的曲线")]
 		public AnimationCurve ShakeAperture = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(0.1f, 32f)]
 		public float RemapApertureZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(0.1f, 32f)]
 		public float RemapApertureOne = 0f;
 
 		[MMInspectorGroup("Focal Length", true, 51)]
 		/// the curve used to animate the focal length value on
-		[Tooltip("the curve used to animate the focal length value on")]
+		[Tooltip("用于驱动焦距值变化的曲线")]
 		public AnimationCurve ShakeFocalLength = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(0f, 300f)]
 		public float RemapFocalLengthZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(0f, 300f)]
 		public float RemapFocalLengthOne = 0f;
         

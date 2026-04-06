@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using MoreMountains.Feedbacks;
 #if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
 using Lofelt.NiceVibrations;
@@ -11,11 +11,12 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// Add this feedback to interact with haptics at a global level, stopping them all, enabling or disabling them, adjusting their global level or initializing/release the haptic engine
 	/// </summary>
 	[AddComponentMenu("")]
+	[System.Serializable]
 	#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
 	[FeedbackPath("Haptics/Haptic Control")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.NiceVibrations")]
-	[FeedbackHelp("Add this feedback to interact with haptics at a global level, stopping them all, enabling or disabling them, adjusting their global level or initializing/release the haptic engine.")]
+	[FeedbackHelp("添加这个反馈后，可在全局层面控制 haptics：全部停止、启用或禁用、调整全局强度，或初始化/释放 haptic 引擎。")]
 	public class MMF_NVControl : MMF_Feedback
 	{
 		#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
@@ -29,11 +30,11 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public enum ControlTypes { Stop, EnableHaptics, DisableHaptics, AdjustHapticsLevel, Initialize, Release }
 
 		[MMFInspectorGroup("Haptic Control", true, 24)]
-		/// the type of control order to trigger when playing this feedback - check Nice Vibrations' documentation for the exact behaviour of these 
-		[Tooltip("the type of control order to trigger when playing this feedback - check Nice Vibrations' documentation for the exact behaviour of these")]
+		/// 播放此反馈时要执行的控制命令类型。具体行为请参考 Nice Vibrations 文档。 
+		[Tooltip("播放此反馈时要执行的控制命令类型。具体行为请参考 Nice Vibrations 文档。")]
 		public ControlTypes ControlType = ControlTypes.Stop;
-		/// the output level when in AdjustHapticsLevel mode
-		[Tooltip("the output level when in AdjustHapticsLevel mode")]
+		/// 在 AdjustHapticsLevel 模式下要设置的输出强度。
+		[Tooltip("在 AdjustHapticsLevel 模式下要设置的输出强度。")]
 		[MMFEnumCondition("ControlType", (int)ControlTypes.AdjustHapticsLevel)]
 		public float OutputLevel = 1f;
         

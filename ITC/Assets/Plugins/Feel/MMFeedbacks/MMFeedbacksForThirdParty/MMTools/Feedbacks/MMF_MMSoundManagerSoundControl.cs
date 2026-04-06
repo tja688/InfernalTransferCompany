@@ -14,8 +14,9 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("Audio/MMSoundManager Sound Control")]
-	[FeedbackHelp("This feedback will let you control a specific sound (or sounds), targeted by SoundID, which has to match the SoundID of the sound you intially played. You will need a MMSoundManager in your scene for this to work.")]
+	[FeedbackHelp("此反馈可控制一个或多个指定声音，目标通过 SoundID 匹配，而该 SoundID 必须与最初播放声音时设置的 SoundID 一致。要使其生效，场景中必须存在一个 MMSoundManager。")]
 	public class MMF_MMSoundManagerSoundControl : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -28,10 +29,10 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("MMSoundManager Sound Control", true, 30)]
 		/// the action to trigger on the specified sound
-		[Tooltip("the action to trigger on the specified sound")]
+		[Tooltip("要对指定声音触发的操作")]
 		public MMSoundManagerSoundControlEventTypes ControlMode = MMSoundManagerSoundControlEventTypes.Pause;
 		/// the ID of the sound, has to match the one you specified when playing it
-		[Tooltip("the ID of the sound, has to match the one you specified when playing it")]
+		[Tooltip("声音的 ID，必须与你播放该声音时指定的 ID 一致")]
 		public int SoundID = 0;
 
 		protected AudioSource _targetAudioSource;

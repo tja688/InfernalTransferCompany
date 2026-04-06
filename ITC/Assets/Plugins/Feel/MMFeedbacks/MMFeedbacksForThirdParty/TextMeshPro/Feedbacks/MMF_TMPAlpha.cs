@@ -1,7 +1,7 @@
-﻿using MoreMountains.Tools;
+using MoreMountains.Tools;
 using UnityEngine;
 using System.Collections;
-#if (MM_TEXTMESHPRO || MM_UGUI2)
+#if MM_UGUI2
 using TMPro;
 #endif
 using UnityEngine.Scripting.APIUpdating;
@@ -12,8 +12,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback lets you control the alpha of a target TMP over time
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback lets you control the alpha of a target TMP over time.")]
-	#if (MM_TEXTMESHPRO || MM_UGUI2)
+	[System.Serializable]
+	[FeedbackHelp("这个反馈可随时间控制目标 TMP 的透明度。")]
+	#if MM_UGUI2
 	[FeedbackPath("TextMesh Pro/TMP Alpha")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.TextMeshPro")]
@@ -22,9 +23,9 @@ namespace MoreMountains.Feedbacks
 		/// sets the inspector color for this feedback
 		#if UNITY_EDITOR
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.TMPColor; } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetTMPText be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈需要指定 TargetTMPText 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
-		#if UNITY_EDITOR && (MM_TEXTMESHPRO || MM_UGUI2)
+		#if UNITY_EDITOR && MM_UGUI2
 		public override bool EvaluateRequiresSetup() { return (TargetTMPText == null); }
 		public override string RequiredTargetText { get { return TargetTMPText != null ? TargetTMPText.name : "";  } }
 		#endif
@@ -36,54 +37,51 @@ namespace MoreMountains.Feedbacks
 		/// the duration of this feedback is the duration of the color transition, or 0 if instant
 		public override float FeedbackDuration { get { return (AlphaMode == AlphaModes.Instant) ? 0f : ApplyTimeMultiplier(Duration); } set { Duration = value; } }
 
-		#if (MM_TEXTMESHPRO || MM_UGUI2)
+		#if MM_UGUI2
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetTMPText = FindAutomatedTarget<TMP_Text>();
 		public override bool HasCustomInspectors => true;
 		
 		[MMFInspectorGroup("Target", true, 12, true)]
-		/// the TMP_Text component to control
-		[Tooltip(" TMP_Text component to control")]
+		/// the要控制的 TMP_Text 组件。
+		[Tooltip("要控制的文本组件。")]
 		public TMP_Text TargetTMPText;
 		#endif
 
 		[MMFInspectorGroup("Alpha", true, 16)]
-		/// the selected color mode :
-		/// None : nothing will happen,
-		/// gradient : evaluates the color over time on that gradient, from left to right,
-		/// interpolate : lerps from the current color to the destination one 
-		[Tooltip("the selected color mode :" +
-		         "Instant : the alpha will change instantly to the target one," +
-		         "Curve : the alpha will be interpolated along the curve," +
-		         "interpolate : lerps from the current color to the destination one ")]
+		/// 所选颜色模式：
+		/// None：不执行任何操作；
+		/// Gradient：沿渐变从左到右随时间评估颜色；
+		/// Interpolate：从当前颜色插值到目标颜色。
+		[Tooltip("所选颜色模式： 即时：透明度会立即切换到目标值； 曲线：透明度会沿曲线进行插值变化； 插值：从当前颜色插值到目标颜色。")]
 		public AlphaModes AlphaMode = AlphaModes.Interpolate;
-		/// how long the color of the text should change over time
-		[Tooltip("how long the color of the text should change over time")]
+		/// 文本颜色/数值随时间变化时的持续时间。
+		[Tooltip("文本颜色/数值随时间变化时的持续时间。")]
 		[MMFEnumCondition("AlphaMode", (int)AlphaModes.Interpolate, (int)AlphaModes.ToDestination)]
 		public float Duration = 0.2f;
-		/// the alpha to apply when in instant mode
-		[Tooltip("the alpha to apply when in instant mode")]
+		/// Instant 模式下要应用的 Alpha。
+		[Tooltip("即时模式下要应用的透明度。")]
 		[MMFEnumCondition("AlphaMode", (int)AlphaModes.Instant)]
 		public float InstantAlpha = 1f;
 
-		/// the curve to use when interpolating towards the destination alpha
-		[Tooltip("the curve to use when interpolating towards the destination alpha")]
+		/// 插值到目标 Alpha 时使用的曲线。
+		[Tooltip("插值到目标 Alpha 时使用的曲线。")]
 		public MMTweenType Curve = new MMTweenType(MMTween.MMTweenCurve.EaseInCubic, "", "AlphaMode", (int)AlphaModes.Interpolate, (int)AlphaModes.ToDestination);
-		/// the value to which the curve's 0 should be remapped
-		[Tooltip("the value to which the curve's 0 should be remapped")]
+		/// 将曲线 0 端重新映射到的值。
+		[Tooltip("将曲线 0 端重新映射到的值。")]
 		[MMFEnumCondition("AlphaMode", (int)AlphaModes.Interpolate)]
 		public float CurveRemapZero = 0f;
-		/// the value to which the curve's 1 should be remapped
-		[Tooltip("the value to which the curve's 1 should be remapped")]
+		/// 将曲线 1 端重新映射到的值。
+		[Tooltip("将曲线 1 端重新映射到的值。")]
 		[MMFEnumCondition("AlphaMode", (int)AlphaModes.Interpolate)]
 		public float CurveRemapOne = 1f;
-		/// the alpha to aim towards when in ToDestination mode
-		[Tooltip("the alpha to aim towards when in ToDestination mode")]
+		/// ToDestination 模式下要逼近的目标 Alpha。
+		[Tooltip("目的地模式下要逼近的目标漏洞。")]
 		[MMFEnumCondition("AlphaMode", (int)AlphaModes.ToDestination)]
 		public float DestinationAlpha = 1f;
 
-		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		/// 若启用，即使当前反馈仍在执行中，再次调用也会重新触发；若关闭，在本次播放结束前新的 Play 调用将被忽略。
+		[Tooltip("若启用，即使当前反馈仍在执行中，再次调用也会重新触发；若关闭，在本次播放结束前新的 Play 调用将被忽略。")] 
 		public bool AllowAdditivePlays = false;
 
 		protected float _initialAlpha;
@@ -97,7 +95,7 @@ namespace MoreMountains.Feedbacks
 		{
 			base.CustomInitialization(owner);
 
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			if (TargetTMPText == null)
 			{
 				return;
@@ -118,7 +116,7 @@ namespace MoreMountains.Feedbacks
 				return;
 			}
         
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			if (TargetTMPText == null)
 			{
 				return;
@@ -199,7 +197,7 @@ namespace MoreMountains.Feedbacks
 		/// <param name="time"></param>
 		protected virtual void SetAlpha(float time)
 		{
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			float newAlpha = 0f;
 			if (AlphaMode == AlphaModes.Interpolate)
 			{
@@ -222,7 +220,7 @@ namespace MoreMountains.Feedbacks
 			{
 				return;
 			}
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			TargetTMPText.alpha = _initialAlpha;
 			#endif
 		}

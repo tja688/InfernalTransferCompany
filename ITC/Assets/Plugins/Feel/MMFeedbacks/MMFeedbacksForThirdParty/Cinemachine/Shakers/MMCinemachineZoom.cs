@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 #if MM_CINEMACHINE
 using Cinemachine;
 #elif MM_CINEMACHINE3
@@ -23,38 +23,40 @@ namespace MoreMountains.FeedbacksForThirdParty
 		[Header("Channel")]
 		[MMFInspectorGroup("Shaker Settings", true, 3)]
 		/// whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what.
-		/// MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable
-		[Tooltip("whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what. " +
-		         "MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable")]
+		/// MMChannel 需要预先创建，但具备可读名称，后期也更容易维护和扩展。
+		[Tooltip("选择使用 int 通道还是 MMChannel ScriptableObject 通道来接收事件。int 配置更简单，但项目变大后容易混乱，不利于记忆每个数字对应什么。" +
+		         "MMChannel 需要预先创建，但具备可读名称，后期也更容易维护和扩展。")]
 		public MMChannelModes ChannelMode = MMChannelModes.Int;
-		/// the channel to listen to - has to match the one on the feedback
-		[Tooltip("the channel to listen to - has to match the one on the feedback")]
+		/// 要监听的通道，必须与反馈上发送的通道一致。
+		[Tooltip("要监听的通道，必须与反馈上发送的通道一致。")]
 		[MMFEnumCondition("ChannelMode", (int)MMChannelModes.Int)]
 		public int Channel = 0;
 		/// the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel,
-		/// right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name
-		[Tooltip("the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel, " +
-		         "right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name")]
+		/// 在 Project 视图中任意位置（通常是 Data 文件夹）右键，选择 MoreMountains > MMChannel，然后为它起一个唯一名称。
+		[Tooltip("用于监听事件的通道资源。要让目标反馈驱动这个通道器，反馈也必须引用同一个通道资源；否则将收不到事件。要创建通道资源，请在项目视图中的任何位置（通常是数据文件夹）右键，选择 更多山脉 > 通道资源，然后为它起一个唯一的名称。")]
 		[MMFEnumCondition("ChannelMode", (int)MMChannelModes.MMChannel)]
 		public MMChannel MMChannelDefinition = null;
+		/// 若启用，新的缩放事件会立即打断当前正在进行的过渡。
+		[Tooltip("若启用，新的缩放事件会立即打断当前正在进行的过渡。")]
+		public bool Interruptable = false;
 
 		[Header("Transition Speed")]
-		/// the animation curve to apply to the zoom transition
-		[Tooltip("the animation curve to apply to the zoom transition")]
+		/// 应用于缩放过渡的曲线。
+		[Tooltip("应用于缩放过渡的曲线。")]
 		public MMTweenType ZoomTween = new MMTweenType( new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(1f, 1f)));
 
 		[Header("Test Zoom")]
-		/// the mode to apply the zoom in when using the test button in the inspector
-		[Tooltip("the mode to apply the zoom in when using the test button in the inspector")]
+		/// 在 Inspector 中使用测试按钮时采用的缩放模式。
+		[Tooltip("在 Inspector 中使用测试按钮时采用的缩放模式。")]
 		public MMCameraZoomModes TestMode;
-		/// the target field of view to apply the zoom in when using the test button in the inspector
-		[Tooltip("the target field of view to apply the zoom in when using the test button in the inspector")]
+		/// 在 Inspector 中使用测试按钮时要应用的目标视野角（Field of View）。
+		[Tooltip("在 Inspector 中使用测试按钮时要应用的目标视野角（Field of View）。")]
 		public float TestFieldOfView = 30f;
-		/// the transition duration to apply the zoom in when using the test button in the inspector
-		[Tooltip("the transition duration to apply the zoom in when using the test button in the inspector")]
+		/// 在 Inspector 中使用测试按钮时的过渡持续时间。
+		[Tooltip("在 Inspector 中使用测试按钮时的过渡持续时间。")]
 		public float TestTransitionDuration = 0.1f;
-		/// the duration to apply the zoom in when using the test button in the inspector
-		[Tooltip("the duration to apply the zoom in when using the test button in the inspector")]
+		/// 在 Inspector 中使用测试按钮时的缩放持续时间。
+		[Tooltip("在 Inspector 中使用测试按钮时的缩放持续时间。")]
 		public float TestDuration = 0.05f;
 
 		[MMFInspectorButton("TestZoom")]
@@ -73,7 +75,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 		#endif
 		protected float _initialFieldOfView;
 		protected MMCameraZoomModes _mode;
-		protected bool _zooming = false;
 		protected float _startFieldOfView;
 		protected float _transitionDuration;
 		protected float _duration;
@@ -96,6 +97,8 @@ namespace MoreMountains.FeedbacksForThirdParty
 			_virtualCamera = this.gameObject.GetComponent<CinemachineCamera>();
 			_initialFieldOfView = _virtualCamera.Lens.FieldOfView;
 			#endif
+			MMCameraZoomEvent.Register(OnCameraZoomEvent);
+			this.enabled = false;
 		}	
         
 		/// <summary>
@@ -103,11 +106,6 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// </summary>
 		protected virtual void Update()
 		{
-			if (!_zooming)
-			{
-				return;
-			}
-
 			_elapsedTime = GetTime() - _zoomStartedAt;
 			if (_elapsedTime <= _transitionDuration)
 			{
@@ -137,7 +135,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 				}
 				else
 				{
-					_zooming = false;
+					this.enabled = false;
 				}   
 			}
 		}
@@ -151,12 +149,12 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// <param name="duration"></param>
 		public virtual void Zoom(MMCameraZoomModes mode, float newFieldOfView, float transitionDuration, float duration, bool useUnscaledTime, bool relative = false, MMTweenType tweenType = null)
 		{
-			if (_zooming)
+			if (this.enabled && !Interruptable)
 			{
 				return;
 			}
 
-			_zooming = true;
+			this.enabled = true;
 			_elapsedTime = 0f;
 			_mode = mode;
 
@@ -220,7 +218,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 			}
 			if (stop)
 			{
-				_zooming = false;
+				this.enabled = false;
 				return;
 			}
 			if (restore)
@@ -236,17 +234,9 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Starts listening for MMCameraZoomEvents
-		/// </summary>
-		protected virtual void OnEnable()
-		{
-			MMCameraZoomEvent.Register(OnCameraZoomEvent);
-		}
-
-		/// <summary>
 		/// Stops listening for MMCameraZoomEvents
 		/// </summary>
-		protected virtual void OnDisable()
+		protected virtual void OnDestroy()
 		{
 			MMCameraZoomEvent.Unregister(OnCameraZoomEvent);
 		}

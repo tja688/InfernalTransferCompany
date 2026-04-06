@@ -11,8 +11,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will let you pilot a MMPlaylist
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you pilot a MMPlaylist")]
+	[FeedbackHelp("此反馈可用于控制一个 MMPlaylist。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("Audio/MMPlaylist")]
 	public class MMF_Playlist : MMF_Feedback
 	{
@@ -29,26 +30,26 @@ namespace MoreMountains.Feedbacks
  
 		[MMFInspectorGroup("MMPlaylist", true, 13)]
 		/// the action to call on the playlist
-		[Tooltip("the action to call on the playlist")]
+		[Tooltip("要对播放列表执行的操作")]
 		public Modes Mode = Modes.PlayNext;
 		/// the index of the song to play
-		[Tooltip("the index of the song to play")]
+		[Tooltip("要播放的歌曲索引")]
 		[MMEnumCondition("Mode", (int)Modes.PlaySongAt)]
 		public int SongIndex = 0;
 		/// the volume multiplier to apply
-		[Tooltip("the volume multiplier to apply")]
+		[Tooltip("要应用的音量倍率")]
 		[MMEnumCondition("Mode", (int)Modes.SetVolumeMultiplier)]
 		public float VolumeMultiplier = 1f;
 		/// whether to apply the volume multiplier instantly (true) or only when the next song starts playing (false)
-		[Tooltip("whether to apply the volume multiplier instantly (true) or only when the next song starts playing (false)")]
+		[Tooltip("是否立即应用音量倍率（true）；若关闭，则会等到下一首歌开始播放时才生效（false）")]
 		[MMEnumCondition("Mode", (int)Modes.SetVolumeMultiplier)]
 		public bool ApplyVolumeMultiplierInstantly = false;
 		/// in change playlist mode, the playlist to which to switch to. Only works with MMSMPlaylistManager
-		[Tooltip("in change playlist mode, the playlist to which to switch to. Only works with MMSMPlaylistManager")]
+		[Tooltip("在 change playlist 模式下，要切换到的播放列表。仅对 MMSMPlaylistManager 生效")]
 		[MMEnumCondition("Mode", (int)Modes.ChangePlaylist)]
 		public MMSMPlaylist NewPlaylist;
 		/// in change playlist mode, whether or not to play the new playlist after the switch. Only works with MMSMPlaylistManager
-		[Tooltip("in change playlist mode, whether or not to play the new playlist after the switch. Only works with MMSMPlaylistManager")]
+		[Tooltip("在 change playlist 模式下，切换后是否立刻播放新播放列表。仅对 MMSMPlaylistManager 生效")]
 		[MMEnumCondition("Mode", (int)Modes.ChangePlaylist)]
 		public bool ChangePlaylistAndPlay = true;
         

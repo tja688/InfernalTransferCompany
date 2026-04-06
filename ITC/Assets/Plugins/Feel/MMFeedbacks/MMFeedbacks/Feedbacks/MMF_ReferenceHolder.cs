@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Tools;
@@ -12,8 +12,9 @@ namespace MoreMountains.Feedbacks
 	/// It doesn't do anything when played. 
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to hold a reference, that can then be used by other feedbacks to automatically set their target. It doesn't do anything when played.")]
+	[FeedbackHelp("此反馈可让你保存一个引用，供其他反馈自动拿来设置目标。它在播放时本身不会执行任何可见操作。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Feedbacks/MMF Reference Holder")]
 	public class MMF_ReferenceHolder : MMF_Feedback
 	{
@@ -31,10 +32,10 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("References", true, 37, true)]
 		/// the game object to set as the target (or on which to look for a specific component as a target) of all feedbacks that may look at this reference holder for a target
-		[Tooltip("the game object to set as the target (or on which to look for a specific component as a target) of all feedbacks that may look at this reference holder for a target")] 
+		[Tooltip("设置为所有反馈的目标（或在其上寻找特定组件作为目标）的游戏对象，这些反馈可能会查看此参考持有者的目标")] 
 		public GameObject GameObjectReference;
 		/// whether or not to force this reference holder on all compatible feedbacks in the MMF Player's list
-		[Tooltip("whether or not to force this reference holder on all compatible feedbacks in the MMF Player's list")] 
+		[Tooltip("是否在 MMF 播放器列表中的所有兼容反馈上强制使用此引用持有者")] 
 		public bool ForceReferenceOnAll = false;
 		
 		/// <summary>
@@ -69,3 +70,5 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+
+

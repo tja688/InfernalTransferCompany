@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 #if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
 using Lofelt.NiceVibrations;
 #endif
@@ -12,23 +12,23 @@ namespace MoreMountains.FeedbacksForThirdParty
 	public class MMFeedbackNVSettings
 	{
 		#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
-		/// whether or not to force this haptic to play on a specific gamepad
-		[Tooltip("whether or not to force this haptic to play on a specific gamepad")]
+		/// 是否强制在指定的 gamepad 上播放这个 haptic。
+		[Tooltip("是否强制在指定的 gamepad 上播放这个 haptic。")]
 		public bool ForceGamepadID = false;
-		/// The ID of the gamepad on which to play this haptic
-		[Tooltip("The ID of the gamepad on which to play this haptic")]
+		/// 要在其上播放此 haptic 的 gamepad ID。
+		[Tooltip("要在其上播放此触觉的游戏手柄编号。")]
 		public int GamepadID = 0;
-		/// whether or not this haptic should play only if haptics are supported
-		[Tooltip("whether or not this haptic should play only if haptics are supported")]
+		/// 是否仅在设备支持 haptics 时才播放该 haptic。
+		[Tooltip("是否仅在设备支持 haptics 时才播放该 haptic。")]
 		public bool OnlyPlayIfHapticsSupported = true;
-		/// whether or not this haptic should play only if advanced haptics requirements are met on the device
-		[Tooltip("whether or not this haptic should play only if advanced haptics requirements are met on the device")]
+		/// 是否仅在设备满足高级 haptics 要求时才播放该 haptic。
+		[Tooltip("是否仅在设备满足高级 haptics 要求时才播放该 haptic。")]
 		public bool OnlyPlayIfAdvancedRequirementsMet = false;
-		/// whether or not this haptic should play only if the device supports amplitude modulation
-		[Tooltip("whether or not this haptic should play only if the device supports amplitude modulation")]
+		/// 是否仅在设备支持 amplitude modulation 时才播放该 haptic。
+		[Tooltip("是否仅在设备支持 amplitude modulation 时才播放该 haptic。")]
 		public bool OnlyPlayIfAmplitudeModulationSupported = false;
-		/// whether or not this haptic should play only if the device supports frequency modulation
-		[Tooltip("whether or not this haptic should play only if the device supports frequency modulation")]
+		/// 是否仅在设备支持 frequency modulation 时才播放该 haptic。
+		[Tooltip("是否仅在设备支持 frequency modulation 时才播放该 haptic。")]
 		public bool OnlyPlayIfFrequencyModulationSupported = false;
 
 		/// <summary>

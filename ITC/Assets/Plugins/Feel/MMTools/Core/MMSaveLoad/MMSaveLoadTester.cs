@@ -24,25 +24,25 @@ namespace MoreMountains.Tools
 		[Header("Bindings")]
 		#if MM_UI
 		/// the text to save
-		[Tooltip("the text to save")]
+		[Tooltip("要保存的文本")]
 		public InputField TargetInputField;
 		#endif
 
 		[Header("Save settings")]
 		/// the chosen save method (json, encrypted json, binary, encrypted binary)
-		[Tooltip("the chosen save method (json, encrypted json, binary, encrypted binary)")]
+		[Tooltip("选择的保存方式（json、加密json、二进制、加密二进制）")]
 		public MMSaveLoadManagerMethods SaveLoadMethod = MMSaveLoadManagerMethods.Binary;
 		/// the name of the file to save
-		[Tooltip("the name of the file to save")]
+		[Tooltip("要保存的文件名")]
 		public string FileName = "TestObject";
 		/// the name of the destination folder
-		[Tooltip("the name of the destination folder")]
+		[Tooltip("目标文件夹名称")]
 		public string FolderName = "MMTest/";
 		/// the extension to use
-		[Tooltip("the extension to use")]
+		[Tooltip("使用的文件扩展名")]
 		public string SaveFileExtension = ".testObject";
 		/// the key to use to encrypt the file (if needed)
-		[Tooltip("the key to use to encrypt the file (if needed)")]
+		[Tooltip("用于文件加密的密钥（启用加密时生效）")]
 		public string EncryptionKey = "ThisIsTheKey";
 
 		/// Test button

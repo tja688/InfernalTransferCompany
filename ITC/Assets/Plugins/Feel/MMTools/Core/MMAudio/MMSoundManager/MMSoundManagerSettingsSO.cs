@@ -16,27 +16,27 @@ namespace MoreMountains.Tools
 	{
 		[Header("Audio Mixer")] 
 		/// the audio mixer to use when playing sounds 
-		[Tooltip("the audio mixer to use when playing sounds")]
+		[Tooltip("播放声音时使用的音频混合器")]
 		public AudioMixer TargetAudioMixer;
 		/// the master group
-		[Tooltip("the master group")]
+		[Tooltip("大师包")]
 		public AudioMixerGroup MasterAudioMixerGroup;
 		/// the group on which to play all music sounds
-		[Tooltip("the group on which to play all music sounds")]
+		[Tooltip("用于播放所有音乐声音的分组")]
 		public AudioMixerGroup MusicAudioMixerGroup;
 		/// the group on which to play all sound effects
-		[Tooltip("the group on which to play all sound effects")]
+		[Tooltip("用于播放所有音效（SFX）的分组")]
 		public AudioMixerGroup SfxAudioMixerGroup;
 		/// the group on which to play all UI sounds
-		[Tooltip("the group on which to play all UI sounds")]
+		[Tooltip("用于播放所有 UI 声音的分组")]
 		public AudioMixerGroup UIAudioMixerGroup;
 		/// the multiplier to apply when converting normalized volume values to audio mixer values
-		[Tooltip("the multiplier to apply when converting normalized volume values to audio mixer values")]
+		[Tooltip("将标准化音量值转换为 Audio Mixer 参数值时使用的乘数")]
 		public float MixerValuesMultiplier = 20;
         
 		[Header("Settings Unfold")]
 		/// the full settings for this MMSoundManager
-		[Tooltip("the full settings for this MMSoundManager")]
+		[Tooltip("多媒体声音管理器 的完整设置")]
 		public MMSoundManagerSettings Settings;
 
 		protected const string _saveFolderName = "MMSoundManager/";

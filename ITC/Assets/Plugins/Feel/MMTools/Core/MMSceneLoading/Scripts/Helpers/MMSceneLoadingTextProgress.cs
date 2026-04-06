@@ -12,13 +12,13 @@ namespace MoreMountains.Tools
 	public class MMSceneLoadingTextProgress : MonoBehaviour
 	{
 		/// the value to which the progress' zero value should be remapped to
-		[Tooltip("the value to which the progress' zero value should be remapped to")]
+		[Tooltip("进度值为 0 时要重映射到的显示值")]
 		public float RemapMin = 0f;
 		/// the value to which the progress' one value should be remapped to
-		[Tooltip("the value to which the progress' one value should be remapped to")]
+		[Tooltip("进度值为 1 时要重映射到的显示值")]
 		public float RemapMax = 100f;
 		/// the amount of decimals to display
-		[Tooltip("the amount of decimals to display")]
+		[Tooltip("显示的小数位数")]
 		public int NumberOfDecimals = 0;
 
 		protected Text _text;

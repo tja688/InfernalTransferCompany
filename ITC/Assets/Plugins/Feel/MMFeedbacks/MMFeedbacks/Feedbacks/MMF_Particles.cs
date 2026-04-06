@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions;
 using Random = UnityEngine.Random;
 using UnityEngine.Scripting.APIUpdating;
 
@@ -12,8 +9,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will play the associated particles system on play, and stop it on stop
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will simply play the specified ParticleSystem (from your scene) when played.")]
+	[FeedbackHelp("此反馈可在播放时控制场景中的 ParticleSystem（Play / Stop / Pause / Emit）。你可以指定主粒子系统，也可以提供随机粒子系统列表；当随机列表不为空时，每次会优先从列表中随机选择一个执行。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Particles/Particles Play")]
 	public class MMF_Particles : MMF_Feedback
 	{
@@ -28,51 +26,51 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.ParticlesColor; } }
 		public override bool EvaluateRequiresSetup() { return (BoundParticleSystem == null); }
 		public override string RequiredTargetText { get { return BoundParticleSystem != null ? BoundParticleSystem.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a BoundParticleSystem be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先设置 BoundParticleSystem 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 		
 		public enum Modes { Play, Stop, Pause, Emit }
 
 		[MMFInspectorGroup("Bound Particles", true, 41, true)]
 		/// whether to Play, Stop or Pause the target particle system when that feedback is played
-		[Tooltip("whether to Play, Stop or Pause the target particle system when that feedback is played")]
+		[Tooltip("播放模式：播放/停止/暂停/发射。仅在发射模式下会使用发射计数。")]
 		public Modes Mode = Modes.Play;
-		/// in Emit mode, the amount of particles per emit
-		[Tooltip("in Emit mode, the amount of particles per emit")]
+		/// 在 Emit 模式下，每次发射的粒子数量
+		[Tooltip("在 Emit 模式下，每次发射的粒子数量")]
 		[MMFEnumCondition("Mode", (int)Modes.Emit)]
 		public int EmitCount = 100;
 		/// the particle system to play with this feedback
-		[Tooltip("the particle system to play with this feedback")]
+		[Tooltip("要控制的粒子系统")]
 		public ParticleSystem BoundParticleSystem;
-		/// a list of (optional) particle systems 
-		[Tooltip("a list of (optional) particle systems")]
+		/// 可选的额外 ParticleSystem 列表 
+		[Tooltip("可选随机粒子系统列表。若列表不为空，每次会从该列表随机选取一个执行，BoundParticleSystem 将不参与本次执行。")]
 		public List<ParticleSystem> RandomParticleSystems;
 		/// if this is true, the particles will be moved to the position passed in parameters
-		[Tooltip("if this is true, the particles will be moved to the position passed in parameters")]
+		[Tooltip("若开启，会把粒子系统移动到传入位置。注意：Emit 模式下不会移动 Transform，而是把该位置写入 Emit 参数。")]
 		public bool MoveToPosition = false;
 		/// if this is true, the particle system's object will be set active on play
-		[Tooltip("if this is true, the particle system's object will be set active on play")]
+		[Tooltip("若开启，播放前会强制激活目标粒子系统对象。")]
 		public bool ActivateOnPlay = false;
 		/// if this is true, the particle system will be stopped on initialization
-		[Tooltip("if this is true, the particle system will be stopped on initialization")]
+		[Tooltip("若开启，初始化时会先停止粒子系统。")]
 		public bool StopSystemOnInit = true;
 		/// if this is true, the particle system will be stopped on reset
-		[Tooltip("if this is true, the particle system will be stopped on reset")]
+		[Tooltip("若开启，反馈 Reset 时会停止粒子系统。")]
 		public bool StopSystemOnReset = true;
 		/// if this is true, the particle system will be stopped on feedback stop
-		[Tooltip("if this is true, the particle system will be stopped on feedback stop")]
+		[Tooltip("若开启，反馈 Stop 时会停止粒子系统。")]
 		public bool StopSystemOnStopFeedback = true;
 
 		/// the duration for the player to consider. This won't impact your particle system, but is a way to communicate to the MMF Player the duration of this feedback. Usually you'll want it to match your actual particle system, and setting it can be useful to have this feedback work with holding pauses.
-		[Tooltip("the duration for the player to consider. This won't impact your particle system, but is a way to communicate to the MMF Player the duration of this feedback. Usually you'll want it to match your actual particle system, and setting it can be useful to have this feedback work with holding pauses.")]
+		[Tooltip("供播放器参考的持续时间。它不会直接影响你的粒子系统，而是用于向 MMF_Player 声明此反馈应持续多久。通常建议将其设置为与你的实际粒子时长一致，这样在使用 Holding Pause 时才能正确协同工作。")]
 		public float DeclaredDuration = 0f;
 
 		[MMFInspectorGroup("Simulation Speed", true, 43, false)]
 		/// whether or not to force a specific simulation speed on the target particle system(s)
-		[Tooltip("whether or not to force a specific simulation speed on the target particle system(s)")]
+		[Tooltip("是否强制目标粒子系统使用指定的 Simulation Speed。")]
 		public bool ForceSimulationSpeed = false;
 		/// The min and max values at which to randomize the simulation speed, if ForceSimulationSpeed is true. A new value will be randomized every time this feedback plays
-		[Tooltip("The min and max values at which to randomize the simulation speed, if ForceSimulationSpeed is true. A new value will be randomized every time this feedback plays")]
+		[Tooltip("仅在 ForceSimulationSpeed 开启时生效：Simulation Speed 会在该范围内随机，每次播放都会重新随机。")]
 		[MMFCondition("ForceSimulationSpeed", true)]
 		public Vector2 ForcedSimulationSpeed = new Vector2(0.1f,1f);
 
@@ -85,6 +83,10 @@ namespace MoreMountains.Feedbacks
 		protected override void CustomInitialization(MMF_Player owner)
 		{
 			base.CustomInitialization(owner);
+			if (RandomParticleSystems == null)
+			{
+				RandomParticleSystems = new List<ParticleSystem>();
+			}
 			if (StopSystemOnInit)
 			{
 				StopParticles();
@@ -229,3 +231,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

@@ -17,18 +17,18 @@ namespace MoreMountains.Feedbacks
 	[ExecuteAlways]
 	public abstract class MMFeedback : MonoBehaviour
 	{
-		/// whether or not this feedback is active
-		[Tooltip("whether or not this feedback is active")]
+		/// 此 feedback 是否启用。
+		[Tooltip("此反馈是否启用。")]
 		public bool Active = true;
-		/// the name of this feedback to display in the inspector
-		[Tooltip("the name of this feedback to display in the inspector")]
+		/// 此 feedback 在 Inspector 中显示的名称。
+		[Tooltip("此反馈在 Inspector 中显示的名称。")]
 		public string Label = "MMFeedback";
-		/// the chance of this feedback happening (in percent : 100 : happens all the time, 0 : never happens, 50 : happens once every two calls, etc)
-		[Tooltip("the chance of this feedback happening (in percent : 100 : happens all the time, 0 : never happens, 50 : happens once every two calls, etc)")]
+		/// 此 feedback 的触发概率（百分比）。`100` 表示每次都触发，`0` 表示永不触发，`50` 大致表示两次触发中出现一次。
+		[Tooltip("此反馈的触发概率（百分比）。`100` 表示每次都触发，`0` 表示永不触发，`50` 大致表示两次触发中出现一次。")]
 		[Range(0,100)]
 		public float Chance = 100f;
-		/// a number of timing-related values (delay, repeat, etc)
-		[Tooltip("a number of timing-related values (delay, repeat, etc)")]
+		/// 与时间相关的一组设置，例如延迟、重复等。
+		[Tooltip("与时间相关的一组设置，例如延迟、重复等。")]
 		public MMFeedbackTiming Timing;
 		/// the Owner of the feedback, as defined when calling the Initialization method
 		public GameObject Owner { get; set; }

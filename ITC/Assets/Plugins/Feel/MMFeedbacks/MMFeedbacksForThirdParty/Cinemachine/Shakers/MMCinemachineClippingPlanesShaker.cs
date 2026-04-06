@@ -27,25 +27,25 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public bool RelativeClippingPlanes = false;
 
 		[MMInspectorGroup("Near Plane", true, 46)]
-		/// the curve used to animate the intensity value on
-		[Tooltip("the curve used to animate the intensity value on")]
+		/// 用于驱动 Near Clip Plane 变化的曲线。
+		[Tooltip("用于驱动近剪辑平面变化的曲线。")]
 		public AnimationCurve ShakeNear = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
-		/// the value to remap the curve's 0 to        
-		[Tooltip("the value to remap the curve's 0 to")]
+		/// 将曲线 0 端重新映射到的值。        
+		[Tooltip("将曲线 0 端重新映射到的值。")]
 		public float RemapNearZero = 0.3f;
-		/// the value to remap the curve's 1 to        
-		[Tooltip("the value to remap the curve's 1 to")]
+		/// 将曲线 1 端重新映射到的值。        
+		[Tooltip("将曲线 1 端重新映射到的值。")]
 		public float RemapNearOne = 100f;
 
 		[MMInspectorGroup("Far Plane", true, 47)]
-		/// the curve used to animate the intensity value on
-		[Tooltip("the curve used to animate the intensity value on")]
+		/// 用于驱动 Far Clip Plane 变化的曲线。
+		[Tooltip("用于驱动远剪平面 变化的曲线。")]
 		public AnimationCurve ShakeFar = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
-		/// the value to remap the curve's 0 to        
-		[Tooltip("the value to remap the curve's 0 to")]
+		/// 将曲线 0 端重新映射到的值。        
+		[Tooltip("将曲线 0 端重新映射到的值。")]
 		public float RemapFarZero = 1000f;
-		/// the value to remap the curve's 1 to        
-		[Tooltip("the value to remap the curve's 1 to")]
+		/// 将曲线 1 端重新映射到的值。        
+		[Tooltip("将曲线 1 端重新映射到的值。")]
 		public float RemapFarOne = 1000f;
 
 		#if MM_CINEMACHINE

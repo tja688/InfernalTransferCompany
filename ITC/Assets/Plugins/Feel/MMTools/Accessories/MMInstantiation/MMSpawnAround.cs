@@ -15,78 +15,78 @@ namespace MoreMountains.Tools
 		public enum MMSpawnAroundShapes { Sphere, Cube }
 		/// the shape within which objects should spawn
 		[Header("Shape")] 
-		[Tooltip("the shape within which objects should spawn")]
+		[Tooltip("区域生成形状（球体或立方体）")]
 		public MMSpawnAroundShapes Shape = MMSpawnAroundShapes.Sphere;
 
 		[Header("Position")]
 		/// the minimum distance to the origin of the spawn at which objects can be spawned
-		[Tooltip("the minimum distance to the origin of the spawn at which objects can be spawned")]
+		[Tooltip("Sphere 模式下，生成位置到原点的最小半径")]
 		[MMEnumCondition("Shape", (int)MMSpawnAroundShapes.Sphere)]
 		public float MinimumSphereRadius = 1f;
 		/// the maximum distance to the origin of the spawn at which objects can be spawned
-		[Tooltip("the maximum distance to the origin of the spawn at which objects can be spawned")]
+		[Tooltip("Sphere 模式下，生成位置到原点的最大半径")]
 		[MMEnumCondition("Shape", (int)MMSpawnAroundShapes.Sphere)]
 		public float MaximumSphereRadius = 2f;
 		/// the minimum size of the cube's base
-		[Tooltip("the minimum size of the cube's base")]
+		[Tooltip("Cube 模式下立方体范围的最小尺寸")]
 		[MMEnumCondition("Shape", (int)MMSpawnAroundShapes.Cube)]
 		public Vector3 MinimumCubeBaseSize = Vector3.one;
 		/// the maximum size of the cube's base
-		[Tooltip("the maximum size of the cube's base")]
+		[Tooltip("Cube 模式下立方体范围的最大尺寸")]
 		[MMEnumCondition("Shape", (int)MMSpawnAroundShapes.Cube)]
 		public Vector3 MaximumCubeBaseSize = new Vector3(2f, 2f, 2f);
 
 		[Header("Plane")] 
 		/// if this is true, spawn will be constrained to the plane defined by the NormalToSpawnPlane property
-		[Tooltip("if this is true, spawn will be constrained to the plane defined by the NormalToSpawnPlane property")]
+		[Tooltip("是否将生成位置限制在指定平面上。开启后会按 NormalToSpawnPlane 约束，关闭则该法线仅用于法线轴偏移")]
 		public bool ForcePlane = true;
 		/// a Vector3 that specifies the normal to the plane you want to spawn objects on (if you want to spawn objects on the x/z plane, the normal to that plane would be the y axis (0,1,0)
-		[Tooltip("a Vector3 that specifies the normal to the plane you want to spawn objects on (if you want to spawn objects on the x/z plane, the normal to that plane would be the y axis (0,1,0)")]
+		[Tooltip("生成平面的法线方向。例如要在 XZ 平面生成，法线应为 (0,1,0)")]
 		public Vector3 NormalToSpawnPlane = Vector3.up;
 
 		[Header("NormalAxisOffset")]
 		/// the minimum offset to apply on the normal axis
-		[Tooltip("the minimum offset to apply on the normal axis")]
+		[Tooltip("沿法线轴施加的最小偏移量")]
 		public float MinimumNormalAxisOffset = 0f;
 		/// the maximum offset to apply on the normal axis
-		[Tooltip("the maximum offset to apply on the normal axis")]
+		[Tooltip("沿法线轴施加的最大偏移量")]
 		public float MaximumNormalAxisOffset = 0f;
 
 		[Header("NormalAxisOffsetCurve")]
 		/// whether or not to use a curve to offset the object's spawn position along the spawn plane
-		[Tooltip("whether or not to use a curve to offset the object's spawn position along the spawn plane")]
+		[Tooltip("是否使用曲线重映射平面内的生成距离。开启后下方曲线与 Remap 参数会生效")]
 		public bool UseNormalAxisOffsetCurve = false;
 		/// a curve used to define how distance to the origin should be altered (potentially above min/max distance)
-		[Tooltip("a curve used to define how distance to the origin should be altered (potentially above min/max distance)")]
+		[Tooltip("用于调整到原点距离的曲线（重映射后结果可能超出最小/最大半径）")]
 		[MMCondition("UseNormalAxisOffsetCurve",true)]
 		public AnimationCurve NormalOffsetCurve = new AnimationCurve(new Keyframe(0, 1f), new Keyframe(1, 1f));
 		/// the value to which the curve's zero should be remapped to
-		[Tooltip("the value to which the curve's zero should be remapped to")]
+		[Tooltip("曲线值 0 重映射到的目标值")]
 		[MMCondition("UseNormalAxisOffsetCurve",true)]
 		public float NormalOffsetCurveRemapZero = 0f;
 		/// the value to which the curve's one should be remapped to
-		[Tooltip("the value to which the curve's one should be remapped to")]
+		[Tooltip("曲线值 1 重映射到的目标值")]
 		[MMCondition("UseNormalAxisOffsetCurve",true)]
 		public float NormalOffsetCurveRemapOne = 1f;
 		/// whether or not to invert the curve (horizontally)
-		[Tooltip("whether or not to invert the curve (horizontally)")]
+		[Tooltip("是否水平反转曲线输入（0->1，1->0）")]
 		[MMCondition("UseNormalAxisOffsetCurve",true)]
 		public bool InvertNormalOffsetCurve = false;
 
 		[Header("Rotation")]
 		/// the minimum random rotation to apply (in degrees)
-		[Tooltip("the minimum random rotation to apply (in degrees)")]
+		[Tooltip("随机旋转的最小欧拉角（度）")]
 		public Vector3 MinimumRotation = Vector3.zero;
 		/// the maximum random rotation to apply (in degrees)
-		[Tooltip("the maximum random rotation to apply (in degrees)")]
+		[Tooltip("随机旋转的最大欧拉角（度）")]
 		public Vector3 MaximumRotation = Vector3.zero;
 
 		[Header("Scale")]
 		/// the minimum random scale to apply
-		[Tooltip("the minimum random scale to apply")]
+		[Tooltip("随机缩放的最小值")]
 		public Vector3 MinimumScale = Vector3.one;
 		/// the maximum random scale to apply
-		[Tooltip("the maximum random scale to apply")]
+		[Tooltip("随机缩放的最大值")]
 		public Vector3 MaximumScale = Vector3.one;
 	}
     

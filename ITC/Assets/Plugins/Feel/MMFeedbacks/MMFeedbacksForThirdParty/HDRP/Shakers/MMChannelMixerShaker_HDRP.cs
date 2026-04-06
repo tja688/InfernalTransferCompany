@@ -22,40 +22,40 @@ namespace MoreMountains.FeedbacksForThirdParty
 
 		[MMInspectorGroup("Red", true, 42)]
 		/// the curve used to animate the red value on
-		[Tooltip("the curve used to animate the red value on")]
+		[Tooltip("用于驱动红色通道数值变化的曲线")]
 		public AnimationCurve ShakeRed = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(-200f, 200f)]
 		public float RemapRedZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-200f, 200f)]
 		public float RemapRedOne = 200f;
 
 		[MMInspectorGroup("Green", true, 43)]
 		/// the curve used to animate the green value on
-		[Tooltip("the curve used to animate the green value on")]
+		[Tooltip("用于驱动绿色通道数值变化的曲线")]
 		public AnimationCurve ShakeGreen = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(-200f, 200f)]
 		public float RemapGreenZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-200f, 200f)]
 		public float RemapGreenOne = 200f;
 
 		[MMInspectorGroup("Blue", true, 44)]
 		/// the curve used to animate the blue value on
-		[Tooltip("the curve used to animate the blue value on")]
+		[Tooltip("用于驱动蓝色通道数值变化的曲线")]
 		public AnimationCurve ShakeBlue = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(-200f, 200f)]
 		public float RemapBlueZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-200f, 200f)]
 		public float RemapBlueOne = 200f;
         

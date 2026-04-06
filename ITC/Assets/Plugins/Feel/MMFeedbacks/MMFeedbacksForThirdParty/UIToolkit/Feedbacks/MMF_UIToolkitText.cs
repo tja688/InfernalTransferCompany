@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -8,17 +8,18 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you change the text an element on a target UI Document
+	/// 这个反馈可修改目标 UI Document 中元素的文本内容。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the text an element on a target UI Document")]
+	[FeedbackHelp("这个反馈可修改目标 UI Document 中元素的文本内容。")]
+	[System.Serializable]
 	[FeedbackPath("UI Toolkit/UITK Text")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitText : MMF_UIToolkit
 	{
 		[Header("Text")]
-		/// the new text to set on the target object(s)
-		[Tooltip("the new text to set on the target object(s)")]
+		/// 要设置到目标对象上的新文本。
+		[Tooltip("要设置到目标对象上的新文本。")]
 		public string NewText = "";
 
 		protected string _initialText;

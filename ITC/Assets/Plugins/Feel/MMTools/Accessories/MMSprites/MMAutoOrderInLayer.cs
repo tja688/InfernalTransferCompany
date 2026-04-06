@@ -13,19 +13,19 @@ namespace MoreMountains.Tools
 		static int CurrentMaxCharacterOrderInLayer = 0;
 
 		[Header("Global Counter")]
-		[MMInformation("Add this component to an object with a sprite renderer, and it'll give it a new order in layer based on the settings defined here. First is the global counter increment, or how much you'd like to increment the layer order between two objects on that same layer.",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("把这个组件挂到带有 SpriteRenderer 的对象上后，它会根据这里的设置为对象分配新的 Order in Layer。首先是全局计数递增值，也就是同一 Sorting Layer 中相邻两个对象之间希望增加多少排序值。",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
 		/// the number by which to increment each new object's order in layer
 		public int GlobalCounterIncrement = 5;
 
 		[Header("Parent")]
-		[MMInformation("You can also decide to determine the new layer order based on the parent sprite's order (it'll have to be on the same layer).",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("你也可以选择基于父级 Sprite 的排序值来决定新的 Order in Layer（前提是它们位于同一个 Sorting Layer）。",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
 		/// if this is true, the new order in layer value will be based on the highest order value found on a parent with a similar sorting layer
 		public bool BasedOnParentOrder = false;
 		/// if BasedOnParentOrder is true, the new value will be the parent's order value + this value
 		public int ParentIncrement = 1;
 
 		[Header("Children")]
-		[MMInformation("And here you can decide to apply your new layer order to all children.",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation("在这里你可以决定是否把新的 Order in Layer 同步应用到所有子对象。",MoreMountains.Tools.MMInformationAttribute.InformationType.Info,false)]
 		/// if this is true, the new order value will be passed to all children with a similar sorting layer
 		public bool ApplyNewOrderToChildren = false;
 		/// the value by which the new order value should be incremented to pass it to children

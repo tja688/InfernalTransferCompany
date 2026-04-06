@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,8 +10,9 @@ namespace MoreMountains.Feedbacks
 	/// Turns an object active or inactive at the various stages of the feedback
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to set global properties on your shader, or enable/disable keywords.")]
+	[FeedbackHelp("此反馈可让你设置 Shader 的全局属性，或启用/禁用关键字。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Renderer/Shader Global")]
 	public class MMF_ShaderGlobal : MMF_Feedback
 	{
@@ -27,42 +28,42 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Shader Global", true, 24)]
 		/// the selected mode for this feedback
-		[Tooltip("the selected mode for this feedback")]
+		[Tooltip("此反馈当前选择的模式")]
 		public Modes Mode = Modes.SetGlobalFloat;
-		/// the name of the global property
-		[Tooltip("the name of the global property")]
+		/// 全局属性名
+		[Tooltip("全局属性名")]
 		[MMFEnumCondition("Mode", (int)Modes.SetGlobalColor, (int)Modes.SetGlobalFloat, (int)Modes.SetGlobalInt, (int)Modes.SetGlobalMatrix, (int)Modes.SetGlobalTexture, (int)Modes.SetGlobalVector)]
 		public string PropertyName = "";
-		/// the name ID of the property retrieved by Shader.PropertyToID
-		[Tooltip("the name ID of the property retrieved by Shader.PropertyToID")]
+		/// 通过 Shader.PropertyToID 获取的属性 ID
+		[Tooltip("通过 着色器.属性到编号 获取的属性编号")]
 		[MMFEnumCondition("Mode", (int)Modes.SetGlobalColor, (int)Modes.SetGlobalFloat, (int)Modes.SetGlobalInt, (int)Modes.SetGlobalMatrix, (int)Modes.SetGlobalTexture, (int)Modes.SetGlobalVector)]
 		public int PropertyNameID = 0;
-		/// a global color property for all shaders
-		[Tooltip("a global color property for all shaders")]
+		/// 写入 Shader 全局 Color 属性
+		[Tooltip("写入 着色器 全局颜色属性")]
 		[MMFEnumCondition("Mode", (int)Modes.SetGlobalColor)]
 		public Color GlobalColor = Color.yellow;
-		/// a global float property for all shaders
-		[Tooltip("a global float property for all shaders")] 
+		/// 写入 Shader 全局 Float 属性
+		[Tooltip("写入 着色器 全局 漂浮 属性")] 
 		[MMFEnumCondition("Mode", (int)Modes.SetGlobalFloat)]
 		public float GlobalFloat = 1f;
-		/// a global int property for all shaders
-		[Tooltip("a global int property for all shaders")] 
+		/// 写入 Shader 全局 Int 属性
+		[Tooltip("写入 着色器 全局 Int 属性")] 
 		[MMFEnumCondition("Mode", (int)Modes.SetGlobalInt)]
 		public int GlobalInt = 1;
-		/// a global matrix property for all shaders
-		[Tooltip("a global matrix property for all shaders")] 
+		/// 写入 Shader 全局 Matrix 属性
+		[Tooltip("写入着色器全局矩阵属性")] 
 		[MMFEnumCondition("Mode", (int)Modes.SetGlobalMatrix)]
 		public Matrix4x4 GlobalMatrix = Matrix4x4.identity;
-		/// a global texture property for all shaders
-		[Tooltip("a global texture property for all shaders")] 
+		/// 写入 Shader 全局 Texture 属性
+		[Tooltip("写入 着色器 全局纹理属性")] 
 		[MMFEnumCondition("Mode", (int)Modes.SetGlobalTexture)]
 		public RenderTexture GlobalTexture;
-		/// a global vector property for all shaders
-		[Tooltip("a global vector property for all shaders")] 
+		/// 写入 Shader 全局 Vector 属性
+		[Tooltip("写入 着色器 全局向量属性")] 
 		[MMFEnumCondition("Mode", (int)Modes.SetGlobalVector)]
 		public Vector4 GlobalVector;
-		/// a global shader keyword
-		[Tooltip("a global shader keyword")] 
+		/// 全局 Shader 关键字
+		[Tooltip("全局着色器关键字")] 
 		[MMFEnumCondition("Mode", (int)Modes.EnableKeyword, (int)Modes.DisableKeyword)]
 		public string Keyword;
 
@@ -234,3 +235,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

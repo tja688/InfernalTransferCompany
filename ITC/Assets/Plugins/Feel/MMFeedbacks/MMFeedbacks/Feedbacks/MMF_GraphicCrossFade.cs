@@ -1,4 +1,4 @@
-﻿#if MM_UI
+#if MM_UI
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Scripting.APIUpdating;
@@ -9,8 +9,9 @@ namespace MoreMountains.Feedbacks
 	/// This feedback will let you trigger cross fades on a target Graphic.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you trigger cross fades on a target Graphic.")]
+	[FeedbackHelp("此反馈可让你对目标 Graphic 触发 CrossFade（透明度或颜色）。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("UI/Graphic CrossFade")]
 	public class MMF_GraphicCrossFade : MMF_Feedback
 	{
@@ -21,7 +22,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.UIColor; } }
 		public override bool EvaluateRequiresSetup() { return (TargetGraphic == null); }
 		public override string RequiredTargetText { get { return TargetGraphic != null ? TargetGraphic.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetGraphic be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈需要先指定 TargetGraphic 才能正常工作，可在下方设置。"; } }
 		#endif
 
 		/// the duration of this feedback is the duration of the Image, or 0 if instant
@@ -35,28 +36,28 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Graphic Cross Fade", true, 54, true)]
 		/// the Graphic to affect when playing the feedback
-		[Tooltip("the Graphic to affect when playing the feedback")]
+		[Tooltip("播放该反馈时要作用的 Graphic")]
 		public Graphic TargetGraphic;
 		/// whether the feedback should affect the Image instantly or over a period of time
-		[Tooltip("whether the feedback should affect the Image instantly or over a period of time")]
+		[Tooltip("交叉淡化模式：`透明度``目标透明度`；`颜色`使用`目标颜色`，并另外`使用透明度`决定是否同时插入值使用透明度通道。")]
 		public Modes Mode = Modes.Alpha;
 		/// how long the Graphic should change over time
-		[Tooltip("how long the Graphic should change over time")]
+		[Tooltip("交叉淡化持续时间（秒）。")]
 		public float Duration = 0.2f;
 		/// the target alpha
-		[Tooltip("the target alpha")]
+		[Tooltip("在 `Alpha` 模式下的目标透明度。")]
 		[MMFEnumCondition("Mode", (int)Modes.Alpha)]
 		public float TargetAlpha = 0.2f;
 		/// the target color
-		[Tooltip("the target color")]
+		[Tooltip("在 `Color` 模式下的目标颜色。")]
 		[MMFEnumCondition("Mode", (int)Modes.Color)]
 		public Color TargetColor = Color.red;
 		/// whether or not the crossfade should also tween the alpha channel
-		[Tooltip("whether or not the crossfade should also tween the alpha channel")]
+		[Tooltip("仅在 `Color` 模式下生效：是否同时插值 Alpha 通道。")]
 		[MMFEnumCondition("Mode", (int)Modes.Color)]
 		public bool UseAlpha = true;
 		/// if this is true, the target will be disabled when this feedbacks is stopped
-		[Tooltip("if this is true, the target will be disabled when this feedbacks is stopped")] 
+		[Tooltip("若开启，调用 Stop 时会关闭目标 Graphic。")] 
 		public bool DisableOnStop = false;
         
 		protected Coroutine _coroutine;
@@ -145,3 +146,4 @@ namespace MoreMountains.Feedbacks
 	}
 }
 #endif
+

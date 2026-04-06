@@ -10,10 +10,11 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you set a property on a target VisualEffect
+	/// 这个反馈可为目标 VisualEffect 设置属性。
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you set a property on a target VisualEffect")]
+	[System.Serializable]
+	[FeedbackHelp("这个反馈可为目标 VisualEffect 设置属性。")]
 	#if MM_VISUALEFFECTGRAPH
 	[FeedbackPath("Particles/VisualEffectSetProperty")]
 	#endif
@@ -33,66 +34,66 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public override bool HasRandomness => true;
 		
 		[MMFInspectorGroup("Visual Effect Property", true, 41)]
-		/// the duration for the player to consider. This won't impact your visual effect, but is a way to communicate to the MMF Player the duration of this feedback. Usually you'll want it to match your actual particle system, and setting it can be useful to have this feedback work with holding pauses.
-		[Tooltip("the duration for the player to consider. This won't impact your visual effect, but is a way to communicate to the MMF Player the duration of this feedback. Usually you'll want it to match your actual particle system, and setting it can be useful to have this feedback work with holding pauses.")]
+		/// 这是提供给 MMF_Player 参考的反馈持续时间，不会直接影响你的 VisualEffect。通常建议让它与实际粒子系统的持续时间一致；这样在使用 Holding Pause 时，本反馈的时序会更准确。
+		[Tooltip("这是提供给 MMF_Player 参考的反馈持续时间，不会直接影响你的 VisualEffect。通常建议让它与实际粒子系统的持续时间一致；这样在使用 Holding Pause 时，本反馈的时序会更准确。")]
 		public float DeclaredDuration = 0f;
 		
 		#if MM_VISUALEFFECTGRAPH
 		
 		public enum PropertyTypes { AnimationCurve, Bool, Float, Gradient, Int, Mesh, Texture, UInt, Vector2, Vector3, Vector4, }
 		
-		/// the visual effect on which to set a property
-		[Tooltip("the visual effect on which to set a property")]
+		/// 要设置属性的 VisualEffect。
+		[Tooltip("要设置属性的视觉效果。")]
 		public VisualEffect TargetVisualEffect;
-		/// the ID of the property to set, as exposed by the Visual Effect Graph
-		[Tooltip("the ID of the property to set, as exposed by the Visual Effect Graph")] 
+		/// 要设置的属性 ID，应与 Visual Effect Graph 中暴露的属性一致。
+		[Tooltip("要设置的属性 ID，应与 Visual Effect Graph 中暴露的属性一致。")] 
 		public string PropertyID;
-		/// the type of the property to set
-		[Tooltip("the type of the property to set")]
+		/// 要设置的属性类型。
+		[Tooltip("要设置的属性类型。")]
 		public PropertyTypes PropertyType = PropertyTypes.Float;
-		/// if the property is an animation curve, the new animation curve to set
-		[Tooltip("if the property is an animation curve, the new animation curve to set")]
+		/// 如果属性类型为 AnimationCurve，则这里指定新的曲线值。
+		[Tooltip("如果属性类型为 AnimationCurve，则这里指定新的曲线值。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.AnimationCurve)]
 		public AnimationCurve NewAnimationCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
-		/// if the property is a bool, the new bool to set
-		[Tooltip("if the property is a bool, the new bool to set")]
+		/// 如果属性类型为 bool，则这里指定新的布尔值。
+		[Tooltip("如果属性类型为 bool，则这里指定新的布尔值。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Bool)]
 		public bool NewBool = true;
-		/// if the property is a float, the new float to set
-		[Tooltip("if the property is a float, the new float to set")]
+		/// 如果属性类型为 float，则这里指定新的浮点值。
+		[Tooltip("如果属性类型为 float，则这里指定新的浮点值。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Float)]
 		public float NewFloat = 1f;
-		/// if the property is a gradient, the new gradient to set
-		[Tooltip("if the property is a gradient, the new gradient to set")] 
+		/// 如果属性类型为 Gradient，则这里指定新的渐变。
+		[Tooltip("如果属性类型为 Gradient，则这里指定新的渐变。")] 
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Gradient)]
 		[GradientUsage(true)]
 		public Gradient NewGradient = new Gradient();
-		/// if the property is an int, the new int to set
-		[Tooltip("if the property is an int, the new int to set")]
+		/// 如果属性类型为 int，则这里指定新的整数值。
+		[Tooltip("如果属性类型为 int，则这里指定新的整数值。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Int)]
 		public int NewInt;
-		/// if the property is a mesh, the new mesh to set
-		[Tooltip("if the property is a mesh, the new mesh to set")]
+		/// 如果属性类型为 Mesh，则这里指定新的网格。
+		[Tooltip("如果属性类型为 Mesh，则这里指定新的网格。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Mesh)]
 		public Mesh NewMesh;
-		/// if the property is a texture, the new texture to set
-		[Tooltip("if the property is a texture, the new texture to set")]
+		/// 如果属性类型为 Texture，则这里指定新的纹理。
+		[Tooltip("如果属性类型为 Texture，则这里指定新的纹理。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Texture)]
 		public Texture NewTexture;
-		/// if the property is an unsigned int, the new unsigned int to set
-		[Tooltip("if the property is an unsigned int, the new unsigned int to set")]
+		/// 如果属性类型为 unsigned int，则这里指定新的无符号整数值。
+		[Tooltip("如果属性类型为 unsigned int，则这里指定新的无符号整数值。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.UInt)]
 		public uint NewUInt;
-		/// if the property is a vector2, the new vector2 to set
-		[Tooltip("if the property is a vector2, the new vector2 to set")]
+		/// 如果属性类型为 Vector2，则这里指定新的 Vector2 值。
+		[Tooltip("如果属性类型为 Vector2，则这里指定新的 Vector2 值。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Vector2)]
 		public Vector2 NewVector2;
-		/// if the property is a vector3, the new vector3 to set
-		[Tooltip("if the property is a vector3, the new vector3 to set")]
+		/// 如果属性类型为 Vector3，则这里指定新的 Vector3 值。
+		[Tooltip("如果属性类型为 Vector3，则这里指定新的 Vector3 值。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Vector3)]
 		public Vector3 NewVector3;
-		/// if the property is a vector4, the new vector4 to set
-		[Tooltip("if the property is a vector4, the new vector4 to set")]
+		/// 如果属性类型为 Vector4，则这里指定新的 Vector4 值。
+		[Tooltip("如果属性类型为 Vector4，则这里指定新的 Vector4 值。")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Vector4)]
 		public Vector4 NewVector4;
 
@@ -127,6 +128,11 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// </summary>
 		protected virtual void GetInitialValue()
 		{
+			if (TargetVisualEffect == null)
+			{
+				return;
+			}
+			
 			switch (PropertyType)
 			{
 				case PropertyTypes.AnimationCurve:

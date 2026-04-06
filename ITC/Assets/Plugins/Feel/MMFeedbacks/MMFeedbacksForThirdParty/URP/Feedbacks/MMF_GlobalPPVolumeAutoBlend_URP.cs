@@ -10,7 +10,8 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// This feedback will let you pilot a Global PostProcessing Volume AutoBlend URP component. A GPPVAB component is placed on a PostProcessing Volume, and will let you control and blend its weight over time on demand.    
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you pilot a Global PostProcessing Volume AutoBlend URP component. A GPPVAB component is placed on a PostProcessing Volume, and will let you control and blend its weight over time on demand.")]
+	[System.Serializable]
+	[FeedbackHelp("此反馈可用于驱动 Global PostProcessing Volume AutoBlend URP 组件。GPPVAB 组件挂在 PostProcessing Volume 上，可让你按需随时间控制并混合它的权重。")]
 	#if MM_URP
 	[FeedbackPath("PostProcess/Global PP Volume Auto Blend URP")]
 	#endif
@@ -30,7 +31,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		#if UNITY_EDITOR
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.PostProcessColor; } }
 		public override string RequiredTargetText { get { return TargetAutoBlend != null ? TargetAutoBlend.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetCanvasGroup be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先指定 TargetCanvasGroup 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetAutoBlend = FindAutomatedTarget<MMGlobalPostProcessingVolumeAutoBlend_URP>();
@@ -87,6 +88,10 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// the weight to blend to
 		[MMFEnumCondition("Mode", (int)Modes.Override)]
 		public float FinalWeight = 1f;        
+		/// whether or not to reset to the initial value at the end of the shake
+		[Tooltip("抖动结束时是否恢复为初始值")]
+		[MMFEnumCondition("Mode", (int)Modes.Override)]
+		public bool ResetToInitialValueOnEnd = true;
 
 		/// <summary>
 		/// On custom play, triggers a blend on the target blender, overriding its settings if needed
@@ -101,7 +106,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 			}
             
 			MMGlobalPostProcessingVolumeAutoBlend_URP.TimeScales timeScale = (ComputedTimescaleMode == TimescaleModes.Scaled) ? MMGlobalPostProcessingVolumeAutoBlend_URP.TimeScales.Scaled : MMGlobalPostProcessingVolumeAutoBlend_URP.TimeScales.Unscaled;
-            MMPostProcessingVolumeAutoBlendURPShakeEvent.Trigger(ChannelData, TargetAutoBlend, Mode, BlendAction, ApplyTimeMultiplier(BlendDuration), BlendCurve, InitialWeight, FinalWeight, NormalPlayDirection, timeScale);
+            MMPostProcessingVolumeAutoBlendURPShakeEvent.Trigger(ChannelData, TargetAutoBlend, Mode, BlendAction, ApplyTimeMultiplier(BlendDuration), BlendCurve, InitialWeight, FinalWeight, ResetToInitialValueOnEnd, NormalPlayDirection, timeScale);
 		}
         
 		/// <summary>

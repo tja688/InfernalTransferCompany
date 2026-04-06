@@ -14,8 +14,9 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.MMTools")]
+	[System.Serializable]
 	[FeedbackPath("Audio/MMSoundManager Sound Fade")]
-	[FeedbackHelp("This feedback lets you trigger fades on a specific sound via the MMSoundManager. You will need a MMSoundManager in your scene for this to work.")]
+	[FeedbackHelp("此反馈可通过 MMSoundManager 对指定 ID 的声音执行淡变。要生效，场景中必须存在 MMSoundManager。")]
 	public class MMF_MMSoundManagerSoundFade : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -28,17 +29,17 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("MMSoundManager Sound Fade", true, 30)]
 		/// the ID of the sound you want to fade. Has to match the ID you specified when playing the sound initially
-		[Tooltip("the ID of the sound you want to fade. Has to match the ID you specified when playing the sound initially")]
+		[Tooltip("要淡变的声音 ID。必须与最初播放该声音时设置的 ID 一致。")]
 		public int SoundID = 0;
 		/// the duration of the fade, in seconds
-		[Tooltip("the duration of the fade, in seconds")]
+		[Tooltip("淡变持续时间，单位为秒。")]
 		public float FadeDuration = 1f;
 		/// the volume towards which to fade
-		[Tooltip("the volume towards which to fade")]
+		[Tooltip("淡变要到达的目标音量。")]
 		[Range(MMSoundManagerSettings._minimalVolume,MMSoundManagerSettings._maxVolume)]
 		public float FinalVolume = MMSoundManagerSettings._minimalVolume;
 		/// the tween to apply over the fade
-		[Tooltip("the tween to apply over the fade")]
+		[Tooltip("淡变过程使用的 Tween 曲线。")]
 		public MMTweenType FadeTween = new MMTweenType(MMTween.MMTweenCurve.EaseInOutQuartic);
         
 		protected AudioSource _targetAudioSource;

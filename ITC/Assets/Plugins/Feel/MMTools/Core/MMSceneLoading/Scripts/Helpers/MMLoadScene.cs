@@ -12,10 +12,10 @@ namespace MoreMountains.Tools
 		public enum LoadingSceneModes { UnityNative, MMSceneLoadingManager, MMAdditiveSceneLoadingManager }
 
 		/// the name of the scene that needs to be loaded when LoadScene gets called
-		[Tooltip("the name of the scene that needs to be loaded when LoadScene gets called")]
+		[Tooltip("调用 LoadScene 时要加载的场景名")]
 		public string SceneName;
 		/// defines whether the scene will be loaded using Unity's native API or MoreMountains' way
-		[Tooltip("defines whether the scene will be loaded using Unity's native API or MoreMountains' way")]
+		[Tooltip("定义场景加载方式：使用 Unity 原生 API，或使用 MoreMountains 的加载流程")]
 		public LoadingSceneModes LoadingSceneMode = LoadingSceneModes.UnityNative;
 
 		/// <summary>

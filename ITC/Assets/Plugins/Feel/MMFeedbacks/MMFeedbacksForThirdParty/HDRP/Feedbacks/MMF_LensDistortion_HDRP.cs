@@ -13,13 +13,14 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// with Lens Distortion active, and a MMLensDistortionShaker_HDRP component.
 	/// </summary>
 	[AddComponentMenu("")]
+	[System.Serializable]
 	#if MM_HDRP
 	[FeedbackPath("PostProcess/Lens Distortion HDRP")]
 	#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.HDRP")]
-	[FeedbackHelp("This feedback allows you to control HDRP lens distortion intensity over time. " +
-	              "It requires you have in your scene an object with a Volume " +
-	              "with Lens Distortion active, and a MMLensDistortionShaker_HDRP component.")]
+	[FeedbackHelp("此反馈可让你随时间控制 HDRP 镜头畸变强度。" +
+	              "它要求你的场景中存在一个带有 Volume 的对象，且该对象" +
+	              "已启用 Lens Distortion，并挂有 MMLensDistortionShaker_HDRP 组件。")]
 	public class MMF_LensDistortion_HDRP : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
@@ -38,21 +39,21 @@ namespace MoreMountains.FeedbacksForThirdParty
 
 		[MMFInspectorGroup("Lens Distortion", true, 22)]
 		/// the duration of the shake in seconds
-		[Tooltip("the duration of the shake in seconds")]
+		[Tooltip("抖动持续时间，单位为秒")]
 		public float Duration = 0.8f;
 		/// whether or not to reset shaker values after shake
-		[Tooltip("whether or not to reset shaker values after shake")]
+		[Tooltip("抖动结束后是否重置抖动器的数值")]
 		public bool ResetShakerValuesAfterShake = true;
 		/// whether or not to reset the target's values after shake
-		[Tooltip("whether or not to reset the target's values after shake")]
+		[Tooltip("抖动结束后是否重置目标对象的数值")]
 		public bool ResetTargetValuesAfterShake = true;
 
 		[MMFInspectorGroup("Intensity", true, 23)]
 		/// whether or not to add to the initial intensity value
-		[Tooltip("whether or not to add to the initial intensity value")]
+		[Tooltip("是否在初始强度值基础上叠加")]
 		public bool RelativeIntensity = false;
 		/// the curve to animate the intensity on
-		[Tooltip("the curve to animate the intensity on")]
+		[Tooltip("用于驱动强度变化的曲线")]
 		public AnimationCurve Intensity = new AnimationCurve(new Keyframe(0, 0),
 			new Keyframe(0.2f, 1),
 			new Keyframe(0.25f, -1),
@@ -64,11 +65,11 @@ namespace MoreMountains.FeedbacksForThirdParty
 			new Keyframe(0.85f, -0.1f),
 			new Keyframe(1, 0));
 		/// the value to remap the curve's 0 to
-		[Tooltip("the value to remap the curve's 0 to")]
+		[Tooltip("将曲线 0 端重映射到的值")]
 		[Range(-1f, 1f)]
 		public float RemapIntensityZero = 0f;
 		/// the value to remap the curve's 1 to
-		[Tooltip("the value to remap the curve's 1 to")]
+		[Tooltip("将曲线 1 端重映射到的值")]
 		[Range(-1f, 1f)]
 		public float RemapIntensityOne = 0.5f;
 

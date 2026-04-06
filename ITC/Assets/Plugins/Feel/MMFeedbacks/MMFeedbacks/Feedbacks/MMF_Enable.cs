@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
@@ -9,9 +9,10 @@ namespace MoreMountains.Feedbacks
 	/// Turns an object active or inactive at the various stages of the feedback
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to change the state of a behaviour on a target gameobject from active to inactive (or the opposite), on init, play, stop or reset. " +
-	              "For each of these you can specify if you want to force a state (enabled or disabled), or toggle it (enabled becomes disabled, disabled becomes enabled).")]
+	[FeedbackHelp("此反馈可让你 change the state of a behaviour on a target GameObject from active to inactive (or the opposite), on init, play, stop or reset. " +
+	              "For each of these you can specify if you want to force a state (enabled or disabled), or 切换 it (enabled becomes disabled, disabled becomes enabled).")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("GameObject/Enable Behaviour")]
 	public class MMF_Enable : MMF_Feedback
 	{
@@ -22,7 +23,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.GameObjectColor; } }
 		public override bool EvaluateRequiresSetup() { return (TargetBehaviour == null); }
 		public override string RequiredTargetText { get { return TargetBehaviour != null ? TargetBehaviour.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetBehaviour be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先设置a TargetBehaviour才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 
 		/// the possible effects the feedback can have on the target object's status 
@@ -30,37 +31,37 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Enable Target Monobehaviour", true, 86, true)]
 		/// the gameobject we want to change the active state of
-		[Tooltip("the gameobject we want to change the active state of")]
+		[Tooltip("要修改激活状态的游戏对象")]
 		public Behaviour TargetBehaviour;
 		/// a list of extra gameobjects we want to change the active state of
-		[Tooltip("a list of extra gameobjects we want to change the active state of")]
+		[Tooltip("我们想要更改其活动状态的额外游戏对象的列表")]
 		public List<Behaviour> ExtraTargetBehaviours;
 		/// whether or not we should alter the state of the target object on init
-		[Tooltip("whether or not we should alter the state of the target object on init")]
+		[Tooltip("我们是否应该改变 init 上目标对象的状态")]
 		public bool SetStateOnInit = false;
 		/// how to change the state on init
 		[MMFCondition("SetStateOnInit", true)]
-		[Tooltip("how to change the state on init")]
+		[Tooltip("如何更改 init 上的状态")]
 		public PossibleStates StateOnInit = PossibleStates.Disabled;
 		/// whether or not we should alter the state of the target object on play
-		[Tooltip("whether or not we should alter the state of the target object on play")]
+		[Tooltip("我们是否应该改变游戏中目标对象的状态")]
 		public bool SetStateOnPlay = false;
 		/// how to change the state on play
 		[MMFCondition("SetStateOnPlay", true)]
-		[Tooltip("how to change the state on play")]
+		[Tooltip("如何更改播放状态")]
 		public PossibleStates StateOnPlay = PossibleStates.Disabled;
 		/// whether or not we should alter the state of the target object on stop
-		[Tooltip("whether or not we should alter the state of the target object on stop")]
+		[Tooltip("停止时是否修改目标对象的状态")]
 		public bool SetStateOnStop = false;
 		/// how to change the state on stop
-		[Tooltip("how to change the state on stop")]
+		[Tooltip("如何更改停止时的状态")]
 		[MMFCondition("SetStateOnStop", true)]
 		public PossibleStates StateOnStop = PossibleStates.Disabled;
 		/// whether or not we should alter the state of the target object on reset
-		[Tooltip("whether or not we should alter the state of the target object on reset")]
+		[Tooltip("我们是否应该在重置时改变目标对象的状态")]
 		public bool SetStateOnReset = false;
 		/// how to change the state on reset
-		[Tooltip("how to change the state on reset")]
+		[Tooltip("如何更改重置时的状态")]
 		[MMFCondition("SetStateOnReset", true)]
 		public PossibleStates StateOnReset = PossibleStates.Disabled;
 
@@ -194,3 +195,5 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+
+

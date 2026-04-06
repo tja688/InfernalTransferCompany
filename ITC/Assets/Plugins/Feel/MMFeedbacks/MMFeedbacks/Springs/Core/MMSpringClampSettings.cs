@@ -8,36 +8,36 @@ namespace MoreMountains.Feedbacks
 	public class MMSpringClampSettings
 	{
 		[Header("Min")]
-		/// whether or not to clamp the min value of this spring, preventing it from going below a certain value
-		[Tooltip("whether or not to clamp the min value of this spring, preventing it from going below a certain value")]
+		/// 是否限制此 spring 的最小值，防止它低于某个阈值。
+		[Tooltip("是否限制此 spring 的最小值，防止它低于某个阈值。")]
 		public bool ClampMin = false;
-		/// the value below which this spring can't go
-		[Tooltip("the value below which this spring can't go")]
+		/// 此 spring 允许达到的最低值。
+		[Tooltip("此 spring 允许达到的最低值。")]
 		[MMCondition("ClampMin", true)]
 		public float ClampMinValue = 0f;
-		/// if ClampMin is true, whether or not to use the initial value as the min value
-		[Tooltip("if ClampMin is true, whether or not to use the initial value as the min value")]
+		/// 当 `ClampMin` 为 true 时，是否把初始值当作最小值使用。若启用，下方手动最小值将失效。
+		[Tooltip("当 `ClampMin` 为 true 时，是否把初始值当作最小值使用。若启用，下方手动最小值将失效。")]
 		[MMCondition("ClampMin", true)]
 		public bool ClampMinInitial = false;
-		/// whether or not the spring should bounce off the min value or not
-		[Tooltip("whether or not the spring should bounce off the min value or not")]
+		/// spring 触及最小值时是否产生反弹。
+		[Tooltip("spring 触及最小值时是否产生反弹。")]
 		[MMCondition("ClampMin", true)]
 		public bool ClampMinBounce = false;
 		
 		[Header("Max")]
-		/// whether or not to clamp the max value of this spring, preventing it from going above a certain value
-		[Tooltip("whether or not to clamp the max value of this spring, preventing it from going above a certain value")]
+		/// 是否限制此 spring 的最大值，防止它超过某个阈值。
+		[Tooltip("是否限制此 spring 的最大值，防止它超过某个阈值。")]
 		public bool ClampMax = false;
-		/// the value above which this spring can't go
-		[Tooltip("the value above which this spring can't go")]
+		/// 此 spring 允许达到的最大值。
+		[Tooltip("此 spring 允许达到的最大值。")]
 		[MMCondition("ClampMax", true)]
 		public float ClampMaxValue = 10f;
-		/// if ClampMax is true, whether or not to use the initial value as the max value
-		[Tooltip("if ClampMax is true, whether or not to use the initial value as the max value")]
+		/// 当 `ClampMax` 为 true 时，是否把初始值当作最大值使用。若启用，下方手动最大值将失效。
+		[Tooltip("当 `ClampMax` 为 true 时，是否把初始值当作最大值使用。若启用，下方手动最大值将失效。")]
 		[MMCondition("ClampMax", true)]
 		public bool ClampMaxInitial = false;
-		/// whether or not the spring should bounce off the max value or not
-		[Tooltip("whether or not the spring should bounce off the max value or not")]
+		/// spring 触及最大值时是否产生反弹。
+		[Tooltip("spring 触及最大值时是否产生反弹。")]
 		[MMCondition("ClampMax", true)]
 		public bool ClampMaxBounce = false;
 

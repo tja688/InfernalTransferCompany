@@ -49,7 +49,7 @@ namespace MoreMountains.Feedbacks
 	}	
 	
 	/// <summary>
-	/// A spring component used to pilot Vector2 values on a target
+	/// A 弹簧 component used to pilot Vector2 values on a target
 	/// </summary>
 	public abstract class MMSpringVector2Component<T> : MMSpringComponentBase, MMEventListener<MMSpringVector2Event> where T:Component
 	{
@@ -57,22 +57,20 @@ namespace MoreMountains.Feedbacks
 		public T Target;
 		
 		[MMInspectorGroup("Channel & TimeScale", true, 16, true)] 
-		/// whether this spring should run on scaled time (and be impacted by time scale changes) or unscaled time (and not be impacted by time scale changes)
-		[Tooltip("whether this spring should run on scaled time (and be impacted by time scale changes) or unscaled time (and not be impacted by time scale changes)")]
+		/// 此 弹簧 使用 `scaled time` 还是 `unscaled time`。前者会受到时间缩放影响，后者不会。
+		[Tooltip("此弹簧使用 `受时间缩放影响的时间` 还是 `不受时间缩放影响的时间`。前者会受到时间缩放影响，后者不会。")]
 		public TimeScaleModes TimeScaleMode = TimeScaleModes.Scaled;
 		/// whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what.
 		/// MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable
-		[Tooltip("whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what. " +
-		         "MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable")]
+		[Tooltip("决定此组件是监听 `int` 定义的通道，还是监听 `MMChannel` ScriptableObject 定义的通道。`int` 配置简单，但项目一大就容易混乱，也不便记忆每个数字代表什么；`MMChannel` 需要预先创建资源，但名称更直观，也更适合扩展。")]
 		public MMChannelModes ChannelMode = MMChannelModes.Int;
-		/// the channel to listen to - has to match the one on the feedback
-		[Tooltip("the channel to listen to - has to match the one on the feedback")]
+		/// 要监听的通道，必须与对应 反馈 上配置的通道一致。
+		[Tooltip("要监听的通道，必须与触发它的反馈上配置的通道一致。")]
 		[MMEnumCondition("ChannelMode", (int)MMChannelModes.Int)]
 		public int Channel = 0;
-		/// the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel,
+		/// the MMChannel definition asset to use to listen for events. The 反馈s targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel,
 		/// right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name
-		[Tooltip("the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel, " +
-		         "right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name")]
+		[Tooltip("用于监听事件的`通道资源`定义资源。只有引用同一个`通道资源`定义的反馈，才能触发这个弹簧组件。若要创建`通道资源`，可以在项目视图中右键（通常放在数据文件夹中），选择更多山脉 >通道资源，并说明说明。")]
 		[MMEnumCondition("ChannelMode", (int)MMChannelModes.MMChannel)]
 		public MMChannel MMChannelDefinition = null;
 		
@@ -83,26 +81,26 @@ namespace MoreMountains.Feedbacks
 		[MMInspectorGroup("Randomness", true, 12, true)]
 		
 		[Header("Move To Random")]
-		/// the minimum vector from which to pick a random value when calling MoveToRandom()
-		[Tooltip("the minimum vector from which to pick a random value when calling MoveToRandom()")]
+		/// 调用 `MoveToRandom()` 时，随机值取样范围的最小向量。
+		[Tooltip("调用 `MoveToRandom()` 时，随机值取样范围的最小向量。")]
 		public Vector2 MoveToRandomValueMin = new Vector2(-2f, -2f);
-		/// the maximum vector from which to pick a random value when calling MoveToRandom()
-		[Tooltip("the maximum vector from which to pick a random value when calling MoveToRandom()")]
+		/// 调用 `MoveToRandom()` 时，随机值取样范围的最大向量。
+		[Tooltip("调用 `MoveToRandom()` 时，随机值取样范围的最大向量。")]
 		public Vector2 MoveToRandomValueMax = new Vector2(2f, 2f);
 		
 		[Header("Bump Random")]
-		/// the minimum vector from which to pick a random value when calling BumpRandom()
-		[Tooltip("the minimum vector from which to pick a random value when calling BumpRandom()")]
+		/// 调用 `BumpRandom()` 时，随机扰动值取样范围的最小向量。
+		[Tooltip("调用 `BumpRandom()` 时，随机扰动值取样范围的最小向量。")]
 		[MMVector("Min", "Max")]
 		public Vector2 BumpAmountRandomValueMin = new Vector2(-20f, -20f);
-		/// the maximum vector from which to pick a random value when calling BumpRandom()
-		[Tooltip("the maximum vector from which to pick a random value when calling BumpRandom()")]
+		/// 调用 `BumpRandom()` 时，随机扰动值取样范围的最大向量。
+		[Tooltip("调用 `BumpRandom()` 时，随机扰动值取样范围的最大向量。")]
 		[MMVector("Min", "Max")]
 		public Vector2 BumpAmountRandomValueMax = new Vector2(20f, 20f);
 		
 		[MMInspectorGroup("Test", true, 20, true)]
-		/// the value to move this spring to when interacting with any of the MoveTo debug buttons in its inspector
-		[Tooltip("the value to move this spring to when interacting with any of the MoveTo debug buttons in its inspector")]
+		/// 在 Inspector 中点击任意 `MoveTo` 调试按钮时，此弹簧会移动到的目标值。
+		[Tooltip("在 Inspector 中点击任意 `MoveTo` 调试按钮时，此弹簧会移动到的目标值。")]
 		public Vector2 TestMoveToValue = new Vector2(2f, 2f);
 		[MMInspectorButtonBar(new string[] { "MoveTo", "MoveToAdditive", "MoveToSubtractive", "MoveToRandom", "MoveToInstant" }, 
 			new string[] { "TestMoveTo", "TestMoveToAdditive", "TestMoveToSubtractive", "TestMoveToRandom", "TestMoveToInstant" }, 
@@ -110,8 +108,8 @@ namespace MoreMountains.Feedbacks
 			new string[] { "main-call-to-action", "", "", "", "" })]
 		public bool MoveToToolbar;
 		
-		/// the amount by which to bump this spring when interacting with the Bump debug button in its inspector
-		[Tooltip("the amount by which to bump this spring when interacting with the Bump debug button in its inspector")]
+		/// 在 Inspector 中点击 `Bump` 调试按钮时，施加到此弹簧的扰动量。
+		[Tooltip("在 Inspector 中点击 `Bump` 调试按钮时，施加到此弹簧的扰动量。")]
 		public Vector2 TestBumpAmount = new Vector2(75f, 100f);
 		[MMInspectorButtonBar(new string[] { "Bump", "BumpRandom" }, 
 			new string[] { "TestBump", "TestBumpRandom" }, 
@@ -243,45 +241,45 @@ namespace MoreMountains.Feedbacks
 		
 		#region EVENTS
 		
-		public void OnMMEvent(MMSpringVector2Event springEvent)
+		public void OnMMEvent(MMSpringVector2Event 弹簧Event)
 		{
-			bool eventMatch = springEvent.ChannelData != null && MMChannel.Match(springEvent.ChannelData, ChannelMode, Channel, MMChannelDefinition);
-			bool targetMatch = springEvent.TargetSpring != null && springEvent.TargetSpring.Equals(this);
+			bool eventMatch = 弹簧Event.ChannelData != null && MMChannel.Match(弹簧Event.ChannelData, ChannelMode, Channel, MMChannelDefinition);
+			bool targetMatch = 弹簧Event.TargetSpring != null && 弹簧Event.TargetSpring.Equals(this);
 			if (!eventMatch && !targetMatch)
 			{
 				return;
 			}
 			
-			if (springEvent.OverrideDamping)
+			if (弹簧Event.OverrideDamping)
 			{
-				SpringVector2.SetDamping(springEvent.NewDamping);
+				SpringVector2.SetDamping(弹簧Event.NewDamping);
 			}
-			if (springEvent.OverrideFrequency)
+			if (弹簧Event.OverrideFrequency)
 			{
-				SpringVector2.SetFrequency(springEvent.NewFrequency);
+				SpringVector2.SetFrequency(弹簧Event.NewFrequency);
 			}
-			switch (springEvent.Command)
+			switch (弹簧Event.Command)
 			{
 				case SpringCommands.MoveTo:
-					MoveTo(springEvent.MoveToValue);
+					MoveTo(弹簧Event.MoveToValue);
 					break;
 				case SpringCommands.MoveToAdditive:
-					MoveToAdditive(springEvent.MoveToValue);
+					MoveToAdditive(弹簧Event.MoveToValue);
 					break;
 				case SpringCommands.MoveToSubtractive:
-					MoveToSubtractive(springEvent.MoveToValue);
+					MoveToSubtractive(弹簧Event.MoveToValue);
 					break;
 				case SpringCommands.MoveToRandom:
-					MoveToRandom(springEvent.MoveToRandomValueMin, springEvent.MoveToRandomValueMax);
+					MoveToRandom(弹簧Event.MoveToRandomValueMin, 弹簧Event.MoveToRandomValueMax);
 					break;
 				case SpringCommands.MoveToInstant:
-					MoveToInstant(springEvent.MoveToValue);
+					MoveToInstant(弹簧Event.MoveToValue);
 					break;
 				case SpringCommands.Bump:
-					Bump(springEvent.BumpAmount);
+					Bump(弹簧Event.BumpAmount);
 					break;
 				case SpringCommands.BumpRandom:
-					BumpRandom(springEvent.BumpAmountRandomValueMin, springEvent.BumpAmountRandomValueMax);
+					BumpRandom(弹簧Event.BumpAmountRandomValueMin, 弹簧Event.BumpAmountRandomValueMax);
 					break;
 				case SpringCommands.Stop:
 					Stop();

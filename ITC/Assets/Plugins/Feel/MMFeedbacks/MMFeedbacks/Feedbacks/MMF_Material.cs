@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Tools;
 using UnityEngine;
@@ -8,8 +8,9 @@ using UnityEngine.Scripting.APIUpdating;
 namespace MoreMountains.Feedbacks
 {
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you change the material of the target renderer everytime it's played.")]
+	[FeedbackHelp("此反馈每次播放时都会将目标 Renderer 的材质切换为指定材质。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Renderer/Material")]
 	public class MMF_Material : MMF_Feedback
 	{
@@ -18,7 +19,7 @@ namespace MoreMountains.Feedbacks
 		public override Color FeedbackColor { get => MMFeedbacksInspectorColors.RendererColor; }
 		public override bool EvaluateRequiresSetup() => (TargetRenderer == null);
 		public override string RequiredTargetText => TargetRenderer != null ? TargetRenderer.name : "";
-		public override string RequiresSetupText => "This feedback requires that a TargetRenderer be set to be able to work properly. You can set one below.";
+		public override string RequiresSetupText => "此反馈必须先设置 TargetRenderer 才能正常工作。你可以在下方进行设置。";
 		#endif
 		public override bool HasAutomatedTargetAcquisition => true;
 		protected override void AutomateTargetAcquisition() => TargetRenderer = FindAutomatedTarget<Renderer>();
@@ -33,29 +34,29 @@ namespace MoreMountains.Feedbacks
 
 		[MMFInspectorGroup("Target Material", true, 61, true)]
 		/// the renderer to change material on
-		[Tooltip("the renderer to change material on")]
+		[Tooltip("要切换材质的目标渲染器。")]
 		public Renderer TargetRenderer;
 		/// the list of material indexes we want to change on the target renderer. If left empty, will only target the material at index 0 
-		[FormerlySerializedAs("MaterialIndexes")] [Tooltip("the list of material indexes we want to change on the target renderer. If left empty, will only target the material at index 0")]
+		[FormerlySerializedAs("MaterialIndexes")] [Tooltip("要修改的材质槽位索引列表。若留空，系统会自动使用索引 0。")]
 		public int[] RendererMaterialIndexes;
         
 		[MMFInspectorGroup("Material Change", true, 33)]
 		/// the selected method
-		[Tooltip("the selected method")]
+		[Tooltip("材质切换方式：Sequential（顺序）或 Random（随机）。")]
 		public Methods Method;
 		/// whether or not the sequential order should loop
 		[MMFEnumCondition("Method", (int)Methods.Sequential)]
-		[Tooltip("whether or not the sequential order should loop")]
+		[Tooltip("仅在 Sequential 模式生效：到达末尾后是否回到开头继续循环。")]
 		public bool Loop = true;
 		/// whether or not to always pick a new material in random mode
 		[MMFEnumCondition("Method", (int)Methods.Random)]        
-		[Tooltip("whether or not to always pick a new material in random mode")]
+		[Tooltip("仅在 Random 模式生效：是否尽量避免与上一次相同材质。若列表只有 1 个材质则无法避免重复。")]
 		public bool AlwaysNewMaterial = true;
 		/// the initial index to start with
-		[Tooltip("the initial index to start with")]
+		[Tooltip("初始材质索引（用于确定第一次切换前的起点）。")]
 		public int InitialIndex = 0;
 		/// the list of materials to pick from
-		[Tooltip("the list of materials to pick from")]
+		[Tooltip("可供切换的材质列表。")]
 		public List<Material> Materials;
 
 		[MMFInspectorGroup("Interpolation", true, 35)]
@@ -88,6 +89,10 @@ namespace MoreMountains.Feedbacks
 
 		protected virtual void InitializeMaterials()
 		{
+			if (Materials == null)
+			{
+				Materials = new List<Material>();
+			}
 			if (TargetRenderer == null)
 			{
 				return;
@@ -126,7 +131,7 @@ namespace MoreMountains.Feedbacks
             
 			if (Materials.Count == 0)
 			{
-				Debug.LogError("[MMFeedbackMaterial on " + Owner.name + "] The Materials array is empty.");
+				Debug.LogWarning("[Material Feedback] The material feedback on "+Owner.name+" has an empty Materials array.");
 				return;
 			}
 
@@ -134,7 +139,7 @@ namespace MoreMountains.Feedbacks
 
 			if (Materials[newIndex] == null)
 			{
-				Debug.LogError("[MMFeedbackMaterial on " + Owner.name + "] Attempting to switch to a null material.");
+				Debug.LogWarning("[Material Feedback] The material feedback on "+Owner.name+" is attempting to switch to a null material.");
 				return;
 			}
 
@@ -274,3 +279,4 @@ namespace MoreMountains.Feedbacks
 		}
 	}
 }
+

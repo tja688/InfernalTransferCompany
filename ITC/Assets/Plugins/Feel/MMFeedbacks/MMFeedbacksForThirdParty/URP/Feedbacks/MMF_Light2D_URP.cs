@@ -13,8 +13,9 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// This feedback will let you control a 2D light's intensity, color, falloff, shadow strength and volumetric intensity over time, or instantly.
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you control a 2D light's intensity, color, falloff, shadow strength and volumetric intensity over time, or instantly.")]
+	[FeedbackHelp("此反馈可让你控制 2D 灯光的强度、颜色、衰减、阴影强度和体积强度，既可随时间渐变，也可立即生效。")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Lights/Light2D_URP")]
 	public class MMF_Light2D_URP : MMF_Feedback
 	{
@@ -25,7 +26,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.LightColor; } }
 		public override bool EvaluateRequiresSetup() { return (BoundLight == null); }
 		public override string RequiredTargetText { get { return BoundLight != null ? BoundLight.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a BoundLight be set to be able to work properly. You can set one below."; } }
+		public override string RequiresSetupText { get { return "此反馈必须先指定 BoundLight 才能正常工作。你可以在下方进行设置。"; } }
 		#endif
 
 		/// the duration of this feedback is the duration of the light, or 0 if instant
@@ -40,163 +41,163 @@ namespace MoreMountains.FeedbacksForThirdParty
 		
 		[MMFInspectorGroup("Light", true, 37, true)]
 		/// the light to affect when playing the feedback
-		[Tooltip("the light to affect when playing the feedback")]
+		[Tooltip("播放反馈时要影响的灯光")]
 		public Light2D BoundLight;
 		/// whether the feedback should affect the light instantly or over a period of time
-		[Tooltip("whether the feedback should affect the light instantly or over a period of time")]
+		[Tooltip("反馈应立即影响灯光，还是在一段时间内逐步生效")]
 		public Modes Mode = Modes.OverTime;
 		/// how long the light should change over time
-		[Tooltip("how long the light should change over time")]
+		[Tooltip("灯光变化持续多长时间")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent, (int)Modes.ToDestination)]
 		public float Duration = 0.2f;
 		/// whether or not that light should be turned off on start
-		[Tooltip("whether or not that light should be turned off on start")]
+		[Tooltip("开始时是否关闭该灯光")]
 		public bool StartsOff = true;
 		/// if this is true, the light will be disabled when this feedbacks is stopped
-		[Tooltip("if this is true, the light will be disabled when this feedbacks is stopped")] 
+		[Tooltip("若启用此项，当此反馈停止时该灯光也会被禁用")] 
 		public bool DisableOnStop = false;
 		/// whether or not the values should be relative or not
-		[Tooltip("whether or not the values should be relative or not")]
+		[Tooltip("数值是否采用相对模式")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent, (int)Modes.Instant)]
 		public bool RelativeValues = true;
 		/// whether or not to reset shaker values after shake
-		[Tooltip("whether or not to reset shaker values after shake")]
+		[Tooltip("抖动结束后是否重置抖动器的数值")]
 		[MMFEnumCondition("Mode", (int)Modes.ShakerEvent)]
 		public bool ResetShakerValuesAfterShake = true;
 		/// whether or not to reset the target's values after shake
-		[Tooltip("whether or not to reset the target's values after shake")]
+		[Tooltip("抖动结束后是否重置目标对象的数值")]
 		[MMFEnumCondition("Mode", (int)Modes.ShakerEvent)]
 		public bool ResetTargetValuesAfterShake = true;
 		/// whether or not to broadcast a range to only affect certain shakers
-		[Tooltip("whether or not to broadcast a range to only affect certain shakers")]
+		[Tooltip("是否广播一个作用范围，以便只影响特定抖动器")]
 		[MMFEnumCondition("Mode", (int)Modes.ShakerEvent)]
 		public bool OnlyBroadcastInRange = false;
 		/// the range of the event, in units
-		[Tooltip("the range of the event, in units")]
+		[Tooltip("事件作用范围，单位为 Unity 世界单位")]
 		[MMFEnumCondition("Mode", (int)Modes.ShakerEvent)]
 		public float EventRange = 100f;
 		/// the transform to use to broadcast the event as origin point
-		[Tooltip("the transform to use to broadcast the event as origin point")]
+		[Tooltip("用于作为事件广播原点的 Transform")]
 		[MMFEnumCondition("Mode", (int)Modes.ShakerEvent)]
 		public Transform EventOriginTransform;
 		/// if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over
-		[Tooltip("if this is true, calling that feedback will trigger it, even if it's in progress. If it's false, it'll prevent any new Play until the current one is over")] 
+		[Tooltip("若启用此项，即使该反馈仍在播放中，再次调用也会重新触发；若关闭，则在当前播放结束前会阻止新的 Play。")] 
 		public bool AllowAdditivePlays = false;
 
 		[MMFInspectorGroup("Color", true, 38, true)]
 		/// whether or not to modify the color of the light
-		[Tooltip("whether or not to modify the color of the light")]
+		[Tooltip("是否修改灯光颜色")]
 		public bool ModifyColor = true;
 		/// the colors to apply to the light over time
-		[Tooltip("the colors to apply to the light over time")]
+		[Tooltip("随时间应用到灯光上的颜色")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent)]
 		public Gradient ColorOverTime;
 		/// the color to move to in instant mode
-		[Tooltip("the color to move to in instant mode")]
+		[Tooltip("Instant 模式下要设置到的颜色")]
 		[MMFEnumCondition("Mode", (int)Modes.Instant, (int)Modes.ShakerEvent)]
 		public Color InstantColor = Color.red;
 		/// the color to move to in destination mode
-		[Tooltip("the color to move to in destination mode")]
+		[Tooltip("Destination 模式下要过渡到的颜色")]
 		[MMFEnumCondition("Mode", (int)Modes.ToDestination)]
 		public Color ToDestinationColor = Color.red;
 
 		[MMFInspectorGroup("Intensity", true, 39, true)]
 		/// whether or not to modify the intensity of the light
-		[Tooltip("whether or not to modify the intensity of the light")]
+		[Tooltip("是否修改灯光强度")]
 		public bool ModifyIntensity = true;
 		/// the curve to tween the intensity on
-		[Tooltip("the curve to tween the intensity on")]
+		[Tooltip("用于驱动强度插值的曲线")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent, (int)Modes.ToDestination)]
 		public AnimationCurve IntensityCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
 		/// the value to remap the intensity curve's 0 to
-		[Tooltip("the value to remap the intensity curve's 0 to")]
+		[Tooltip("将强度曲线 0 端重映射到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent)]
 		public float RemapIntensityZero = 0f;
 		/// the value to remap the intensity curve's 1 to
-		[Tooltip("the value to remap the intensity curve's 1 to")]
+		[Tooltip("将强度曲线 1 端重映射到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent)]
 		public float RemapIntensityOne = 1f;
 		/// the value to move the intensity to in instant mode
-		[Tooltip("the value to move the intensity to in instant mode")]
+		[Tooltip("Instant 模式下要设置到的强度值")]
 		[MMFEnumCondition("Mode", (int)Modes.Instant)]
 		public float InstantIntensity = 1f;
 		/// the value to move the intensity to in ToDestination mode
-		[Tooltip("the value to move the intensity to in ToDestination mode")]
+		[Tooltip("ToDestination 模式下要过渡到的强度值")]
 		[MMFEnumCondition("Mode", (int)Modes.ToDestination)]
 		public float ToDestinationIntensity = 1f;
 
 		[MMFInspectorGroup("Falloff", true, 40, true)]
 		/// whether or not to modify the falloff of the light
-		[Tooltip("whether or not to modify the falloff of the light")]
+		[Tooltip("是否修改灯光衰减")]
 		public bool ModifyFalloff = true;
 		/// the falloff to apply to the light over time
-		[Tooltip("the falloff to apply to the light over time")]
+		[Tooltip("随时间应用到灯光上的衰减值")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent, (int)Modes.ToDestination)]
 		public AnimationCurve FalloffCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
 		/// the value to remap the falloff curve's 0 to
-		[Tooltip("the value to remap the falloff curve's 0 to")]
+		[Tooltip("将衰减曲线 0 端重映射到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent)]
 		public float RemapFalloffZero = 0f;
 		/// the value to remap the falloff curve's 0 to
-		[Tooltip("the value to remap the falloff curve's 0 to")]
+		[Tooltip("将衰减曲线 0 端重映射到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent)]
 		public float RemapFalloffOne = 10f;
 		/// the value to move the intensity to in instant mode
-		[Tooltip("the value to move the intensity to in instant mode")]
+		[Tooltip("Instant 模式下要设置到的强度值")]
 		[MMFEnumCondition("Mode", (int)Modes.Instant)]
 		public float InstantFalloff = 10f;
 		/// the value to move the intensity to in ToDestination mode
-		[Tooltip("the value to move the intensity to in ToDestination mode")]
+		[Tooltip("ToDestination 模式下要过渡到的强度值")]
 		[MMFEnumCondition("Mode", (int)Modes.ToDestination)]
 		public float ToDestinationFalloff = 10f;
 
 		[MMFInspectorGroup("Shadow Strength", true, 41, true)]
 		/// whether or not to modify the shadow strength of the light
-		[Tooltip("whether or not to modify the shadow strength of the light")]
+		[Tooltip("是否修改灯光阴影强度")]
 		public bool ModifyShadowStrength = true;
 		/// the shadow strength to apply to the light over time
-		[Tooltip("the shadow strength to apply to the light over time")]
+		[Tooltip("随时间应用到灯光上的阴影强度")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent, (int)Modes.ToDestination)]
 		public AnimationCurve ShadowStrengthCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
 		/// the value to remap the shadow strength's curve's 0 to
-		[Tooltip("the value to remap the shadow strength's curve's 0 to")]
+		[Tooltip("将阴影强度曲线 0 端重映射到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent)]
 		public float RemapShadowStrengthZero = 0f;
 		/// the value to remap the shadow strength's curve's 1 to
-		[Tooltip("the value to remap the shadow strength's curve's 1 to")]
+		[Tooltip("将阴影强度曲线 1 端重映射到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent)]
 		public float RemapShadowStrengthOne = 1f;
 		/// the value to move the shadow strength to in instant mode
-		[Tooltip("the value to move the shadow strength to in instant mode")]
+		[Tooltip("Instant 模式下要设置到的阴影强度值")]
 		[MMFEnumCondition("Mode", (int)Modes.Instant)]
 		public float InstantShadowStrength = 1f;
 		/// the value to move the shadow strength to in ToDestination mode
-		[Tooltip("the value to move the shadow strength to in ToDestination mode")]
+		[Tooltip("ToDestination 模式下要过渡到的阴影强度值")]
 		[MMFEnumCondition("Mode", (int)Modes.ToDestination)]
 		public float ToDestinationShadowStrength = 1f;
 
 		[MMFInspectorGroup("Volumetric Intensity", true, 39, true)]
 		/// whether or not to modify the volumetric intensity of the light
-		[Tooltip("whether or not to modify the volumetric intensity of the light")]
+		[Tooltip("是否修改灯光体积强度")]
 		public bool ModifyVolumetricIntensity = true;
 		/// the curve to tween the volumetric intensity on
-		[Tooltip("the curve to tween the volumetric intensity on")]
+		[Tooltip("用于驱动体积强度插值的曲线")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent, (int)Modes.ToDestination)]
 		public AnimationCurve VolumetricIntensityCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
 		/// the value to remap the volumetric intensity curve's 0 to
-		[Tooltip("the value to remap the volumetric intensity curve's 0 to")]
+		[Tooltip("将体积强度曲线 0 端重映射到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent)]
 		public float RemapVolumetricIntensityZero = 0f;
 		/// the value to remap the volumetric intensity curve's 1 to
-		[Tooltip("the value to remap the volumetric intensity curve's 1 to")]
+		[Tooltip("将体积强度曲线 1 端重映射到的值")]
 		[MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.ShakerEvent)]
 		public float RemapVolumetricIntensityOne = 1f;
 		/// the value to move the volumetric intensity to in instant mode
-		[Tooltip("the value to move the volumetric intensity to in instant mode")]
+		[Tooltip("Instant 模式下要设置到的体积强度值")]
 		[MMFEnumCondition("Mode", (int)Modes.Instant)]
 		public float InstantVolumetricIntensity = 1f;
 		/// the value to move the volumetric intensity to in ToDestination mode
-		[Tooltip("the value to move the volumetric intensity to in ToDestination mode")]
+		[Tooltip("ToDestination 模式下要过渡到的体积强度值")]
 		[MMFEnumCondition("Mode", (int)Modes.ToDestination)]
 		public float ToDestinationVolumetricIntensity = 1f;
 
@@ -219,6 +220,11 @@ namespace MoreMountains.FeedbacksForThirdParty
 			if (BoundLight == null)
 			{
 				return;
+			}
+
+			if (ColorOverTime == null)
+			{
+				ColorOverTime = new Gradient();
 			}
             
 			_initialFalloff = BoundLight.shapeLightFalloffSize ;
@@ -248,7 +254,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// <param name="feedbacksIntensity"></param>
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
-			if (!Active || !FeedbackTypeAuthorized)
+			if (!Active || !FeedbackTypeAuthorized || (BoundLight == null))
 			{
 				return;
 			}
