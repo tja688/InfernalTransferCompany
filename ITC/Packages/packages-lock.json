@@ -10,6 +10,16 @@
       },
       "hash": "c7e219e83dc386307116e24cc494c4eb6a8ab3f4"
     },
+    "com.coplaydev.unity-mcp": {
+      "version": "https://github.com/CoplayDev/unity-mcp.git?path=/MCPForUnity#beta",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2",
+        "com.unity.test-framework": "1.1.31"
+      },
+      "hash": "38292bd004e98e93018113125671a95a4242b069"
+    },
     "com.esotericsoftware.spine.timeline": {
       "version": "file:com.esotericsoftware.spine.timeline-3.8",
       "depth": 0,
@@ -25,12 +35,6 @@
       "dependencies": {
         "com.unity.modules.animation": "1.0.0"
       }
-    },
-    "com.kyrylokuzyk.primetween": {
-      "version": "file:../Assets/Plugins/PrimeTween/internal/com.kyrylokuzyk.primetween.tgz",
-      "depth": 0,
-      "source": "local-tarball",
-      "dependencies": {}
     },
     "com.unity.2d.animation": {
       "version": "9.2.2",
@@ -140,15 +144,6 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.ide.rider": {
-      "version": "3.0.28",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.ext.nunit": "1.0.6"
-      },
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
