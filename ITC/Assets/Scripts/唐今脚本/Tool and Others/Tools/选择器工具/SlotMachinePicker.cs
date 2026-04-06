@@ -87,6 +87,8 @@ public class SlotMachinePicker : MonoBehaviour
     [SerializeField] private bool invertMouseWheel = true;
     [Tooltip("滚轮值转换为冲量的倍率，数值越大滚动越灵敏。")]
     [SerializeField] private float wheelImpulseMultiplier = 0.12f;
+    [Tooltip("将滚轮输入换算为“格数”时使用的基准值。Windows 鼠标通常每格约为 120。")]
+    [SerializeField] private float wheelStepUnit = 120f;
     [Tooltip("滚轮输入的绝对值超过该阈值时判定为“惯性滚动（大力）”，否则进入步进模式。")]
     [SerializeField] private float flingThreshold = 0.6f;
     [Tooltip("两次步进之间的最小间隔（秒）。")]
@@ -188,6 +190,8 @@ public class SlotMachinePicker : MonoBehaviour
     private int _slotCount;
     private bool _isHidden = true; // <-- 【新增】状态：控制按钮是否已隐藏
     private bool _wasFocusEffectEnabled;
+    private float _wheelStepAccumulator;
+    private int _pendingWheelSteps;
 
     private float DeltaTime => useUnscaledDeltaTime ? Time.unscaledDeltaTime : Time.deltaTime;
     private float TimeNow => useUnscaledDeltaTime ? Time.unscaledTime : Time.time;
@@ -515,6 +519,8 @@ public class SlotMachinePicker : MonoBehaviour
         }
         
         _velocity = 0f;
+        _pendingWheelSteps = 0;
+        _wheelStepAccumulator = 0f;
         if (instant)
         {
             _scrollPosition = index;
@@ -536,6 +542,8 @@ public class SlotMachinePicker : MonoBehaviour
     public void ClearVelocity()
     {
         _velocity = 0f;
+        _pendingWheelSteps = 0;
+        _wheelStepAccumulator = 0f;
     }
 
     /// <summary>
@@ -606,6 +614,8 @@ public class SlotMachinePicker : MonoBehaviour
 
         _entrancePlaying = true;
         _exitPlaying = false;
+        _pendingWheelSteps = 0;
+        _wheelStepAccumulator = 0f;
 
         // 4. 注入冲量
         float desiredTravel = Mathf.Max(1f, _slotCount - 1f);
@@ -633,6 +643,8 @@ public class SlotMachinePicker : MonoBehaviour
 
         _exitPlaying = true;
         _entrancePlaying = false;
+        _pendingWheelSteps = 0;
+        _wheelStepAccumulator = 0f;
 
         float impulse = Mathf.Max(exitImpulseSlots, _slotCount);
         impulse *= Mathf.Max(0.1f, impulseMultiplierOverride);
@@ -778,6 +790,9 @@ public class SlotMachinePicker : MonoBehaviour
             _runtimeButtons[i].LogicalIndex = source[i];
         }
 
+        _pendingWheelSteps = 0;
+        _wheelStepAccumulator = 0f;
+
         // 【新增】恢复快照时，要确保按钮是可见的
         if (_runtimeButtons.Count > 0)
         {
@@ -830,6 +845,7 @@ public class SlotMachinePicker : MonoBehaviour
     private void ClampInspectorValues()
     {
         wheelImpulseMultiplier = Mathf.Max(0f, wheelImpulseMultiplier);
+        wheelStepUnit = Mathf.Max(1f, wheelStepUnit);
         flingThreshold = Mathf.Max(0f, flingThreshold);
         stepCooldown = Mathf.Max(0f, stepCooldown);
         friction = Mathf.Max(0f, friction);
@@ -874,23 +890,7 @@ public class SlotMachinePicker : MonoBehaviour
             raw = -raw;
         }
 
-        float impulse = raw * wheelImpulseMultiplier;
-        float abs = Mathf.Abs(impulse);
-
-        if (abs >= flingThreshold)
-        {
-            AddImpulseInternal(impulse);
-            _lastStepTime = TimeNow;
-        }
-        else
-        {
-            if (TimeNow - _lastStepTime >= stepCooldown)
-            {
-                int stepDirection = impulse > 0f ? 1 : -1;
-                Step(stepDirection);
-                _lastStepTime = TimeNow;
-            }
-        }
+        QueueWheelSteps(raw);
     }
 
     private void SimulateMotion()
@@ -914,6 +914,11 @@ public class SlotMachinePicker : MonoBehaviour
                 _scrollPosition = _snapTarget;
                 _velocity = 0f;
 
+                if (!_exitPlaying && TryConsumeQueuedStep())
+                {
+                    return;
+                }
+
                 if (_entrancePlaying)
                 {
                     _entrancePlaying = false;
@@ -926,6 +931,11 @@ public class SlotMachinePicker : MonoBehaviour
                 //     onExitCompleted?.Invoke();
                 // }
             }
+            return;
+        }
+
+        if (!_exitPlaying && TryConsumeQueuedStep())
+        {
             return;
         }
 
@@ -1098,6 +1108,8 @@ public class SlotMachinePicker : MonoBehaviour
         _velocity += signedImpulse;
         _velocity = Mathf.Clamp(_velocity, -maxVelocity, maxVelocity);
         _isSnapping = false;
+        _pendingWheelSteps = 0;
+        _wheelStepAccumulator = 0f;
     }
 
     private void Step(int stepDirection)
@@ -1106,6 +1118,54 @@ public class SlotMachinePicker : MonoBehaviour
         float target = Mathf.Round(_scrollPosition + signed);
         _velocity = 0f;
         StartSnap(target);
+        _lastStepTime = TimeNow;
+    }
+
+    private void QueueWheelSteps(float rawDelta)
+    {
+        float normalizedDelta = NormalizeWheelDelta(rawDelta);
+        if (Mathf.Approximately(normalizedDelta, 0f))
+        {
+            return;
+        }
+
+        _wheelStepAccumulator += normalizedDelta;
+
+        while (Mathf.Abs(_wheelStepAccumulator) >= 1f)
+        {
+            int direction = _wheelStepAccumulator > 0f ? 1 : -1;
+            _pendingWheelSteps += direction;
+            _wheelStepAccumulator -= direction;
+        }
+    }
+
+    private float NormalizeWheelDelta(float rawDelta)
+    {
+        float absRaw = Mathf.Abs(rawDelta);
+        if (absRaw <= Mathf.Epsilon)
+        {
+            return 0f;
+        }
+
+        if (absRaw > 10f)
+        {
+            return rawDelta / Mathf.Max(1f, wheelStepUnit);
+        }
+
+        return rawDelta;
+    }
+
+    private bool TryConsumeQueuedStep()
+    {
+        if (_pendingWheelSteps == 0 || _isSnapping)
+        {
+            return false;
+        }
+
+        int direction = _pendingWheelSteps > 0 ? 1 : -1;
+        _pendingWheelSteps -= direction;
+        Step(direction);
+        return true;
     }
 
     #endregion
