@@ -1,15 +1,6 @@
 *.riv binary
 
 # Project-owned binary assets stored in Git LFS.
-/ITC/Assets/**/*.psd filter=lfs diff=lfs merge=lfs -text
-/ITC/Assets/**/*.psb filter=lfs diff=lfs merge=lfs -text
-/ITC/Assets/**/*.png filter=lfs diff=lfs merge=lfs -text
-/ITC/Assets/**/*.jpg filter=lfs diff=lfs merge=lfs -text
-/ITC/Assets/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
-/ITC/Assets/**/*.mp3 filter=lfs diff=lfs merge=lfs -text
-/ITC/Assets/**/*.wav filter=lfs diff=lfs merge=lfs -text
-# Third-party plugin assets stay on normal Git to avoid unnecessary churn.
-/ITC/Assets/Plugins/** -filter -diff -merge -text
 ITC/Assets/**/*.psd filter=lfs diff=lfs merge=lfs -text
 ITC/Assets/**/*.psb filter=lfs diff=lfs merge=lfs -text
 ITC/Assets/**/*.png filter=lfs diff=lfs merge=lfs -text
@@ -17,4 +8,6 @@ ITC/Assets/**/*.jpg filter=lfs diff=lfs merge=lfs -text
 ITC/Assets/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
 ITC/Assets/**/*.mp3 filter=lfs diff=lfs merge=lfs -text
 ITC/Assets/**/*.wav filter=lfs diff=lfs merge=lfs -text
-ITC/Assets/Plugins/** !text -filter -merge -diff
+
+# Third-party plugin assets stay on normal Git to avoid unnecessary churn.
+ITC/Assets/Plugins/** -filter -diff -merge -text
