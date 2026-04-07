@@ -1,0 +1,333 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "Pixel Crushers Dialogue System (scoped runtime graph)",
+    "languages": [
+      "C#"
+    ],
+    "frameworks": [
+      "Unity",
+      "Pixel Crushers Dialogue System"
+    ],
+    "description": "Scoped architecture graph for Assets/Plugins/Pixel Crushers focused on runtime conversation flow, UI, triggers, persistence, and official extension points. Editor tooling, importers, demos, and most Lua interpreter internals are intentionally excluded because the plugin contains more than 1000 C# files.",
+    "analyzedAt": "2026-04-07T14:07:52.1937284+08:00",
+    "gitCommitHash": "7975e51b89878cf5d2a5e8788c8304129e0a6ba8"
+  },
+  "nodes": [
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemController.cs",
+      "type": "file",
+      "name": "DialogueSystemController.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemController.cs",
+      "summary": "Runtime hub that boots the dialogue database, display settings, UI, sequencer, events, and conversation controller. This is the real scene-side Dialogue Manager implementation.",
+      "tags": ["bootstrap", "runtime", "manager"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueManager.cs",
+      "type": "file",
+      "name": "DialogueManager.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueManager.cs",
+      "summary": "Static facade around the active DialogueSystemController singleton. This is the safest gameplay-side API surface to call from project scripts.",
+      "tags": ["facade", "api", "manager"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/DB/DatabaseManager.cs",
+      "type": "file",
+      "name": "DatabaseManager.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/DB/DatabaseManager.cs",
+      "summary": "Maintains the master DialogueDatabase and synchronizes loaded database content into the global Lua environment.",
+      "tags": ["database", "lua", "manager"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Data/DialogueDatabase.cs",
+      "type": "file",
+      "name": "DialogueDatabase.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Data/DialogueDatabase.cs",
+      "summary": "Primary ScriptableObject asset containing actors, items, locations, variables, conversations, and global Lua script data.",
+      "tags": ["data", "scriptableobject", "content"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Data/DialogueEntry.cs",
+      "type": "file",
+      "name": "DialogueEntry.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Data/DialogueEntry.cs",
+      "summary": "Represents a single node in a conversation graph, including actor, listener, menu text, subtitle text, conditions, Lua script, links, and sequences.",
+      "tags": ["data", "conversation", "node"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/Model/ConversationModel.cs",
+      "type": "file",
+      "name": "ConversationModel.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/Model/ConversationModel.cs",
+      "summary": "Conversation data engine that evaluates conditions, executes Lua and OnExecute events, marks lines visited, and resolves valid outgoing links.",
+      "tags": ["runtime", "mvc", "logic"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Controller/ConversationController.cs",
+      "type": "file",
+      "name": "ConversationController.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Controller/ConversationController.cs",
+      "summary": "Conversation state machine that mediates between ConversationModel and ConversationView, advancing through subtitles and responses.",
+      "tags": ["runtime", "mvc", "controller"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/View/View/ConversationView.cs",
+      "type": "file",
+      "name": "ConversationView.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/View/View/ConversationView.cs",
+      "summary": "Coordinates the active IDialogueUI and sequencer, decides continue-button behavior, displays subtitles and responses, and raises UI events back to the controller.",
+      "tags": ["runtime", "mvc", "view"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/UI/Standard/Dialogue/StandardDialogueUI.cs",
+      "type": "file",
+      "name": "StandardDialogueUI.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/UI/Standard/Dialogue/StandardDialogueUI.cs",
+      "summary": "Default Unity UI implementation of the dialogue UI. Handles subtitle panels, response panels, alerts, panel open-close sequencing, and EventSystem requirements.",
+      "tags": ["ui", "default-ui", "unity-ui"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Actor/DialogueActor.cs",
+      "type": "file",
+      "name": "DialogueActor.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Actor/DialogueActor.cs",
+      "summary": "Scene-side adapter that maps GameObjects to actor names, portraits, bark UI, and Standard Dialogue UI panel overrides.",
+      "tags": ["actor", "ui", "scene"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Triggers/Triggers/DialogueSystemTrigger.cs",
+      "type": "file",
+      "name": "DialogueSystemTrigger.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Triggers/Triggers/DialogueSystemTrigger.cs",
+      "summary": "General-purpose scene trigger that can start conversations, run Lua, play sequences, change quests, bark, show alerts, and send messages on many gameplay events.",
+      "tags": ["trigger", "scene", "integration"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemEvents.cs",
+      "type": "file",
+      "name": "DialogueSystemEvents.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemEvents.cs",
+      "summary": "Inspector-driven UnityEvent bridge for conversation, bark, sequence, quest, and pause lifecycle callbacks.",
+      "tags": ["events", "unityevent", "integration"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Quests/QuestLog.cs",
+      "type": "file",
+      "name": "QuestLog.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Quests/QuestLog.cs",
+      "summary": "Quest API built on top of the Dialogue System Item[] and Quest[] Lua tables. Registers Lua-callable quest helpers and exposes code-side state methods.",
+      "tags": ["quest", "lua", "api"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/ExtraDatabases.cs",
+      "type": "file",
+      "name": "ExtraDatabases.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/ExtraDatabases.cs",
+      "summary": "Adds or removes extra DialogueDatabase assets at runtime in response to scene events, with optional one-per-frame loading to reduce stutter.",
+      "tags": ["database", "streaming", "loading"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Save System/DialogueSystemSaver.cs",
+      "type": "file",
+      "name": "DialogueSystemSaver.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Save System/DialogueSystemSaver.cs",
+      "summary": "Bridge from Dialogue System persistent data into Pixel Crushers Common Save System. Handles immediate Lua restore, full apply, and restart reset behavior.",
+      "tags": ["save", "persistence", "integration"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Templates/Scripts/TemplateCustomLua.cs",
+      "type": "file",
+      "name": "TemplateCustomLua.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Templates/Scripts/TemplateCustomLua.cs",
+      "summary": "Official starter template for registering custom C# methods into Lua, usually from a component attached to the Dialogue Manager.",
+      "tags": ["template", "lua", "extension"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Sequencer/Commands/SequencerCommand.cs",
+      "type": "file",
+      "name": "SequencerCommand.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Sequencer/Commands/SequencerCommand.cs",
+      "summary": "Base class for runtime sequencer commands. Provides access to the active sequencer, speaker, listener, command parameters, and completion signaling.",
+      "tags": ["sequencer", "base-class", "extension"]
+    },
+    {
+      "id": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Templates/Scripts/SequencerCommandTemplate.cs",
+      "type": "file",
+      "name": "SequencerCommandTemplate.cs",
+      "filePath": "Assets/Plugins/Pixel Crushers/Dialogue System/Templates/Scripts/SequencerCommandTemplate.cs",
+      "summary": "Official starter template for custom sequencer commands. Demonstrates naming and lifecycle expectations for plugin-safe command extension.",
+      "tags": ["template", "sequencer", "extension"]
+    },
+    {
+      "id": "concept:dialogue-manager-bootstrap",
+      "type": "concept",
+      "name": "Dialogue Manager Bootstrap",
+      "summary": "Official scene setup pattern centered on a Dialogue Manager object with DialogueSystemController and optional support components.",
+      "tags": ["concept", "bootstrap"]
+    },
+    {
+      "id": "concept:runtime-mvc-flow",
+      "type": "concept",
+      "name": "Runtime MVC Flow",
+      "summary": "Core runtime path where ConversationModel computes state, ConversationController advances it, and ConversationView renders it through an IDialogueUI and Sequencer.",
+      "tags": ["concept", "mvc"]
+    },
+    {
+      "id": "concept:official-extension-points",
+      "type": "concept",
+      "name": "Official Extension Points",
+      "summary": "Recommended customizations that avoid plugin forks, such as custom Lua functions, custom sequencer commands, trigger composition, UI swapping, and event hooks.",
+      "tags": ["concept", "extension"]
+    },
+    {
+      "id": "concept:persistent-state",
+      "type": "concept",
+      "name": "Persistent State",
+      "summary": "Dialogue variables, visited lines, quest data, and actor state preserved through PersistentDataManager and Save System integrations.",
+      "tags": ["concept", "save"]
+    }
+  ],
+  "edges": [
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueManager.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemController.cs", "type": "depends_on", "weight": 0.6 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemController.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/DB/DatabaseManager.cs", "type": "depends_on", "weight": 0.6 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemController.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Controller/ConversationController.cs", "type": "configures", "weight": 0.6 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemController.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/UI/Standard/Dialogue/StandardDialogueUI.cs", "type": "configures", "weight": 0.6 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/DB/DatabaseManager.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Data/DialogueDatabase.cs", "type": "depends_on", "weight": 0.6 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/Model/ConversationModel.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Data/DialogueDatabase.cs", "type": "reads_from", "weight": 0.5 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/Model/ConversationModel.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Data/DialogueEntry.cs", "type": "reads_from", "weight": 0.5 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Controller/ConversationController.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/Model/ConversationModel.cs", "type": "depends_on", "weight": 0.6 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Controller/ConversationController.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/View/View/ConversationView.cs", "type": "depends_on", "weight": 0.6 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/View/View/ConversationView.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/UI/Standard/Dialogue/StandardDialogueUI.cs", "type": "related", "weight": 0.5 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Actor/DialogueActor.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/UI/Standard/Dialogue/StandardDialogueUI.cs", "type": "configures", "weight": 0.6 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Triggers/Triggers/DialogueSystemTrigger.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueManager.cs", "type": "depends_on", "weight": 0.6 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Triggers/Triggers/DialogueSystemTrigger.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Quests/QuestLog.cs", "type": "calls", "weight": 0.8 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemEvents.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemController.cs", "type": "subscribes", "weight": 0.5 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/ExtraDatabases.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/DB/DatabaseManager.cs", "type": "configures", "weight": 0.6 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Save System/DialogueSystemSaver.cs", "target": "concept:persistent-state", "type": "writes_to", "weight": 0.5 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Quests/QuestLog.cs", "target": "concept:persistent-state", "type": "related", "weight": 0.5 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Templates/Scripts/TemplateCustomLua.cs", "target": "concept:official-extension-points", "type": "configures", "weight": 0.6 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Sequencer/Commands/SequencerCommand.cs", "target": "concept:official-extension-points", "type": "related", "weight": 0.5 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Templates/Scripts/SequencerCommandTemplate.cs", "target": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Sequencer/Commands/SequencerCommand.cs", "type": "depends_on", "weight": 0.6 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemController.cs", "target": "concept:dialogue-manager-bootstrap", "type": "related", "weight": 0.5 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/Model/ConversationModel.cs", "target": "concept:runtime-mvc-flow", "type": "related", "weight": 0.5 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Controller/ConversationController.cs", "target": "concept:runtime-mvc-flow", "type": "related", "weight": 0.5 },
+    { "source": "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/View/View/ConversationView.cs", "target": "concept:runtime-mvc-flow", "type": "related", "weight": 0.5 }
+  ],
+  "layers": [
+    {
+      "id": "layer:bootstrap-and-global-access",
+      "name": "Bootstrap And Global Access",
+      "description": "Scene-level startup and globally reachable APIs that initialize the Dialogue System runtime.",
+      "nodeIds": [
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemController.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueManager.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemEvents.cs"
+      ]
+    },
+    {
+      "id": "layer:data-and-conversation-model",
+      "name": "Data And Conversation Model",
+      "description": "Dialogue content assets and the logic that evaluates entry conditions, Lua, and links.",
+      "nodeIds": [
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/DB/DatabaseManager.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Data/DialogueDatabase.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Data/DialogueEntry.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/Model/ConversationModel.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Quests/QuestLog.cs"
+      ]
+    },
+    {
+      "id": "layer:runtime-ui-and-interaction",
+      "name": "Runtime UI And Interaction",
+      "description": "Runtime controller-view flow plus the scene adapters that expose conversations to players and NPCs.",
+      "nodeIds": [
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Controller/ConversationController.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/View/View/ConversationView.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/UI/Standard/Dialogue/StandardDialogueUI.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Actor/DialogueActor.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Triggers/Triggers/DialogueSystemTrigger.cs"
+      ]
+    },
+    {
+      "id": "layer:persistence-and-database-loading",
+      "name": "Persistence And Database Loading",
+      "description": "Systems that preserve Dialogue System state across scene changes and support modular database loading.",
+      "nodeIds": [
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/ExtraDatabases.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Save System/DialogueSystemSaver.cs"
+      ]
+    },
+    {
+      "id": "layer:official-extension-points",
+      "name": "Official Extension Points",
+      "description": "Templates and base classes that the vendor expects teams to customize instead of editing core plugin code.",
+      "nodeIds": [
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Templates/Scripts/TemplateCustomLua.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Sequencer/Commands/SequencerCommand.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Templates/Scripts/SequencerCommandTemplate.cs"
+      ]
+    }
+  ],
+  "tour": [
+    {
+      "order": 1,
+      "title": "Start At The Dialogue Manager",
+      "description": "Read the runtime bootstrap first. DialogueSystemController owns database loading, UI acquisition, sequencer creation, and conversation start-stop policy, while DialogueManager is the gameplay-facing static wrapper.",
+      "nodeIds": [
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemController.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueManager.cs"
+      ]
+    },
+    {
+      "order": 2,
+      "title": "Understand The Content Model",
+      "description": "The plugin stores authored content in DialogueDatabase and DialogueEntry. DatabaseManager merges loaded databases into a master database and mirrors the result into Lua tables.",
+      "nodeIds": [
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/DB/DatabaseManager.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Data/DialogueDatabase.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Data/DialogueEntry.cs"
+      ]
+    },
+    {
+      "order": 3,
+      "title": "Follow The Conversation Pipeline",
+      "description": "ConversationModel computes valid states, executes Lua and entry events, ConversationController decides the next branch, and ConversationView renders subtitles, responses, and sequences through the active UI.",
+      "nodeIds": [
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Model/Logic/Model/ConversationModel.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Controller/ConversationController.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/View/View/ConversationView.cs"
+      ]
+    },
+    {
+      "order": 4,
+      "title": "Inspect Scene-Facing Adapters",
+      "description": "StandardDialogueUI, DialogueActor, DialogueSystemTrigger, and DialogueSystemEvents are the main scene composition points. Most feature work lands here rather than in the conversation engine itself.",
+      "nodeIds": [
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/UI/Standard/Dialogue/StandardDialogueUI.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Actor/DialogueActor.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Triggers/Triggers/DialogueSystemTrigger.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemEvents.cs"
+      ]
+    },
+    {
+      "order": 5,
+      "title": "Check Persistence And Modular Loading",
+      "description": "If a requirement touches save-load, branching persistence, or loading dialogue packs by scene or quest stage, ExtraDatabases and DialogueSystemSaver define the supported path.",
+      "nodeIds": [
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/ExtraDatabases.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Save System/DialogueSystemSaver.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Quests/QuestLog.cs"
+      ]
+    },
+    {
+      "order": 6,
+      "title": "Use Official Extension Templates",
+      "description": "Before modifying plugin internals, inspect the stock templates for custom Lua and custom sequencer commands. They encode the vendor's intended extension strategy and keep upgrades manageable.",
+      "nodeIds": [
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Templates/Scripts/TemplateCustomLua.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/MVC/Sequencer/Commands/SequencerCommand.cs",
+        "file:Assets/Plugins/Pixel Crushers/Dialogue System/Templates/Scripts/SequencerCommandTemplate.cs"
+      ]
+    }
+  ]
+}
