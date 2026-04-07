@@ -386,11 +386,11 @@ public sealed class PauseMenuRouteRuntimeFix : MonoBehaviour
         TryAddLegacyBinding(bindings, "加载菜单Canvas/存档菜单面板/背景板/纯黑背景", "BG in");
         TryAddLegacyBinding(bindings, "加载菜单Canvas/存档菜单面板/界面组件", "Read Main In");
 
-        if (!TryAddLegacyBinding(bindings, "加载菜单Canvas/存档菜单面板/背景板/LOAD字符", "Button left")
-            && !TryAddLegacyBinding(bindings, "加载菜单Canvas/存档菜单面板/背景板/SAVE字符", "Button left"))
-        {
-            TryAddLegacyBinding(bindings, "加载菜单Canvas/存档菜单面板/背景板/提示图翻牌器-加载菜单", "Button right");
-        }
+        // Do not reuse the preview board as a legacy menu tween target.
+        // Its authored RectTransform is already the correct visible position,
+        // and driving it with the old "Button right" preset shifts it over the load content.
+        TryAddLegacyBinding(bindings, "加载菜单Canvas/存档菜单面板/背景板/LOAD字符", "Button left");
+        TryAddLegacyBinding(bindings, "加载菜单Canvas/存档菜单面板/背景板/SAVE字符", "Button left");
 
         TryAddLegacyBinding(bindings, "加载菜单Canvas/存档菜单面板/关闭按钮", "Button down");
         TryAddLegacyBinding(bindings, "加载菜单Canvas/存档菜单面板/WHERE TO READ", "Button down");
