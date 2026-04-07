@@ -52,7 +52,7 @@ namespace PixelCrushers.DialogueSystem
         {
             base.Awake();
             VerifyAssignments();
-            conversationUIElements.Initialize();
+            conversationUIElements.Initialize(this);
             alertUIElements.HideImmediate();
             conversationUIElements.HideImmediate();
             QTEIndicatorElements.HideImmediate();
@@ -96,6 +96,7 @@ namespace PixelCrushers.DialogueSystem
 
         public override void Open()
         {
+            conversationUIElements.SetDialogueUI(this);
             if (closeCoroutine != null)
             {
                 StopCoroutine(closeCoroutine);
@@ -258,12 +259,12 @@ namespace PixelCrushers.DialogueSystem
             {
                 var focusedPanel = conversationUIElements.standardSubtitleControls.StageFocusedPanel(subtitle);
                 float timeout = Time.realtimeSinceStartup + WaitForOpenTimeoutDuration;
-                var showContinueButton = false;
+                var showContinueButton = focusedPanel.shouldShowContinueButton;
                 while (conversationUIElements.mainPanel.panelState != UIPanel.PanelState.Open && Time.realtimeSinceStartup < timeout)
                 {
                     yield return endOfFrame;
                     var isContinueButtonActive = focusedPanel != null && focusedPanel.continueButton != null && focusedPanel.continueButton.gameObject.activeSelf;
-                    showContinueButton = showContinueButton || isContinueButtonActive;
+                    showContinueButton = showContinueButton || isContinueButtonActive || focusedPanel.shouldShowContinueButton;
                     if (isContinueButtonActive)
                     {
                         focusedPanel.continueButton.gameObject.SetActive(false);
@@ -377,8 +378,11 @@ namespace PixelCrushers.DialogueSystem
 
         public override void OnClick(object data)
         {
-            conversationUIElements.standardMenuControls.MakeButtonsNonclickable();
-            base.OnClick(data);
+            if (data is Response)
+            {
+                conversationUIElements.standardMenuControls.MakeButtonsNonclickable();
+                base.OnClick(data);
+            }
         }
 
         public virtual void OverrideActorMenuPanel(Transform actorTransform, MenuPanelNumber menuPanelNumber, StandardUIMenuPanel customPanel)

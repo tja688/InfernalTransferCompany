@@ -11,7 +11,7 @@ namespace PixelCrushers.DialogueSystem
     /// Custom inspector editor for DialogueSystemController (e.g., Dialogue Manager).
     /// </summary>
     [CustomEditor(typeof(DialogueSystemController), true)]
-    public class DialogueSystemControllerEditor : Editor
+    public class DialogueSystemControllerEditor : UnityEditor.Editor
     {
 
         private const string LightSkinIconFilename = "Dialogue System/DialogueManager Inspector Light.png";
@@ -36,6 +36,7 @@ namespace PixelCrushers.DialogueSystem
             public bool barkSettingsFoldout = false;
             public bool alertSettingsFoldout = false;
             public bool persistentDataSettingsFoldout = false;
+            public bool questSettingsFoldout = false;
             public bool otherSettingsFoldout = false;
         }
 
@@ -44,6 +45,9 @@ namespace PixelCrushers.DialogueSystem
         private SerializedProperty displaySettingsProperty = null;
         private SerializedProperty persistentDataSettingsProperty = null;
         private bool createDatabase = false;
+
+        private static GUIContent CurrentLanguagePlayerPrefsLabel = new GUIContent("Current PlayerPrefs", 
+            "In play mode, this value takes precedence over the Language field or Use System Language checkbox above.");
 
         public static Texture2D FindIcon()
         {
@@ -77,6 +81,7 @@ namespace PixelCrushers.DialogueSystem
             DrawDatabaseField();
             DrawDisplaySettings();
             DrawPersistentDataSettings();
+            DrawQuestSettings();
             DrawOtherSettings();
             serializedObject.ApplyModifiedProperties();
             var newDialogueUI = GetCurrentDialogueUI();
@@ -204,6 +209,13 @@ namespace PixelCrushers.DialogueSystem
                     EditorGUILayout.PropertyField(localizationSettings.FindPropertyRelative("useSystemLanguage"), true);
                     EditorGUILayout.PropertyField(localizationSettings.FindPropertyRelative("textTable"), true);
                     EditorGUILayout.HelpBox("To use more than one Text Table, add a UILocalizationManager component to the Dialogue Manager and assign them there.", MessageType.None);
+                    var currentPlayerPrefs = GetCurrentLanguagePlayerPrefs();
+                    if (!string.IsNullOrEmpty(currentPlayerPrefs))
+                    {
+                        EditorGUI.BeginDisabledGroup(true);
+                        EditorGUILayout.TextField(CurrentLanguagePlayerPrefsLabel, currentPlayerPrefs);
+                        EditorGUI.EndDisabledGroup();
+                    }
                     EditorGUILayout.HelpBox("Play mode not using the language you specified here? Click Reset Language PlayerPrefs.", MessageType.None);
                     if (GUILayout.Button(new GUIContent("Reset Language PlayerPrefs", "Delete the language selection saved in PlayerPrefs.")))
                     {
@@ -216,6 +228,14 @@ namespace PixelCrushers.DialogueSystem
                     EditorWindowTools.EditorGUILayoutEndGroup();
                 }
             }
+        }
+
+        private string GetCurrentLanguagePlayerPrefs()
+        {
+            var uiLocalizationManager = dialogueSystemController.GetComponent<UILocalizationManager>();
+            return (uiLocalizationManager != null)
+                ? PlayerPrefs.GetString(uiLocalizationManager.currentLanguagePlayerPrefsKey)
+                : PlayerPrefs.GetString("Language");
         }
 
         private void ResetLanguagePlayerPrefs()
@@ -241,6 +261,7 @@ namespace PixelCrushers.DialogueSystem
                     EditorWindowTools.EditorGUILayoutBeginGroup();
                     var subtitleSettings = displaySettingsProperty.FindPropertyRelative("subtitleSettings");
                     EditorGUILayout.PropertyField(subtitleSettings.FindPropertyRelative("richTextEmphases"), new GUIContent("Use Rich Text For [em#] Tags", "Use rich text codes for [em#] markup tags. If unticked, [em#] tag will apply color to entire text."), true);
+                    EditorGUILayout.PropertyField(subtitleSettings.FindPropertyRelative("convertPipesToLineBreaks"), new GUIContent("Convert Pipes To Line Breaks", "Treat '|' characters in text as line breaks."), true);
                     EditorGUILayout.PropertyField(subtitleSettings.FindPropertyRelative("showNPCSubtitlesDuringLine"), true);
                     EditorGUILayout.PropertyField(subtitleSettings.FindPropertyRelative("showNPCSubtitlesWithResponses"), true);
                     EditorGUILayout.PropertyField(subtitleSettings.FindPropertyRelative("showPCSubtitlesDuringLine"), true);
@@ -271,6 +292,7 @@ namespace PixelCrushers.DialogueSystem
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("sequencerCamera"), true);
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("alternateCameraObject"), true);
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("cameraAngles"), true);
+                    EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("cameraEasing"), true);
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("keepCameraPositionAtConversationEnd"), true);
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("showSubtitleOnEmptyContinue"), true);
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("defaultSequence"), true);
@@ -278,6 +300,7 @@ namespace PixelCrushers.DialogueSystem
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("defaultResponseMenuSequence"), true);
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("entrytagFormat"), true);
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("reportMissingAudioFiles"), true);
+                    EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("treatAllCommandsAsRequired"), true);
                     EditorGUILayout.PropertyField(cameraSettings.FindPropertyRelative("disableInternalSequencerCommands"), true);
                 }
                 finally
@@ -382,6 +405,23 @@ namespace PixelCrushers.DialogueSystem
                     EditorGUILayout.PropertyField(persistentDataSettingsProperty.FindPropertyRelative("asyncGameObjectBatchSize"), true);
                     EditorGUILayout.PropertyField(persistentDataSettingsProperty.FindPropertyRelative("asyncDialogueEntryBatchSize"), true);
                     EditorGUILayout.PropertyField(persistentDataSettingsProperty.FindPropertyRelative("initializeNewVariables"), true);
+                }
+                finally
+                {
+                    EditorWindowTools.EditorGUILayoutEndGroup();
+                }
+            }
+        }
+
+        private void DrawQuestSettings()
+        {
+            foldouts.questSettingsFoldout = EditorWindowTools.EditorGUILayoutFoldout("Quest Settings", "Settings used by the quest system.", foldouts.questSettingsFoldout);
+            if (foldouts.questSettingsFoldout)
+            {
+                try
+                {
+                    EditorWindowTools.EditorGUILayoutBeginGroup();
+                    EditorGUILayout.PropertyField(serializedObject.FindProperty("invokeOnQuestStateChangeForEntries"), true);
                 }
                 finally
                 {

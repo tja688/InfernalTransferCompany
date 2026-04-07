@@ -1,4 +1,3 @@
-// Recompile at 2025/7/1 10:17:08
 #if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
@@ -39,7 +38,7 @@ namespace PixelCrushers.DialogueSystem
                     }
                     else
                     {
-                        PreviewUI.ShowMessage("Lua: " + luaCode, 3, -1);
+                        PreviewUI.ShowMessage("Lua: " + luaCode);
                     }
                 }
                 else if (inputWeight <= 0.001f && played.Contains(i))

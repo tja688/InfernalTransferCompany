@@ -3,6 +3,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace PixelCrushers.DialogueSystem
 {
@@ -29,6 +30,12 @@ namespace PixelCrushers.DialogueSystem
         [Tooltip("The trigger that this component listens for.")]
         [DialogueSystemTriggerEvent]
         public DialogueSystemTriggerEvent trigger = DialogueSystemTriggerEvent.OnUse;
+
+        /// <summary>
+        /// Delay 1 frame before starting. Applie to OnStart and OnEnable.
+        /// </summary>
+        [Tooltip("Delay 1 frame before starting. Applie to OnStart, OnEnable, and OnSaveDataApplied.")]
+        public bool delayOneFrame = false;
 
         /// <summary>
         /// The conditions under which the trigger will fire.
@@ -265,6 +272,12 @@ namespace PixelCrushers.DialogueSystem
 
         [Tooltip("If specified, use this dialogue UI for conversation.")]
         public GameObject overrideDialogueUI = null;
+
+        /// <summary>
+        /// Additional actors to override. Use to specify different actors to fill roles of actors assigned in conversation.
+        /// </summary>
+        [Tooltip("Additional actors to override.")]
+        public List<ActorOverride> additionalActorOverrides = new List<ActorOverride>();
 
         /// <summary>
         /// Only start if no other conversation is active.
@@ -714,6 +727,7 @@ namespace PixelCrushers.DialogueSystem
             {
                 yield return CoroutineUtility.endOfFrame;
             }
+            if (delayOneFrame) yield return null;
             TryStart(null);
         }
 
@@ -1073,7 +1087,7 @@ namespace PixelCrushers.DialogueSystem
                     }
 
                     var overrideIDialogueUI = (overrideDialogueUI != null) ? overrideDialogueUI.GetComponent<IDialogueUI>() : null;
-                    DialogueManager.StartConversation(conversation, actorTransform, conversantTransform, entryID, overrideIDialogueUI);
+                    DialogueManager.StartConversation(conversation, actorTransform, conversantTransform, entryID, overrideIDialogueUI, additionalActorOverrides);
                     activeConversation = DialogueManager.instance.activeConversation;
                     earliestTimeToAllowTriggerExit = GetCurrentDialogueTime() + marginToAllowTriggerExit;
                     if (stopConversationIfTooFar)

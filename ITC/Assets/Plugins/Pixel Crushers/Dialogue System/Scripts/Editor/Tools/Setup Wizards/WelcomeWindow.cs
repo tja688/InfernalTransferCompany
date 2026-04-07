@@ -16,6 +16,8 @@ namespace PixelCrushers.DialogueSystem
 
         private const string ShowOnStartEditorPrefsKey = "PixelCrushers.DialogueSystem.WelcomeWindow.ShowOnStart";
 
+        private Vector2 scrollPosition = Vector2.zero;
+
         private GUIStyle m_quickButtonGuiStyle = null;
         private GUIStyle quickButtonGuiStyle
         {
@@ -41,9 +43,9 @@ namespace PixelCrushers.DialogueSystem
         {
             var window = GetWindow<WelcomeWindow>(false, "Welcome");
 #if EVALUATION_VERSION || ACADEMIC
-            window.minSize = new Vector2(370, 680);
+            window.minSize = new Vector2(370, 290);
 #else
-            window.minSize = new Vector2(370, 650);
+            window.minSize = new Vector2(370, 290);
 #endif
             window.showOnStart = true; // Can't check EditorPrefs when constructing window: showOnStartPrefs;
             return window;
@@ -81,8 +83,17 @@ namespace PixelCrushers.DialogueSystem
         private void OnGUI()
         {
             DrawBanner();
-            DrawButtons();
-            DrawDefines();
+            GUILayout.Space(40);
+            try
+            {
+                scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+                DrawButtons();
+                DrawDefines();
+            }
+            finally
+            {
+                GUILayout.EndScrollView();
+            }
             DrawFooter();
         }
 
@@ -110,7 +121,8 @@ namespace PixelCrushers.DialogueSystem
 
         private void DrawButtons()
         {
-            GUILayout.BeginArea(new Rect(5, 40, position.width - 10, position.height - 40));
+            //GUILayout.BeginArea(new Rect(5, 40, position.width - 10, position.height - 40));
+            var ButtonHeightLayout = GUILayout.Height(3 * EditorGUIUtility.singleLineHeight);
             try
             {
                 EditorWindowTools.DrawHorizontalLine();
@@ -120,25 +132,25 @@ namespace PixelCrushers.DialogueSystem
                 GUILayout.BeginHorizontal();
                 try
                 {
-                    if (GUILayout.Button(new GUIContent("Quick\nStart", "Open Quick Start tutorial"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), GUILayout.Height(3 * EditorGUIUtility.singleLineHeight)))
+                    if (GUILayout.Button(new GUIContent("Quick\nStart", "Open Quick Start tutorial"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), ButtonHeightLayout))
                     {
-                        Application.OpenURL("http://www.pixelcrushers.com/dialogue_system/manual2x/html/quick_start.html");
+                        Application.OpenURL("https://www.pixelcrushers.com/dialogue_system/manual2x/html/quick_start.html");
                     }
-                    if (GUILayout.Button(new GUIContent("Manual", "Open online manual"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), GUILayout.Height(3 * EditorGUIUtility.singleLineHeight)))
+                    if (GUILayout.Button(new GUIContent("Manual", "Open online manual"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), ButtonHeightLayout))
                     {
-                        Application.OpenURL("http://www.pixelcrushers.com/dialogue_system/manual2x/html/");
+                        Application.OpenURL("https://www.pixelcrushers.com/dialogue_system/manual2x/html/");
                     }
-                    if (GUILayout.Button(new GUIContent("Videos", "Open video tutorial list"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), GUILayout.Height(3 * EditorGUIUtility.singleLineHeight)))
+                    if (GUILayout.Button(new GUIContent("Videos", "Open video tutorial list"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), ButtonHeightLayout))
                     {
-                        Application.OpenURL("http://www.pixelcrushers.com/dialogue-system-tutorials/");
+                        Application.OpenURL("https://www.youtube.com/watch?v=exs6s3Db8aU&list=PLwJBdHXwa-RoOVOj_BjpdmFbXGV245VQb&index=2");
                     }
-                    if (GUILayout.Button(new GUIContent("Scripting\nReference", "Open scripting & API reference"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), GUILayout.Height(3 * EditorGUIUtility.singleLineHeight)))
+                    if (GUILayout.Button(new GUIContent("Scripting\nReference", "Open scripting & API reference"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), ButtonHeightLayout))
                     {
-                        Application.OpenURL("http://www.pixelcrushers.com/dialogue_system/manual2x/html/scripting.html");
+                        Application.OpenURL("https://www.pixelcrushers.com/dialogue_system/manual2x/html/scripting.html");
                     }
-                    if (GUILayout.Button(new GUIContent("Forum", "Go to the Pixel Crushers forum"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), GUILayout.Height(3 * EditorGUIUtility.singleLineHeight)))
+                    if (GUILayout.Button(new GUIContent("Forum", "Go to the Pixel Crushers forum"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), ButtonHeightLayout))
                     {
-                        Application.OpenURL("http://www.pixelcrushers.com/phpbb");
+                        Application.OpenURL("https://forum.pixelcrushers.com/");
                     }
                 }
                 finally
@@ -150,25 +162,25 @@ namespace PixelCrushers.DialogueSystem
                 GUILayout.BeginHorizontal();
                 try
                 {
-                    if (GUILayout.Button(new GUIContent("Dialogue\nEditor", "Open the Dialogue Editor window"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), GUILayout.Height(3 * EditorGUIUtility.singleLineHeight)))
+                    if (GUILayout.Button(new GUIContent("Dialogue\nEditor", "Open the Dialogue Editor window"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), ButtonHeightLayout))
                     {
                         PixelCrushers.DialogueSystem.DialogueEditor.DialogueEditorWindow.OpenDialogueEditorWindow();
                     }
-                    if (GUILayout.Button(new GUIContent("Dialogue\nManager\nWizard", "Configure a Dialogue Manager, the component that coordinates all Dialogue System activity"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), GUILayout.Height(3 * EditorGUIUtility.singleLineHeight)))
+                    if (GUILayout.Button(new GUIContent("Dialogue\nManager\nWizard", "Configure a Dialogue Manager, the component that coordinates all Dialogue System activity"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), ButtonHeightLayout))
                     {
                         DialogueManagerWizard.Init();
                     }
-                    if (GUILayout.Button(new GUIContent("Player\nSetup\nWizard", "Configure a player GameObject to work with the Dialogue System"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), GUILayout.Height(3 * EditorGUIUtility.singleLineHeight)))
+                    if (GUILayout.Button(new GUIContent("Player\nSetup\nWizard", "Configure a player GameObject to work with the Dialogue System"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), ButtonHeightLayout))
                     {
                         PlayerSetupWizard.Init();
                     }
-                    if (GUILayout.Button(new GUIContent("NPC\nSetup\nWizard", "Configure a non-player character or other interactive GameObject to work with the Dialogue System"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), GUILayout.Height(3 * EditorGUIUtility.singleLineHeight)))
+                    if (GUILayout.Button(new GUIContent("NPC\nSetup\nWizard", "Configure a non-player character or other interactive GameObject to work with the Dialogue System"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), ButtonHeightLayout))
                     {
                         NPCSetupWizard.Init();
                     }
-                    if (GUILayout.Button(new GUIContent("Free\nExtras", "Go to the Dialogue System free extras website"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), GUILayout.Height(3 * EditorGUIUtility.singleLineHeight)))
+                    if (GUILayout.Button(new GUIContent("Free\nExtras", "Go to the Dialogue System free extras website"), quickButtonGuiStyle, GUILayout.Width(ButtonWidth), ButtonHeightLayout))
                     {
-                        Application.OpenURL("http://www.pixelcrushers.com/dialogue-system-extras/");
+                        Application.OpenURL("https://www.pixelcrushers.com/dialogue-system-extras/");
                     }
                 }
                 finally
@@ -179,13 +191,13 @@ namespace PixelCrushers.DialogueSystem
             }
             finally
             {
-                GUILayout.EndArea();
+                //GUILayout.EndArea();
             }
         }
 
         private void DrawDefines()
         {
-            GUILayout.BeginArea(new Rect(5, 256, position.width - 10, position.height - 256));
+            //GUILayout.BeginArea(new Rect(5, 256, position.width - 10, position.height - 256));
             EditorGUILayout.LabelField("Current Build Target: " + ObjectNames.NicifyVariableName(EditorUserBuildSettings.activeBuildTarget.ToString()), EditorStyles.boldLabel);
 
             var define_USE_PHYSICS2D = false;
@@ -202,6 +214,7 @@ namespace PixelCrushers.DialogueSystem
             var define_USE_TWINE = false;
             var define_USE_YARN = false;
             var define_USE_YARN2 = false;
+            var define_USE_YARN3 = false;
             var define_TMP_PRESENT = false;
             var define_USE_STM = false;
             var define_USE_NAVMESH = false;
@@ -222,6 +235,7 @@ namespace PixelCrushers.DialogueSystem
                 if (string.Equals(ScriptingSymbolNames.USE_TWINE, defines[i].Trim())) define_USE_TWINE = true;
                 if (string.Equals(ScriptingSymbolNames.USE_YARN, defines[i].Trim())) define_USE_YARN = true;
                 if (string.Equals(ScriptingSymbolNames.USE_YARN2, defines[i].Trim())) define_USE_YARN2 = true;
+                if (string.Equals(ScriptingSymbolNames.USE_YARN3, defines[i].Trim())) define_USE_YARN3 = true;
                 if (string.Equals(ScriptingSymbolNames.TMP_PRESENT, defines[i].Trim())) define_TMP_PRESENT = true;
                 if (string.Equals(ScriptingSymbolNames.USE_STM, defines[i].Trim())) define_USE_STM = true;
                 if (string.Equals(ScriptingSymbolNames.USE_NAVMESH, defines[i].Trim())) define_USE_NAVMESH = true;
@@ -241,6 +255,7 @@ namespace PixelCrushers.DialogueSystem
             define_USE_TWINE = true;
             define_USE_YARN = false;
             define_USE_YARN2 = false;
+            define_USE_YARN3 = false;
 #endif
 
             EditorGUI.BeginChangeCheck();
@@ -287,8 +302,9 @@ namespace PixelCrushers.DialogueSystem
             EditorGUILayout.ToggleLeft(new GUIContent("Celtx GVR 2 (USE_CELTX)", "Enable Dialogue System support for Celtx GVR 2 JSON import."), define_USE_CELTX);
             EditorGUILayout.ToggleLeft(new GUIContent("Backlight (Celtx) Gem 3 (USE_CELTX3)", "Enable Dialogue System support for Backlight Gem 3 JSON import."), define_USE_CELTX3);
             EditorGUILayout.ToggleLeft(new GUIContent("Twine (USE_TWINE)", "Enable Dialogue System support for Twine Twison import."), define_USE_TWINE);
-            EditorGUILayout.ToggleLeft(new GUIContent("Yarn 1 (USE_YARN)", "Enable Dialogue System support for YarnSpinner 1 import."), define_USE_YARN);
-            EditorGUILayout.ToggleLeft(new GUIContent("Yarn 2 (USE_YARN2)", "Enable Dialogue System support for YarnSpinner 2 import."), define_USE_YARN2);
+            EditorGUILayout.ToggleLeft(new GUIContent("Yarn 1 (USE_YARN)", "Enable Dialogue System support for Yarn Spinner 1 import."), define_USE_YARN);
+            EditorGUILayout.ToggleLeft(new GUIContent("Yarn 2 (USE_YARN2)", "Enable Dialogue System support for Yarn Spinner 2 import."), define_USE_YARN2);
+            EditorGUILayout.ToggleLeft(new GUIContent("Yarn 3 (USE_YARN3)", "Enable Dialogue System support for Yarn Spinner 3 import."), define_USE_YARN3);
             EditorGUI.EndDisabledGroup();
             var new_USE_ARCWEAVE = define_USE_ARCWEAVE;
             var new_USE_ARTICY = define_USE_ARTICY;
@@ -298,6 +314,7 @@ namespace PixelCrushers.DialogueSystem
             var new_USE_TWINE = define_USE_TWINE;
             var new_USE_YARN = define_USE_YARN;
             var new_USE_YARN2 = define_USE_YARN2;
+            var new_USE_YARN3 = define_USE_YARN3;
 #else
             var new_USE_ARCWEAVE = EditorGUILayout.ToggleLeft(new GUIContent("Arcweave (USE_ARCWEAVE)", "Enable Dialogue System support for Arcweave import."), define_USE_ARCWEAVE);
             var new_USE_ARTICY = EditorGUILayout.ToggleLeft(new GUIContent("articy:draft (USE_ARTICY)", "Enable Dialogue System support for articy:draft XML import."), define_USE_ARTICY);
@@ -305,8 +322,9 @@ namespace PixelCrushers.DialogueSystem
             var new_USE_CELTX = EditorGUILayout.ToggleLeft(new GUIContent("Celtx GVR 2 (USE_CELTX)", "Enable Dialogue System support for Celtx GVR 2 JSON import."), define_USE_CELTX);
             var new_USE_CELTX3 = EditorGUILayout.ToggleLeft(new GUIContent("Backlight (Celtx) Gem 3 (USE_CELTX3)", "Enable Dialogue System support for Backlight Gem 3 JSON import."), define_USE_CELTX3);
             var new_USE_TWINE = EditorGUILayout.ToggleLeft(new GUIContent("Twine (USE_TWINE)", "Enable Dialogue System support for Twine Twison import."), define_USE_TWINE);
-            var new_USE_YARN = EditorGUILayout.ToggleLeft(new GUIContent("Yarn 1 (USE_YARN)", "Enable Dialogue System support for YarnSpinner 1 import."), define_USE_YARN);
-            var new_USE_YARN2 = EditorGUILayout.ToggleLeft(new GUIContent("Yarn 2 (USE_YARN2)", "Enable Dialogue System support for YarnSpinner 2 import."), define_USE_YARN2);
+            var new_USE_YARN = EditorGUILayout.ToggleLeft(new GUIContent("Yarn 1 (USE_YARN)", "Enable Dialogue System support for Yarn Spinner 1 import."), define_USE_YARN);
+            var new_USE_YARN2 = EditorGUILayout.ToggleLeft(new GUIContent("Yarn 2 (USE_YARN2)", "Enable Dialogue System support for Yarn Spinner 2 import."), define_USE_YARN2);
+            var new_USE_YARN3 = EditorGUILayout.ToggleLeft(new GUIContent("Yarn 3 (USE_YARN3)", "Enable Dialogue System support for Yarn Spinner 3 import."), define_USE_YARN3);
 #endif
 
             var changed = EditorGUI.EndChangeCheck();
@@ -318,6 +336,7 @@ namespace PixelCrushers.DialogueSystem
             if (new_USE_TWINE != define_USE_TWINE) MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.USE_TWINE, new_USE_TWINE);
             if (new_USE_YARN != define_USE_YARN) MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.USE_YARN, new_USE_YARN);
             if (new_USE_YARN2 != define_USE_YARN2) MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.USE_YARN2, new_USE_YARN2);
+            if (new_USE_YARN3 != define_USE_YARN3) MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.USE_YARN3, new_USE_YARN3);
             if (new_TMP_PRESENT != define_TMP_PRESENT) MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.TMP_PRESENT, new_TMP_PRESENT, true);
             if (new_USE_NAVMESH != define_USE_NAVMESH) MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.USE_NAVMESH, new_USE_NAVMESH, true);
 
@@ -503,35 +522,68 @@ namespace PixelCrushers.DialogueSystem
                 }
             }
 
+            if (new_USE_YARN3 != define_USE_YARN3)
+            {
+                if (new_USE_YARN3)
+                {
+                    if (EditorUtility.DisplayDialog("Enable Yarn 3 Import", "This will enable the ability to import Yarn Spinner 3 files. Yarn Spinner 3 for Unity must already be installed in your project first.\n\n*IMPORTANT*: Only press OK if Yarn Spinner 3 is already installed!\n\nTo continue, press OK. Then refer to the Yarn 3 Import section of the manual for remaining setup steps. If you need to install Yarn Spinner first, press Cancel.", "OK", "Cancel"))
+                    {
+                        MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.USE_YARN3, new_USE_YARN3);
+                    }
+                    else
+                    {
+                        changed = false;
+                    }
+                }
+                else
+                {
+                    MoreEditorUtility.ToggleScriptingDefineSymbol(ScriptingSymbolNames.USE_YARN3, new_USE_YARN3);
+                }
+            }
+
             EditorWindowTools.DrawHorizontalLine();
-            GUILayout.EndArea();
+            //GUILayout.EndArea();
 
             if (changed) EditorTools.ReimportScripts();
         }
 
         private void DrawFooter()
         {
-            if (GUI.Button(new Rect(position.width - 200, position.height - 8 - 2 * EditorGUIUtility.singleLineHeight, 190, EditorGUIUtility.singleLineHeight), new GUIContent("Learn About OpenAI Addon", "Visit the Asset Store page for the Addon for OpenAI")))
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button(new GUIContent("OpenAI Addon", "Visit the Asset Store page for the Addon for OpenAI & Other Generative AI"),
+                GUILayout.Width(150)))
             {
                 Application.OpenURL("https://assetstore.unity.com/packages/tools/ai/dialogue-system-addon-for-openai-249287");
             }
+            if (GUILayout.Button(new GUIContent("Procedural Dialogue", "Visit the Asset Store page for the Addon for Procedural Dialogue"),
+                GUILayout.Width(150)))
+            {
+                Application.OpenURL("https://assetstore.unity.com/packages/tools/behavior-ai/dialogue-system-for-unity-addon-for-procedural-dialogue-317822");
+            }
+            GUILayout.EndHorizontal();
 
-            var newShowOnStart = EditorGUI.ToggleLeft(new Rect(5, position.height - 5 - EditorGUIUtility.singleLineHeight, position.width - (70 + 150), EditorGUIUtility.singleLineHeight), "Show at start", showOnStart);
+            GUILayout.BeginHorizontal();
+            var newShowOnStart = EditorGUILayout.ToggleLeft("Show at start", showOnStart, GUILayout.Width(100));
             if (newShowOnStart != showOnStart)
             {
                 showOnStart = newShowOnStart;
                 showOnStartPrefs = newShowOnStart;
             }
-            if (GUI.Button(new Rect(position.width - 80, position.height - 5 - EditorGUIUtility.singleLineHeight, 70, EditorGUIUtility.singleLineHeight), new GUIContent("Support", "Contact the developer for support")))
-            {
-                Application.OpenURL("http://www.pixelcrushers.com/support-form/");
-            }
-#if EVALUATION_VERSION || ACADEMIC
-            if (GUI.Button(new Rect(position.width - 154, position.height - 5 - EditorGUIUtility.singleLineHeight, 70, EditorGUIUtility.singleLineHeight), new GUIContent("Buy", "Buy a license")))
+            GUILayout.FlexibleSpace();
+
+            #if EVALUATION_VERSION || ACADEMIC
+            if (GUILayout.Button(new GUIContent("Buy", "Buy a license"), GUILayout.Width(70)))
             {
                 Application.OpenURL("https://assetstore.unity.com/packages/tools/ai/dialogue-system-for-unity-11672");
             }
-#endif
+            #endif
+
+            if (GUILayout.Button(new GUIContent("Support", "Contact the developer for support"), GUILayout.Width(70)))
+            {
+                Application.OpenURL("https://www.pixelcrushers.com/support-form/");
+            }
+            EditorGUILayout.EndHorizontal();
         }
 
     }

@@ -65,8 +65,8 @@ namespace PixelCrushers.DialogueSystem.Articy
 
         #region Variables
 
-        protected const string ArticyIdFieldTitle = "Articy Id";
-        protected const string ArticyTechnicalNameFieldTitle = "Technical Name";
+        public const string ArticyIdFieldTitle = "Articy Id";
+        public const string ArticyTechnicalNameFieldTitle = "Technical Name";
         protected const string DestinationArticyIdFieldTitle = "destinationArticyId";
         protected const int StartEntryID = 0;
 
@@ -227,6 +227,7 @@ namespace PixelCrushers.DialogueSystem.Articy
             {
                 otherScriptFieldTitles.Add(otherScriptFieldTitle.Trim());
             }
+            ArticyTools.convertMarkupToRichText = prefs.ConvertMarkupToRichText;
             ResetArticyIdIndex();
             this.template = template;
         }
@@ -809,7 +810,7 @@ namespace PixelCrushers.DialogueSystem.Articy
             SetDialogueEntryParticipants(startEntry, conversation.ActorID, conversation.ConversantID);
             Field.SetValue(startEntry.fields, ArticyIdFieldTitle, articyFlowFragment.id, FieldType.Text);
             IndexDialogueEntryByArticyId(startEntry, articyFlowFragment.id);
-            ConvertPinExpressionsToConditionsAndScripts(startEntry, articyFlowFragment.pins);
+            ConvertPinExpressionsToConditionsAndScripts(startEntry, articyFlowFragment.pins, true, false);
             startEntry.outgoingLinks = new List<Link>();
             var conversationSequenceField = Field.Lookup(conversation.fields, "Sequence");
             if (conversationSequenceField != null && !string.IsNullOrEmpty(conversationSequenceField.value))
@@ -823,7 +824,7 @@ namespace PixelCrushers.DialogueSystem.Articy
             }
             conversation.dialogueEntries.Add(startEntry);
 
-            // Convert dialogue's in and out pins to passthrough group entries:
+            // Convert flow fragment's in and out pins to passthrough group entries:
             for (int i = 0; i < articyFlowFragment.pins.Count; i++)
             {
                 var pin = articyFlowFragment.pins[i];
@@ -1372,6 +1373,10 @@ namespace PixelCrushers.DialogueSystem.Articy
             ConvertLocalizableText(entry, "Menu Text", fragment.menuText, true);
             ConvertLocalizableText(entry, "Title", fragment.displayName);
             SetFeatureFields(entry.fields, fragment.features);
+            if (prefs.AddDialogueEntryTechnicalNames)
+            {
+                Field.SetValue(entry.fields, ArticyTechnicalNameFieldTitle, fragment.technicalName, FieldType.Text);
+            }
             switch (prefs.StageDirectionsMode)
             {
                 case ConverterPrefs.StageDirModes.Sequences:
@@ -1449,6 +1454,10 @@ namespace PixelCrushers.DialogueSystem.Articy
             ConvertLocalizableText(entry, "Title", flowFragment.displayName);
             entry.Title = "Flow: " + entry.Title;
             SetFeatureFields(entry.fields, flowFragment.features);
+            if (prefs.AddDialogueEntryTechnicalNames)
+            {
+                Field.SetValue(entry.fields, ArticyTechnicalNameFieldTitle, flowFragment.technicalName, FieldType.Text);
+            }
             var scriptField = Field.Lookup(entry.fields, "Script");
             if (scriptField != null) // Script is handled differently.
             {
@@ -1482,6 +1491,10 @@ namespace PixelCrushers.DialogueSystem.Articy
             DialogueEntry hubEntry = CreateNewDialogueEntry(conversation, hub.displayName.DefaultText, hub.id);
             hubEntry.canvasRect = new Rect(hub.position.x, hub.position.y, DialogueEntry.CanvasRectWidth, DialogueEntry.CanvasRectHeight);
             SetFeatureFields(hubEntry.fields, hub.features);
+            if (prefs.AddDialogueEntryTechnicalNames)
+            {
+                Field.SetValue(hubEntry.fields, ArticyTechnicalNameFieldTitle, hub.technicalName, FieldType.Text);
+            }
             ConvertLocalizableText(hubEntry, "Title", hub.displayName);
             hubEntry.isGroup = true; // May be set false if output pin has code.
             ConvertPinExpressionsToConditionsAndScripts(hubEntry, hub.pins);
@@ -1504,6 +1517,10 @@ namespace PixelCrushers.DialogueSystem.Articy
             DialogueEntry jumpEntry = CreateNewDialogueEntry(conversation, jump.displayName.DefaultText, jump.id);
             jumpEntry.canvasRect = new Rect(jump.position.x, jump.position.y, DialogueEntry.CanvasRectWidth, DialogueEntry.CanvasRectHeight);
             SetFeatureFields(jumpEntry.fields, jump.features);
+            if (prefs.AddDialogueEntryTechnicalNames)
+            {
+                Field.SetValue(jumpEntry.fields, ArticyTechnicalNameFieldTitle, jump.technicalName, FieldType.Text);
+            }
             ConvertLocalizableText(jumpEntry, "Title", jump.displayName);
             jumpEntry.isGroup = true; // We'll set isGroup correctly in a final pass in CheckJumpsForGroupNodes.
             ConvertPinExpressionsToConditionsAndScripts(jumpEntry, jump.pins);
@@ -1517,6 +1534,10 @@ namespace PixelCrushers.DialogueSystem.Articy
                 var flowEntry = CreateNewDialogueEntry(conversation, "Flow: " + flowFragment.displayName.DefaultText, flowFragment.id);
                 flowEntry.canvasRect = new Rect(jump.position.x, jump.position.y + 32f, DialogueEntry.CanvasRectWidth, DialogueEntry.CanvasRectHeight);
                 SetFeatureFields(flowEntry.fields, flowFragment.features);
+                if (prefs.AddDialogueEntryTechnicalNames)
+                {
+                    Field.SetValue(flowEntry.fields, ArticyTechnicalNameFieldTitle, flowFragment.technicalName, FieldType.Text);
+                }
                 flowEntry.isGroup = true;
                 ConvertPinExpressionsToConditionsAndScripts(flowEntry, flowFragment.pins);
                 if (flowEntry.isGroup) flowEntry.ActorID = GetNPCID(conversation);
@@ -1562,7 +1583,6 @@ namespace PixelCrushers.DialogueSystem.Articy
             conditionEntry.currentMenuText = string.Empty;
             conditionEntry.isGroup = true;
             if (conditionEntry.isGroup) conditionEntry.ActorID = GetNPCID(conversation);
-
             string trueLuaConditions = ConvertExpression(condition.expression, true);
             string falseLuaConditions = string.IsNullOrEmpty(trueLuaConditions)
                 ? "false" : string.Format("({0}) == false", RemoveTrailingSemicolon(trueLuaConditions));
@@ -1710,13 +1730,13 @@ namespace PixelCrushers.DialogueSystem.Articy
                 switch (pin.semantic)
                 {
                     case ArticyData.SemanticType.Input:
-                        if (convertInput)
+                        if (convertInput && entry.Title != "output")
                         {
                             entry.conditionsString = AddToConditions(entry.conditionsString, ConvertExpression(pin.expression, true));
                         }
                         break;
                     case ArticyData.SemanticType.Output:
-                        if (convertOutput)
+                        if (convertOutput && entry.Title != "input")
                         {
                             entry.userScript = AddToUserScript(entry.userScript, ConvertExpression(pin.expression, false));
                             if (!string.IsNullOrEmpty(entry.userScript) && prefs.ConvertInstructionsAs != ConverterPrefs.CodeNodeMode.GroupEntry)
@@ -1738,6 +1758,9 @@ namespace PixelCrushers.DialogueSystem.Articy
             }
         }
 
+        private static Regex SeenRegex = new Regex(@"\bseen\b");
+        private static Regex UnseenRegex = new Regex(@"\bunseen\b");
+
         /// <summary>
         /// Converts an articy expresso expression into Lua.
         /// </summary>
@@ -1746,6 +1769,12 @@ namespace PixelCrushers.DialogueSystem.Articy
         public static string ConvertExpression(string expression, bool isCondition = false)
         {
             if (string.IsNullOrEmpty(expression)) return expression;
+
+            // Special variables defined in Articy:
+            expression = Regex.Replace(expression, @"\bseen\b", "Dialog[thisID].SimStatus == \"WasDisplayed\"");
+            expression = Regex.Replace(expression, @"\bunseen\b", "Dialog[thisID].SimStatus ~= \"WasDisplayed\"");
+            expression = Regex.Replace(expression, @"\bseenCounter\b", "getSeenCounter(self)");
+            // 'self' and 'speaker' are set in ArticyLuaFunctions' OnConversationLine.
 
             if (isCondition && expression.Trim().StartsWith("//") && !expression.Contains("\n")) return string.Empty;
 

@@ -1,4 +1,3 @@
-// Recompile at 2025/7/1 10:17:08
 #if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
@@ -54,7 +53,7 @@ namespace PixelCrushers.DialogueSystem
                         {
                             message = "Set quest " + input.quest + " entry #" + input.questEntryNumber + " to " + input.questEntryState;
                         }
-                        if (!string.IsNullOrEmpty(message)) PreviewUI.ShowMessage(message, 2, -2);
+                        if (!string.IsNullOrEmpty(message)) PreviewUI.ShowMessage(message);
                     }
                 }
                 else if (inputWeight <= 0.001f && played.Contains(i))

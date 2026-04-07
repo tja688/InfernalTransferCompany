@@ -1,6 +1,3 @@
-// Recompile at 2025/7/1 10:25:16
-
-
 // Copyright (c) Pixel Crushers. All rights reserved.
 
 using UnityEngine;
@@ -52,6 +49,17 @@ namespace PixelCrushers
         }
 #endif
 
+#if UNITEXT
+        [SerializeField]
+        private LightSide.UniText m_uniText;
+
+        public LightSide.UniText uniText
+        {
+            get { return m_uniText; }
+            set { m_uniText = value; }
+        }
+#endif
+
         /// <summary>
         /// The text content of the UI.Text or TextMeshProUGUI.
         /// </summary>
@@ -65,6 +73,9 @@ namespace PixelCrushers
 #if USE_STM
                 if (superTextMesh != null) return superTextMesh.text;
 #endif
+#if UNITEXT
+                if (uniText != null) return uniText.Text;
+#endif
                 if (uiText != null) return uiText.text;
                 return string.Empty;
             }
@@ -75,6 +86,9 @@ namespace PixelCrushers
 #endif
 #if USE_STM
                 if (superTextMesh != null) superTextMesh.text = value;
+#endif
+#if UNITEXT
+                if (uniText != null) uniText.Text = value;
 #endif
                 if (uiText != null) uiText.text = value;
             }
@@ -90,6 +104,9 @@ namespace PixelCrushers
 #if USE_STM
                 if (superTextMesh != null) return superTextMesh.enabled;
 #endif
+#if UNITEXT
+                if (uniText != null) return uniText.enabled;
+#endif
                 if (uiText != null) return uiText.enabled;
                 return false;
             }
@@ -100,6 +117,9 @@ namespace PixelCrushers
 #endif
 #if USE_STM
                 if (superTextMesh != null) superTextMesh.enabled = value;
+#endif
+#if UNITEXT
+                if (uniText != null) uniText.enabled = value;
 #endif
                 if (uiText != null) uiText.enabled = value;
             }
@@ -115,6 +135,9 @@ namespace PixelCrushers
 #if USE_STM
                 if (superTextMesh != null) return superTextMesh.color;
 #endif
+#if UNITEXT
+                if (uniText != null) return uniText.color;
+#endif
                 if (uiText != null) return uiText.color;
                 return Color.black;
             }
@@ -125,6 +148,9 @@ namespace PixelCrushers
 #endif
 #if USE_STM
                 if (superTextMesh != null) superTextMesh.color = value;
+#endif
+#if UNITEXT
+                if (uniText != null) uniText.color = value;
 #endif
                 if (uiText != null) uiText.color = value;
             }
@@ -139,6 +165,9 @@ namespace PixelCrushers
 #if USE_STM
             this.superTextMesh = null;
 #endif
+#if UNITEXT
+            this.uniText = null;
+#endif
         }
 
         public UITextField(UnityEngine.UI.Text uiText)
@@ -150,6 +179,9 @@ namespace PixelCrushers
 #if USE_STM
             this.superTextMesh = null;
 #endif
+#if UNITEXT
+            this.uniText = null;
+#endif
         }
 
 #if TMP_PRESENT
@@ -158,6 +190,9 @@ namespace PixelCrushers
             this.uiText = null;
 #if USE_STM
             this.superTextMesh = null;
+#endif
+#if UNITEXT
+            this.uniText = null;
 #endif
             this.textMeshProUGUI = textMeshProUGUI;
         }
@@ -174,6 +209,21 @@ namespace PixelCrushers
         }
 #endif
 
+#if UNITEXT
+        public UITextField(LightSide.UniText uniText)
+        {
+            this.uniText = uniText;
+            this.uiText = null;
+#if TMP_PRESENT
+            this.textMeshProUGUI = null;
+#endif
+#if USE_STM
+            this.superTextMesh = null;
+#endif
+            this.textMeshProUGUI = textMeshProUGUI;
+        }
+#endif
+
         public GameObject gameObject
         {
             get
@@ -183,6 +233,9 @@ namespace PixelCrushers
 #endif
 #if USE_STM
                 if (superTextMesh != null) return superTextMesh.gameObject;
+#endif
+#if UNITEXT
+                if (uniText != null) return uniText.gameObject;
 #endif
                 return (uiText != null) ? uiText.gameObject : null;
             }
@@ -201,6 +254,9 @@ namespace PixelCrushers
 #if USE_STM
             if (superTextMesh != null) superTextMesh.gameObject.SetActive(value);
 #endif
+#if UNITEXT
+            if (uniText != null) uniText.gameObject.SetActive(value);
+#endif
         }
 
         /// <summary>
@@ -217,6 +273,9 @@ namespace PixelCrushers
 #endif
 #if USE_STM
             if (uiTextField.superTextMesh != null) return false;
+#endif
+#if UNITEXT
+            if (uiTextField.uniText != null) return false;
 #endif
             return true;
         }

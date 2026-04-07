@@ -10,6 +10,7 @@ using System;
 #if USE_NEW_INPUT
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.LowLevel;
 #endif
 
 namespace PixelCrushers
@@ -36,9 +37,6 @@ namespace PixelCrushers
 
         [Tooltip("If any of these axes are greater than Joystick Axis Threshold, current device is joystick. Must be defined in Input Manager.")]
         public string[] joystickAxesToCheck = new string[0];
-        //--- Changed to prevent errors in new projects if user hasn't clicked "Add Input Definitions" yet.
-        //--- Added "Add Default Joystick Axes Check" button instead.
-        //public string[] joystickAxesToCheck = new string[] { "JoystickAxis1", "JoystickAxis2", "JoystickAxis3", "JoystickAxis4", "JoystickAxis6", "JoystickAxis7" };
 
         [Tooltip("Joystick axis values must be above this threshold to switch to joystick mode.")]
         public float joystickAxisThreshold = 0.5f;
@@ -89,11 +87,12 @@ namespace PixelCrushers
         public UnityEvent onUseMouse = new UnityEvent();
         public UnityEvent onUseTouch = new UnityEvent();
 
-        public delegate bool GetButtonDownDelegate(string buttonName);
+        public delegate bool GetButtonDelegate(string buttonName);
         public delegate float GetAxisDelegate(string axisName);
 
-        public GetButtonDownDelegate GetButtonDown = null;
-        public GetButtonDownDelegate GetButtonUp = null;
+        public GetButtonDelegate GetButtonDown = null;
+        public GetButtonDelegate GetButtonUp = null;
+        public GetButtonDelegate GetButtonPressed = null;
         public GetAxisDelegate GetInputAxis = null;
 
         private Vector3 m_lastMousePosition;
@@ -171,10 +170,29 @@ namespace PixelCrushers
             return (m_instance != null && m_instance.GetButtonUp != null) ? m_instance.GetButtonUp(buttonName) : DefaultGetButtonUp(buttonName);
         }
 
+        public static bool IsButtonPressed(string buttonName)
+        {
+            if (!isInputAllowed) return false;
+            return (m_instance != null && m_instance.GetButtonPressed != null) ? m_instance.GetButtonPressed(buttonName) : DefaultGetButtonPressed(buttonName);
+        }
+
+
         public static bool IsKeyDown(KeyCode keyCode)
         {
             if (!isInputAllowed) return false;
             return DefaultGetKeyDown(keyCode);
+        }
+
+        public static bool IsKeyUp(KeyCode keyCode)
+        {
+            if (!isInputAllowed) return false;
+            return DefaultGetKeyUp(keyCode);
+        }
+
+        public static bool IsKeyPressed(KeyCode keyCode)
+        {
+            if (!isInputAllowed) return false;
+            return DefaultGetKeyPressed(keyCode);
         }
 
         public static bool IsAnyKeyDown()
@@ -236,6 +254,10 @@ namespace PixelCrushers
         public void OnDestroy()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
+#if USE_NEW_INPUT
+            InputSystem.onDeviceChange -= OnInputSystemDeviceChange;
+            InputSystem.onEvent -= OnInputSystemEvent;
+#endif
         }
 
         public void Start()
@@ -246,6 +268,7 @@ namespace PixelCrushers
             SceneManager.sceneLoaded += OnSceneLoaded;
 #if USE_NEW_INPUT
             InputSystem.onDeviceChange += OnInputSystemDeviceChange;
+            InputSystem.onEvent += OnInputSystemEvent;
 #endif
         }
 
@@ -253,7 +276,7 @@ namespace PixelCrushers
         private void OnInputSystemDeviceChange(UnityEngine.InputSystem.InputDevice device, InputDeviceChange change)
         {
             if (change == InputDeviceChange.Added ||
-               (change == InputDeviceChange.UsageChanged && device.lastUpdateTime >= Time.time - 1))
+               (change == InputDeviceChange.UsageChanged && device.lastUpdateTime >= Time.unscaledTime - 1))
             {
                 if (device is Joystick || device is Gamepad)
                 {
@@ -312,6 +335,79 @@ namespace PixelCrushers
             }
         }
 
+#if USE_NEW_INPUT
+        private float prevInputSystemCheckTime = 0f;
+        private const float InputSystemCheckFrequencyInSeconds = 0.5f;
+        private List<UnityEngine.InputSystem.InputDevice> reportedUnknownDevices = new List<UnityEngine.InputSystem.InputDevice>();
+
+        private void OnInputSystemEvent(InputEventPtr eventPtr, UnityEngine.InputSystem.InputDevice device)
+        {
+            if (Time.unscaledTime < prevInputSystemCheckTime) return;
+            prevInputSystemCheckTime = Time.unscaledTime + InputSystemCheckFrequencyInSeconds;
+
+            if (!(eventPtr.IsA<StateEvent>() || eventPtr.IsA<DeltaStateEvent>())) return;
+
+            PixelCrushers.InputDevice newDevice = PixelCrushers.InputDevice.Joystick;
+            if (device is UnityEngine.InputSystem.Joystick || device is UnityEngine.InputSystem.Gamepad)
+                newDevice = PixelCrushers.InputDevice.Joystick;
+            else if (device is UnityEngine.InputSystem.Keyboard)
+                newDevice = keyInputSwitchesModeTo == KeyInputSwitchesModeTo.Keyboard ? PixelCrushers.InputDevice.Keyboard : PixelCrushers.InputDevice.Mouse;
+            else if (device is UnityEngine.InputSystem.Mouse)
+                newDevice = PixelCrushers.InputDevice.Mouse;
+            else if (device is UnityEngine.InputSystem.Touchscreen)
+                newDevice = PixelCrushers.InputDevice.Touch;
+            else
+            {
+                if (!reportedUnknownDevices.Contains(device))
+                {
+                    reportedUnknownDevices.Add(device);
+                    Debug.LogWarning($"Pixel Crushers Input Device Manager: Detected an unknown device type: {device.displayName}.");
+                }
+                return;
+            }
+
+            if (inputDevice == newDevice) return;
+
+            if (newDevice == PixelCrushers.InputDevice.Joystick)
+            {
+                if (!eventPtr.HasButtonPress())
+                    if (device is UnityEngine.InputSystem.Joystick)
+                    {
+                        var joystick = device as UnityEngine.InputSystem.Joystick;
+                        var x = joystick.stick.x.ReadValue();
+                        var y = joystick.stick.y.ReadValue();
+                        if (!(Mathf.Abs(x) > joystickAxisThreshold || Mathf.Abs(y) > joystickAxisThreshold)) return;
+                    }
+                    else
+                    {
+                        var gamePad = device as UnityEngine.InputSystem.Gamepad;
+                        var xL = gamePad.leftStick.x.ReadValue();
+                        var yL = gamePad.leftStick.y.ReadValue();
+                        if (!(Mathf.Abs(xL) > joystickAxisThreshold || Mathf.Abs(yL) > joystickAxisThreshold))
+                        {
+                            var xR = gamePad.rightStick.x.ReadValue();
+                            var yR = gamePad.rightStick.y.ReadValue();
+                            if (!(Mathf.Abs(xR) > joystickAxisThreshold || Mathf.Abs(yR) > joystickAxisThreshold)) return;
+                        }
+                    }
+            }
+            else if (newDevice == PixelCrushers.InputDevice.Keyboard)
+            {
+                if (!isInputAllowed) return;
+            }
+            else if (newDevice == PixelCrushers.InputDevice.Mouse)
+            {
+                if (!detectMouseControl) return;
+                var mousePosition = DefaultGetMousePosition();
+                var didMouseMove = !m_ignoreMouse && (Mathf.Abs(mousePosition.x - m_lastMousePosition.x) > mouseMoveThreshold || 
+                    Mathf.Abs(mousePosition.y - m_lastMousePosition.y) > mouseMoveThreshold);
+                m_lastMousePosition = mousePosition;
+            }
+
+            SetInputDevice(newDevice);
+        }
+#else
+        // With input manager/Rewired, poll inputs for device changes:
         public void Update()
         {
             switch (inputDevice)
@@ -334,6 +430,7 @@ namespace PixelCrushers
                     break;
             }
         }
+#endif
 
         public bool IsUsingJoystick()
         {
@@ -474,12 +571,16 @@ namespace PixelCrushers
         public static void RegisterInputAction(string name, InputAction inputAction)
         {
             inputActionDict[name] = inputAction;
+            if (inputAction != null) inputAction.Enable();
         }
 
         public static void UnregisterInputAction(string name)
         {
             if (inputActionDict.ContainsKey(name)) inputActionDict.Remove(name);
         }
+
+        // Cache key to translations to avoid GC:
+        private static Dictionary<KeyCode, string> m_keyCodeStrings = new Dictionary<KeyCode, string>();
 
         // Number keys translate differently in Input System, so create a quick lookup dictionary:
         protected static Dictionary<KeyCode, KeyControl> m_specialKeyCodeDict = null;
@@ -512,12 +613,21 @@ namespace PixelCrushers
         }
 #endif
 
-        public static bool DefaultGetKeyDown(KeyCode keyCode)
+        protected enum KeyState { Down, Up, Pressed }
+
+        protected static bool DefaultGetKeyState(KeyCode keyCode, KeyState state)
         {
 #if USE_NEW_INPUT
             if (Keyboard.current == null || keyCode == KeyCode.None) return false;
             if (keyCode == KeyCode.Return) return (Keyboard.current["enter"] as KeyControl).wasPressedThisFrame;
-            var s = keyCode.ToString().ToLower();
+            if (!m_keyCodeStrings.TryGetValue(keyCode, out var s))
+            {
+                // Store the Input System's lowercase string equivalent for the keycode.
+                // This is done only once per keycode and stored in a dictionary.
+                s = keyCode.ToString().ToLower();
+                m_keyCodeStrings.Add(keyCode, s);
+
+            }
             if (s.StartsWith("mouse"))
             {
                 if (s == "mouse0") return Mouse.current.leftButton.wasPressedThisFrame;
@@ -534,8 +644,32 @@ namespace PixelCrushers
             var keyControl = Keyboard.current[s] as KeyControl;
             return (keyControl != null) ? keyControl.wasPressedThisFrame : false;
 #else
-            return Input.GetKeyDown(keyCode);
+            switch (state)
+            {
+                default:
+                case KeyState.Down:
+                    return Input.GetKeyDown(keyCode);
+                case KeyState.Up:
+                    return Input.GetKeyUp(keyCode);
+                case KeyState.Pressed:
+                    return Input.GetKey(keyCode);
+            }
 #endif
+        }
+
+        public static bool DefaultGetKeyDown(KeyCode keyCode)
+        {
+            return DefaultGetKeyState(keyCode, KeyState.Down);
+        }
+
+        public static bool DefaultGetKeyUp(KeyCode keyCode)
+        {
+            return DefaultGetKeyState(keyCode, KeyState.Up);
+        }
+
+        public static bool DefaultGetKeyPressed(KeyCode keyCode)
+        {
+            return DefaultGetKeyState(keyCode, KeyState.Pressed);
         }
 
         public static bool DefaultGetAnyKeyDown()
@@ -595,6 +729,34 @@ namespace PixelCrushers
                 return false;
 #else
                 return string.IsNullOrEmpty(buttonName) ? false : Input.GetButtonUp(buttonName);
+#endif
+            }
+            catch (System.ArgumentException) // Input button not in setup.
+            {
+                return false;
+            }
+        }
+
+        public static bool DefaultGetButtonPressed(string buttonName)
+        {
+            try
+            {
+#if USE_NEW_INPUT
+                InputAction inputAction;
+                if (inputActionDict.TryGetValue(buttonName, out inputAction))
+                {
+                    foreach (var control in inputAction.controls)
+                    {
+                        if (((control is ButtonControl) && (control as ButtonControl).isPressed) ||
+                            ((control is KeyControl) && (control as KeyControl).isPressed))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+#else
+                return string.IsNullOrEmpty(buttonName) ? false : Input.GetButton(buttonName);
 #endif
             }
             catch (System.ArgumentException) // Input button not in setup.

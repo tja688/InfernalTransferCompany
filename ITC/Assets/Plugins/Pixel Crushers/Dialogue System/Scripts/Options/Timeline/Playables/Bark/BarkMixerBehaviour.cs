@@ -1,4 +1,3 @@
-// Recompile at 2025/7/1 10:17:08
 #if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
@@ -55,7 +54,7 @@ namespace PixelCrushers.DialogueSystem
                     {
                         var message = DialogueActor.GetActorName(trackBinding.transform) + " bark: " + input.GetEditorBarkText();
                         if (input.useConversation) message += " (may vary)";
-                        PreviewUI.ShowMessage(message, 2, 1);
+                        PreviewUI.ShowMessage(message);
                     }
                 }
                 else if (inputWeight <= 0.001f && played.Contains(i))

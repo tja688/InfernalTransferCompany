@@ -1,4 +1,3 @@
-// Recompile at 2025/7/1 10:17:08
 #if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
@@ -51,12 +50,13 @@ namespace PixelCrushers.DialogueSystem
                     else
                     {
                         var message = "Conversation (" + DialogueActor.GetActorName(actorTransform) + "->" + DialogueActor.GetActorName(input.conversant) + "):\n[" + input.conversation + "]\n'" + input.GetEditorDialogueText() + "' (may vary)";
-                        PreviewUI.ShowMessage(message, 2, 0);
+                        PreviewUI.ShowMessage(message);
                     }
                 }
                 else if (inputWeight <= 0.001f && played.Contains(i))
                 {
                     played.Remove(i);
+                    PreviewUI.HideMessage();
                 }
             }
         }

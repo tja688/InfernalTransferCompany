@@ -1,6 +1,4 @@
-// Recompile at 2025/7/1 10:25:16
-
-// Copyright (c) Pixel Crushers. All rights reserved.
+﻿// Copyright (c) Pixel Crushers. All rights reserved.
 
 using System.Collections.Generic;
 using System.IO;
@@ -115,7 +113,7 @@ namespace PixelCrushers
             titleContent.text = "Text Table";
             m_needRefreshLists = true;
             Undo.undoRedoPerformed += Repaint;
-            if (m_textTableInstanceID != 0) Selection.activeObject = EditorUtility.InstanceIDToObject(m_textTableInstanceID);
+            if (m_textTableInstanceID != 0) Selection.activeObject = MoreEditorUtility.InstanceIDToObject(m_textTableInstanceID);
             m_toolbarSelection = EditorPrefs.GetInt(ToolbarSelectionPrefsKey, 0);
             if (EditorPrefs.HasKey(SearchBarPrefsKey))
             {
@@ -147,14 +145,15 @@ namespace PixelCrushers
 
         private void OnSelectionChange()
         {
-            if (Selection.activeObject is TextTable)
+            if (Selection.activeObject is TextTable selectedTextTable)
             {
+                if (selectedTextTable != m_textTable && m_serializedObject != null) m_serializedObject.ApplyModifiedProperties();
                 SelectTextTable(Selection.activeObject as TextTable);
                 Repaint();
             }
             else if (m_textTable == null && m_textTableInstanceID != 0)
             {
-                SelectTextTable(EditorUtility.InstanceIDToObject(m_textTableInstanceID) as TextTable);
+                SelectTextTable(MoreEditorUtility.InstanceIDToObject(m_textTableInstanceID) as TextTable);
                 Repaint();
             }
         }
@@ -175,9 +174,9 @@ namespace PixelCrushers
         private void OnGUI()
         {
             if (Event.current.commandName == "ObjectSelectorClosed" || Event.current.commandName == "ObjectSelectorUpdated")
-            { 
+            {
                 if (m_isPickingOtherTextTable)
-                { 
+                {
                     m_isPickingOtherTextTable = false;
                     AskConfirmImportOtherTextTable(EditorGUIUtility.GetObjectPickerObject() as TextTable);
                 }
@@ -1012,9 +1011,14 @@ namespace PixelCrushers
 
         private void ImportFieldsFromLocalizeUI()
         {
-            if (!EditorUtility.DisplayDialog("Import From Localize UI", 
-                "This will examine all Localize UI components in the current scene and create corresponding fields in the text table. Proceed?", 
-                "OK", "Cancel")) return;
+            var answer = EditorUtility.DisplayDialogComplex("Import From Localize UI",
+                "This will examine all Localize UI components in the current scene and create corresponding fields in the text table. Also add LocalizeUI components to all Text & TextMesh Pro elements in scene?",
+                "Only Existing Localize UI", "Cancel", "Add Localize UI");
+            if (answer == 1) return;
+            if (answer == 2)
+            {
+                AddLocalizeUIToScene();
+            }
             Undo.RecordObject(m_textTable, "Import");
             foreach (var localizeUI in GameObjectUtility.FindObjectsOfTypeAlsoInactive<LocalizeUI>())
             {
@@ -1031,6 +1035,43 @@ namespace PixelCrushers
             EditorUtility.SetDirty(m_textTable);
             m_needRefreshLists = true;
             Repaint();
+        }
+
+        private void AddLocalizeUIToScene()
+        {
+            foreach (var rootGO in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+            {
+                AddLocalizeUIToChildren(rootGO.transform);
+            }
+        }
+
+        private void AddLocalizeUIToChildren(Transform t)
+        {
+            if (t == null) return;
+            AddLocalizeUI(t);
+            foreach (Transform child in t)
+            {
+                AddLocalizeUIToChildren(child);
+            }
+        }
+
+        private void AddLocalizeUI(Transform t)
+        {
+            if (t == null) return;
+            if (t.GetComponent<LocalizeUI>()) return;
+            if (t.GetComponent<UnityEngine.UI.Text>() != null ||
+                t.GetComponent<UnityEngine.UI.Dropdown>() != null
+#if TMP_PRESENT
+                ||
+                t.GetComponent<TMPro.TextMeshPro>() != null ||
+                t.GetComponent<TMPro.TextMeshProUGUI>() != null ||
+                t.GetComponent<TMPro.TMP_Dropdown>() != null
+#endif
+                )
+            {
+                t.gameObject.AddComponent<PixelCrushers.Wrappers.LocalizeUI>();
+                Debug.Log($"{t.name}: Added LocalizeUI component.", t);
+            }
         }
 
         private void AddField(string fieldName)

@@ -50,6 +50,12 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         [SerializeField]
         private bool registerCompleteObjectUndo = true;
 
+        [SerializeField]
+        private float garbageCollectFrequency = DefaultGarbageCollectFrequency; // in seconds
+        private const float DefaultGarbageCollectFrequency = 60f;
+
+        private double nextGarbageCollectTime;
+
         private bool verboseDebug = false;
 
         [SerializeField]
@@ -58,6 +64,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private Template template = Template.FromDefault();
 
         private const string CompleteUndoKey = "PixelCrushers.DialogueSystem.DialogueEditor.registerCompleteObjectUndo";
+        private const string GarbageCollectFrequencyKey = "PixelCrushers.DialogueSystem.DialogueEditor.garbageCollectFrequency";
         private const string ShowNodeEditorKey = "PixelCrushers.DialogueSystem.DialogueEditor.ShowNodeEditor";
         private const string ShowDatabaseNameKey = "PixelCrushers.DialogueSystem.DialogueEditor.ShowDatabaseName";
         private const string SyncOnOpenKey = "PixelCrushers.DialogueSystem.DialogueEditor.SyncOnOpen";
@@ -149,6 +156,15 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             LoadEditorSettings();
             if (database == null) template = TemplateTools.LoadFromEditorPrefs();
             InitializeEntrytagFormatFromScene();
+            InitializeDialogueTree();
+            ResetDialogueEntryText();
+            if (toolbar.current == Toolbar.Tab.Conversations &&
+                currentConversationID != -1 && 
+                database != null)
+            {
+                var conversation = database.GetConversation(currentConversationID);
+                if (conversation != null) OpenConversation(conversation);
+            }
         }
 
         private void OnDisable()
@@ -164,12 +180,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
 #else
             UnityEditorFocusChanged += OnFocusChanged;
 #endif
-            //--- No need to save assets after entering play mode? This was a workaround for Asset Database bugs.
-            //try
-            //{
-            //    EditorApplication.delayCall += AssetDatabase.SaveAssets;
-            //}
-            //catch (System.NullReferenceException) { } // Some Unity versions w/disabled domain reloading don't allow when entering play mode.
+            if (database != null) EditorUtility.SetDirty(database);
             SaveTemplate();
             inspectorSelection = null;
             instance = null;
@@ -185,6 +196,7 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
         private void LoadEditorSettings()
         {
             registerCompleteObjectUndo = EditorPrefs.GetBool(CompleteUndoKey, true);
+            garbageCollectFrequency = EditorPrefs.GetFloat(GarbageCollectFrequencyKey, DefaultGarbageCollectFrequency);
             showDatabaseName = EditorPrefs.GetBool(ShowDatabaseNameKey, true);
             syncOnOpen = EditorPrefs.GetBool(SyncOnOpenKey, true);
             autoBackupFrequency = EditorPrefs.GetFloat(AutoBackupKey, DefaultAutoBackupFrequency);
@@ -252,6 +264,10 @@ namespace PixelCrushers.DialogueSystem.DialogueEditor
             currentConversationState = null;
             currentRuntimeEntry = null;
             actorPortraitCache = null;
+            serializedObject = null;
+            serializedObjectCurrentEntry = null;
+            onExecuteProperty = null;
+            dialogueSystemSceneEventsSerializedObject = null;
             UITools.ClearSpriteCache();
             ResetWatchSection();
             SetReorderableListInspectorSelection();
