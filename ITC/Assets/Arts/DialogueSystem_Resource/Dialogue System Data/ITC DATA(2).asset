@@ -211,9 +211,11 @@ MonoBehaviour:
       value: Barks
       type: 0
       typeString: 
-    portrait: {fileID: 0}
+    portrait: {fileID: 2800000, guid: e01677f998f23544988d3f6eee8ad3ea, type: 3}
     spritePortrait: {fileID: 0}
-    alternatePortraits: []
+    alternatePortraits:
+    - {fileID: 2800000, guid: 6987226633d5aec41bc4aa602a041263, type: 3}
+    - {fileID: 2800000, guid: eb47276ac50b2d14b847110f500c08f4, type: 3}
     spritePortraits: []
   - id: 3
     fields:
@@ -5460,7 +5462,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 388.99997
+        x: 389.7339
         y: 562.4676
         width: 160
         height: 30
@@ -16625,8 +16627,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 131.76532, y: 52.621437}
-    canvasZoom: 0.96999955
+    canvasScrollPosition: {x: 268.36237, y: 219.6281}
+    canvasZoom: 1.0899994
   - id: 3
     fields:
     - title: Title
