@@ -67,25 +67,25 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// How to target (center of screen or under mouse cursor). Default is center of screen.
         /// </summary>
-        [Tooltip("How to target. This is where the raycast points to.")]
+        [Tooltip("如何瞄准。这是 raycast 指向的位置。")]
         public SelectAt selectAt = SelectAt.CenterOfScreen;
 
         /// <summary>
         /// The layer mask to use when targeting objects. Objects on others layers are ignored.
         /// </summary>
-        [Tooltip("Layer mask to use when targeting objects; objects on others layers are ignored.")]
+        [Tooltip("用于瞄准对象时使用的层遮罩；其他层上的对象会被忽略。")]
         public LayerMask layerMask = DefaultLayer;
 
         /// <summary>
         /// How to compute range to targeted object. Default is from the camera.
         /// </summary>
-        [Tooltip("How to compute range to targeted object.")]
+        [Tooltip("如何计算到目标对象的距离。")]
         public DistanceFrom distanceFrom = DistanceFrom.Camera;
 
         /// <summary>
         /// The max selection distance. The selector won't target objects farther than this.
         /// </summary>
-        [Tooltip("Don't target objects farther than this; targets may still be unusable if beyond their usable range.")]
+        [Tooltip("不要瞄准超过此距离的对象；即使在此范围内，若超出其可用范围，目标仍可能无法使用。")]
         public float maxSelectionDistance = 30f;
 
         /// <summary>
@@ -98,13 +98,13 @@ namespace PixelCrushers.DialogueSystem
         /// If <c>false</c>, the check stops on the first hit, even if it's not a usable.
         /// This prevents selection through walls.
         /// </summary>
-        [Tooltip("Check all objects within raycast range for usables, even passing through obstacles.")]
+        [Tooltip("检查 raycast 范围内的所有可用对象，即使需要穿过障碍物。")]
         public bool raycastAll = false;
 
         /// <summary>
         /// When Select At is set to Mouse Position, allow selection even when mouse is over a UI object. If unticked, don't select when mouse is blocked by a UI object.
         /// </summary>
-        [Tooltip("When Select At is set to Mouse Position, allow selection even when mouse is over a UI object. If unticked, don't select when mouse is blocked by a UI object.")]
+        [Tooltip("当 Select At 设为 Mouse Position 时，即使鼠标位于 UI 对象上也允许选择。若未勾选，当鼠标被 UI 对象遮挡时不进行选择。")]
         public bool selectBehindUIObjects = false;
 
         /// <summary>
@@ -117,13 +117,13 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The GUI skin to use for the target's information (name and use message).
         /// </summary>
-        [Tooltip("GUI skin to use for the target's information (name and use message).")]
+        [Tooltip("用于目标信息（名称和使用消息）的 GUI skin。")]
         public GUISkin guiSkin;
 
         /// <summary>
         /// The name of the GUI style in the skin.
         /// </summary>
-        [Tooltip("Name of the GUI style in the skin.")]
+        [Tooltip("该 skin 中 GUI 样式的名称。")]
         public string guiStyleName = "label";
 
         /// <summary>
@@ -144,13 +144,13 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The color of the information labels when the target is in range.
         /// </summary>
-        [Tooltip("Color of the information labels when target is in range.")]
+        [Tooltip("目标在范围内时信息标签的颜色。")]
         public Color inRangeColor = Color.yellow;
 
         /// <summary>
         /// The color of the information labels when the target is out of range.
         /// </summary>
-        [Tooltip("Color of the information labels when target is out of range.")]
+        [Tooltip("目标超出范围时信息标签的颜色。")]
         public Color outOfRangeColor = Color.gray;
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The default use message. This can be overridden in the target's Usable component.
         /// </summary>
-        [Tooltip("Default use message; can be overridden in the target's Usable component")]
+        [Tooltip("默认使用消息；可在目标的 Usable 组件中覆盖。")]
         [SerializeField]
         [FormerlySerializedAs("defaultUseMessage")]
         private string m_defaultUseMessage = "(spacebar to interact)";
@@ -180,19 +180,19 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// If ticked, the OnUse message is broadcast to the usable object's children.
         /// </summary>
-        [Tooltip("Tick to also broadcast to the usable object's children")]
+        [Tooltip("勾选后也向可用对象的子对象广播。")]
         public bool broadcastToChildren = true;
 
         /// <summary>
         /// The actor transform to send with OnUse. Defaults to this transform.
         /// </summary>
-        [Tooltip("Actor transform to send with OnUse; defaults to this transform")]
+        [Tooltip("随 OnUse 发送的 Actor transform；默认为此 transform。")]
         public Transform actorTransform = null;
 
         /// <summary>
         /// If set, show this alert message if attempt to use something beyond its usable range.
         /// </summary>
-        [Tooltip("If set, show this alert message if attempt to use something beyond its usable range")]
+        [Tooltip("如果设置，当尝试使用超出可用范围的对象时显示此提醒消息。")]
         public string tooFarMessage = string.Empty;
 
         public UsableUnityEvent onSelectedUsable = new UsableUnityEvent();
@@ -207,7 +207,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// If <c>true</c>, draws gizmos.
         /// </summary>
-        [Tooltip("Tick to draw gizmos in Scene view")]
+        [Tooltip("勾选后在 Scene 视图中绘制 gizmo。")]
         public bool debug = false;
 
         /// <summary>

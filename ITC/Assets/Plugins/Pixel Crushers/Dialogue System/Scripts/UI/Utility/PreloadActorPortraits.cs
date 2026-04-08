@@ -13,10 +13,10 @@ namespace PixelCrushers.DialogueSystem
     public class PreloadActorPortraits : MonoBehaviour
     {
 
-        [Tooltip("Preload for Unity UI.")]
+        [Tooltip("用于 Unity UI 的预加载。")]
         public bool supportUnityUI;
 
-        [Tooltip("If preloading for Unity UI, collapse legacy textures to save memory. Dialogue Manager's Instantiate Database must be ticked.")]
+        [Tooltip("如果为 Unity UI 预加载，则折叠旧版纹理以节省内存。必须勾选 Dialogue Manager 的 Instantiate Database。")]
         public bool collapseLegacyTextures;
 
         private List<Texture2D> legacyPortraits = new List<Texture2D>();

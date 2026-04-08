@@ -27,14 +27,14 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The trigger that this component listens for.
         /// </summary>
-        [Tooltip("The trigger that this component listens for.")]
+        [Tooltip("此组件监听的触发器。")]
         [DialogueSystemTriggerEvent]
         public DialogueSystemTriggerEvent trigger = DialogueSystemTriggerEvent.OnUse;
 
         /// <summary>
         /// Delay 1 frame before starting. Applie to OnStart and OnEnable.
         /// </summary>
-        [Tooltip("Delay 1 frame before starting. Applie to OnStart, OnEnable, and OnSaveDataApplied.")]
+        [Tooltip("开始前延迟 1 帧。适用于 OnStart、OnEnable 和 OnSaveDataApplied。")]
         public bool delayOneFrame = false;
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// If `true`, set the quest state.
         /// </summary>
-        [Tooltip("Set a quest state when triggered.")]
+        [Tooltip("触发时设置任务状态。")]
         public bool setQuestState = true;
 
         /// <summary>
@@ -60,14 +60,14 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The new state of the quest when triggered.
         /// </summary>
-        [Tooltip("Set quest's main state.")]
+        [Tooltip("设置任务的主状态。")]
         [QuestState]
         public QuestState questState;
 
         /// <summary>
         /// If `true`, set the quest entry state.
         /// </summary>
-        [Tooltip("Set state of a quest entry.")]
+        [Tooltip("设置任务条目的状态。")]
         public bool setQuestEntryState = false;
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The lua code to run.
         /// </summary>
-        [Tooltip("Lua code to run. Leave blank for no message.")]
+        [Tooltip("要运行的 Lua 代码。留空则不发送消息。")]
         public string luaCode = string.Empty;
 
         // //////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ namespace PixelCrushers.DialogueSystem
         /// commands can reference 'speaker' and 'listener', so you may need to define them
         /// in this component.
         /// </summary>
-        [Tooltip("Optional GameObject to use if sequence uses 'speaker' keyword.")]
+        [Tooltip("如果 Sequence 使用 'speaker' 关键字，可选用于此处的 GameObject。")]
         public Transform sequenceSpeaker;
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace PixelCrushers.DialogueSystem
         /// commands can reference 'speaker' and 'listener', so you may need to define them
         /// in this component.
         /// </summary>
-        [Tooltip("Optional GameObject to use if sequence uses 'listener' keyword.")]
+        [Tooltip("如果 Sequence 使用 'listener' 关键字，可选用于此处的 GameObject。")]
         public Transform sequenceListener;
 
         public bool waitOneFrameOnStartOrEnable = true;
@@ -129,13 +129,13 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// An optional gameplay alert message. Leave blank for no message.
         /// </summary>
-        [Tooltip("Alert message. Leave blank for no message.")]
+        [Tooltip("提醒消息。留空则不显示消息。")]
         public string alertMessage;
 
         /// <summary>
         /// An optional localized text table to use for the alert message.
         /// </summary>
-        [Tooltip("Optional text table to use to localize messages.")]
+        [Tooltip("用于本地化消息的可选文本表。")]
         public TextTable textTable;
 
         public float alertDuration = 0;
@@ -146,11 +146,11 @@ namespace PixelCrushers.DialogueSystem
         [Serializable]
         public class SendMessageAction
         {
-            [Tooltip("Target GameObject.")]
+            [Tooltip("目标 GameObject。")]
             public GameObject gameObject = null;
-            [Tooltip("Name of method to call on target. One or more scripts on target should have a method with this name.")]
+            [Tooltip("要在目标上调用的方法名。目标上的一个或多个脚本应具有同名方法。")]
             public string message = "OnUse";
-            [Tooltip("Optional method parameter. Specify if method accepts a string parameter.")]
+            [Tooltip("可选的方法参数。若方法接受 string 参数，请在此指定。")]
             public string parameter = string.Empty;
         }
 
@@ -164,50 +164,50 @@ namespace PixelCrushers.DialogueSystem
 
         public enum BarkSource { None, Conversation, Text }
 
-        [Tooltip("Where to get content to bark.")]
+        [Tooltip("从哪里获取喊话内容。")]
         public BarkSource barkSource = BarkSource.None;
 
         /// <summary>
         /// The title of the bark conversation. Used if barkSource is set to conversation.
         /// </summary>
-        [Tooltip("Conversation to get bark content from.")]
+        [Tooltip("用于获取喊话内容的对话。")]
         [ConversationPopup(false, true)]
         public string barkConversation = string.Empty;
 
         /// <summary>
         /// Dialogue entry to bark. Otherwise will bark from a valid entry in bark conversation.
         /// </summary>
-        [Tooltip("Dialogue entry to bark. Otherwise will bark from a valid entry in bark conversation.")]
+        [Tooltip("要喊话的对话条目。否则会从喊话对话中的有效条目进行喊话。")]
         public int barkEntryID = -1;
 
         /// <summary>
         /// Bark entry with this Title. If set, this takes precedence over Bark Entry ID.
         /// </summary>
-        [Tooltip("Bark entry with this Title. If set, this takes precedence over Bark Entry ID.")]
+        [Tooltip("具有此 Title 的喊话条目。若设置，则优先于 Bark Entry ID。")]
         public string barkEntryTitle;
 
         /// <summary>
         /// Text to bark. Used if barkSource is text. Will be localized through Dialogue Manager's Text Table if assigned.
         /// </summary>
-        [Tooltip("Bark this text. Will be localized through Dialogue Manager's Text Table if assigned.")]
+        [Tooltip("对这段文本进行喊话。若分配了 Dialogue Manager 的 Text Table，将通过其进行本地化。")]
         public string barkText = string.Empty;
 
         /// <summary>
         /// Optional sequence to play when barking text.
         /// </summary>
-        [Tooltip("Optional sequence to play when barking text.")]
+        [Tooltip("喊话文本时播放的可选 Sequence。")]
         public string barkTextSequence = string.Empty;
 
         /// <summary>
         /// The barker.
         /// </summary>
-        [Tooltip("Character that bark comes from. Should have a bark UI or a Dialogue Actor component with a bark UI prefab assigned.")]
+        [Tooltip("喊话来源角色。应具有喊话 UI，或带有已分配喊话 UI prefab 的 Dialogue Actor 组件。")]
         public Transform barker;
 
         /// <summary>
         /// The target of the bark.
         /// </summary>
-        [Tooltip("Optional target of the bark. Receives OnBark events.")]
+        [Tooltip("可选的喊话目标。会接收 OnBark 事件。")]
         public Transform barkTarget;
 
         /// <summary>
@@ -226,7 +226,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Skip bark if no valid entries.
         /// </summary>
-        [Tooltip("Only trigger if at least one entry's Conditions are currently true.")]
+        [Tooltip("仅当至少一个条目的 Conditions 当前为真时才触发。")]
         public bool skipBarkIfNoValidEntries;
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace PixelCrushers.DialogueSystem
         /// as the state changes, barks use no em formatting codes, and sequences are not
         /// played with barks.
         /// </summary>
-        [Tooltip("Cache all lines during first bark. This can reduce stutter when barking on slower mobile devices, but barks' conditions are not reevaluated each time as the state changes, barks use no em formatting codes, and sequences are not played with barks.")]
+        [Tooltip("在首次喊话时缓存所有行。这可以减少在较慢的移动设备上喊话时的卡顿，但随着状态变化，喊话的条件不会每次重新求值，喊话不使用 em 格式代码，且喊话时不会播放 Sequence。")]
         public bool cacheBarkLines = false;
 
         // //////////////////////////////////////////////////////////////////////////////////
@@ -244,7 +244,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The title of the conversation to start.
         /// </summary>
-        [Tooltip("Conversation to start. Leave blank for no conversation.")]
+        [Tooltip("要开始的对话。留空则不开始对话。")]
         [ConversationPopup(false, true)]
         public string conversation = string.Empty;
 
@@ -255,80 +255,80 @@ namespace PixelCrushers.DialogueSystem
         /// See https://www.pixelcrushers.com/dialogue_system/manual2x/html/triggers_and_interaction.html
         /// for an explanation of how GameObjects are assigned at runtime.
         /// </summary>
-        [Tooltip("Other actor (e.g., NPC). If unassigned, this GameObject.")]
+        [Tooltip("另一位角色（例如 NPC）。未分配时使用此 GameObject。")]
         public Transform conversationConversant;
 
         /// <summary>
         /// The actor to converse with. If not set, the game object that triggered the event.
         /// </summary>
-        [Tooltip("Primary actor (e.g., player). If unassigned, GameObject that triggered conversation.")]
+        [Tooltip("主角色（例如玩家）。未分配时使用触发对话的 GameObject。")]
         public Transform conversationActor;
 
-        [Tooltip("Start at this entry ID.")]
+        [Tooltip("从此条目 ID 开始。")]
         public int startConversationEntryID = -1;
 
-        [Tooltip("Start at entry with this Title. If set, this takes precedence over Start Conversation Entry ID.")]
+        [Tooltip("从具有此 Title 的条目开始。如果设置，则优先于 Start Conversation Entry ID。")]
         public string startConversationEntryTitle;
 
-        [Tooltip("If specified, use this dialogue UI for conversation.")]
+        [Tooltip("如果指定，则使用此对话 UI 进行对话。")]
         public GameObject overrideDialogueUI = null;
 
         /// <summary>
         /// Additional actors to override. Use to specify different actors to fill roles of actors assigned in conversation.
         /// </summary>
-        [Tooltip("Additional actors to override.")]
+        [Tooltip("要覆盖的其他角色。")]
         public List<ActorOverride> additionalActorOverrides = new List<ActorOverride>();
 
         /// <summary>
         /// Only start if no other conversation is active.
         /// </summary>
-        [Tooltip("Only trigger if no other conversation is already active.")]
+        [Tooltip("仅当没有其他对话正在进行时才触发。")]
         public bool exclusive = false;
 
         /// <summary>
         /// Stop other conversation if one is active.
         /// </summary>
-        [Tooltip("Stop other conversation if one is active.")]
+        [Tooltip("如果有其他对话正在进行，则停止该对话。")]
         public bool replace = false;
 
         /// <summary>
         /// If another conversation is active and simultaneous conversations aren't allowed, queue this conversation to start as soon as active one ends.
         /// </summary>
-        [Tooltip("If another conversation is active and simultaneous conversations aren't allowed, queue this conversation to start as soon as active one ends.")]
+        [Tooltip("如果有其他对话正在进行且不允许同时进行对话，则将此对话排队，待当前对话结束后立即开始。")]
         public bool queue = false;
 
         /// <summary>
         /// If this is <c>true</c> and no valid entries currently link from the start entry,
         /// don't start the conversation.
         /// </summary>
-        [Tooltip("Only trigger if at least one entry's Conditions are currently true.")]
+        [Tooltip("仅当至少一个条目的 Conditions 当前为真时才触发。")]
         public bool skipIfNoValidEntries = false;
 
-        [Tooltip("Disallow conversation if same conversation just ended on this frame.")]
+        [Tooltip("如果同一对话刚在本帧结束，则不允许再次开始。")]
         public bool preventRestartOnSameFrameEnded = false;
 
         /// <summary>
         /// Set <c>true</c> to stop the conversation if the actor leaves the trigger area.
         /// </summary>
-        [Tooltip("Stop conversation if actor leaves trigger area.")]
+        [Tooltip("如果角色离开触发区域，则停止对话。")]
         public bool stopConversationOnTriggerExit = false;
 
-        [Tooltip("Start checking if actor has left trigger area after this duration from start of conversation.")]
+        [Tooltip("从对话开始后经过此时长再开始检查角色是否已离开触发区域。")]
         public float marginToAllowTriggerExit = 0.2f;
 
-        [Tooltip("Stop conversation if Conversation Actor exceeds Max Conversation Distance from this trigger's GameObject.")]
+        [Tooltip("如果 Conversation Actor 超过此触发器 GameObject 的 Max Conversation Distance，则停止对话。")]
         public bool stopConversationIfTooFar = false;
 
-        [Tooltip("If Stop Conversation If Too Far is ticked, this is too far.")]
+        [Tooltip("如果勾选了 Stop Conversation If Too Far，这就是过远距离。")]
         public float maxConversationDistance = 5f;
 
-        [Tooltip("Check distance on this frequency.")]
+        [Tooltip("按此频率检查距离。")]
         public float monitorConversationDistanceFrequency = 1f;
 
-        [Tooltip("Make the cursor visible when the conversation starts. Return to previous visibility state when conversation ends.")]
+        [Tooltip("对话开始时显示光标；对话结束时恢复之前的可见性状态。")]
         public bool showCursorDuringConversation = false;
 
-        [Tooltip("Set Time.timeScale to 0 during conversation, back to previous timeScale when conversation ends.")]
+        [Tooltip("对话期间将 Time.timeScale 设为 0，对话结束后恢复之前的 timeScale。")]
         public bool pauseGameDuringConversation = false;
 
         // //////////////////////////////////////////////////////////////////////////////////
@@ -364,9 +364,9 @@ namespace PixelCrushers.DialogueSystem
         public class SetAnimatorStateAction
         {
             public Condition condition = new Condition();
-            [Tooltip("Set the state of the animator on this GameObject. Animator can be on a child GameObject.")]
+            [Tooltip("设置此 GameObject 上 Animator 的状态。Animator 也可以位于子 GameObject 上。")]
             public Transform target;
-            [Tooltip("State to crossfade to.")]
+            [Tooltip("要淡入切换到的状态。")]
             public string stateName;
             public float crossFadeDuration = 0.3f;
         }

@@ -14,24 +14,24 @@ namespace PixelCrushers.DialogueSystem
     public class StandardUIContinueButtonFastForward : MonoBehaviour
     {
 
-        [Tooltip("Dialogue UI that the continue button affects.")]
+        [Tooltip("继续按钮所作用的 Dialogue UI。")]
         public StandardDialogueUI dialogueUI;
 
-        [Tooltip("Typewriter effect to fast forward if it's not done playing.")]
+        [Tooltip("如果打字机效果尚未播放完，则将其快进。")]
         public AbstractTypewriterEffect typewriterEffect;
 
 #if USE_STM
-        [Tooltip("If using SuperTextMesh, assign this instead of typewriter effect.")]
+        [Tooltip("若使用 SuperTextMesh，请改用此项，而不是 typewriter effect。")]
         public SuperTextMesh superTextMesh;
 #endif
 
-        [Tooltip("Hide the continue button when continuing.")]
+        [Tooltip("继续时隐藏继续按钮。")]
         public bool hideContinueButtonOnContinue = false;
 
-        [Tooltip("If subtitle is displaying, continue past it.")]
+        [Tooltip("如果正在显示 subtitle，则继续跳过它。")]
         public bool continueSubtitlePanel = true;
 
-        [Tooltip("If alert is displaying, continue past it.")]
+        [Tooltip("如果正在显示 alert，则继续跳过它。")]
         public bool continueAlertPanel = true;
 
         protected UnityEngine.UI.Button continueButton;

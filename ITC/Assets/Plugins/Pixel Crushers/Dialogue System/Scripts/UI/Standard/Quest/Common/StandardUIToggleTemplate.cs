@@ -15,7 +15,7 @@ namespace PixelCrushers.DialogueSystem
     public class StandardUIToggleTemplate : StandardUIContentTemplate
     {
 
-        [Tooltip("Toggle UI element.")]
+        [Tooltip("切换 UI 元素。")]
         public UnityEngine.UI.Toggle toggle;
 
         protected object m_data;

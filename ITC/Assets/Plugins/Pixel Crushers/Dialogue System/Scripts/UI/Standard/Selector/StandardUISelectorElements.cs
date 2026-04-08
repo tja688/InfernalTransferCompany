@@ -24,40 +24,40 @@ namespace PixelCrushers.DialogueSystem
         /// The main graphic (optional). Assign this if you have created an entire 
         /// panel for the selector.
         /// </summary>
-        [Tooltip("(Optional) Main panel. Assign if you have created an entire panel for selector.")]
+        [Tooltip("（可选）主面板。如果你为选择器创建了整个面板，请在此分配。")]
         public UnityEngine.UI.Graphic mainGraphic = null;
 
         /// <summary>
         /// The text for the name of the current selection.
         /// </summary>
-        [Tooltip("Text element for name of current selection.")]
+        [Tooltip("当前所选对象名称的文本元素。")]
         public UITextField nameText = null;
 
         /// <summary>
         /// The text for the use message (e.g., "Press spacebar to use").
         /// </summary>
-        [Tooltip("Text element for use message (e.g., 'Press spacebar to use').")]
+        [Tooltip("使用提示的文本元素，例如按空格键使用。")]
         public UITextField useMessageText = null;
 
-        [Tooltip("Use In Range and Out Of Range text colors defined below.")]
+        [Tooltip("使用下方定义的“在范围内”和“超出范围”文本颜色。")]
         public bool useRangeColors = true;
 
-        [Tooltip("Set text elements to this color when selector is in range to use selection.")]
+        [Tooltip("当 selector 在可用范围内时，将文本元素设为此颜色。")]
         public Color inRangeColor = Color.yellow;
 
-        [Tooltip("Set text elements to this color when selector is out of range.")]
+        [Tooltip("当 selector 超出范围时，将文本元素设为此颜色。")]
         public Color outOfRangeColor = Color.gray;
 
         /// <summary>
         /// The graphic to show if the selection is in range.
         /// </summary>
-        [Tooltip("Optional graphic to show if selection is in range.")]
+        [Tooltip("当选择在范围内时显示的可选图像。")]
         public UnityEngine.UI.Graphic reticleInRange = null;
 
         /// <summary>
         /// The graphic to show if the selection is out of range.
         /// </summary>
-        [Tooltip("Optional graphic to show if selection is out of range.")]
+        [Tooltip("当选择超出范围时显示的可选图像。")]
         public UnityEngine.UI.Graphic reticleOutOfRange = null;
 
         [Serializable]

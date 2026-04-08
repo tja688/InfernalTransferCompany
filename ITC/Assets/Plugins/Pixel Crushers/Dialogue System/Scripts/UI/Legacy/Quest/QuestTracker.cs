@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using PixelCrushers.DialogueSystem.UnityGUI;
@@ -16,7 +16,7 @@ namespace PixelCrushers.DialogueSystem
     public class QuestTracker : MonoBehaviour
     {
 
-        [Tooltip("Record the quest tracker display toggle in this PlayerPrefs key.")]
+        [Tooltip("将任务跟踪器显示开关记录到此 PlayerPrefs 键中。")]
         public string playerPrefsToggleKey = "QuestTracker";
 
         /// <summary>

@@ -19,19 +19,19 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The frequency at which to check the condition.
         /// </summary>
-        [Tooltip("Frequency in seconds between checks.")]
+        [Tooltip("检查间隔（秒）。")]
         public float frequency = 1;
 
         /// <summary>
         /// When observed condition becomes true, run actions and then deactivate this component.
         /// </summary>
-        [Tooltip("When observed condition becomes true, run actions and then deactivate this component.")]
+        [Tooltip("当观察到的条件为真时，执行动作，然后停用此组件。")]
         public bool once;
 
         /// <summary>
         /// Observe this game object when evaluating the condition.
         /// </summary>
-        [Tooltip("Refer to this GameObject when evaluating the Condition.")]
+        [Tooltip("在评估 Condition 时引用此 GameObject。")]
         public GameObject observeGameObject = null;
 
         /// <summary>
@@ -42,39 +42,39 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The name of the quest to update when the condition is true. Blank for none.
         /// </summary>
-        [Tooltip("Set this quest's state when the condition is true.")]
+        [Tooltip("当条件为真时设置此任务的状态。")]
         public string questName = string.Empty;
 
         /// <summary>
         /// The new state of the quest.
         /// </summary>
-        [Tooltip("Set the quest to this state when the condition is true.")]
+        [Tooltip("当条件为真时将任务设置为此状态。")]
         [QuestState]
         public QuestState questState;
 
         /// <summary>
         /// The lua code to run.
         /// </summary>
-        [Tooltip("Run this Lua code when the condition is true. Leave blank to skip.")]
+        [Tooltip("当条件为真时运行此 Lua 代码。留空则跳过。")]
         public string luaCode = string.Empty;
 
         /// <summary>
         /// The sequence to play.
         /// </summary>
-        [Tooltip("Play this sequence when the condition is true. Leave blank to skip.")]
+        [Tooltip("当条件为真时播放此 Sequence。留空则跳过。")]
         [TextArea(1, 20)]
         public string sequence = string.Empty;
 
         /// <summary>
         /// An optional gameplay alert message. Leave blank for no message.
         /// </summary>
-        [Tooltip("Show this alert message when the condition is true. Leave blank to skip.")]
+        [Tooltip("当条件为真时显示此 alert message。留空则跳过。")]
         public string alertMessage = string.Empty;
 
         /// <summary>
         /// An optional localized text table to use for the alert message.
         /// </summary>
-        [Tooltip("Text table to use to localize alert message.")]
+        [Tooltip("用于本地化 alert message 的 Text Table。")]
         public TextTable textTable = null;
 
         [Serializable]

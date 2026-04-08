@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace PixelCrushers.DialogueSystem
@@ -13,7 +13,7 @@ namespace PixelCrushers.DialogueSystem
     [Serializable]
     public class CustomLuaFunctionInfoRecord
     {
-        [Tooltip("Use forward slashes to group into submenus.")]
+        [Tooltip("使用正斜杠将其分组到子菜单中。")]
         public string functionName;
         public CustomLuaParameterType[] parameters;
         public CustomLuaReturnType returnValue = CustomLuaReturnType.None;

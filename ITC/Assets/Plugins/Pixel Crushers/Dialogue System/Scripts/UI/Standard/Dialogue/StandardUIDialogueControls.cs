@@ -16,38 +16,38 @@ namespace PixelCrushers.DialogueSystem
 
         #region Serialized Variables
 
-        [Tooltip("Main panel for conversation UI (optional).")]
+        [Tooltip("对话 UI 的主面板（可选）。")]
         public UIPanel mainPanel;
 
-        [Tooltip("Never deactivate Main Panel. Will still play show & hide animations if specified.")]
+        [Tooltip("不要停用 Main Panel。若已指定，仍会播放 show 和 hide 动画。")]
         public bool dontDeactivateMainPanel = false;
 
-        [Tooltip("When starting conversation, wait until main panel is open before showing subtitle or menu.")]
+        [Tooltip("开始对话时，等待主面板打开后再显示字幕或菜单。")]
         public bool waitForMainPanelOpen = false;
 
         public StandardUISubtitlePanel[] subtitlePanels;
 
-        [Tooltip("Default panel for NPC subtitles.")]
+        [Tooltip("NPC 字幕的默认面板。")]
         public StandardUISubtitlePanel defaultNPCSubtitlePanel;
 
-        [Tooltip("Default panel for PC subtitles.")]
+        [Tooltip("PC 字幕的默认面板。")]
         public StandardUISubtitlePanel defaultPCSubtitlePanel;
 
-        [Tooltip("Check for subtitle panels that are configured to immediately open when conversation starts. Untick to bypass check.")]
+        [Tooltip("检查是否存在已配置为在对话开始时立即打开的字幕面板。取消勾选可跳过检查。")]
         public bool allowOpenSubtitlePanelsOnStartConversation = true;
 
-        [Tooltip("Allow Dialogue Actor components to use custom subtitle and menu panels.")]
+        [Tooltip("允许 Dialogue Actor 组件使用自定义字幕和菜单面板。")]
         public bool allowDialogueActorCustomPanels = true;
 
         public StandardUIMenuPanel[] menuPanels;
 
-        [Tooltip("Default panel for response menus.")]
+        [Tooltip("Response Menu 的默认面板。")]
         public StandardUIMenuPanel defaultMenuPanel;
 
-        [Tooltip("When showing response menu, use portrait info of player actor assigned to first response. Also use that actor's menu panel if using multiple menu panels.")]
+        [Tooltip("显示 Response Menu 时，使用分配给第一条回应的玩家角色的肖像信息。如果使用多个菜单面板，也使用该角色的菜单面板。")]
         public bool useFirstResponseForMenuPortrait;
 
-        [Tooltip("When closing, wait for all subtitle panels and menu panels to close.")]
+        [Tooltip("关闭时，等待所有字幕面板和菜单面板关闭。")]
         public bool waitForClose = true;
 
         #endregion

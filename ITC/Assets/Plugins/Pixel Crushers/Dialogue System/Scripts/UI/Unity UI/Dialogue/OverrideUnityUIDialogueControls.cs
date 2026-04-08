@@ -14,13 +14,13 @@ namespace PixelCrushers.DialogueSystem
     public class OverrideUnityUIDialogueControls : MonoBehaviour
     {
 
-        [Tooltip("Use these controls when playing subtitles through this actor")]
+        [Tooltip("通过此角色播放字幕时使用这些控件")]
         public UnityUISubtitleControls subtitle;
 
-        [Tooltip("Use these controls when showing subtitle reminders for actor")]
+        [Tooltip("为此角色显示字幕提醒时使用这些控件")]
         public UnityUISubtitleControls subtitleReminder;
 
-        [Tooltip("Use these controls when showing a response menu involving this actor")]
+        [Tooltip("显示涉及此角色的 Response Menu 时使用这些控件")]
         public UnityUIResponseMenuControls responseMenu;
 
         private bool checkedContinueButton = false;

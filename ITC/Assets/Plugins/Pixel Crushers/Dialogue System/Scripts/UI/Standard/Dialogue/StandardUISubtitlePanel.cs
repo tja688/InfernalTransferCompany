@@ -14,70 +14,70 @@ namespace PixelCrushers.DialogueSystem
 
         #region Serialized Fields
 
-        [Tooltip("(Optional) Main panel for subtitle.")]
+        [Tooltip("字幕的主面板（可选）。")]
         public RectTransform panel;
 
-        [Tooltip("(Optional) Image for actor's portrait.")]
+        [Tooltip("（可选）角色肖像的图像。")]
         public UnityEngine.UI.Image portraitImage;
 
-        [Tooltip("(Optional) Text element for actor's name.")]
+        [Tooltip("（可选）角色名字的文本元素。")]
         public UITextField portraitName;
 
-        [Tooltip("Subtitle text.")]
+        [Tooltip("字幕文本。")]
         public UITextField subtitleText;
 
-        [Tooltip("Add speaker's name to subtitle text.")]
+        [Tooltip("将说话者名字添加到字幕文本中。")]
         public bool addSpeakerName = false;
 
-        [Tooltip("Format to add speaker name, where {0} is name and {1} is subtitle text.")]
+        [Tooltip("添加说话者名字的格式，其中 {0} 是名字，{1} 是字幕文本。")]
         public string addSpeakerNameFormat = "{0}: {1}";
 
-        [Tooltip("Each subtitle adds to Subtitle Text instead of replacing it.")]
+        [Tooltip("每条字幕都会追加到 Subtitle Text，而不是替换它。")]
         public bool accumulateText = false;
 
-        [Tooltip("If Accumulate Text is ticked, accumulate up to this many lines, removing the oldest lines when over the limit.")]
+        [Tooltip("如果勾选了 Accumulate Text，则最多累积这么多行，超出限制时移除最旧的行。")]
         public int maxLines = 100;
 
-        [Tooltip("If panel has a typewriter effect, don't start typing until panel's Show animation has completed.")]
+        [Tooltip("如果面板有打字机效果，则在面板的 Show 动画完成前不要开始打字。")]
         public bool delayTypewriterUntilOpen = false;
 
-        [Tooltip("(Optional) Continue button. Only shown if Dialogue Manager's Continue Button mode uses continue button.")]
+        [Tooltip("（可选）Continue 按钮。仅当 Dialogue Manager 的 Continue Button 模式使用继续按钮时才显示。")]
         public UnityEngine.UI.Button continueButton;
 
-        [Tooltip("If non-zero, prevent continue button clicks for this duration in seconds when opening subtitle panel.")]
+        [Tooltip("如果不为 0，在打开字幕面板后会在此秒数内禁止点击继续按钮。")]
         public float blockInputDuration = 0;
 
-        [Tooltip("When the subtitle UI elements should be visible.")]
+        [Tooltip("字幕 UI 元素何时可见。")]
         public UIVisibility visibility = UIVisibility.OnlyDuringContent;
 
-        [Tooltip("When focusing panel, set this animator trigger.")]
+        [Tooltip("聚焦面板时，设置此 Animator 触发器。")]
         public string focusAnimationTrigger = string.Empty;
 
-        [Tooltip("When unfocusing panel, set this animator trigger.")]
+        [Tooltip("取消聚焦面板时，设置此 Animator 触发器。")]
         public string unfocusAnimationTrigger = string.Empty;
 
-        [Tooltip("If a player actor uses this panel, don't show player portrait name & image; keep previous NPC portrait visible instead.")]
+        [Tooltip("如果玩家角色使用此面板，则不显示玩家肖像的名字和图像；改为保持之前的 NPC 肖像可见。")]
         public bool onlyShowNPCPortraits = false;
 
-        [Tooltip("Check Dialogue Actors for portrait animator controllers. Portrait image must have an Animator.")]
+        [Tooltip("检查 Dialogue Actor 是否有肖像 Animator Controller。Portrait image 必须带有 Animator。")]
         public bool useAnimatedPortraits = false;
 
-        [Tooltip("Set Portrait Image to actor portrait's native size. Image's Rect Transform can't use Stretch anchors.")]
+        [Tooltip("将 Portrait Image 设置为角色肖像的原始尺寸。Image 的 Rect Transform 不能使用 Stretch 锚点。")]
         public bool usePortraitNativeSize = false;
 
-        [Tooltip("Wait for panel state to be Open before showing subtitle.")]
+        [Tooltip("等待面板状态变为 Open 后再显示字幕。")]
         public bool waitForOpen = false;
 
-        [Tooltip("Wait for panels within this dialogue UI (not external panels) to close before showing.")]
+        [Tooltip("在显示前，等待此对话 UI 内的面板关闭（不包括外部面板）。")]
         public bool waitForClose = false;
 
-        [Tooltip("Clear text when closing panel, including when hiding using SetDialoguePanel().")]
+        [Tooltip("关闭面板时清空文本，包括使用 SetDialoguePanel() 隐藏时。")]
         public bool clearTextOnClose = true;
 
-        [Tooltip("Clear text when any conversation starts.")]
+        [Tooltip("当任何对话开始时清空文本。")]
         public bool clearTextOnConversationStart = false;
 
-        [Tooltip("If Subtitle Text doesn't have a typewriter effect, to enable scroll to bottom add UIScrollbarEnabler to Scroll Rect and assign it here.")]
+        [Tooltip("如果 Subtitle Text 没有打字机效果，要启用滚动到底部，请在 Scroll Rect 上添加 UIScrollbarEnabler 并在此处指定。")]
         public UIScrollbarEnabler scrollbarEnabler;
 
         /// <summary>

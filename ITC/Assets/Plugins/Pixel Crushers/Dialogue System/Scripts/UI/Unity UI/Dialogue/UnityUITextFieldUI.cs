@@ -17,13 +17,13 @@ namespace PixelCrushers.DialogueSystem
         /// The (optional) panel. If your text field UI contains more than a label and text field, you should
         /// assign the panel, too.
         /// </summary>
-        [Tooltip("Optional panel containing the UI elements")]
+        [Tooltip("包含 UI 元素的可选面板")]
         public UnityEngine.UI.Graphic panel;
 
         /// <summary>
         /// The label that will contain any label text prompting the user what to enter.
         /// </summary>
-        [Tooltip("Optional text element for prompt")]
+        [Tooltip("提示的可选文本元素")]
         public UnityEngine.UI.Text label;
 
         /// <summary>
@@ -34,16 +34,16 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The accept key.
         /// </summary>
-        [Tooltip("Optional key code that accepts the input")]
+        [Tooltip("接受输入的可选按键代码")]
         public KeyCode acceptKey = KeyCode.Return;
 
         /// <summary>
         /// The cancel key.
         /// </summary>
-        [Tooltip("Optional key code that cancels the input")]
+        [Tooltip("取消输入的可选按键代码")]
         public KeyCode cancelKey = KeyCode.Escape;
 
-        [Tooltip("Automatically open touchscreen keyboard")]
+        [Tooltip("自动打开触摸屏键盘")]
         public bool showTouchScreenKeyboard = false;
 
         public UnityEvent onAccept = new UnityEvent();

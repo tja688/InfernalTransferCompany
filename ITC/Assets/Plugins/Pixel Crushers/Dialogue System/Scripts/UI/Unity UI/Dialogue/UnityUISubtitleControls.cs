@@ -17,41 +17,41 @@ namespace PixelCrushers.DialogueSystem
         /// The panel containing the response menu controls. A panel is optional, but you may want one
         /// so you can include a background image, panel-wide effects, etc.
         /// </summary>
-        [Tooltip("Optional panel for the subtitle elements")]
+        [Tooltip("字幕元素的可选面板。")]
         public UnityEngine.UI.Graphic panel;
 
         /// <summary>
         /// The label that will show the text of the subtitle.
         /// </summary>
-        [Tooltip("Subtitle text")]
+        [Tooltip("subtitle 文本。")]
         public UnityEngine.UI.Text line;
 
         /// <summary>
         /// The label that will show the portrait image.
         /// </summary>
-        [Tooltip("Optional image for speaker's portrait")]
+        [Tooltip("可选的说话者 portrait 图片。")]
         public UnityEngine.UI.Image portraitImage;
 
         /// <summary>
         /// The label that will show the name of the speaker.
         /// </summary>
-        [Tooltip("Optional label for speaker's name")]
+        [Tooltip("可选的说话者名称标签。")]
         public UnityEngine.UI.Text portraitName;
 
         /// <summary>
         /// The continue button. This is only required if DisplaySettings.waitForContinueButton 
         /// is <c>true</c> -- in which case this button should send "OnContinue" to the UI when clicked.
         /// </summary>
-        [Tooltip("Optional continue button; configure OnClick to invoke dialogue UI's OnContinue method")]
+        [Tooltip("可选的 continue button；将 OnClick 配置为调用 dialogue UI 的 OnContinue 方法。")]
         public UnityEngine.UI.Button continueButton;
 
-        [Tooltip("Ignore RPGMaker-style pause codes")]
+        [Tooltip("忽略 RPGMaker 风格的 pause code。")]
         public bool ignorePauseCodes = false;
 
-        [Tooltip("Optional animation transitions; panel should have an Animator")]
+        [Tooltip("可选的动画过渡；面板应包含 Animator。")]
         public UIAnimationTransitions animationTransitions = new UIAnimationTransitions();
 
-        [Tooltip("When the subtitle UI elements should be visible.")]
+        [Tooltip("字幕 UI 元素何时可见。")]
         public UIVisibility uiVisibility = UIVisibility.OnlyDuringContent;
 
         public bool isVisible

@@ -17,7 +17,7 @@ namespace PixelCrushers.DialogueSystem.UIToolkit
     {
 
         [SerializeField] private UIDocument document;
-        [Tooltip("Name of document's root container.")]
+        [Tooltip("文档根容器的名称。")]
         [SerializeField] private string rootContainerName;
         [SerializeField] private List<string> indicatorNames;
 

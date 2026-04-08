@@ -11,37 +11,37 @@ namespace PixelCrushers.DialogueSystem
     [System.Serializable]
     public class PersistentDataSettings
     {
-        [Tooltip("- All Game Objects: Send notification to all scripts on all GameObjects in the scene to record and/or apply their persistent data if supported.\n- Only Registered Game Objects: Send notification only to explicitly-registered GameObjects.\n- No Game Objects: Don't send notification to any GameObjects in the scene.")]
+        [Tooltip("- All Game Objects：向场景中所有 GameObject 上的所有脚本发送通知，以便在支持时记录和/或应用其持久化数据。\n- Only Registered Game Objects：仅向显式注册的 GameObject 发送通知。\n- No Game Objects：不向场景中的任何 GameObject 发送通知。")]
         public PersistentDataManager.RecordPersistentDataOn recordPersistentDataOn = PersistentDataManager.RecordPersistentDataOn.AllGameObjects;
 
-        [Tooltip("Tick to include the Actor[] table in save data.")]
+        [Tooltip("勾选以在存档数据中包含 Actor[] 表。")]
         public bool includeActorData = true;
 
-        [Tooltip("Tick to include all Item[] and Quest[] fields. If unticked, only record quest states and quest tracking states to reduce size.")]
+        [Tooltip("勾选以包含所有 Item[] 和 Quest[] 字段。若未勾选，则只记录任务状态和任务跟踪状态以减小体积。")]
         public bool includeAllItemData = false;
 
-        [Tooltip("Tick to include the Location[] table.")]
+        [Tooltip("勾选以包含 Location[] 表。")]
         public bool includeLocationData = false;
 
-        [Tooltip("Tick to include status and relationship tables in save data.")]
+        [Tooltip("勾选以在存档数据中包含状态和关系表。")]
         public bool includeStatusAndRelationshipData = true;
 
-        [Tooltip("Tick to include all conversation fields.")]
+        [Tooltip("勾选以包含所有对话字段。")]
         public bool includeAllConversationFields = false;
 
-        [Tooltip("Optional field to use when saving a conversation's SimStatus info (e.g., Title). If blank, uses conversation ID.")]
+        [Tooltip("用于保存对话 SimStatus 信息的可选字段（例如 Title）。如果为空，则使用对话 ID。")]
         public string saveConversationSimStatusWithField = string.Empty;
 
-        [Tooltip("Optional field to use when saving a dialogue entry's SimStatus info (e.g,. Title). If blank, uses entry's ID.")]
+        [Tooltip("用于保存对话条目 SimStatus 信息的可选字段（例如 Title）。如果为空，则使用条目 ID。")]
         public string saveDialogueEntrySimStatusWithField = string.Empty;
 
-        [Tooltip("How many scene GameObjects are sent OnRecordPersistentData each frame.")]
+        [Tooltip("每帧向多少个场景 GameObject 发送 OnRecordPersistentData。")]
         public int asyncGameObjectBatchSize = 1000;
 
-        [Tooltip("How many dialogue entries' SimStatus values are recorded each frame; only used if saving SimStatus.")]
+        [Tooltip("每帧记录多少个对话条目的 SimStatus 值；仅在保存 SimStatus 时使用。")]
         public int asyncDialogueEntryBatchSize = 100;
 
-        [Tooltip("Initialize variables and quests that were added to database after saved game.")]
+        [Tooltip("初始化在存档之后添加到数据库中的变量和任务。")]
         public bool initializeNewVariables = true;
     }
 

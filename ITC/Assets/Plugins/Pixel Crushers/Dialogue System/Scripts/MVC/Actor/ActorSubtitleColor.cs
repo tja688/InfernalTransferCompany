@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Text.RegularExpressions;
 
 namespace PixelCrushers.DialogueSystem
@@ -14,15 +14,15 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The color to use for subtitle lines spoken by this actor.
         /// </summary>
-        [Tooltip("Color to use for subtitle lines spoken by this actor.")]
+        [Tooltip("此角色所说字幕行的颜色。")]
         public Color color = Color.white;
 
         public enum ApplyTo { DialogueText, PrependedActorName }
 
-        [Tooltip("Apply color to entire Dialogue Text or prepend actor name and apply color only to name.")]
+        [Tooltip("将颜色应用到整个对话文本，或在前面添加角色名并只给名字上色。")]
         public ApplyTo applyTo = ApplyTo.DialogueText;
 
-        [Tooltip("If prepending actor name, separate from Dialogue Text with this string.")]
+        [Tooltip("如果在前面添加角色名，则用此字符串与 Dialogue Text 分隔。")]
         public string prependActorNameSeparator = ": ";
 
         public void OnConversationLine(Subtitle subtitle)

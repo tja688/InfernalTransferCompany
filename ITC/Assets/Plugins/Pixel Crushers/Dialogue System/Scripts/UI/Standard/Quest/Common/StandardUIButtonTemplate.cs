@@ -12,7 +12,7 @@ namespace PixelCrushers.DialogueSystem
     public class StandardUIButtonTemplate : StandardUIContentTemplate
     {
 
-        [Tooltip("Button UI element.")]
+        [Tooltip("Button UI 元素。")]
         public UnityEngine.UI.Button button;
 
         public UITextField label;

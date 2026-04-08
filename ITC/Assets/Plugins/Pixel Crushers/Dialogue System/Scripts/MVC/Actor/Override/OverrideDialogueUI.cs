@@ -18,10 +18,10 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The dialogue UI to use for the game object this component is attached to.
         /// </summary>
-        [Tooltip("Use this dialogue UI when this GameObject is involved in conversation.")]
+        [Tooltip("当此 GameObject 参与对话时使用此对话 UI。")]
         public GameObject ui;
 
-        [Tooltip("If instantiating a prefab, keep it ready in memory instead of destroying it when conversation ends.")]
+        [Tooltip("如果实例化的是 prefab，则在对话结束时保留在内存中，而不是销毁。")]
         [FormerlySerializedAs("dontDestroyPrefabIntance")]
         public bool dontDestroyPrefabInstance = true;
 

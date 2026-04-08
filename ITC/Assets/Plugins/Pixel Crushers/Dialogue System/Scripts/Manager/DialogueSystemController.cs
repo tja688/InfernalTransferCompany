@@ -39,7 +39,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The initial dialogue database.
         /// </summary>
-        [Tooltip("This dialogue database is loaded automatically. Use an Extra Databases component to load additional databases.")]
+        [Tooltip("此对话数据库会自动加载。使用 Extra Databases 组件可加载其他数据库。")]
         public DialogueDatabase initialDatabase = null;
 
         /// <summary>
@@ -55,67 +55,67 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Set <c>true</c> to allow more than one conversation to play simultaneously.
         /// </summary>
-        [Tooltip("Allow more than one conversation to play simultaneously.")]
+        [Tooltip("允许同时播放多个对话。")]
         public bool allowSimultaneousConversations = false;
 
         /// <summary>
         /// If not allowing simultaneous conversations and a conversation is active, stop it if another conversation wants to start.
         /// </summary>
-        [Tooltip("If not allowing simultaneous conversations and a conversation is active, stop it if another conversation wants to start.")]
+        [Tooltip("如果不允许同时对话且当前已有对话在进行，当另一个对话要开始时将其停止。")]
         public bool interruptActiveConversations = false;
 
         /// <summary>
         /// Stop evaluating links at first valid NPC link unless parent uses RandomizeNextEntry().
         /// </summary>
-        [Tooltip("Stop evaluating links at first valid NPC link unless parent uses RandomizeNextEntry().")]
+        [Tooltip("除非父项使用 RandomizeNextEntry()，否则在第一个有效 NPC link 处停止评估链接。")]
         public bool stopEvaluationAtFirstValid = true;
 
         /// <summary>
         /// Reevaluate links after showing subtitle in case subtitle Sequence or OnConversationLine changes link conditions. If you know this can't happen, you can UNtick this checkbox to improve performance.
         /// </summary>
-        [Tooltip("Reevaluate links after showing subtitle in case subtitle Sequence or OnConversationLine changes link conditions. If you know this can't happen, you can UNtick this checkbox to improve performance.")]
+        [Tooltip("显示字幕后重新评估链接，以防字幕 Sequence 或 OnConversationLine 更改链接条件。如果你确定不会发生这种情况，可以取消勾选此复选框以提升性能。")]
         public bool reevaluateLinksAfterSubtitle = false;
 
         /// <summary>
         /// If a group node's Conditions are true, don't evaluate sibling group nodes.
         /// </summary>
-        [Tooltip("If a group node's Conditions are true, don't evaluate sibling group nodes.")]
+        [Tooltip("如果某个组节点的 Conditions 为真，则不评估其兄弟组节点。")]
         public bool useLinearGroupMode = false;
 
         /// <summary>
         /// Update any actively-displayed conversations' text when current language changes.
         /// </summary>
-        [Tooltip("Update any actively-displayed conversations' text when current language changes.")]
+        [Tooltip("当前语言更改时，更新所有正在显示的对话文本。")]
         public bool updateActiveConversationTextWhenLanguageChanges = true;
 
         /// <summary>
         /// Set <c>true</c> to include sim status for each dialogue entry.
         /// </summary>
-        [Tooltip("Tick if your conversations reference Dialog[x].SimStatus.")]
+        [Tooltip("如果你的对话引用了 Dialog[x].SimStatus，请勾选。")]
         public bool includeSimStatus = false;
 
-        [Tooltip("Use a copy of the dialogue database at runtime instead of the asset file directly. This allows you to change the database without affecting the asset. Warm Up Conversation Controller must be set to Off to untick this checkbox.")]
+        [Tooltip("运行时使用对话数据库的副本，而不是直接使用资源文件。这样可以在不影响资源的情况下修改数据库。要取消勾选此复选框，Warm Up Conversation Controller 必须设为 Off。")]
         public bool instantiateDatabase = true;
 
         /// <summary>
         /// If <c>true</c>, preloads the master database and dialogue UI. Otherwise they're lazy-
         /// loaded only before the first time they're needed.
         /// </summary>
-        [Tooltip("Preload the dialogue database and dialogue UI at Start. Otherwise they're loaded at first use.")]
+        [Tooltip("在 Start 时预加载对话数据库和对话 UI。否则会在首次使用时加载。")]
         public bool preloadResources = true;
 
         public enum WarmUpMode { On, Extra, Off }
 
-        [Tooltip("Warm up conversation engine and dialogue UI at Start to avoid a small amount of overhead on first use. 'Extra' performs deeper warmup that takes 1.25s at startup.")]
+        [Tooltip("在 Start 时预热对话引擎和对话 UI，以避免首次使用时产生少量开销。'Extra' 会执行更深入的预热，启动时需要 1.25 秒。")]
         public WarmUpMode warmUpConversationController = WarmUpMode.On;
 
-        [Tooltip("Don't run HideImmediate on dialogue UI when warming it up on start.")]
+        [Tooltip("在启动预热对话 UI 时，不要运行 HideImmediate。")]
         public bool dontHideImmediateDuringWarmup = false;
 
         /// <summary>
         /// If <c>true</c>, Unity will not destroy the game object when loading a new level.
         /// </summary>
-        [Tooltip("Retain this GameObject when changing levels. Note: If InputDeviceManager's Singleton checkbox is ticked or GameObject has SaveSystem, GameObject will still be marked Don't Destroy On Load.")]
+        [Tooltip("切换关卡时保留此 GameObject。注意：如果 InputDeviceManager 的 Singleton 复选框已勾选，或者该 GameObject 含有 SaveSystem，GameObject 仍会被标记为 Don't Destroy On Load。")]
         public bool dontDestroyOnLoad = true;
 
         /// <summary>
@@ -123,13 +123,13 @@ namespace PixelCrushers.DialogueSystem
         /// already exists in the scene. Otherwise, if you reload a level and dontDestroyOnLoad
         /// is true, you'll end up with a second object.
         /// </summary>
-        [Tooltip("Ensure only one Dialogue Manager in the scene.")]
+        [Tooltip("确保场景中只有一个 Dialogue Manager。")]
         public bool allowOnlyOneInstance = true;
 
         /// <summary>
         /// If <c>true</c>, Dialogue System Triggers set to OnStart should wait until save data has been applied or variables initialized.
         /// </summary>
-        [Tooltip("Dialogue System Triggers set to OnStart should wait until save data has been applied or variables initialized.")]
+        [Tooltip("设置为 OnStart 的 Dialogue System Triggers 应等待存档数据应用完毕或变量初始化完成。")]
         public bool onStartTriggerWaitForSaveDataApplied = false;
 
         /// <summary>
@@ -138,20 +138,20 @@ namespace PixelCrushers.DialogueSystem
         /// - Gameplay: Observe Time.timeScale.
         /// - Custom: You must manually set DialogueTime.time.
         /// </summary>
-        [Tooltip("Time mode to use for conversations.\nRealtime: Independent of Time.timeScale.\nGameplay: Observe Time.timeScale.\nCustom: You must manually set DialogueTime.time.")]
+        [Tooltip("对话使用的时间模式。\nRealtime：独立于 Time.timeScale。\nGameplay：遵循 Time.timeScale。\nCustom：你必须手动设置 DialogueTime.time。")]
         public DialogueTime.TimeMode dialogueTimeMode = DialogueTime.TimeMode.Realtime;
 
         /// <summary>
         /// The debug level. Information at this level or higher is logged to the console. This can
         /// be helpful when tracing through conversations.
         /// </summary>
-        [Tooltip("Set to higher levels for troubleshooting.")]
+        [Tooltip("为排查问题可设为更高级别。")]
         public DialogueDebug.DebugLevel debugLevel = DialogueDebug.DebugLevel.Warning;
 
         /// <summary>
         /// Invoke OnQuestStateChange events for quest entry changes as well as main quest state changes.
         /// </summary>
-        [Tooltip("Invoke OnQuestStateChange events for quest entry changes as well as main quest state changes.")]
+        [Tooltip("在任务条目变化以及主任务状态变化时都触发 OnQuestStateChange 事件。")]
         public bool invokeOnQuestStateChangeForEntries = true;
 
         /// <summary>

@@ -17,10 +17,10 @@ namespace PixelCrushers.DialogueSystem.ArcweaveSupport
     [AddComponentMenu("")] // Use wrapper.
     public class ArcweaveLua : Saver
     {
-        [Tooltip("Typically leave unticked so temporary Dialogue Managers don't unregister your functions.")]
+        [Tooltip("通常保持未勾选，这样临时 Dialogue Manager 不会注销你的函数。")]
         public bool unregisterOnDisable = false;
 
-        [Tooltip("Support multiplayer Lua functions. Currently: visits() incorporates Variable['ActorIndex'].")]
+        [Tooltip("支持多人 Lua 函数。目前：visits() 会纳入 Variable['ActorIndex']。")]
         public bool multiplayer = false;
 
         #region Unity Entrypoints

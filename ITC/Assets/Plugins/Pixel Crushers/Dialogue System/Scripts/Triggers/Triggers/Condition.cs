@@ -120,12 +120,12 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The allowable quest states for the condition to be true.
         /// </summary>
-        [Tooltip("The allowable quest states for the condition to be true.")]
+        [Tooltip("使条件为真的可接受任务状态。")]
         [BitMask(typeof(QuestState))]
         [QuestState]
         public QuestState questState;
 
-        [Tooltip("Check quest entry state.")]
+        [Tooltip("检查任务条目状态。")]
         public bool checkQuestEntry = false;
 
         [QuestEntryPopup]
@@ -134,7 +134,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The allowable quest entry states for the condition to be true.
         /// </summary>
-        [Tooltip("If quest entry is specified, the allowable quest entry states for the condition to be true.")]
+        [Tooltip("如果指定了任务条目，则用于使条件为真的允许任务条目状态。")]
         [BitMask(typeof(QuestState))]
         [QuestState]
         public QuestState questEntryState;

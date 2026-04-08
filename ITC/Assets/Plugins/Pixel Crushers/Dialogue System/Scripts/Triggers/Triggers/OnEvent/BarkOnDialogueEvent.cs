@@ -42,7 +42,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The bark order.
         /// </summary>
-        [Tooltip("The order in which to bark dialogue entries.")]
+        [Tooltip("对话条目的喊话顺序。")]
         public BarkOrder barkOrder = BarkOrder.Random;
 
         /// <summary>

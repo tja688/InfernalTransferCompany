@@ -13,7 +13,7 @@ namespace PixelCrushers.DialogueSystem
     public class SequencerMessageBehaviour : PlayableBehaviour
     {
 
-        [Tooltip("Sequencer message to send to Dialogue System's sequencer.")]
+        [Tooltip("要发送给 Dialogue System 的 Sequence 消息。")]
         public string message;
 
     }

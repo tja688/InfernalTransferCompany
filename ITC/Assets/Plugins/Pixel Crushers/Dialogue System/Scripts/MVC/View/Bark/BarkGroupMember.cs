@@ -16,31 +16,31 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Member of this group. Can be a Lua expression.
         /// </summary>
-        [Tooltip("Member of this group. Can be a Lua expression.")]
+        [Tooltip("此组的成员。可以是 Lua 表达式。")]
         public string groupId;
 
         /// <summary>
         /// Evaluate Group Id before every bark. Useful if Id is a Lua expression that can change value.
         /// </summary>
-        [Tooltip("Evaluate Group Id before every bark. Useful if Id is a Lua expression that can change value.")]
+        [Tooltip("在每次喊话前计算 Group Id。若 Id 是可能改变值的 Lua 表达式，这会很有用。")]
         public bool evaluateIdEveryBark = false;
 
         /// <summary>
         /// When another group member forces this member's bark to hide, delay this many seconds before hiding.
         /// </summary>
-        [Tooltip("When another group member forces this member's bark to hide, delay this many seconds before hiding.")]
+        [Tooltip("当其他组成员强制隐藏此成员的喊话时，在隐藏前延迟这么多秒。")]
         public float forcedHideDelay = 0;
 
         /// <summary>
         /// If another group member is barking, wait in a queue to bark.
         /// </summary>
-        [Tooltip("If another group member is barking, wait in a queue to bark instead of cancelling the other member's bark.")]
+        [Tooltip("如果其他组成员正在喊话，则排队等待喊话，而不是取消对方的喊话。")]
         public bool queueBarks = false;
 
         public float minDelayBetweenQueuedBarks = 0;
         public float maxDelayBetweenQueuedBarks = 1;
 
-        [Tooltip("Hide bark when conversations start.")]
+        [Tooltip("对话开始时隐藏喊话。")]
         public bool hideBarkOnConversationStart = false;
 
         private string m_currentIdValue = string.Empty;

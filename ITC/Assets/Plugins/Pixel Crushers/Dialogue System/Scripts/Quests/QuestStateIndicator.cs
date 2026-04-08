@@ -16,7 +16,7 @@ namespace PixelCrushers.DialogueSystem
     public class QuestStateIndicator : MonoBehaviour
     {
 
-        [Tooltip("GameObject such as a world space canvas element associated with each indicator level. A typical use is to associate indicator level 0 = nothing (unassigned), level 1 = question mark, and level 2 = exclamation mark.")]
+        [Tooltip("与每个指示器等级关联的 GameObject，例如世界空间 Canvas 元素。典型用法是将等级 0 设为无（未分配），等级 1 设为问号，等级 2 设为感叹号。")]
         public GameObject[] indicators = new GameObject[0];
 
         private List<List<QuestStateListener>> m_currentIndicatorCount = new List<List<QuestStateListener>>();

@@ -17,40 +17,40 @@ namespace PixelCrushers.DialogueSystem
 
         #region Serialized Fields
 
-        [Header("Main Panel")]
+        [Header("主面板")]
 
         public UIPanel mainPanel;
         public UITextField showingActiveQuestsHeading;
         public UITextField showingCompletedQuestHeading;
-        [Tooltip("Button to switch display to active quests.")]
+        [Tooltip("切换显示为进行中任务的按钮。")]
         public UnityEngine.UI.Button activeQuestsButton;
-        [Tooltip("Button to switch display to completed quests.")]
+        [Tooltip("切换显示为已完成任务的按钮。")]
         public UnityEngine.UI.Button completedQuestsButton;
 
-        [Header("Selection Panel")]
+        [Header("选择面板")]
 
         public RectTransform questSelectionContentContainer;
         public StandardUIFoldoutTemplate questGroupTemplate;
-        [Tooltip("Use this template for active quests.")]
+        [Tooltip("为进行中任务使用此模板。")]
         public StandardUIQuestTitleButtonTemplate activeQuestHeadingTemplate;
-        [Tooltip("Use this template for the currently-selected active quest.")]
+        [Tooltip("为当前选中的进行中任务使用此模板。")]
         public StandardUIQuestTitleButtonTemplate selectedActiveQuestHeadingTemplate;
-        [Tooltip("Use this template for completed quests.")]
+        [Tooltip("为已完成任务使用此模板。")]
         public StandardUIQuestTitleButtonTemplate completedQuestHeadingTemplate;
-        [Tooltip("Use this template for the currently-selected completed quest.")]
+        [Tooltip("为当前选中的已完成任务使用此模板。")]
         public StandardUIQuestTitleButtonTemplate selectedCompletedQuestHeadingTemplate;
-        [Tooltip("If there are no quests to show, show the No Active/Completed Quests Text above.")]
+        [Tooltip("如果没有可显示的任务，则显示上方的 No Active/Completed Quests Text。")]
         public bool showNoQuestsText = true;
-        [Tooltip("Select first quest in list when open. If unticked and Always Auto Focus is ticked, selects button assigned to main panel's First Selected field (Close button).")]
+        [Tooltip("打开时选中列表中的第一个任务。如果未勾选且 Always Auto Focus 已勾选，则选中主面板 First Selected 字段所分配的按钮（关闭按钮）。")]
         public bool selectFirstQuestOnOpen = false;
-        [Tooltip("Show details when quest button is selected (highlighted/hovered), not when clicked.")]
+        [Tooltip("当任务按钮被选中（高亮/悬停）时显示详情，而不是在点击时显示。")]
         public bool showDetailsOnSelect = false;
-        [Tooltip("Keep all groups expanded.")]
+        [Tooltip("保持所有组展开。")]
         public bool keepGroupsExpanded = false;
-        [Tooltip("Show ungrouped quests before groups.")]
+        [Tooltip("先显示未分组的任务，再显示各组。")]
         public bool showUngroupedQuestsFirst = false;
 
-        [Header("Details Panel")]
+        [Header("详情面板")]
 
         public RectTransform questDetailsContentContainer;
         public StandardUITextTemplate questHeadingTextTemplate;
@@ -60,16 +60,16 @@ namespace PixelCrushers.DialogueSystem
         public StandardUITextTemplate questEntryFailureTextTemplate;
         public StandardUIButtonTemplate abandonButtonTemplate;
 
-        [Header("Abandon Quest Panel")]
+        [Header("放弃任务面板")]
 
         public UIPanel abandonQuestPanel;
         public UITextField abandonQuestTitleText;
 
-        [Header("Events")]
+        [Header("事件")]
         public UnityEvent onOpen = new UnityEvent();
         public UnityEvent onClose = new UnityEvent();
 
-        [Tooltip("Add an EventSystem if one isn't in the scene.")]
+        [Tooltip("如果场景中没有 EventSystem，则添加一个。")]
         public bool addEventSystemIfNeeded = true;
 
         #endregion

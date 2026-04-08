@@ -35,7 +35,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// If `true`, set the quest state.
         /// </summary>
-        [Tooltip("Set the main state of the quest.")]
+        [Tooltip("设置任务的主状态。")]
         public bool setQuestState = true;
 
         /// <summary>
@@ -47,13 +47,13 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// If `true`, set the quest entry state.
         /// </summary>
-        [Tooltip("Set the state of a quest entry (subtask) in the quest.")]
+        [Tooltip("设置任务中某个任务条目（子任务）的状态。")]
         public bool setQuestEntryState = false;
 
         /// <summary>
         /// The quest entry number whose state to change.
         /// </summary>
-        [Tooltip("Quest entry number whose state to change.")]
+        [Tooltip("要更改状态的任务条目编号。")]
         public int questEntryNumber = 1;
 
         /// <summary>
@@ -65,19 +65,19 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The lua code to run.
         /// </summary>
-        [Tooltip("(Optional) Run this Lua code after setting the quest state.")]
+        [Tooltip("（可选）在设置任务状态后运行此 Lua 代码。")]
         public string luaCode = string.Empty;
 
         /// <summary>
         /// An optional gameplay alert message. Leave blank for no message.
         /// </summary>
-        [Tooltip("(Optional) Show this alert message after setting the quest state.")]
+        [Tooltip("（可选）在设置任务状态后显示此提示消息。")]
         public string alertMessage;
 
         /// <summary>
         /// An optional localized text table to use for the alert message.
         /// </summary>
-        [Tooltip("Localized text table to use for the alert message.")]
+        [Tooltip("用于提示消息的本地化文本表。")]
         public LocalizedTextTable localizedTextTable;
 
         [Serializable]

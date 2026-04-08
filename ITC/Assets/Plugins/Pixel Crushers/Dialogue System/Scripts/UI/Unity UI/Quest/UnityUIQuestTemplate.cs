@@ -14,29 +14,29 @@ namespace PixelCrushers.DialogueSystem
     public class UnityUIQuestTemplate : MonoBehaviour
     {
 
-        [Header("Quest Heading")]
-        [Tooltip("The heading - name or description depends on window setting")]
+        [Header("任务标题")]
+        [Tooltip("标题 - 名称或描述取决于窗口设置")]
         public UnityEngine.UI.Button heading;
 
-        [Tooltip("Used for Description")]
+        [Tooltip("用于描述")]
         public UnityEngine.UI.Text description;
 
         public UnityUIQuestTemplateAlternateDescriptions alternateDescriptions = new UnityUIQuestTemplateAlternateDescriptions();
 
-        [Header("Quest Entries")]
-        [Tooltip("(Optional) If set, holds instantiated quest entries")]
+        [Header("任务条目")]
+        [Tooltip("（可选）如果已设置，则用于容纳实例化的任务条目。")]
         public Transform entryContainer;
 
-        [Tooltip("Used for quest entries")]
+        [Tooltip("用于任务条目")]
         public UnityEngine.UI.Text entryDescription;
 
         public UnityUIQuestTemplateAlternateDescriptions alternateEntryDescriptions = new UnityUIQuestTemplateAlternateDescriptions();
 
-        [Header("Buttons")]
-        [Tooltip("Used for Track button if quest is trackable")]
+        [Header("按钮")]
+        [Tooltip("如果任务可跟踪，则用于 Track 按钮")]
         public UnityEngine.UI.Button trackButton;
 
-        [Tooltip("Used for Abandon button if quest is abandonable")]
+        [Tooltip("如果任务可放弃，则用于 Abandon 按钮")]
         public UnityEngine.UI.Button abandonButton;
 
         protected List<GameObject> entryInstances = new List<GameObject>();

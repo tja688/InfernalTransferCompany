@@ -14,10 +14,10 @@ namespace PixelCrushers.DialogueSystem
     {
         public enum Operation { Continue, ClearSubtitleText }
 
-        [Tooltip("Continue past current subtitle or just clear text in subtitle panels.")]
+        [Tooltip("继续当前字幕，或仅清空字幕面板中的文本。")]
         public Operation operation = Operation.Continue;
 
-        [Tooltip("If Operation is Clear Subtitle Text, clear these panel(s).")]
+        [Tooltip("如果 Operation 是 Clear Subtitle Text，则清除这些面板。")]
         public int clearPanelNumber = 0;
 
         public bool clearAllPanels = false;

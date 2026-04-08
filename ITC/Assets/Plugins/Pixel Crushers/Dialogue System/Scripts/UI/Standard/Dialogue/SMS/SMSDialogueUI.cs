@@ -15,38 +15,38 @@ namespace PixelCrushers.DialogueSystem
     public class SMSDialogueUI : StandardDialogueUI
     {
 
-        [Header("Heading")]
+        [Header("标题")]
 
-        [Tooltip("(Optional) If assigned, set to the conversation title.")]
+        [Tooltip("（可选）若已分配，则设为对话标题。")]
         public UnityEngine.UI.Text headingText;
 
-        [Header("Message Panel")]
+        [Header("消息面板")]
 
-        [Tooltip("The scroll rect containing the content panel.")]
+        [Tooltip("包含内容面板的 Scroll Rect。")]
         public UnityEngine.UI.ScrollRect scrollRect;
 
-        [Tooltip("The content panel inside the scroll rect containing the message panel and response panel.")]
+        [Tooltip("Scroll Rect 内的内容面板，包含消息面板和响应面板。")]
         public RectTransform contentPanel;
 
-        [Tooltip("Add messages to this panel.")]
+        [Tooltip("将消息添加到此面板。")]
         public RectTransform messagePanel;
 
-        [Tooltip("If non-zero, drop older messages when the number of messages in the history reaches this value.")]
+        [Tooltip("如果非零，当历史消息数量达到此值时丢弃较旧的消息。")]
         public int maxMessages = 0;
 
-        [Tooltip("Speed at which to smoothly scroll down.")]
+        [Tooltip("平滑向下滚动的速度。")]
         public float scrollSpeed = 5f;
 
         [Serializable]
         public class PreDelaySettings
         {
-            [Tooltip("Show this when waiting before showing subtitle. Often a '...' image suggesting NPC is typing.")]
+            [Tooltip("在显示字幕前等待时显示此图像。通常是表示 NPC 正在输入的省略号图像。")]
             public GameObject preDelayIcon;
 
-            [Tooltip("Before showing subtitle, delay based on the Dialogue Text length and Dialogue Manager > Subtitle Settings > Subtitle Chars Per Second.")]
+            [Tooltip("在显示字幕前，根据对话文本长度以及 Dialogue Manager > Subtitle Settings > Subtitle Chars Per Second 进行延迟。")]
             public bool basedOnTextLength = false;
 
-            [Tooltip("Before showing subtitle, also delay for this many seconds.")]
+            [Tooltip("在显示字幕前，还要额外延迟这么多秒。")]
             public float additionalSeconds = 0;
 
             public float GetDelayDuration(Subtitle subtitle)
@@ -63,37 +63,37 @@ namespace PixelCrushers.DialogueSystem
             }
         }
 
-        [Tooltip("Before showing NPC subtitles, delay for this duration.")]
+        [Tooltip("在显示 NPC 字幕前，延迟此时长。")]
         public PreDelaySettings npcPreDelaySettings = new PreDelaySettings();
 
-        [Tooltip("Before showing PC subtitles, delay for this duration.")]
+        [Tooltip("在显示 PC 字幕前，延迟此时长。")]
         public PreDelaySettings pcPreDelaySettings = new PreDelaySettings();
 
         [Serializable]
         public class ActorReference
         {
-            [Tooltip("No pre-delay for this actor.")]
+            [Tooltip("此角色不使用预延迟。")]
             [ActorPopup] public string actor;
         }
 
-        [Tooltip("No pre-delays for these actors.")]
+        [Tooltip("这些角色不使用预延迟。")]
         public List<ActorReference> excludePreDelayForActors = new List<ActorReference>();
 
-        [Header("Save/Load")]
+        [Header("保存/加载")]
 
-        [Tooltip("Resume conversation when restoring saved game data.")]
+        [Tooltip("在恢复存档数据时继续对话。")]
         public bool resumeConversationOnApplyPersistentData = true;
 
-        [Tooltip("Load the saved conversation specified in the Conversation variable.")]
+        [Tooltip("加载 Conversation 变量中指定的已保存对话。")]
         public bool useConversationVariable = false;
 
-        [Tooltip("When resuming conversation, don't play sequence of last entry.")]
+        [Tooltip("恢复对话时，不播放最后一条条目的 Sequence。")]
         public bool dontRepeatLastSequence = false;
 
-        [Tooltip("Disable Audio() and AudioWait() sequencer commands when resuming last entry.")]
+        [Tooltip("恢复最后一条目时，禁用 Audio() 和 AudioWait() Sequence 命令。")]
         public bool disableAudioOnLastSequence = true;
 
-        [Tooltip("When entering these scene(s), don't resume the conversation. Typically used for the start menu (scene 0).")]
+        [Tooltip("进入这些场景时，不恢复对话。通常用于开始菜单（场景 0）。")]
         public int[] dontLoadConversationInScenes = new int[] { 0 };
 
         public static string conversationVariableOverride;

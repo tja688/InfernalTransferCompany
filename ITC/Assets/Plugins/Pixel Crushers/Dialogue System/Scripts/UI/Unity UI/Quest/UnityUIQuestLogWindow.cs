@@ -60,7 +60,7 @@ namespace PixelCrushers.DialogueSystem
             public string showTrigger = "Show";
             public string hideTrigger = "Hide";
 
-            [Tooltip("Specifies whether Show Trigger and Hide Trigger are animator states or trigger parameters.")]
+            [Tooltip("指定 Show Trigger 和 Hide Trigger 是 Animator 状态还是触发器参数。")]
             public UIShowHideController.TransitionMode transitionMode = UIShowHideController.TransitionMode.State;
 
             public bool debug = false;
@@ -72,20 +72,20 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Set <c>true</c> to always keep a control focused; useful for gamepads.
         /// </summary>
-        [Tooltip("Always keep a control focused; useful for gamepads and keyboard.")]
+        [Tooltip("始终保持某个控件处于焦点状态；适合手柄和键盘。")]
         public bool autoFocus = false;
 
         /// <summary>
         /// If auto focusing, check on this frequency in seconds that the control is focused.
         /// </summary>
-        [Tooltip("If auto focusing, check on this frequency in seconds that the control is focused.")]
+        [Tooltip("如果启用自动聚焦，则按此频率（秒）检查控件是否处于焦点。")]
         public float autoFocusCheckFrequency = 0.5f;
 
         public UnityEvent onOpen = new UnityEvent();
         public UnityEvent onClose = new UnityEvent();
         public UnityEvent onContentChanged = new UnityEvent();
 
-        [Tooltip("Add an EventSystem if one isn't in the scene.")]
+        [Tooltip("如果场景中没有 EventSystem，则添加一个。")]
         public bool addEventSystemIfNeeded = true;
 
         /// <summary>

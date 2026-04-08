@@ -13,10 +13,10 @@ namespace PixelCrushers.DialogueSystem
     public class ConversationLogger : MonoBehaviour
     {
 
-        [Tooltip("Log player lines in this color.")]
+        [Tooltip("以此颜色记录玩家台词。")]
         public Color playerColor = Color.blue;
 
-        [Tooltip("Log NPC lines in this color.")]
+        [Tooltip("以此颜色记录 NPC 台词。")]
         public Color npcColor = Color.red;
 
         public void OnConversationStart(Transform actor)

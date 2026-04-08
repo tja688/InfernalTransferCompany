@@ -18,11 +18,11 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The trigger that starts the conversation.
         /// </summary>
-        [Tooltip("Trigger that starts the sequence.")]
+        [Tooltip("启动 Sequence 的触发器。")]
         [DialogueTriggerEvent]
         public DialogueTriggerEvent trigger = DialogueTriggerEvent.OnUse;
 
-        [Tooltip("Tick to wait one frame to allow other components to finish their OnStart/OnEnable.")]
+        [Tooltip("勾选后等待一帧，让其他组件完成 OnStart/OnEnable。")]
         public bool waitOneFrameOnStartOrEnable = true;
 
         public void OnBarkEnd(Transform actor)

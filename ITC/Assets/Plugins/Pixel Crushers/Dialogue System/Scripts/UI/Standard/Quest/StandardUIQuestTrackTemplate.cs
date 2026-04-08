@@ -15,17 +15,17 @@ namespace PixelCrushers.DialogueSystem
     public class StandardUIQuestTrackTemplate : MonoBehaviour
     {
 
-        [Header("Quest Heading")]
-        [Tooltip("The heading - name or description depends on tracker setting")]
+        [Header("任务标题")]
+        [Tooltip("标题，显示名称或描述取决于跟踪器设置。")]
         public UITextField description;
 
         public StandardUIQuestTemplateAlternateDescriptions alternateDescriptions = new StandardUIQuestTemplateAlternateDescriptions();
 
-        [Header("Quest Entries")]
-        [Tooltip("(Optional) If set, holds instantiated quest entries")]
+        [Header("任务条目")]
+        [Tooltip("（可选）如果已设置，则用于容纳实例化的任务条目。")]
         public Transform entryContainer;
 
-        [Tooltip("Used for quest entries")]
+        [Tooltip("用于任务条目")]
         public UITextField entryDescription;
 
         public StandardUIQuestTemplateAlternateDescriptions alternateEntryDescriptions = new StandardUIQuestTemplateAlternateDescriptions();

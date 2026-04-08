@@ -11,7 +11,7 @@ namespace PixelCrushers.DialogueSystem
     [AddComponentMenu("")] // Use wrapper.
     public class CommonLibraryLua : MonoBehaviour
     {
-        [Tooltip("Unregister functions when this component is disabled. Leave unticked if this script is on Dialogue Manager or other persistent GameObject.")]
+        [Tooltip("当此组件被禁用时注销函数。如果此脚本挂在 Dialogue Manager 或其他持久 GameObject 上，请不要勾选。")]
         public bool unregisterOnDisable = false;
 
         private static bool s_registered = false;

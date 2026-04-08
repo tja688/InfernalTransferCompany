@@ -26,19 +26,19 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The default color for response text.
         /// </summary>
-        [Tooltip("Set the button's text to this color by default")]
+        [Tooltip("默认将按钮文本设为此颜色")]
         public Color defaultColor = Color.white;
 
         /// <summary>
         /// Set <c>true</c> to set the button color when applying emphasis tags.
         /// </summary>
-        [Tooltip("Apply emphasis tag colors to the button background")]
+        [Tooltip("将强调标签颜色应用到按钮背景")]
         public bool setButtonColor = false;
 
         /// <summary>
         /// Set <c>true</c> to set the label color when applying emphasis tags.
         /// </summary>
-        [Tooltip("Apply emphasis tag colors to the button text")]
+        [Tooltip("将强调标签颜色应用到按钮文本")]
         public bool setLabelColor = true;
 
         /// <summary>

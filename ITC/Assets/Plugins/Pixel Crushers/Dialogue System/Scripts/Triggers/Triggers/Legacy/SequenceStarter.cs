@@ -15,7 +15,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The sequence to play. See @ref sequencer
         /// </summary>
-        [Tooltip("The sequence to play.")]
+        [Tooltip("要播放的 Sequence。")]
         [TextArea(1, 20)]
         public string sequence;
 
@@ -24,7 +24,7 @@ namespace PixelCrushers.DialogueSystem
         /// commands can reference 'speaker' and 'listener', so you may need to define them
         /// in this component.
         /// </summary>
-        [Tooltip("Speaker to use for the sequence (leave unassigned if no speaker is needed). Sequencer commands can reference 'speaker' and 'listener', so you may need to define them here.")]
+        [Tooltip("Sequence 使用的 speaker（如果不需要 speaker，可留空）。Sequencer 命令可以引用 'speaker' 和 'listener'，因此你可能需要在这里定义它们。")]
         public Transform speaker;
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace PixelCrushers.DialogueSystem
         /// commands can reference 'speaker' and 'listener', so you may need to define them
         /// in this component.
         /// </summary>
-        [Tooltip("Listener to use for the sequence (leave unassigned if no listener is needed). Sequencer commands can reference 'speaker' and 'listener', so you may need to define them here.")]
+        [Tooltip("Sequence 使用的 listener（如果不需要 listener，可留空）。Sequencer 命令可以引用 'speaker' 和 'listener'，因此你可能需要在这里定义它们。")]
         public Transform listener;
 
         /// <summary>

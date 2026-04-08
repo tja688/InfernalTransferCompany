@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 #if USE_CINEMACHINE //2
 using Cinemachine;
 using CinemachineCam = Cinemachine.CinemachineVirtualCamera;
@@ -16,13 +16,13 @@ namespace PixelCrushers.DialogueSystem
     public class CinemachineCameraPriorityOnDialogueEvent : ActOnDialogueEvent
     {
 
-        [Tooltip("The Cinemachine virtual camera whose priority to control.")]
+        [Tooltip("要控制优先级的 Cinemachine virtual camera。")]
         public CinemachineCam virtualCamera;
 
-        [Tooltip("Set the virtual camera to this priority when the start event occurs.")]
+        [Tooltip("在 start 事件发生时，将 virtual camera 设为此优先级。")]
         public int onStart = 99;
 
-        [Tooltip("Set the virtual camera to this priority when the end event occurs.")]
+        [Tooltip("在 end 事件发生时，将 virtual camera 设为此优先级。")]
         public int onEnd = 0;
 
         public override void TryStartActions(Transform actor)

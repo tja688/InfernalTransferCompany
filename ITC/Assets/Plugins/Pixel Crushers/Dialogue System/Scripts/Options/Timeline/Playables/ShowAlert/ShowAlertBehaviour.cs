@@ -13,10 +13,10 @@ namespace PixelCrushers.DialogueSystem
     public class ShowAlertBehaviour : PlayableBehaviour
     {
 
-        [Tooltip("Show this message using the Dialogue System's alert panel.")]
+        [Tooltip("使用 Dialogue System 的提示面板显示此消息。")]
         public string message;
 
-        [Tooltip("Show alert for duration based on text length, not duration of playable clip.")]
+        [Tooltip("根据文本长度而不是 playable clip 的时长来显示提示。")]
         public bool useTextLengthForDuration;
 
     }

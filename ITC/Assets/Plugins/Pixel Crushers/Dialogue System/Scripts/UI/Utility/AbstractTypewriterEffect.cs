@@ -16,101 +16,101 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Set `true` to type right to left.
         /// </summary>
-        [Tooltip("Tick for right-to-left text such as Arabic.")]
+        [Tooltip("用于阿拉伯语等从右到左的文本时勾选。")]
         public bool rightToLeft = false;
 
         /// <summary>
         /// How fast to "type."
         /// </summary>
-        [Tooltip("How fast to type. This is separate from Dialogue Manager > Subtitle Settings > Chars Per Second.")]
+        [Tooltip("打字速度。此项独立于 Dialogue Manager > Subtitle Settings > Chars Per Second。")]
         public float charactersPerSecond = 50;
 
         /// <summary>
         /// The audio clip to play with each character.
         /// </summary>
-        [Tooltip("Optional audio clip to play with each character.")]
+        [Tooltip("每个字符播放的可选 audio clip。")]
         public AudioClip audioClip = null;
 
         /// <summary>
         /// If specified, randomly use these clips or the main Audio Clip.
         /// </summary>
-        [Tooltip("If specified, randomly use these clips or the main Audio Clip.")]
+        [Tooltip("如果指定，则随机使用这些 clips 或主 Audio Clip。")]
         public AudioClip[] alternateAudioClips = new AudioClip[0];
 
         /// <summary>
         /// The audio source through which to play the clip. If unassigned, will look for an
         /// audio source on this GameObject.
         /// </summary>
-        [Tooltip("Optional audio source through which to play the clip.")]
+        [Tooltip("用于播放该 clip 的可选 Audio Source。")]
         public AudioSource audioSource = null;
 
-        [Tooltip("Use AudioSource.PlayOneShot instead of Play. Slightly heavier performance but produces different effect.")]
+        [Tooltip("使用 AudioSource.PlayOneShot 代替 Play。性能稍重一些，但效果不同。")]
         public bool usePlayOneShot = false;
 
         /// <summary>
         /// If audio clip is still playing from previous character, stop and restart it when typing next character.
         /// </summary>
-        [Tooltip("If audio clip is still playing from previous character, stop and restart it when typing next character.")]
+        [Tooltip("如果前一个字符的 audio clip 仍在播放，则在输入下一个字符时停止并重新开始。")]
         public bool interruptAudioClip = false;
 
-        [Tooltip("Stop audio when typing any of the Silent Characters specified below.")]
+        [Tooltip("在输入下方指定的任何 Silent Characters 时停止音频。")]
         public bool stopAudioOnSilentCharacters = false;
 
-        [Tooltip("Stop audio when upon reaching a pause code.")]
+        [Tooltip("在遇到 pause code 时停止音频。")]
         public bool stopAudioOnPauseCodes = false;
 
         /// <summary>
         /// Don't play audio on these characters.
         /// </summary>
-        [Tooltip("Don't play audio on these characters.")]
+        [Tooltip("这些字符不播放音频。")]
         public string silentCharacters = string.Empty;
 
         /// <summary>
         /// Play a full pause on these characters.
         /// </summary>
-        [Tooltip("Play a full pause on these characters.")]
+        [Tooltip("在这些字符处播放完整停顿。")]
         public string fullPauseCharacters = string.Empty;
 
         /// <summary>
         /// Play a quarter pause on these characters.
         /// </summary>
-        [Tooltip("Play a quarter pause on these characters.")]
+        [Tooltip("在这些字符处播放四分之一停顿。")]
         public string quarterPauseCharacters = string.Empty;
 
         /// <summary>
         /// Duration to pause on when text contains '\\.'
         /// </summary>
-        [Tooltip("Duration to pause on when text contains '\\.'")]
+        [Tooltip("当文本包含 '\\.' 时的停顿时长。")]
         public float fullPauseDuration = 1f;
 
         /// <summary>
         /// Duration to pause when text contains '\\,'
         /// </summary>
-        [Tooltip("Duration to pause when text contains '\\,'")]
+        [Tooltip("当文本包含 '\\,' 时的停顿时长。")]
         public float quarterPauseDuration = 0.25f;
 
         /// <summary>
         /// Ensures this GameObject has only one typewriter effect.
         /// </summary>
-        [Tooltip("Ensure this GameObject has only one typewriter effect.")]
+        [Tooltip("确保此 GameObject 只有一个 typewriter effect。")]
         public bool removeDuplicateTypewriterEffects = true;
 
         /// <summary>
         /// Play using the current text content whenever component is enabled.
         /// </summary>
-        [Tooltip("Play using the current text content whenever component is enabled.")]
+        [Tooltip("每当组件启用时，使用当前文本内容播放。")]
         public bool playOnEnable = true;
 
         /// <summary>
         /// Wait one frame to allow layout elements to setup first.
         /// </summary>
-        [Tooltip("Wait one frame to allow layout elements to setup first.")]
+        [Tooltip("等待一帧，让 layout 元素先完成设置。")]
         public bool waitOneFrameBeforeStarting = false;
 
         /// <summary>
         /// Stop typing when the conversation ends.
         /// </summary>
-        [Tooltip("Stop typing when the conversation ends.")]
+        [Tooltip("对话结束时停止打字。")]
         public bool stopOnConversationEnd = false;
 
         public abstract bool isPlaying { get; }

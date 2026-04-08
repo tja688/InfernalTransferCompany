@@ -24,19 +24,19 @@ namespace PixelCrushers.DialogueSystem
         /// If localizedTextTable is assigned, message is the field name of a field
         /// in the localized text table.
         /// </summary>
-        [Tooltip("Optional localized text table; if assigned, Message is the field in the table.")]
+        [Tooltip("可选的本地化文本表；若已分配，Message 就是表中的字段。")]
         public LocalizedTextTable localizedTextTable;
 
         /// <summary>
         /// The message to show.
         /// </summary>
-        [Tooltip("The message to display, which may contain tags such as [var=varName].")]
+        [Tooltip("要显示的消息，其中可以包含 [var=varName] 等标签。")]
         public string message;
 
         /// <summary>
         /// The duration to show the message.
         /// </summary>
-        [Tooltip("The duration in seconds to display the message. If zero, use default defined on Dialogue Manager.")]
+        [Tooltip("消息显示时长（秒）。如果为 0，则使用 Dialogue Manager 中定义的默认值。")]
         public float duration = 5f;
 
         /// <summary>

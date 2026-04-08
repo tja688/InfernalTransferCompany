@@ -16,7 +16,7 @@ namespace PixelCrushers.DialogueSystem
     public class BarkDialogueUI : MonoBehaviour, IDialogueUI
     {
 
-        [Tooltip("Play sequence associated with bark. ConversationView already plays it, but tick this if bark UI needs to wait for sequence to end.")]
+        [Tooltip("播放与 bark 关联的 Sequence。ConversationView 已经会播放它，但如果 bark UI 需要等待 Sequence 结束，请勾选此项。")]
         public bool playSequence = false;
 
         public event EventHandler<SelectedResponseEventArgs> SelectedResponseHandler;

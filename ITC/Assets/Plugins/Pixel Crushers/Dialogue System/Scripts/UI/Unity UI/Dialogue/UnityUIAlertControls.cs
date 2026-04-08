@@ -16,28 +16,28 @@ namespace PixelCrushers.DialogueSystem
         /// The panel containing the alert controls. A panel is optional, but you may want one
         /// so you can include a background image, panel-wide effects, etc.
         /// </summary>
-        [Tooltip("Optional panel containing the alert line; can contain other doodads and effects, too")]
+        [Tooltip("可选面板，包含 alert line；也可以包含其他装饰和效果。")]
         public UnityEngine.UI.Graphic panel;
 
         /// <summary>
         /// The label used to show the alert message text.
         /// </summary>
-        [Tooltip("Shows the alert message text")]
+        [Tooltip("显示 alert message 文本。")]
         public UnityEngine.UI.Text line;
 
         /// <summary>
         /// Optional continue button to close the alert immediately.
         /// </summary>
-        [Tooltip("Optional continue button; configure OnClick to invoke dialogue UI's OnContinue method")]
+        [Tooltip("可选的 continue button；将 OnClick 配置为调用 dialogue UI 的 OnContinue 方法。")]
         public UnityEngine.UI.Button continueButton;
 
-        [Tooltip("Wait for previous alerts to finish before showing new alert; if unticked, new alerts replace old")]
+        [Tooltip("先等待前一个 alert 结束，再显示新 alert；如果未勾选，新 alert 会替换旧 alert。")]
         public bool queueAlerts = false;
 
-        [Tooltip("Wait for the previous alert's Hide animation to finish before showing the next queued alert")]
+        [Tooltip("等待前一个 alert 的 Hide 动画完成后，再显示下一个排队的 alert。")]
         public bool waitForHideAnimation = false;
 
-        [Tooltip("Optional animation transitions; panel should have an Animator")]
+        [Tooltip("可选的动画过渡；面板应包含 Animator。")]
         public UIAnimationTransitions animationTransitions = new UIAnimationTransitions();
 
         /// <summary>

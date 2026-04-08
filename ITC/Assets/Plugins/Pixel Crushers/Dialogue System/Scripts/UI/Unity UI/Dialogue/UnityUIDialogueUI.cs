@@ -52,31 +52,31 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Set <c>true</c> to always keep a control focused; useful for gamepads.
         /// </summary>
-        [Tooltip("Always keep a control focused; useful for gamepads and keyboard.")]
+        [Tooltip("始终保持某个控件处于焦点状态；适合手柄和键盘。")]
         public bool autoFocus = false;
 
         /// <summary>
         /// Allow the dialogue UI to steal focus if a non-dialogue UI panel has it.
         /// </summary>
-        [Tooltip("Allow the dialogue UI to steal focus if a non-dialogue UI panel has it.")]
+        [Tooltip("如果非对话 UI 面板占用了焦点，允许对话 UI 抢夺焦点。")]
         public bool allowStealFocus = false;
 
         /// <summary>
         /// If auto focusing, check on this frequency in seconds that the control is focused.
         /// </summary>
-        [Tooltip("If auto focusing, check on this frequency in seconds that the control is focused.")]
+        [Tooltip("如果启用自动聚焦，则按此频率（秒）检查控件是否处于焦点。")]
         public float autoFocusCheckFrequency = 0.5f;
 
         /// <summary>
         /// Set <c>true</c> to look for OverrideUnityUIDialogueControls on actors.
         /// </summary>
-		[Tooltip("Look for OverrideUnityUIDialogueControls on actors.")]
+		[Tooltip("查找角色上的 OverrideUnityUIDialogueControls。")]
         public bool findActorOverrides = true;
 
         /// <summary>
         /// Set <c>true</c> to add an EventSystem if one isn't in the scene.
         /// </summary>
-        [Tooltip("Add an EventSystem if one isn't in the scene.")]
+        [Tooltip("如果场景中没有 EventSystem，则添加一个。")]
         public bool addEventSystemIfNeeded = true;
 
         private UnityUIQTEControls m_qteControls;

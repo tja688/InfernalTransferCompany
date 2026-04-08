@@ -27,7 +27,7 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public SetEnabledAction[] onStart = new SetEnabledAction[0];
 
-        [Tooltip("When the dialogue event starts, wait one frame before processing the On Start list.")]
+        [Tooltip("当对话事件开始时，先等待一帧，再处理 On Start 列表。")]
         public bool waitOneFrameOnStart = false;
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace PixelCrushers.DialogueSystem
         /// </summary>
         public SetEnabledAction[] onEnd = new SetEnabledAction[0];
 
-        [Tooltip("When the dialogue event starts, wait one frame before processing the On End list.")]
+        [Tooltip("当对话事件开始时，先等待一帧，再处理 On End 列表。")]
         public bool waitOneFrameOnEnd = false;
 
         public override void TryStartActions(Transform actor)

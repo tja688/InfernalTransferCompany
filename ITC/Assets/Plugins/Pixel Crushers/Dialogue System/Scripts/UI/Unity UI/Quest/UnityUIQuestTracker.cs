@@ -17,50 +17,50 @@ namespace PixelCrushers.DialogueSystem
     public class UnityUIQuestTracker : MonoBehaviour
     {
 
-        [Tooltip("Record the quest tracker display toggle in this PlayerPrefs key.")]
+        [Tooltip("将任务跟踪器显示开关记录到此 PlayerPrefs 键中。")]
         public string playerPrefsToggleKey = "QuestTracker";
 
         /// <summary>
         /// The UI control that will hold quest track info (instantiated copies of the 
         /// quest track template). This is typically a Vertical Layout Group.
         /// </summary>
-        [Tooltip("UI container that will hold instances of quest track template.")]
+        [Tooltip("用于容纳任务跟踪模板实例的 UI 容器。")]
         public Transform container;
 
         /// <summary>
         /// Tick to show the container even if there's nothing to track.
         /// </summary>
-        [Tooltip("Show Container even if there's nothing to track.")]
+        [Tooltip("即使没有可跟踪内容，也显示 Container。")]
         public bool showContainerIfEmpty = true;
 
         /// <summary>
         /// The quest track template.
         /// </summary>
-        [Tooltip("Template to instantiate for each tracked quest.")]
+        [Tooltip("为每个被跟踪的任务实例化的模板。")]
         public UnityUIQuestTrackTemplate questTrackTemplate;
 
         /// <summary>
         /// Tick to show active quests in the tracker.
         /// </summary>
-        [Tooltip("Show active quests.")]
+        [Tooltip("显示进行中的任务。")]
         public bool showActiveQuests = true;
 
         /// <summary>
         /// Tick to show successful and failed quests in the tracker.
         /// </summary>
-        [Tooltip("Show successful and failed quests.")]
+        [Tooltip("显示成功和失败的任务。")]
         public bool showCompletedQuests = false;
 
         /// <summary>
         /// Tick to look up "Entry n Success" or "Entry n Failure" if the
         /// quest entry is in the success or failure state.
         /// </summary>
-        [Tooltip("Show Entry n Success or Entry n Failure text if quest entry is in success/failure state.")]
+        [Tooltip("如果任务条目处于成功/失败状态，则显示 Entry n Success 或 Entry n Failure 文本。")]
         public bool showCompletedEntryText = false;
 
         public enum QuestDescriptionSource { Title, Description }
 
-        [Tooltip("Source for the quest tracker text.")]
+        [Tooltip("任务跟踪器文本的来源。")]
         public QuestDescriptionSource questDescriptionSource = QuestDescriptionSource.Title;
 
         public bool visibleOnStart = true;

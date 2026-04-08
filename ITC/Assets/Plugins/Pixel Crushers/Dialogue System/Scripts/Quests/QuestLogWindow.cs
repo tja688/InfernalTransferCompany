@@ -25,16 +25,16 @@ namespace PixelCrushers.DialogueSystem
     public abstract class QuestLogWindow : MonoBehaviour
     {
 
-        [Tooltip("Optional localized text table to use to localize no active/completed quests.")]
+        [Tooltip("用于本地化无进行中/已完成任务文本的可选 Text Table。")]
         public TextTable textTable = null; // v2: changed from LocalizedTextTable.
 
-        [Tooltip("Text to show (or localize) when there are no active quests.")]
+        [Tooltip("没有进行中任务时显示（或本地化）的文本。")]
         public string noActiveQuestsText = "No Active Quests";
 
-        [Tooltip("Text to show (or localize) when there are no completed quests.")]
+        [Tooltip("没有已完成任务时显示（或本地化）的文本。")]
         public string noCompletedQuestsText = "No Completed Quests";
 
-        [Tooltip("Check if quest has a field named 'Visible'. If field is false, don't show quest.")]
+        [Tooltip("检查 quest 是否有名为 'Visible' 的字段。如果该字段为 false，则不显示 quest。")]
         public bool checkVisibleField = false;
 
         public enum QuestHeadingSource
@@ -58,7 +58,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The state to assign abandoned quests.
         /// </summary>
-        [Tooltip("State to assign to quests when player abandons then.")]
+        [Tooltip("玩家放弃任务时要分配给任务的状态。")]
         [QuestState]
         public QuestState abandonQuestState = QuestState.Unassigned;
 
@@ -76,16 +76,16 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// If <c>true</c>, organize the quests by group.
         /// </summary>
-        [Tooltip("Organize quests by the values of their Group fields.")]
+        [Tooltip("按 Group 字段的值对任务进行分组。")]
         public bool useGroups = false;
 
-        [Tooltip("If not blank, show this text next to quest titles that haven't been viewed yet. Will be localized if text has entry in Dialogue Manager's Text Table.")]
+        [Tooltip("如果不为空，则在尚未查看过的任务标题旁显示此文本。若此文本在 Dialogue Manager 的 Text Table 中有条目，则会被本地化。")]
         public string newQuestText = string.Empty;
 
-        [Tooltip("Allow only one quest to be tracked at a time.")]
+        [Tooltip("一次只允许跟踪一个任务。")]
         public bool trackOneQuestAtATime = false;
 
-        [Tooltip("Clicking again on selected quest title deselects quest.")]
+        [Tooltip("再次点击已选中的任务标题会取消选择该任务。")]
         public bool deselectQuestOnSecondClick = true;
 
         [Serializable]

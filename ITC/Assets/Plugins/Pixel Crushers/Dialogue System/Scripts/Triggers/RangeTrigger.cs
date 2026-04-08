@@ -19,19 +19,19 @@ namespace PixelCrushers.DialogueSystem
         /// The condition that must be true in order to activate/deactivate target
         /// game objects and components when the trigger is entered or exited.
         /// </summary>
-        [Tooltip("These conditions must be true for the Range Trigger to affect GameObjects and components and invoke events")]
+        [Tooltip("这些条件必须为真，Range Trigger 才会影响 GameObjects 和 components 并调用事件。")]
         public Condition condition;
 
         /// <summary>
         /// The game objects to affect.
         /// </summary>
-        [Tooltip("Activate these GameObjects on trigger enter, deactivate them on trigger exit")]
+        [Tooltip("在触发进入时激活这些 GameObjects，在触发退出时停用它们。")]
         public GameObject[] gameObjects;
 
         /// <summary>
         /// The components to affect.
         /// </summary>
-        [Tooltip("Enable these components on trigger enter, disable them on trigger exit")]
+        [Tooltip("在触发进入时启用这些 components，在触发退出时禁用它们。")]
         public Component[] components;
 
         public UnityEvent onEnter = new UnityEvent();

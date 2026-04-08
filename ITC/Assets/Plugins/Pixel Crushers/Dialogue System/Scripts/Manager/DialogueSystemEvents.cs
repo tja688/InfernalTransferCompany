@@ -29,86 +29,86 @@ namespace PixelCrushers.DialogueSystem
         [System.Serializable]
         public class ConversationEvents
         {
-            [Tooltip("Invoked when a conversation starts. Transform is primary actor (typically player).")]
+            [Tooltip("当对话开始时调用。Transform 是主参与者（通常是玩家）。")]
             public TransformEvent onConversationStart = new TransformEvent();
 
-            [Tooltip("Invoked when a conversation ends. Transform is primary actor (typically player).")]
+            [Tooltip("当对话结束时调用。Transform 是主参与者（通常是玩家）。")]
             public TransformEvent onConversationEnd = new TransformEvent();
 
-            [Tooltip("Run OnConversationEnd() events at end of frame to allow other scripts to complete their frame processing first.")]
+            [Tooltip("在帧结束时运行 OnConversationEnd() 事件，让其他脚本先完成本帧处理。")]
             public bool runOnConversationEndEventsAtEndOfFrame = false;
 
-            [Tooltip("Invoked when a conversation is cancelled. Transform is primary actor (typically player).")]
+            [Tooltip("当对话被取消时调用。Transform 是主参与者（通常是玩家）。")]
             public TransformEvent onConversationCancelled = new TransformEvent();
 
-            [Tooltip("Invoked just before a line is delivered but before OnConversationLine. Passes Subtitle.")]
+            [Tooltip("在台词发出前、OnConversationLine 之前调用。传递 Subtitle。")]
             public SubtitleEvent onConversationLineEarly = new SubtitleEvent();
 
-            [Tooltip("Invoked just before a line is delivered but after OnConversationLineEarly. Passes Subtitle.")]
+            [Tooltip("在台词发出前、OnConversationLineEarly 之后调用。传递 Subtitle。")]
             public SubtitleEvent onConversationLine = new SubtitleEvent();
 
-            [Tooltip("Invoked when a line has finished. Passes Subtitle.")]
+            [Tooltip("当一行结束时调用。传递 Subtitle。")]
             public SubtitleEvent onConversationLineEnd = new SubtitleEvent();
 
-            [Tooltip("Invoked if player presses cancel button while line is being delivered.")]
+            [Tooltip("当玩家在台词显示过程中按下取消按钮时调用。")]
             public SubtitleEvent onConversationLineCancelled = new SubtitleEvent();
 
-            [Tooltip("Invoked when showing a response menu. Passes Response[] array.")]
+            [Tooltip("显示 Response Menu 时调用。传递 Response[] 数组。")]
             public ResponsesEvent onConversationResponseMenu = new ResponsesEvent();
 
-            [Tooltip("Invoked when a response menu times out.")]
+            [Tooltip("当 Response Menu 超时调用。")]
             public UnityEvent onConversationResponseMenuTimeout = new UnityEvent();
 
-            [Tooltip("Invoked when a conversation follows a link to another conversation. Transform is primary actor (typically player).")]
+            [Tooltip("当对话通过链接跳转到另一个对话时调用。Transform 是主参与者（通常是玩家）。")]
             public TransformEvent onLinkedConversationStart = new TransformEvent();
         }
 
         [System.Serializable]
         public class BarkEvents
         {
-            [Tooltip("Invoked when a bark starts. Transform is recipient of bark.")]
+            [Tooltip("当 bark 开始时调用。Transform 是 bark 的接收者。")]
             public TransformEvent onBarkStart = new TransformEvent();
 
-            [Tooltip("Invoked when a bark ends. Transform is recipient of bark.")]
+            [Tooltip("当 bark 结束时调用。Transform 是 bark 的接收者。")]
             public TransformEvent onBarkEnd = new TransformEvent();
 
-            [Tooltip("Invoked just before a bark line is delivered. Passes Subtitle.")]
+            [Tooltip("在 bark 台词发出前调用。传递 Subtitle。")]
             public SubtitleEvent onBarkLine = new SubtitleEvent();
         }
 
         [System.Serializable]
         public class SequenceEvents
         {
-            [Tooltip("Invoked when a sequence starts. Transform is 'listener' of sequence.")]
+            [Tooltip("当 Sequence 开始时调用。Transform 是该 Sequence 的 'listener'。")]
             public TransformEvent onSequenceStart = new TransformEvent();
 
-            [Tooltip("Invoked when a sequence ends. Transform is 'listener' of sequence.")]
+            [Tooltip("当 Sequence 结束时调用。Transform 是该 Sequence 的 'listener'。")]
             public TransformEvent onSequenceEnd = new TransformEvent();
         }
 
         [System.Serializable]
         public class QuestEvents
         {
-            [Tooltip("Invoked when a quest state or quest entry state changes. String is quest title.")]
+            [Tooltip("当任务状态或任务条目状态变化时调用。字符串是任务标题。")]
             public StringEvent onQuestStateChange = new StringEvent();
 
-            [Tooltip("Invoked when tracking is enabled for a quest. String is quest title.")]
+            [Tooltip("当某个任务启用 tracking 时调用。字符串是任务标题。")]
             public StringEvent onQuestTrackingEnabled = new StringEvent();
 
-            [Tooltip("Invoked when tracking is disabled for a quest. String is quest title.")]
+            [Tooltip("当某个任务禁用 tracking 时调用。字符串是任务标题。")]
             public StringEvent onQuestTrackingDisabled = new StringEvent();
 
-            [Tooltip("Invoked when updating quest tracker.")]
+            [Tooltip("当更新 quest tracker 时调用。")]
             public UnityEvent onUpdateQuestTracker = new UnityEvent();
         }
 
         [System.Serializable]
         public class PauseEvents
         {
-            [Tooltip("Invoked when DialogueManager.Pause() is called.")]
+            [Tooltip("当调用 DialogueManager.Pause() 时调用。")]
             public UnityEvent onDialogueSystemPause = new UnityEvent();
 
-            [Tooltip("Invoked when DialogueManager.Unpause() is called.")]
+            [Tooltip("当调用 DialogueManager.Unpause() 时调用。")]
             public UnityEvent onDialogueSystemUnpause = new UnityEvent();
         }
 

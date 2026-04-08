@@ -13,23 +13,23 @@ namespace PixelCrushers.DialogueSystem
     public class BarkBehaviour : PlayableBehaviour
     {
 
-        [Tooltip("Get bark text from a conversation.")]
+        [Tooltip("从对话中获取 Bark 文本。")]
         public bool useConversation = true;
 
-        [Tooltip("Get the bark text from this conversation.")]
+        [Tooltip("从此对话中获取 Bark 文本。")]
         [ConversationPopup(true)]
         public string conversation;
 
-        [Tooltip("Bark a specific dialogue entry instead of starting from the conversation's START node.")]
+        [Tooltip("对一个特定的对话条目执行旁白，而不是从对话的 START 节点开始。")]
         public bool barkSpecificEntry;
 
-        [Tooltip("Dialogue entry to bark.")]
+        [Tooltip("要旁白的对话条目。")]
         public int entryID;
 
-        [Tooltip("Bark this text.")]
+        [Tooltip("对这段文本执行旁白。")]
         public string text;
 
-        [Tooltip("(Optional) Barker is barking to this listener.")]
+        [Tooltip("（可选）Barker 正在对这个监听者进行旁白。")]
         public Transform listener;
 
         public string GetEditorBarkText()

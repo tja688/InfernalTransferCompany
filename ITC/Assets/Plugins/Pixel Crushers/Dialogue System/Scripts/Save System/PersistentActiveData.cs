@@ -22,19 +22,19 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The target game object.
         /// </summary>
-        [Tooltip("The GameObject to set active or inactive based on the Condition below.")]
+        [Tooltip("根据下方 Condition 设置为激活或未激活的 GameObject。")]
         public GameObject target;
 
         /// <summary>
         /// If this condition is <c>true</c>, the target game object is activated; otherwise it's deactivated.
         /// </summary>
-        [Tooltip("If true, Target is activated; otherwise deactivated.")]
+        [Tooltip("若为 true，则激活 Target；否则停用。")]
         public Condition condition;
 
         /// <summary>
         /// When the script starts, check the condition and set the target GameObject active/inactive.
         /// </summary>
-        [Tooltip("When script starts, check condition & set target GameObject active/inactive. Otherwise it only checks when a game is loaded or entering from another scene.")]
+        [Tooltip("脚本启动时检查 condition，并设置目标 GameObject 为激活/未激活。否则只会在加载游戏或从其他场景进入时检查。")]
         public bool checkOnStart;
 
         protected virtual void Start()

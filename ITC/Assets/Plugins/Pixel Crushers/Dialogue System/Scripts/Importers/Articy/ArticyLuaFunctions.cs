@@ -1,4 +1,4 @@
-﻿#if USE_ARTICY
+#if USE_ARTICY
 // Copyright (c) Pixel Crushers. All rights reserved.
 
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace PixelCrushers.DialogueSystem.Articy
         private static bool s_registered = false;
         private static ArticyLuaFunctions s_instance = null;
 
-        [Tooltip("Tick to enable tracking of seen counters for dialogue entries.")]
+        [Tooltip("勾选以启用对话条目的已读计数跟踪。")]
         [SerializeField] private bool useSeenCounters = false;
 
         private Dictionary<string, int> seenCounters = new Dictionary<string, int>(); // < [convID:entryID], count >

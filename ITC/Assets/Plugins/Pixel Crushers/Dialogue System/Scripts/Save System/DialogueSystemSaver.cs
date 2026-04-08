@@ -20,10 +20,10 @@ namespace PixelCrushers.DialogueSystem
             public byte[] bytes;
         }
 
-        [Tooltip("If data was restored immediately after loading a scene, don't apply it again after save system waits specified number of frames for other scripts to initialize.")]
+        [Tooltip("如果数据在加载场景后已立即恢复，则在保存系统等待指定帧数让其他脚本初始化后，不要再次应用它。")]
         public bool skipApplyDataAfterFramesIfApplyImmediate = true;
 
-        [Tooltip("Save using raw data dump. If your database is extremely large, this method is faster but generates larger saved game data. If you use this option, use BinaryDataSerializer instead of JsonDataSerializer or data will be ridiculously large.")]
+        [Tooltip("使用原始数据转储保存。如果数据库极大，这种方法更快，但会生成更大的存档数据。如果使用此选项，请使用 BinaryDataSerializer 而不是 JsonDataSerializer，否则数据会大得离谱。")]
         public bool saveRawData = false;
 
         private bool m_appliedImmediate = false;

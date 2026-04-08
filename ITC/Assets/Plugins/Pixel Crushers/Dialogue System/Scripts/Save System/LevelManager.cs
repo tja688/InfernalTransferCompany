@@ -18,10 +18,10 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The default starting level to use if none is recorded in the saved-game data.
         /// </summary>
-        [Tooltip("Level to use if none is recorded in saved-game data.")]
+        [Tooltip("如果存档数据中未记录关卡，则使用此关卡。")]
         public string defaultStartingLevel;
 
-        [Tooltip("Load asynchronously to prevent freeze while loading.")]
+        [Tooltip("异步加载以避免加载时卡顿。")]
         public bool useAsyncLoad = true;
 
         /// <summary>

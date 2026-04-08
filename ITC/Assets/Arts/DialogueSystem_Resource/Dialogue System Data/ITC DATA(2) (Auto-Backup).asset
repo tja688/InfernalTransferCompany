@@ -211,9 +211,11 @@ MonoBehaviour:
       value: Barks
       type: 0
       typeString: 
-    portrait: {fileID: 0}
+    portrait: {fileID: 2800000, guid: e01677f998f23544988d3f6eee8ad3ea, type: 3}
     spritePortrait: {fileID: 0}
-    alternatePortraits: []
+    alternatePortraits:
+    - {fileID: 2800000, guid: 6987226633d5aec41bc4aa602a041263, type: 3}
+    - {fileID: 2800000, guid: eb47276ac50b2d14b847110f500c08f4, type: 3}
     spritePortraits: []
   - id: 3
     fields:
@@ -762,9 +764,12 @@ MonoBehaviour:
       cancelSubtitle:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
       cancelConversation:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
+      actorSubtitlePanelOverrides: []
     nodeColor: 
     dialogueEntries:
     - id: 0
@@ -5104,9 +5109,12 @@ MonoBehaviour:
       cancelSubtitle:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
       cancelConversation:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
+      actorSubtitlePanelOverrides: []
     nodeColor: 
     dialogueEntries:
     - id: 0
@@ -5140,7 +5148,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       conversationID: 2
-      isRoot: 0
+      isRoot: 1
       isGroup: 0
       nodeColor: 
       delaySimStatus: 0
@@ -5454,7 +5462,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 388.99997
+        x: 389.7339
         y: 562.4676
         width: 160
         height: 30
@@ -16619,8 +16627,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 72.38806, y: 126.119385}
-    canvasZoom: 0.66999984
+    canvasScrollPosition: {x: 268.36237, y: 219.6281}
+    canvasZoom: 1.0899994
   - id: 3
     fields:
     - title: Title
@@ -16662,9 +16670,12 @@ MonoBehaviour:
       cancelSubtitle:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
       cancelConversation:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
+      actorSubtitlePanelOverrides: []
     nodeColor: 
     dialogueEntries:
     - id: 0
@@ -44105,7 +44116,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 354.2513}
+    canvasScrollPosition: {x: 17.142822, y: 0}
     canvasZoom: 0.70000017
   - id: 4
     fields:
@@ -44148,9 +44159,12 @@ MonoBehaviour:
       cancelSubtitle:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
       cancelConversation:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
+      actorSubtitlePanelOverrides: []
     nodeColor: 
     dialogueEntries:
     - id: 0
@@ -44301,9 +44315,12 @@ MonoBehaviour:
       cancelSubtitle:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
       cancelConversation:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
+      actorSubtitlePanelOverrides: []
     nodeColor: 
     dialogueEntries:
     - id: 0
@@ -44399,9 +44416,12 @@ MonoBehaviour:
       cancelSubtitle:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
       cancelConversation:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
+      actorSubtitlePanelOverrides: []
     nodeColor: 
     dialogueEntries:
     - id: 0
@@ -44772,9 +44792,12 @@ MonoBehaviour:
       cancelSubtitle:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
       cancelConversation:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
+      actorSubtitlePanelOverrides: []
     nodeColor: 
     dialogueEntries:
     - id: 0
@@ -44986,9 +45009,12 @@ MonoBehaviour:
       cancelSubtitle:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
       cancelConversation:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
+      actorSubtitlePanelOverrides: []
     nodeColor: 
     dialogueEntries:
     - id: 0
@@ -45627,7 +45653,7 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 330.45892, y: 0}
+    canvasScrollPosition: {x: 229.69943, y: 0}
     canvasZoom: 0.7900002
   - id: 9
     fields:
@@ -45670,9 +45696,12 @@ MonoBehaviour:
       cancelSubtitle:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
       cancelConversation:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
+      actorSubtitlePanelOverrides: []
     nodeColor: 
     dialogueEntries:
     - id: 0
@@ -46000,9 +46029,12 @@ MonoBehaviour:
       cancelSubtitle:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
       cancelConversation:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
+      actorSubtitlePanelOverrides: []
     nodeColor: 
     dialogueEntries:
     - id: 0
@@ -46269,9 +46301,12 @@ MonoBehaviour:
       cancelSubtitle:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
       cancelConversation:
         key: 27
         buttonName: 
+        inputAction: {fileID: 0}
+      actorSubtitlePanelOverrides: []
     nodeColor: 
     dialogueEntries:
     - id: 0

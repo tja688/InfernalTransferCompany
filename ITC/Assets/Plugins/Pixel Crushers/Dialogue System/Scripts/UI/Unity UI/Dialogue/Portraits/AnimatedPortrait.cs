@@ -12,7 +12,7 @@ namespace PixelCrushers.DialogueSystem
     public class AnimatedPortrait : MonoBehaviour
     {
 
-        [Tooltip("Animator controller that runs this actor's animated portrait. It should animate an Image component, not a SpriteRenderer.")]
+        [Tooltip("运行此角色动画肖像的 Animator Controller。它应驱动 Image 组件，而不是 SpriteRenderer。")]
         public RuntimeAnimatorController animatorController;
     }
 

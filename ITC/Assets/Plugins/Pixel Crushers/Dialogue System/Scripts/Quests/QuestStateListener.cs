@@ -23,13 +23,13 @@ namespace PixelCrushers.DialogueSystem
         [Serializable]
         public class QuestStateIndicatorLevel
         {
-            [Tooltip("Quest state to listen for.")]
+            [Tooltip("要监听的任务状态。")]
             public QuestState questState;
 
-            [Tooltip("Conditions that must also be true.")]
+            [Tooltip("还必须满足的条件。")]
             public Condition condition;
 
-            [Tooltip("Indicator level to use when this quest state is reached.")]
+            [Tooltip("达到此任务状态时使用的指示级别。")]
             public int indicatorLevel;
 
             public UnityEvent onEnterState = new UnityEvent();
@@ -40,16 +40,16 @@ namespace PixelCrushers.DialogueSystem
         [Serializable]
         public class QuestEntryStateIndicatorLevel
         {
-            [Tooltip("Quest entry number.")]
+            [Tooltip("任务条目编号。")]
             public int entryNumber;
 
-            [Tooltip("Quest entry state to listen for.")]
+            [Tooltip("要监听的任务条目状态。")]
             public QuestState questState;
 
-            [Tooltip("Conditions that must also be true.")]
+            [Tooltip("还必须满足的条件。")]
             public Condition condition;
 
-            [Tooltip("Indicator level to use when this quest state is reached.")]
+            [Tooltip("达到此任务状态时使用的指示级别。")]
             public int indicatorLevel;
 
             public UnityEvent onEnterState = new UnityEvent();
@@ -57,10 +57,10 @@ namespace PixelCrushers.DialogueSystem
 
         public QuestEntryStateIndicatorLevel[] questEntryStateIndicatorLevels = new QuestEntryStateIndicatorLevel[0];
 
-        [Tooltip("When starting component, do not invoke any OnEnterState() events.")]
+        [Tooltip("启动组件时，不要调用任何 OnEnterState() 事件。")]
         public bool suppressOnEnterStateEventsOnStart = false;
 
-        [Tooltip("If assigned, use this Quest State Indicator component. Otherwise will automatically find Quest State Indicator on this GameObject or its parents or children.")]
+        [Tooltip("如果已指定，则使用此 Quest State Indicator 组件。否则会自动在此 GameObject 或其父级/子级中查找 Quest State Indicator。")]
         [SerializeField] protected QuestStateIndicator m_questStateIndicator;
         protected QuestStateIndicator questStateIndicator
         {

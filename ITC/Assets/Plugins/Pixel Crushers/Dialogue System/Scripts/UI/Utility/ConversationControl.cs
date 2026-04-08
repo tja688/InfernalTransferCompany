@@ -18,25 +18,25 @@ namespace PixelCrushers.DialogueSystem
     [AddComponentMenu("")] // Use wrapper.
     public class ConversationControl : MonoBehaviour // Add to dialogue UI. Connect to Skip All and Auto Play buttons.
     {
-        [Tooltip("Skip all subtitles until response menu or end of conversation is reached. Set by SkipAll().")]
+        [Tooltip("跳过所有字幕，直到到达 Response Menu 或对话结束。由 SkipAll() 设置。")]
         public bool skipAll;
 
-        [Tooltip("Stop SkipAll() when unread subtitle is reached. You MUST tick Dialogue Manager's Include SimStatus checkbox to use this.")]
+        [Tooltip("当到达未读字幕时停止 SkipAll()。要使用此功能，必须勾选 Dialogue Manager 的 Include SimStatus 复选框。")]
         public bool stopSkipAllOnUnreadSubtitle = false;
 
-        [Tooltip("Stop SkipAll() when response menu is reached.")]
+        [Tooltip("当到达 Response Menu 时停止 SkipAll()。")]
         public bool stopSkipAllOnResponseMenu = true;
 
-        [Tooltip("Stop SkipAll() when end of conversation is reached.")]
+        [Tooltip("当对话结束时停止 SkipAll()。")]
         public bool stopSkipAllOnConversationEnd;
 
-        [Tooltip("If Skip All is enabled, don't skip last conversation line.")]
+        [Tooltip("如果启用了 Skip All，则不要跳过最后一行对话。")]
         public bool dontSkipAllOnLastConversationLine;
 
-        [Tooltip("Use this continue button mode when AutoPlay is on.")]
+        [Tooltip("当 AutoPlay 开启时使用此继续按钮模式。")]
         public DisplaySettings.SubtitleSettings.ContinueButtonMode autoPlayOnContinueButton = DisplaySettings.SubtitleSettings.ContinueButtonMode.Never;
 
-        [Tooltip("Use this continue button mode when AutoPlay is off.")]
+        [Tooltip("当 AutoPlay 关闭时使用此继续按钮模式。")]
         public DisplaySettings.SubtitleSettings.ContinueButtonMode autoPlayOffContinueButton = DisplaySettings.SubtitleSettings.ContinueButtonMode.Always;
 
         protected AbstractDialogueUI dialogueUI;

@@ -12,7 +12,7 @@ namespace PixelCrushers.DialogueSystem
     public class StandardUITextTemplate : StandardUIContentTemplate
     {
 
-        [Tooltip("Text UI element.")]
+        [Tooltip("Text UI 元素。")]
         [SerializeField]
         private UITextField m_text;
 

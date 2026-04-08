@@ -19,13 +19,13 @@ namespace PixelCrushers.DialogueSystem
         /// - Random: Choose a random bark from the conversation, avoiding sequential repeats if possible.
         /// - Sequential: Choose the barks in order from first to last, looping at the end.
         /// </summary>
-        [Tooltip("The order in which to bark dialogue entries.")]
+        [Tooltip("对话条目的喊话顺序。")]
         public BarkOrder barkOrder = BarkOrder.Random;
 
         /// <summary>
         /// Are barks allowed during conversations?
         /// </summary>
-        [Tooltip("Allow barks during active conversations.")]
+        [Tooltip("允许在对话进行中喊话。")]
         public bool allowDuringConversations = false;
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace PixelCrushers.DialogueSystem
         /// as the state changes, barks use no em formatting codes, and sequences are not
         /// played with barks.
         /// </summary>
-        [Tooltip("Cache all lines during first bark. This can reduce stutter when barking on slower mobile devices, but barks' conditions are not reevaluated each time as the state changes, barks use no em formatting codes, and sequences are not played with barks.")]
+        [Tooltip("在首次喊话时缓存所有行。这可以减少在较慢的移动设备上喊话时的卡顿，但随着状态变化，喊话的条件不会每次重新求值，喊话不使用 em 格式代码，且喊话时不会播放 Sequence。")]
         public bool cacheBarkLines = false;
 
         /// <summary>

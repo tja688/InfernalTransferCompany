@@ -47,19 +47,19 @@ namespace PixelCrushers.DialogueSystem
         /// If <c>true</c>, uses a default OnGUI to display a selection message and
         /// targeting reticle.
         /// </summary>
-        [Tooltip("Use a default OnGUI to display selection message and targeting reticle.")]
+        [Tooltip("使用默认 OnGUI 显示选择消息和瞄准准星。")]
         public bool useDefaultGUI = true;
 
         /// <summary>
         /// The GUI skin to use for the target's information (name and use message).
         /// </summary>
-        [Tooltip("GUI skin to use for the target's information (name and use message).")]
+        [Tooltip("用于目标信息（名称和使用消息）的 GUI skin。")]
         public GUISkin guiSkin;
 
         /// <summary>
         /// The name of the GUI style in the skin.
         /// </summary>
-        [Tooltip("Name of the GUI style in the skin.")]
+        [Tooltip("该 skin 中 GUI 样式的名称。")]
         public string guiStyleName = "label";
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The color of the information labels when the target is in range.
         /// </summary>
-        [Tooltip("Color of the information labels when the target is in range.")]
+        [Tooltip("目标在范围内时信息标签的颜色。")]
         public Color color = Color.yellow;
 
         /// <summary>
@@ -81,13 +81,13 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The color of the text style's outline or shadow.
         /// </summary>
-        [Tooltip("Color of the text style's outline or shadow.")]
+        [Tooltip("文本样式轮廓或阴影的颜色。")]
         public Color textStyleColor = Color.black;
 
         /// <summary>
         /// The default use message. This can be overridden in the target's Usable component.
         /// </summary>
-        [Tooltip("Default use message; can be overridden in the target's Usable component")]
+        [Tooltip("默认使用消息；可在目标的 Usable 组件中覆盖。")]
         [SerializeField]
         [FormerlySerializedAs("defaultUseMessage")]
         private string m_defaultUseMessage = "(spacebar to interact)";
@@ -96,19 +96,19 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The key that sends an OnUse message.
         /// </summary>
-        [Tooltip("Key that sends an OnUse message.")]
+        [Tooltip("发送 OnUse 消息的按键。")]
         public KeyCode useKey = KeyCode.Space;
 
         /// <summary>
         /// The button that sends an OnUse message.
         /// </summary>
-        [Tooltip("Input button that sends an OnUse message.")]
+        [Tooltip("发送 OnUse 消息的输入按钮。")]
         public string useButton = "Fire2";
 
         /// <summary>
         /// Tick to enable touch triggering.
         /// </summary>
-        [Tooltip("Enable touch triggering.")]
+        [Tooltip("启用触摸触发。")]
         public bool enableTouch = false;
 
         /// <summary>
@@ -120,13 +120,13 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// If ticked, the OnUse message is broadcast to the usable object's children.
         /// </summary>
-        [Tooltip("Broadcast OnUse message to Usable object's children.")]
+        [Tooltip("将 OnUse 消息广播到 Usable 对象的子对象。")]
         public bool broadcastToChildren = true;
 
         /// <summary>
         /// The actor transform to send with OnUse. Defaults to this transform.
         /// </summary>
-        [Tooltip("Actor transform to send with OnUse. Defaults to this transform.")]
+        [Tooltip("随 OnUse 发送的 Actor transform。默认为此 transform。")]
         public Transform actorTransform = null;
 
         public UsableUnityEvent onSelectedUsable = new UsableUnityEvent();

@@ -33,11 +33,11 @@ namespace PixelCrushers.DialogueSystem
     //public class LocalizeUIText : MonoBehaviour
     //{
 
-    //    [Tooltip("Optional; overrides the Dialogue Manager's table.")]
+    //    [Tooltip("可选；覆盖 Dialogue Manager 的 table。")]
     //    public TextTable textTable;
     //    //---Was: public TextTable localizedTextTable;
 
-    //    [Tooltip("Optional; if assigned, use this instead of the Text field's value as the field lookup value.")]
+    //    [Tooltip("可选；如果已指定，则使用此项而不是 Text 字段的值作为字段查找值。")]
     //    public string fieldName = string.Empty;
 
     //    protected UnityEngine.UI.Text text = null;

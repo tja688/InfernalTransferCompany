@@ -16,13 +16,13 @@ namespace PixelCrushers.DialogueSystem
         [QuestPopup]
         public string quest;
 
-        [Tooltip("Change the quest's main state.")]
+        [Tooltip("更改任务的主状态。")]
         public bool setQuestState;
 
         [QuestState]
         public QuestState questState;
 
-        [Tooltip("Change a quest entry's state.")]
+        [Tooltip("更改任务条目的状态。")]
         public bool setQuestEntryState;
 
         public int questEntryNumber;

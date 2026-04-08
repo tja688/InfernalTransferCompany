@@ -21,43 +21,43 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Hold down this key and press Second Key to open console.
         /// </summary>
-        [Tooltip("Hold down this key and press Second Key to open console.")]
+        [Tooltip("按住此键并按 Second Key 打开控制台。")]
         public KeyCode firstKey = KeyCode.BackQuote;
 
         /// <summary>
         /// Hold down First Key and press this key to open console.
         /// </summary>
-        [Tooltip("Hold down First Key and press this key to open console.")]
+        [Tooltip("按住 First Key 并按此键打开控制台。")]
         public KeyCode secondKey = KeyCode.L;
 
         /// <summary>
         /// Is the console visible or hidden?
         /// </summary>
-        [Tooltip("Console is visible.")]
+        [Tooltip("控制台可见。")]
         public bool visible = false;
 
         /// <summary>
         /// Optional GUI Skin to style console window.
         /// </summary>
-        [Tooltip("Optional GUI Skin to style console window.")]
+        [Tooltip("可选 GUI Skin，用于设置控制台窗口样式。")]
         public GUISkin guiSkin;
 
         /// <summary>
         /// The minimum size of the console window.
         /// </summary>
-        [Tooltip("Minimum size of console window.")]
+        [Tooltip("控制台窗口的最小尺寸。")]
         public Vector2 minSize = new Vector2(384f, 384f);
 
         /// <summary>
         /// The max number of previous commands to remember.
         /// </summary>
-        [Tooltip("Max number of previous commands to remember.")]
+        [Tooltip("要记住的历史命令最大数量。")]
         public int maxHistory = 20;
 
         /// <summary>
         /// If true, then while open set Time.timeScale to 0.
         /// </summary>
-        [Tooltip("While open, set Time.timeScale to 0.")]
+        [Tooltip("打开时将 Time.timeScale 设为 0。")]
         public bool pauseGameWhileOpen = false;
 
         protected List<string> m_history = new List<string>();

@@ -18,13 +18,13 @@ namespace PixelCrushers.DialogueSystem
         /// The target that the bark is directed to. If assigned, the target will get an
         /// OnBarkEnd event.
         /// </summary>
-        [Tooltip("The target that the bark is directed to. If assigned, the target will get an OnBarkEnd event.")]
+        [Tooltip("喊话指向的目标。若已分配，目标将接收 OnBarkEnd 事件。")]
         public Transform target;
 
         /// <summary>
         /// The trigger that starts the conversation.
         /// </summary>
-        [Tooltip("Event that starts the conversation.")]
+        [Tooltip("启动对话的事件。")]
         [DialogueTriggerEvent]
         public DialogueTriggerEvent trigger = DialogueTriggerEvent.OnUse;
 

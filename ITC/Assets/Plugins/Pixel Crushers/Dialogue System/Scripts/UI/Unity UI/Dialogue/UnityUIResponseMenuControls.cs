@@ -19,61 +19,61 @@ namespace PixelCrushers.DialogueSystem
         /// The panel containing the response menu controls. A panel is optional, but you may want one
         /// so you can include a background image, panel-wide effects, etc.
         /// </summary>
-        [Tooltip("The panel containing the response menu controls. A panel is optional, but you may want one so you can include a background image, panel-wide effects, etc.")]
+        [Tooltip("包含 Response Menu 控件的面板。面板是可选的，但你可能会希望有一个，这样可以加入背景图、面板级效果等。")]
         public UnityEngine.UI.Graphic panel;
 
         /// <summary>
         /// The PC portrait image to show during the response menu.
         /// </summary>
-        [Tooltip("The PC portrait image to show during the response menu.")]
+        [Tooltip("在 Response Menu 期间显示的 PC 肖像图像。")]
         public UnityEngine.UI.Image pcImage;
 
         /// <summary>
         /// The label that will show the PC name.
         /// </summary>
-        [Tooltip("The label that will show the PC name.")]
+        [Tooltip("显示 PC 名字的标签。")]
         public UnityEngine.UI.Text pcName;
 
         /// <summary>
         /// The reminder of the last subtitle.
         /// </summary>
-        [Tooltip("The reminder of the last subtitle.")]
+        [Tooltip("上一条字幕的提醒文本。")]
         public UnityUISubtitleControls subtitleReminder;
 
         /// <summary>
         /// The (optional) timer.
         /// </summary>
-        [Tooltip("The (optional) timer.")]
+        [Tooltip("（可选）计时器。")]
         public UnityEngine.UI.Slider timer;
 
         /// <summary>
         /// If ticked, then select the currently-focused response on timeout.
         /// </summary>
-        [Tooltip("Select the currently-focused response on timeout.")]
+        [Tooltip("超时后选择当前聚焦的回应。")]
         public bool selectCurrentOnTimeout = false;
 
         /// <summary>
         /// The response buttons, if you want to specify buttons at design time.
         /// </summary>
-        [Tooltip("Design-time positioned response buttons")]
+        [Tooltip("在设计时定位的回应按钮")]
         public UnityUIResponseButton[] buttons;
 
-        [Tooltip("Template from which to instantiate response buttons; optional to use instead of positioned buttons above")]
+        [Tooltip("用于实例化回应按钮的模板；可选，可用来替代上方的定位按钮")]
         public UnityUIResponseButton buttonTemplate;
 
-        [Tooltip("If using Button Template, instantiated buttons are parented under this GameObject")]
+        [Tooltip("如果使用 Button Template，实例化的按钮会作为此 GameObject 的子对象")]
         public UnityEngine.UI.Graphic buttonTemplateHolder;
 
-        [Tooltip("Optional scrollbar if the instantiated button holder is in a scroll rect")]
+        [Tooltip("如果实例化的按钮容器位于 Scroll Rect 中，则可选的滚动条")]
         public UnityEngine.UI.Scrollbar buttonTemplateScrollbar;
 
-        [Tooltip("Reset the scroll bar to this value when preparing the response menu")]
+        [Tooltip("准备 Response Menu 时将滚动条重置为此值")]
         public float buttonTemplateScrollbarResetValue = 1;
 
-        [Tooltip("Automatically set up explicit navigation for instantiated template buttons instead of using Automatic navigation")]
+        [Tooltip("为实例化的模板按钮自动设置显式导航，而不是使用 Automatic navigation")]
         public bool explicitNavigationForTemplateButtons = true;
 
-        [Tooltip("If explicit navigation is enabled, loop around when navigating past end of menu")]
+        [Tooltip("如果启用了显式导航，则在导航超出菜单末尾时循环返回")]
         public bool loopExplicitNavigation = false;
 
         public UIAutonumberSettings autonumber = new UIAutonumberSettings();

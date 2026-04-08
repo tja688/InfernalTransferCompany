@@ -36,14 +36,14 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// As soon as one event (add or remove) has occurred, destroy this component.
         /// </summary>
-        [Tooltip("As soon as one event (add or remove) has occurred, destroy this component.")]
+        [Tooltip("一旦发生一次事件（添加或移除），就销毁此组件。")]
         public bool once = false;
 
         /// <summary>
         /// Add/remove one database per frame instead of adding them all at the same time.
         /// Useful to avoid stutter when adding several databases.
         /// </summary>
-        [Tooltip("Add/remove one database per frame instead of adding them all at the same time. Useful to avoid stutter when adding several databases.")]
+        [Tooltip("每帧只添加/移除一个数据库，不要一次性全部添加。适合避免添加多个数据库时卡顿。")]
         public bool onePerFrame = false;
 
         /// <summary>

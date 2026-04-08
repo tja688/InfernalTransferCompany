@@ -1,4 +1,4 @@
-﻿#if USE_TIMELINE
+#if USE_TIMELINE
 #if UNITY_2017_1_OR_NEWER
 // Copyright (c) Pixel Crushers. All rights reserved.
 
@@ -18,15 +18,15 @@ namespace PixelCrushers.DialogueSystem
         [DialogueTriggerEvent]
         public DialogueTriggerEvent trigger = DialogueTriggerEvent.OnUse;
 
-        [Tooltip("Playable Director through which to play the timeline. If a Timeline is assigned, play it when the trigger fires.")]
+        [Tooltip("用于播放 Timeline 的 Playable Director。若已指定 Timeline，则在触发器触发时播放它。")]
         public PlayableDirector playableDirector;
 
-        [Tooltip("If Playable Director above is unassigned, or if no asset is assigned to the Playable Director, play this Timeline asset when the trigger fires.")]
+        [Tooltip("如果上方的 Playable Director 未指定，或者 Playable Director 没有分配资产，则在触发器触发时播放此 Timeline 资产。")]
         public TimelineAsset timelineAsset;
 
         public Condition condition;
 
-        [Tooltip("(Optional) Bind these GameObjects to the Timeline's tracks.")]
+        [Tooltip("（可选）将这些 GameObjects 绑定到 Timeline 的轨道。")]
         public List<GameObject> bindings = new List<GameObject>();
 
         private bool tryingToStart = false;

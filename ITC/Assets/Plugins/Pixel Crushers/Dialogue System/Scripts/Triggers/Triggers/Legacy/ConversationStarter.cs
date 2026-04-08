@@ -16,7 +16,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The title of the conversation to start.
         /// </summary>
-        [Tooltip("Start this conversation.")]
+        [Tooltip("开始此对话。")]
         [ConversationPopup(true)]
         public string conversation;
 
@@ -29,13 +29,13 @@ namespace PixelCrushers.DialogueSystem
         /// If this is <c>true<c/c> and no valid entries currently link from the start entry,
         /// don't start the conversation.
         /// </summary>
-        [Tooltip("Only trigger if at least one entry's Conditions are currently true.")]
+        [Tooltip("仅当至少一个条目的 Conditions 当前为真时才触发。")]
         public bool skipIfNoValidEntries;
 
         /// <summary>
         /// Only start if no other conversation is active.
         /// </summary>
-        [Tooltip("Only trigger if no other conversation is already active.")]
+        [Tooltip("仅当没有其他对话正在进行时才触发。")]
         public bool exclusive = false;
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace PixelCrushers.DialogueSystem
         /// the entity that caused the trigger (for example, the player that hits the "Use" button
         /// on the conversant, thereby triggering OnUse).
         /// </summary>
-        [Tooltip("The other actor (e.g., NPC). If unassigned, this GameObject.")]
+        [Tooltip("另一个角色（例如 NPC）。如果未指定，则为此 GameObject。")]
         public Transform conversant;
 
         private bool tryingToStart = false;

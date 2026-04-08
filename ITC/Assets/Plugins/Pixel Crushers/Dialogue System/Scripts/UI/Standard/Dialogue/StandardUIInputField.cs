@@ -13,31 +13,31 @@ namespace PixelCrushers.DialogueSystem
     public class StandardUIInputField : UIPanel, ITextFieldUI
     {
 
-        [Tooltip("(Optional) Text field panel.")]
+        [Tooltip("（可选）文本字段面板。")]
         public UnityEngine.UI.Graphic panel;
 
-        [Tooltip("(Optional) Text element for prompt.")]
+        [Tooltip("（可选）提示文本元素。")]
         public UITextField label;
 
-        [Tooltip("Input field.")]
+        [Tooltip("输入字段。")]
         public UIInputField inputField;
 
-        [Tooltip("(Optional) Key code that accepts user's text input.")]
+        [Tooltip("（可选）接受用户文本输入的按键代码。")]
         public KeyCode acceptKey = KeyCode.Return;
 
-        [Tooltip("(Optional) Input button that accepts user's text input.")]
+        [Tooltip("（可选）接受用户文本输入的输入按钮。")]
         public string acceptButton = string.Empty;
 
-        [Tooltip("(Optional) Key code that cancels user's text input.")]
+        [Tooltip("（可选）取消用户文本输入的按键代码。")]
         public KeyCode cancelKey = KeyCode.Escape;
 
-        [Tooltip("(Optional) Input button that cancels user's text input.")]
+        [Tooltip("（可选）取消用户文本输入的输入按钮。")]
         public string cancelButton = string.Empty;
 
-        [Tooltip("Automatically open touchscreen keyboard.")]
+        [Tooltip("自动打开触摸屏键盘。")]
         public bool showTouchScreenKeyboard = false;
 
-        [Tooltip("Allow blank text input.")]
+        [Tooltip("允许空白文本输入。")]
         public bool allowBlankInput = true;
 
         public UnityEvent onAccept = new UnityEvent();

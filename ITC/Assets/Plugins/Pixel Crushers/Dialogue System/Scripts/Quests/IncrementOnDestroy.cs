@@ -17,41 +17,41 @@ namespace PixelCrushers.DialogueSystem
 
         public enum IncrementOn { Destroy, Disable, Manually }
 
-        [Tooltip("Increment on Destroy or Disable.")]
+        [Tooltip("在 Destroy 或 Disable 时递增。")]
         public IncrementOn incrementOn = IncrementOn.Destroy;
 
         /// <summary>
         /// The variable to increment.
         /// </summary>
-        [Tooltip("Increment this Dialogue System variable.")]
+        [Tooltip("递增此 Dialogue System 变量。")]
         [VariablePopup(true)]
         public string variable = string.Empty;
 
         /// <summary>
         /// The increment amount. To decrement, use a negative number.
         /// </summary>
-        [Tooltip("Increment the variable by this amount. Use a negative value to decrement.")]
+        [Tooltip("按此数值递增变量。使用负值可递减。")]
         public int increment = 1;
 
         /// <summary>
         /// The minimum value.
         /// </summary>
-        [Tooltip("After incrementing, ensure that the variable is at least this value.")]
+        [Tooltip("递增后，确保变量至少为此值。")]
         public int min = 0;
 
         /// <summary>
         /// The maximum value.
         /// </summary>
-        [Tooltip("After incrementing, ensure that the variable is no more than this value.")]
+        [Tooltip("递增后，确保变量不超过此值。")]
         public int max = 100;
 
-        [Tooltip("Optional alert message to show when incrementing.")]
+        [Tooltip("递增时显示的可选提醒消息。")]
         public string alertMessage = string.Empty;
 
-        [Tooltip("Duration to show alert, or 0 to use default duration.")]
+        [Tooltip("提醒显示时长，或设为 0 使用默认时长。")]
         public float alertDuration = 0;
 
-        [Tooltip("If set, only increment if the conditions are true.")]
+        [Tooltip("如果设置，则仅在条件为真时递增。")]
         public Condition condition = new Condition();
 
         public UnityEvent onIncrement = new UnityEvent();

@@ -14,28 +14,28 @@ namespace PixelCrushers.DialogueSystem
     public class BarkOnIdle : BarkStarter
     {
 
-        [Tooltip("Bark as soon as this component starts the first time.")]
+        [Tooltip("此组件第一次启动时立即旁白。")]
         public bool barkOnStart = false;
 
-        [Tooltip("Bark when the component is enabled. If disabled and reenabled, barks again.")]
+        [Tooltip("组件启用时旁白。如果先禁用再重新启用，也会再次旁白。")]
         public bool barkOnEnable = false;
 
         /// <summary>
         /// The minimum seconds between barks.
         /// </summary>
-        [Tooltip("Minimum seconds between barks.")]
+        [Tooltip("两次旁白之间的最短秒数。")]
         public float minSeconds = 5f;
 
         /// <summary>
         /// The maximum seconds between barks.
         /// </summary>
-        [Tooltip("Maximum seconds between barks.")]
+        [Tooltip("两次旁白之间的最长秒数。")]
         public float maxSeconds = 10f;
 
         /// <summary>
         /// The target to bark at. Leave unassigned to just bark into the air.
         /// </summary>
-        [Tooltip("Target to whom bark is addressed. Leave unassigned to just bark into the air.")]
+        [Tooltip("旁白的目标对象。留空则只向空中发声。")]
         public Transform target;
 
         protected override bool useOnce { get { return false; } } // Removed confusing Once checkbox.

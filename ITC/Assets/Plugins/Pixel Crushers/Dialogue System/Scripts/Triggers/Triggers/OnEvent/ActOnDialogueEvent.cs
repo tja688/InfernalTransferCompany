@@ -28,13 +28,13 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The dialogue event that triggers the actions.
         /// </summary>
-        [Tooltip("Trigger when this dialogue event occurs.")]
+        [Tooltip("当此对话事件发生时触发。")]
         public DialogueEvent trigger;
 
         /// <summary>
         /// Set <c>true</c> if this should only happen once.
         /// </summary>
-        [Tooltip("Destroy this component after triggering. If you need to remember across scene changes and saved games, use a Condition instead.")]
+        [Tooltip("触发后销毁此组件。如果需要在场景切换和存档之间保留状态，请改用 Condition。")]
         public bool once = false;
 
         [HideInInspector]

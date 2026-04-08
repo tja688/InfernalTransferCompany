@@ -16,11 +16,11 @@ namespace PixelCrushers.DialogueSystem.UIToolkit
     {
 
         [SerializeField] private UIDocument document;
-        [Tooltip("Name of document's root container.")]
+        [Tooltip("文档根容器的名称。")]
         [SerializeField] private string rootContainerName;
-        [Tooltip("Optional container panel for alert text.")]
+        [Tooltip("提醒文本的可选容器面板。")]
         [SerializeField] private string alertPanelName;
-        [Tooltip("Alert text.")]
+        [Tooltip("提示文本。")]
         [SerializeField] private string alertLabelName;
 
         protected UIDocument Document => document;

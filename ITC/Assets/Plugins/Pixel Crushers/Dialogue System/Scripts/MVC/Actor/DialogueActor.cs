@@ -19,7 +19,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// Overrides the actor name used in conversations.
         /// </summary>
-        [Tooltip("Use this actor name in conversations.")]
+        [Tooltip("在对话中使用此角色名称。")]
         [ActorPopup(true)]
         [UnityEngine.Serialization.FormerlySerializedAs("overrideName")]
         public string actor;
@@ -28,29 +28,29 @@ namespace PixelCrushers.DialogueSystem
         /// The internal name to use in the dialogue database when saving persistent data.
         /// If blank, uses the override name.
         /// </summary>
-        [Tooltip("Name used when saving persistent data. If blank, use actor name.")]
+        [Tooltip("保存持久化数据时使用的名称。若为空，则使用角色名称。")]
         [UnityEngine.Serialization.FormerlySerializedAs("internalName")]
         public string persistentDataName;
 
-        [Tooltip("Optional portrait. If unassigned, will use portrait of actor in database. This field allows you to assign a Texture.")]
+        [Tooltip("可选肖像。如果未指定，将使用数据库中该角色的肖像。此字段允许你指定一个 Texture。")]
         public Texture2D portrait;
 
-        [Tooltip("Optional portrait. If unassigned, will use portrait of actor in database. This field allows you to assign a Sprite.")]
+        [Tooltip("可选肖像。如果未指定，将使用数据库中角色的肖像。此字段可让你指定一个 Sprite。")]
         public Sprite spritePortrait;
 
-        [Tooltip("Custom camera angles for this actor. If assigned, overrides Dialogue Manager's Camera & Cutscene Settings > Camera Angles.")]
+        [Tooltip("此角色的自定义摄像机角度。如果已指定，将覆盖 Dialogue Manager 的 Camera & Cutscene Settings > Camera Angles。")]
         public GameObject cameraAngles;
 
-        [Tooltip("Optional. Specifies which Audio Source to use with sequencer commands such as Audio() and AudioWait().")]
+        [Tooltip("可选。指定与 Audio()、AudioWait() 等 sequencer 命令一起使用的 Audio Source。")]
         public AudioSource audioSource;
 
         [Serializable]
         public class BarkUISettings
         {
-            [Tooltip("If a prefab, Dialogue Actor will instantiate it at runtime.")]
+            [Tooltip("如果是 prefab，Dialogue Actor 会在运行时实例化它。")]
             public AbstractBarkUI barkUI;
 
-            [Tooltip("If instantiating bark UI prefab, offset it this far from Dialogue Actor's origin.")]
+            [Tooltip("如果实例化 bark UI prefab，则相对于 Dialogue Actor 的原点偏移这么远。")]
             public Vector3 barkUIOffset = new Vector3(0, 2, 0);
         }
 
@@ -61,43 +61,43 @@ namespace PixelCrushers.DialogueSystem
         [Serializable]
         public class StandardDialogueUISettings
         {
-            [Tooltip("If using Standard Dialogue UI, subtitle panel to use for this actor.")]
+            [Tooltip("如果使用 Standard Dialogue UI，则为此角色使用的字幕面板。")]
             public SubtitlePanelNumber subtitlePanelNumber = SubtitlePanelNumber.Default;
 
-            [Tooltip("The panel to use if Subtitle Panel Number is set to Custom.")]
+            [Tooltip("当 Subtitle Panel Number 设为 Custom 时要使用的面板。")]
             public StandardUISubtitlePanel customSubtitlePanel = null;
 
-            [Tooltip("If instantiating subtitle panel prefab, offset it this far from Dialogue Actor's origin.")]
+            [Tooltip("如果实例化字幕面板 prefab，则相对于 Dialogue Actor 的原点偏移这么远。")]
             public Vector3 customSubtitlePanelOffset = new Vector3(0, 0, 0);
 
-            [Tooltip("If using Standard Dialogue UI, menu panel to use for this actor.")]
+            [Tooltip("如果使用 Standard Dialogue UI，则为此角色使用的菜单面板。")]
             public MenuPanelNumber menuPanelNumber = MenuPanelNumber.Default;
 
-            [Tooltip("The panel to use if Menu Panel Number is set to Custom.")]
+            [Tooltip("当 Menu Panel Number 设为 Custom 时要使用的面板。")]
             public StandardUIMenuPanel customMenuPanel = null;
 
-            [Tooltip("If instantiating menu panel prefab, offset it this far from Dialogue Actor's origin.")]
+            [Tooltip("如果实例化菜单面板 prefab，则相对于 Dialogue Actor 的原点偏移这么远。")]
             public Vector3 customMenuPanelOffset = new Vector3(0, 0, 0);
 
-            [Tooltip("If Only Me, only use this menu panel when this Dialogue Actor is the respondent.\nIf MeAndResponsesToMe, use this menu panel when this Dialogue Actor is the response or the character being responded to (i.e., the last one to speak).")]
+            [Tooltip("如果是 Only Me，则仅当此 Dialogue Actor 是回应者时使用此菜单面板。\n如果是 MeAndResponsesToMe，则当此 Dialogue Actor 是回应者或被回应角色（即最后一个发言者）时使用此菜单面板。")]
             public UseMenuPanelFor useMenuPanelFor = UseMenuPanelFor.OnlyMe;
 
-            [Tooltip("If assigned, animator controller that runs this actor's animated portrait. It should animate an Image component, not a SpriteRenderer.")]
+            [Tooltip("如果已指定，则为运行此角色动画肖像的 Animator Controller。它应驱动 Image 组件，而不是 SpriteRenderer。")]
             public RuntimeAnimatorController portraitAnimatorController;
 
-            [Tooltip("Specify subtitle color for this actor.")]
+            [Tooltip("为此角色指定字幕颜色。")]
             public bool setSubtitleColor = false;
 
-            [Tooltip("Prepend actor name and apply color only to name.")]
+            [Tooltip("在前面加上角色名，并且只对名字应用颜色。")]
             public bool applyColorToPrependedName = false;
 
-            [Tooltip("If prepending actor name, separate from Dialogue Text with this string.")]
+            [Tooltip("如果在前面添加角色名，则用此字符串与 Dialogue Text 分隔。")]
             public string prependActorNameSeparator = ": ";
 
-            [Tooltip("If prepending actor name, format this way, where {0} is name + separator, and {1} is Dialogue Text.")]
+            [Tooltip("如果在前面添加角色名，则按此方式格式化，其中 {0} 是名字 + 分隔符，{1} 是 Dialogue Text。")]
             public string prependActorNameFormat = "{0}{1}";
 
-            [Tooltip("Color to use for this actor's subtitles.")]
+            [Tooltip("此角色字幕使用的颜色。")]
             public Color subtitleColor = Color.white;
         }
 

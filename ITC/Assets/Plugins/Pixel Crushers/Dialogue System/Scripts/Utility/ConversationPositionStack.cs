@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 
 namespace PixelCrushers.DialogueSystem
@@ -13,13 +13,13 @@ namespace PixelCrushers.DialogueSystem
     [AddComponentMenu("")] // Use wrapper.
     public class ConversationPositionStack : MonoBehaviour
     {
-        [Tooltip("Clear stack when new conversation starts. Only applies if component is on Dialogue Manager.")]
+        [Tooltip("当新对话开始时清空堆栈。仅当组件位于 Dialogue Manager 上时适用。")]
         public bool clearOnConversationStart = true;
 
-        [Tooltip("Typically leave unticked so temporary Dialogue Manager's don't unregister your functions.")]
+        [Tooltip("通常保持未勾选，这样临时 Dialogue Manager 不会注销你的函数。")]
         public bool unregisterOnDisable = false;
 
-        [Tooltip("Push current dialogue entry instead of its follow-up entry. Use care if ticked; can cause to loop back on itself infinitely.")]
+        [Tooltip("推送当前对话条目，而不是其后续条目。若勾选请谨慎使用；可能导致无限循环回到自身。")]
         public bool pushCurrentEntry = false;
 
         private static Stack<DialogueEntry> s_stack = new Stack<DialogueEntry>();

@@ -16,21 +16,21 @@ namespace PixelCrushers.DialogueSystem
         [Serializable]
         public class Shortcut
         {
-            [Tooltip("Shortcut. Wrap in double braces to reference in sequences, such as {{foo}}.")]
+            [Tooltip("快捷项。用双大括号包裹后即可在 Sequence 中引用，例如 {{foo}}。")]
             public string shortcut;
 
-            [Tooltip("Value to replace shortcut with.")]
+            [Tooltip("用于替换快捷项的值。")]
             [TextArea]
             public string value;
 
-            [Tooltip("Menu of the shortcut.")]
+            [Tooltip("快捷项菜单。")]
             [TextArea]
             public string subMenu;
         }
 
         public Shortcut[] shortcuts = new Shortcut[0];
 
-        [Tooltip("Optionally assign GameObjects referenced by name in sequencer commands below. Prevents having to search for them at runtime.")]
+        [Tooltip("可选地为下方 Sequence 命令中按名称引用的 GameObject 赋值。这样可避免运行时搜索它们。")]
         public Transform[] referencedSubjects = new Transform[0];
 
         void OnEnable()

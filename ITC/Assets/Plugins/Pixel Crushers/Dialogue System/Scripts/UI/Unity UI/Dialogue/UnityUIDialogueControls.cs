@@ -16,10 +16,10 @@ namespace PixelCrushers.DialogueSystem
         /// The panel containing the dialogue controls. A panel is optional, but you may want one
         /// so you can include a background image, panel-wide effects, etc.
         /// </summary>
-        [Tooltip("Panel containing the entire conversation UI")]
+        [Tooltip("包含整个 conversation UI 的面板。")]
         public UnityEngine.UI.Graphic panel;
 
-        [Tooltip("Optional animation transitions; panel should have an Animator")]
+        [Tooltip("可选的动画过渡；面板应包含 Animator。")]
         public UIAnimationTransitions animationTransitions = new UIAnimationTransitions();
 
         /// <summary>

@@ -47,7 +47,7 @@ namespace PixelCrushers.DialogueSystem
 
         public AnimationTransitions animationTransitions = new AnimationTransitions();
 
-        [Tooltip("You can leave this unassigned if the Canvas is on this GameObject.")]
+        [Tooltip("如果 Canvas 在此 GameObject 上，可以不指定此项。")]
         public Canvas canvas;
 
         protected Animator animator = null;

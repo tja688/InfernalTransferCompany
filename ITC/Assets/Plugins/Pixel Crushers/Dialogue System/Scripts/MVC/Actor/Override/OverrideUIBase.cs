@@ -14,7 +14,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// When both participants have overrides, the higher priority takes precedence.
         /// </summary>
-        [Tooltip("When both participants have overrides, higher priority takes precedence.")]
+        [Tooltip("当双方都具有 override 时，优先级更高者优先。")]
         public int priority = 0;
 
     }

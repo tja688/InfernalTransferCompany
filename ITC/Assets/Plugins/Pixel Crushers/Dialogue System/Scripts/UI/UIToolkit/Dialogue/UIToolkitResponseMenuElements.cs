@@ -17,15 +17,15 @@ namespace PixelCrushers.DialogueSystem.UIToolkit
     {
         // [TODO] Options to consider: Autonumber
 
-        [Tooltip("Container panel for response menu.")]
+        [Tooltip("Response Menu 的容器面板。")]
         [SerializeField] private string responseMenuPanelName;
-        [Tooltip("Progress bar for optional timer. Value range should be 0-1.")]
+        [Tooltip("可选计时器的进度条。取值范围应为 0-1。")]
         [SerializeField] private string timerProgressBarName;
-        [Tooltip("Optional player portrait name.")]
+        [Tooltip("可选的玩家 portrait 名称。")]
         [SerializeField] private string portraitLabelName;
-        [Tooltip("Optional player portrait image.")]
+        [Tooltip("可选的玩家 portrait image。")]
         [SerializeField] private string portraitImageName;
-        [Tooltip("List of all available response buttons. The dialogue UI will use these to fill out the menu.")]
+        [Tooltip("所有可用 response button 的列表。dialogue UI 会使用这些按钮填充菜单。")]
         [SerializeField] private List<string> responseButtonNames;
 
         protected UIDocument Document { get; set; }

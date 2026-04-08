@@ -17,32 +17,32 @@ namespace PixelCrushers.DialogueSystem
         /// The (optional) UI canvas group. If assigned, the fade will occur on this
         /// control. The other controls should be children of this canvas group.
         /// </summary>
-        [Tooltip("Optional canvas group, for example to play fade animations.")]
+        [Tooltip("可选的 Canvas Group，例如用于播放淡入淡出动画。")]
         public CanvasGroup canvasGroup = null;
 
         /// <summary>
         /// The UI text control for the bark text.
         /// </summary>
-        [Tooltip("UI text control for bark text.")]
+        [Tooltip("用于 bark text 的 UI text 控件。")]
         public UITextField barkText = null;
 
         /// <summary>
         /// The (optional) UI text control for the actor's name, if includeName is <c>true</c>.
         /// If <c>null</c>, the name is added to the front of the subtitle text instead.
         /// </summary>
-        [Tooltip("Optional UI text control for barker's name if Include Name is ticked. If unassigned and Include Name is ticked, name is prepended to Bark Text.")]
+        [Tooltip("如果勾选 Include Name，可选的 barker 名称 UI text 控件。若未指定且勾选 Include Name，则名称会添加到 Bark Text 前面。")]
         public UITextField nameText = null;
 
         /// <summary>
         /// Set <c>true</c> to include the barker's name in the text.
         /// </summary>
-        [Tooltip("If Name Text is unassigned, prepend barker's name to Bark Text.")]
+        [Tooltip("如果未指定 Name Text，则将 barker 名称添加到 Bark Text 前面。")]
         public bool includeName = false;
 
-        [Tooltip("Optional to show barker's portrait image.")]
+        [Tooltip("可选，用于显示 barker 的 portrait image。")]
         public UnityEngine.UI.Image portraitImage = null;
 
-        [Tooltip("Show barker's portrait image.")]
+        [Tooltip("显示 barker 的 portrait image。")]
         public bool showPortraitImage = false;
 
         [HideInInspector]
@@ -60,31 +60,31 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The duration in seconds to show the bark text before fading it out.
         /// </summary>
-        [Tooltip("The duration in seconds to show the bark text before fading it out. If zero, use the Dialogue Manager's Bark Settings.")]
+        [Tooltip("Bark 文本在淡出前显示的秒数。如果为 0，则使用 Dialogue Manager 的 Bark Settings。")]
         public float duration = 4f;
 
-        [Tooltip("Keep bark canvas anchor point always in camera view.")]
+        [Tooltip("始终让 bark canvas 锚点保持在 camera 视野内。")]
         public bool keepInView = false;
 
         /// <summary>
         /// Set <c>true</c> to keep the bark text onscreen until the sequence ends.
         /// </summary>
-        [Tooltip("Keep the bark text onscreen until the sequence ends.")]
+        [Tooltip("让 Bark 文本一直显示到 Sequence 结束。")]
         public bool waitUntilSequenceEnds = false;
 
-        [Tooltip("If bark is visible and waiting for sequence to end, but new bark wants to show, cancel wait for previous sequence.")]
+        [Tooltip("如果 bark 正在显示并等待 Sequence 结束，但新的 bark 需要显示，则取消对前一个 Sequence 的等待。")]
         public bool cancelWaitUntilSequenceEndsIfReplacingBark = false;
 
         /// <summary>
         /// Wait for an "OnContinue" message.
         /// </summary>
-        [Tooltip("Wait for an OnContinue message.")]
+        [Tooltip("等待 OnContinue 消息。")]
         public bool waitForContinueButton = false;
 
         /// <summary>
         /// If visible, hide this bark UI when any conversation starts.
         /// </summary>
-        [Tooltip("If visible, hide this bark UI when any conversation starts.")]
+        [Tooltip("如果可见，在任何对话开始时隐藏此 bark UI。")]
         public bool hideOnConversationStart = false;
 
         /// <summary>

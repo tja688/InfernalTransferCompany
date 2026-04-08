@@ -18,7 +18,7 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The display settings to use for the game object this component is attached to.
         /// </summary>
-        [Tooltip("Use these display settings when this GameObject is involved in conversation.")]
+        [Tooltip("当此 GameObject 参与对话时使用这些显示设置。")]
         public DisplaySettings displaySettings;
 
     }

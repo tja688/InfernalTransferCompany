@@ -13,7 +13,7 @@ namespace PixelCrushers.DialogueSystem
     public class StandardUIQTEControls : AbstractUIQTEControls
     {
 
-        [Tooltip("(Optional) Quick Time Event (QTE) indicators. Typically graphics such as images or sprites.")]
+        [Tooltip("（可选）Quick Time Event (QTE) 指示器。通常是图像或 sprite 等图形。")]
 
         public GameObject[] QTEIndicators;
 

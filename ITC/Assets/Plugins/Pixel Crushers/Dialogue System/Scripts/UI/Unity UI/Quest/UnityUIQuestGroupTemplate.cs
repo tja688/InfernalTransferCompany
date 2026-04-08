@@ -13,8 +13,8 @@ namespace PixelCrushers.DialogueSystem
     public class UnityUIQuestGroupTemplate : MonoBehaviour
     {
 
-        [Header("Quest Group Heading")]
-        [Tooltip("The quest group name")]
+        [Header("任务组标题")]
+        [Tooltip("任务组名称")]
         public UnityEngine.UI.Text heading;
 
         public bool ArePropertiesAssigned

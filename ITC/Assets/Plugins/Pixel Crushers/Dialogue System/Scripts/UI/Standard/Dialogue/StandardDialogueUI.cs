@@ -17,10 +17,10 @@ namespace PixelCrushers.DialogueSystem
         public StandardUIDialogueControls conversationUIElements;
         public StandardUIQTEControls QTEIndicatorElements;
 
-        [Tooltip("Add an EventSystem if one isn't in the scene.")]
+        [Tooltip("如果场景中没有 EventSystem，则添加一个。")]
         public bool addEventSystemIfNeeded = true;
 
-        [Tooltip("Check in Awake if panels are properly assigned. Untick to suppress warnings.")]
+        [Tooltip("在 Awake 中检查面板是否正确指定。取消勾选可关闭警告。")]
         public bool verifyPanelAssignments = true;
 
         #endregion

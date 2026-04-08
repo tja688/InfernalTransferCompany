@@ -17,26 +17,26 @@ namespace PixelCrushers.DialogueSystem
         /// The (optional) UI canvas group. If assigned, the fade will occur on this
         /// control. The other controls should be children of this canvas group.
         /// </summary>
-        [Tooltip("Optional canvas group, for example to play fade animations.")]
+        [Tooltip("可选的 Canvas Group，例如用于播放淡入淡出动画。")]
         public CanvasGroup canvasGroup = null;
 
         /// <summary>
         /// The UI text control for the bark text.
         /// </summary>
-        [Tooltip("UI text control for the bark text.")]
+        [Tooltip("用于 Bark 文本的 UI 文本控件。")]
         public UnityEngine.UI.Text barkText = null;
 
         /// <summary>
         /// The (optional) UI text control for the actor's name, if includeName is <c>true</c>.
         /// If <c>null</c>, the name is added to the front of the subtitle text instead.
         /// </summary>
-        [Tooltip("Optional UI text control for the actor's name if Include Name is ticked. If unassigned and Include Name is ticked, the name is prepended to the Bark Text.")]
+        [Tooltip("如果勾选 Include Name，则可选 UI 文本控件用于显示角色名字。若未指定且勾选 Include Name，则名字会添加到 Bark Text 前面。")]
         public UnityEngine.UI.Text nameText = null;
 
         /// <summary>
         /// Set <c>true</c> to include the barker's name in the text.
         /// </summary>
-        [Tooltip("Show the barker's name.")]
+        [Tooltip("显示发声者的名字。")]
         public bool includeName = false;
 
         [HideInInspector]
@@ -54,13 +54,13 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The duration in seconds to show the bark text before fading it out.
         /// </summary>
-        [Tooltip("The duration in seconds to show the bark text before fading it out. If zero, use the Dialogue Manager's Bark Settings.")]
+        [Tooltip("Bark 文本在淡出前显示的秒数。如果为 0，则使用 Dialogue Manager 的 Bark Settings。")]
         public float duration = 4f;
 
         /// <summary>
         /// Set <c>true</c> to keep the bark text onscreen until the sequence ends.
         /// </summary>
-        [Tooltip("Keep the bark text onscreen until the sequence ends.")]
+        [Tooltip("让 Bark 文本一直显示到 Sequence 结束。")]
         public bool waitUntilSequenceEnds = false;
 
         /// <summary>

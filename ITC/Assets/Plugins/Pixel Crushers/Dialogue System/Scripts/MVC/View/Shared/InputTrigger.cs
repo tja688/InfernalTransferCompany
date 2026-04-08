@@ -17,13 +17,13 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The key that fires the trigger.
         /// </summary>
-        [Tooltip("This key fires the trigger.")]
+        [Tooltip("此按键触发该 trigger。")]
         public KeyCode key = KeyCode.None;
 
         /// <summary>
         /// The name of the button defined in UnityEngine.InputManager that fires the trigger.
         /// </summary>
-        [Tooltip("This button fires the trigger. The button name must be defined in your project's Input Settings.")]
+        [Tooltip("此按钮触发该 trigger。按钮名称必须在项目的 Input Settings 中定义。")]
         public string buttonName = string.Empty;
 
 #if USE_NEW_INPUT

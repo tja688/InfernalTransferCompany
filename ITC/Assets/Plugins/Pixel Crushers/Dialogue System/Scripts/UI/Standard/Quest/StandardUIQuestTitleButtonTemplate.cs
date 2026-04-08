@@ -12,15 +12,15 @@ namespace PixelCrushers.DialogueSystem
     public class StandardUIQuestTitleButtonTemplate : StandardUIContentTemplate
     {
 
-        [Header("Quest Title Button")]
+        [Header("任务标题按钮")]
 
-        [Tooltip("Button UI element.")]
+        [Tooltip("Button UI 元素。")]
         public UnityEngine.UI.Button button;
 
-        [Tooltip("Label text to set on button.")]
+        [Tooltip("要设置到按钮上的标签文本。")]
         public UITextField label;
 
-        [Header("Tracking Toggle")]
+        [Header("跟踪开关")]
 
         public StandardUIToggleTemplate trackToggleTemplate;
 

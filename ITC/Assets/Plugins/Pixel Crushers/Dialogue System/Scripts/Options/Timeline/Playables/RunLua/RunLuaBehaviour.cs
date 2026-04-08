@@ -13,7 +13,7 @@ namespace PixelCrushers.DialogueSystem
     public class RunLuaBehaviour : PlayableBehaviour
     {
 
-        [Tooltip("Run this Lua code.")]
+        [Tooltip("运行此 Lua 代码。")]
         [TextArea(5, 5)]
         public string luaCode;
 

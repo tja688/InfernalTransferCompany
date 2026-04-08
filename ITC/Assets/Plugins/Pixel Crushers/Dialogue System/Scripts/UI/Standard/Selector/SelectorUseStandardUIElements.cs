@@ -18,7 +18,7 @@ namespace PixelCrushers.DialogueSystem
         [Serializable]
         public class TagInfo
         {
-            [Tooltip("Use the UI elements below for usables with this tag. Tags take precedence over layers.")]
+            [Tooltip("用这组 UI 元素处理带有此 tag 的可交互对象。Tag 优先于 layer。")]
             public string tag;
             public string defaultUseMessage;
             public StandardUISelectorElements UIElements;
@@ -29,7 +29,7 @@ namespace PixelCrushers.DialogueSystem
         [Serializable]
         public class LayerInfo
         {
-            [Tooltip("Use the UI elements below for usables in these layers.")]
+            [Tooltip("用这组 UI 元素处理这些 layer 中的可交互对象。")]
             public LayerMask layerMask;
             public string defaultUseMessage;
             public StandardUISelectorElements UIElements;

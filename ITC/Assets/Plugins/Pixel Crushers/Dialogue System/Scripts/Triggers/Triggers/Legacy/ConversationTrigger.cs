@@ -18,20 +18,20 @@ namespace PixelCrushers.DialogueSystem
         /// <summary>
         /// The actor to converse with. If not set, the game object that triggered the event.
         /// </summary>
-        [Tooltip("The primary actor (e.g., player). If unassigned, the GameObject that triggered the conversation.")]
+        [Tooltip("主要角色（例如玩家）。如果未指定，则为触发该对话的 GameObject。")]
         public Transform actor;
 
         /// <summary>
         /// The trigger that starts the conversation.
         /// </summary>
-        [Tooltip("Try to start the conversation when this event occurs.")]
+        [Tooltip("当此事件发生时尝试开始对话。")]
         [DialogueTriggerEvent]
         public DialogueTriggerEvent trigger = DialogueTriggerEvent.OnUse;
 
         /// <summary>
         /// Set <c>true</c> to stop the conversation if the actor leaves the trigger area.
         /// </summary>
-        [Tooltip("Stop the triggered conversation if this GameObject receives OnTriggerExit.")]
+        [Tooltip("如果此 GameObject 收到 OnTriggerExit，则停止已触发的对话。")]
         public bool stopConversationOnTriggerExit = false;
 
         private float earliestTimeToAllowTriggerExit = 0;

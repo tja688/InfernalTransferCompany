@@ -17,13 +17,13 @@ namespace PixelCrushers.DialogueSystem
         [HelpBox("If Button's OnClick() event is empty, this Standard UI Response Button component will automatically assign its OnClick method at runtime. If Button's OnClick() event has other elements, you *must* manually assign the StandardUIResponseButton.OnClick method to it.", HelpBoxMessageType.Info)]
         public UnityEngine.UI.Button button;
 
-        [Tooltip("Text element to display response text.")]
+        [Tooltip("用于显示回应文本的文本元素。")]
         public UITextField label;
 
-        [Tooltip("Apply emphasis tag colors to button text.")]
+        [Tooltip("将强调标签颜色应用到按钮文本。")]
         public bool setLabelColor = true;
 
-        [Tooltip("Set button's text to this color by default.")]
+        [Tooltip("将按钮文本默认设为此颜色。")]
         public Color defaultColor = Color.white;
 
         /// <summary>

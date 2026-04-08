@@ -21,15 +21,15 @@ namespace PixelCrushers.DialogueSystem
         [System.Serializable]
         public class AutoScrollSettings
         {
-            [Tooltip("Automatically scroll to bottom of scroll rect. Useful for long text. Works best with left justification. Make sure the text has a Content Size Fitter.")]
+            [Tooltip("自动滚动到 Scroll Rect 底部。适合长文本。左对齐时效果最好。请确保文本具有 Content Size Fitter。")]
             public bool autoScrollEnabled = false;
 
             public UnityEngine.UI.ScrollRect scrollRect = null;
 
-            [Tooltip("If assigned, the Scrollbar Enabler will be updated with each character to determine if it needs to show the scrollbar.")]
+            [Tooltip("如果已指定，Scrollbar Enabler 会随每个字符更新，以判断是否需要显示滚动条。")]
             public UIScrollbarEnabler scrollbarEnabler = null;
 
-            [Tooltip("If assigned, this should be a copy of the Text component on this typewriter effect. The Sizer Text should have a Content Size Fitter, but the typewriter Text component should not. Make the Sizer Text a parent of the typewriter Text component.")]
+            [Tooltip("如果已指定，这应当是此 typewriter effect 上 Text 组件的一个副本。Sizer Text 应该带有 Content Size Fitter，而 typewriter Text 组件不应该有。让 Sizer Text 成为 typewriter Text 组件的父对象。")]
             public UnityEngine.UI.Text sizerText = null;
         }
 

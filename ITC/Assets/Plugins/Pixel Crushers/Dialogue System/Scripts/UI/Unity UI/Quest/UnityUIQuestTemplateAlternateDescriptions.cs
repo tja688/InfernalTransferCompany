@@ -9,10 +9,10 @@ namespace PixelCrushers.DialogueSystem
     public class UnityUIQuestTemplateAlternateDescriptions
     {
 
-        [Tooltip("(Optional) If set, use if state is success")]
+        [Tooltip("（可选）如果已设置，则在状态为 success 时使用。")]
         public UnityEngine.UI.Text successDescription;
 
-        [Tooltip("(Optional) If set, use if state is failure")]
+        [Tooltip("（可选）如果已设置，则在状态为 failure 时使用。")]
         public UnityEngine.UI.Text failureDescription;
 
         public void SetActive(bool value)

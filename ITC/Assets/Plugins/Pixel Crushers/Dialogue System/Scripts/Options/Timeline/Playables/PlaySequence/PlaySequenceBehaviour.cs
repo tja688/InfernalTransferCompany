@@ -13,11 +13,11 @@ namespace PixelCrushers.DialogueSystem
     public class PlaySequenceBehaviour : PlayableBehaviour
     {
 
-        [Tooltip("Play this sequence.")]
+        [Tooltip("播放此 Sequence。")]
         [TextArea(5, 5)]
         public string sequence;
 
-        [Tooltip("(Optional) The other subject in the sequence.")]
+        [Tooltip("（可选）Sequence 中的另一方主体。")]
         public Transform listener;
 
     }

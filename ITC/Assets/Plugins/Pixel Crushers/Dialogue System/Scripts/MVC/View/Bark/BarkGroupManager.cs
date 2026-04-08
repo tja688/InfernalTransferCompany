@@ -18,7 +18,7 @@ namespace PixelCrushers.DialogueSystem
 
         public BarkGroupQueueLimitMode queueLimitMode = BarkGroupQueueLimitMode.NoLimit;
 
-        [Tooltip("Only used if mode is Stop At Limit or Drop Oldest At Limit")]
+        [Tooltip("仅在模式为 Stop At Limit 或 Drop Oldest At Limit 时使用")]
         public int queueLimit = 256;
 
         private static bool s_applicationIsQuitting = false;

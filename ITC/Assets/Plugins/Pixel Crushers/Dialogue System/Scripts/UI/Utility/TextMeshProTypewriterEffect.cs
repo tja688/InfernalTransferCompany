@@ -25,10 +25,10 @@ namespace PixelCrushers.DialogueSystem
         [System.Serializable]
         public class AutoScrollSettings
         {
-            [Tooltip("Automatically scroll to bottom of scroll rect. Useful for long text. Works best with left justification.")]
+            [Tooltip("自动滚动到 Scroll Rect 底部。适合长文本，左对齐时效果最佳。")]
             public bool autoScrollEnabled = false;
             public UnityEngine.UI.ScrollRect scrollRect = null;
-            [Tooltip("Optional. Add a UIScrollBarEnabler to main dialogue panel, assign UI elements, then assign it here to automatically enable scrollbar if content is taller than viewport.")]
+            [Tooltip("可选。向主对话面板添加 UIScrollBarEnabler，分配 UI 元素，然后在此处将其指定，以便在内容高于视口时自动启用滚动条。")]
             public UIScrollbarEnabler scrollbarEnabler = null;
         }
 

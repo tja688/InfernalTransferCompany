@@ -15,17 +15,17 @@ namespace PixelCrushers.DialogueSystem.UIToolkit
     public class UIToolkitSubtitleElements : AbstractUISubtitleControls
     {
 
-        [Tooltip("Container panel for subtitle.")]
+        [Tooltip("subtitle 的容器面板。")]
         [SerializeField] private string subtitlePanelName;
-        [Tooltip("Subtitle text.")]
+        [Tooltip("字幕文本。")]
         [SerializeField] private string subtitleLabelName;
-        [Tooltip("Optional speaker portrait name.")]
+        [Tooltip("可选的说话者 portrait 名称。")]
         [SerializeField] private string portraitLabelName;
-        [Tooltip("Optional speaker portrait image.")]
+        [Tooltip("可选的说话者 portrait image。")]
         [SerializeField] private string portraitImageName;
-        [Tooltip("Continue button to advance conversation (if mode requires continue button click).")]
+        [Tooltip("用于推进对话的 continue button（如果模式要求点击 continue button）。")]
         [SerializeField] private string continueButtonName;
-        [Tooltip("Specifies when panel should be visible/hidden.")]
+        [Tooltip("指定面板何时显示/隐藏。")]
         [SerializeField] private UIVisibility visibility;
 
         public bool IsSamePanel(UIToolkitSubtitleElements panel) => panel.subtitlePanelName == this.subtitlePanelName;

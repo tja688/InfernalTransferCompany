@@ -9,16 +9,16 @@ namespace PixelCrushers.DialogueSystem
     [Serializable]
     public class UIAutonumberSettings
     {
-        [Tooltip("Enable autonumbering of responses.")]
+        [Tooltip("启用回应自动编号。")]
         public bool enabled = false;
 
-        [Tooltip("Bind regular number keys as hotkeys.")]
+        [Tooltip("将普通数字键绑定为热键。")]
         public bool regularNumberHotkeys = true;
 
-        [Tooltip("Bind numpad keys as hotkeys.")]
+        [Tooltip("将小键盘数字键绑定为热键。")]
         public bool numpadHotkeys = false;
 
-        [Tooltip("Format for response button text, where {0} is hotkey number and {1} is menu text.")]
+        [Tooltip("回应按钮文本的格式，其中 {0} 是热键编号，{1} 是菜单文本。")]
         public string format = "{0}. {1}";
     }
 

@@ -17,12 +17,12 @@ namespace PixelCrushers.DialogueSystem.UIToolkit
     {
 
         [SerializeField] private UIDocument document;
-        [Tooltip("Name of document's root container.")]
+        [Tooltip("文档根容器的名称。")]
         [SerializeField] private string rootContainerName;
         [SerializeField] private string dialoguePanelName;
-        [Tooltip("Index (starting from 0) into Subtitle Panel Elements of the default NPC subtitle panel.")]
+        [Tooltip("默认 NPC subtitle panel 的 Subtitle Panel Elements 中的索引（从 0 开始）。")]
         [SerializeField] int npcSubtitlePanelIndex = 0;
-        [Tooltip("Index (starting from 0) into Subtitle Panel Elements of the default PC subtitle panel.")]
+        [Tooltip("默认 PC subtitle panel 的 Subtitle Panel Elements 中的索引（从 0 开始）。")]
         [SerializeField] int pcSubtitlePanelIndex = 1;
         [SerializeField] private List<UIToolkitSubtitleElements> subtitlePanelElements;
         [SerializeField] private UIToolkitResponseMenuElements responseMenuElements;

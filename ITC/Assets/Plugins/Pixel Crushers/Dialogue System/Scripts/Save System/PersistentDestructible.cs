@@ -18,7 +18,7 @@ namespace PixelCrushers.DialogueSystem
 
         public enum RecordOn { Destroy, Disable }
 
-        [Tooltip("Record destroyed on Destroy or Disable.")]
+        [Tooltip("在 Destroy 或 Disable 时记录已销毁状态。")]
         public RecordOn recordOn = RecordOn.Destroy;
 
         /// <summary>
@@ -27,10 +27,10 @@ namespace PixelCrushers.DialogueSystem
         /// GameObject for the variable name. If the variable is <c>true</c>,
         /// the GameObject has been destroyed.
         /// </summary>
-        [Tooltip("Unique Dialogue System variable (Boolean) to record whether the GameObject has been destroyed/disabled.")]
+        [Tooltip("用于记录该 GameObject 是否已被销毁/禁用的唯一 Dialogue System 布尔变量。")]
         public string variableName = string.Empty;
 
-        [Tooltip("Spawn an instance of this when destroyed.")]
+        [Tooltip("销毁时生成此对象的一个实例。")]
         public GameObject spawnWhenDestroyed;
 
         protected string ActualVariableName

@@ -13,22 +13,22 @@ namespace PixelCrushers.DialogueSystem
     public class StandardUIAlertControls : AbstractUIAlertControls
     {
 
-        [Tooltip("Main alert panel (optional).")]
+        [Tooltip("主提示面板（可选）。")]
         public UIPanel panel;
 
-        [Tooltip("Alert text.")]
+        [Tooltip("提示文本。")]
         public UITextField alertText;
 
-        [Tooltip("Wait for previous alerts to finish before showing new alert; if unticked, new alerts replace old.")]
+        [Tooltip("在显示新提示前等待上一个提示结束；如果未勾选，新提示会替换旧提示。")]
         public bool queueAlerts = false;
 
-        [Tooltip("If a message is already queued to display, don't queue another.")]
+        [Tooltip("如果已有消息排队显示，则不要再排队新的消息。")]
         public bool dontQueueDuplicates = false;
 
-        [Tooltip("Wait for the previous alert's Hide animation to finish before showing the next queued alert.")]
+        [Tooltip("在显示下一个排队提示前，等待上一个提示的 Hide 动画结束。")]
         public bool waitForHideAnimation = false;
 
-        [Tooltip("If message contains [f], show immediately instead of queueing.")]
+        [Tooltip("如果消息包含 [f]，则立即显示而不是排队。")]
         public bool allowForceImmediate = false;
 
         /// <summary>

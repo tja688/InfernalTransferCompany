@@ -13,13 +13,13 @@ namespace PixelCrushers.DialogueSystem
     public class QuestLogWindowHotkey : MonoBehaviour
     {
 
-        [Tooltip("Toggle the quest log window when this key is pressed.")]
+        [Tooltip("按下此按键时切换任务日志窗口。")]
         public KeyCode key = KeyCode.J;
 
-        [Tooltip("Toggle the quest log window when this input button is presed.")]
+        [Tooltip("按下此输入按钮时切换任务日志窗口。")]
         public string buttonName = string.Empty;
 
-        [Tooltip("(Optional) Use this quest log window. If unassigned, will automatically find quest log window in scene. If you assign a window, assign a scene instance, not an uninstantiated prefab.")]
+        [Tooltip("（可选）使用此任务日志窗口。未分配时，会自动在场景中查找任务日志窗口。如果要指定窗口，请指定场景实例，而不是未实例化的 prefab。")]
         public QuestLogWindow questLogWindow;
 
         public QuestLogWindow runtimeQuestLogWindow

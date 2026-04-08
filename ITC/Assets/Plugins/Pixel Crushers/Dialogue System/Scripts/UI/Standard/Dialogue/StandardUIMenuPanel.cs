@@ -15,71 +15,71 @@ namespace PixelCrushers.DialogueSystem
 
         #region Serialized Fields
 
-        [Tooltip("(Optional) Main response menu panel.")]
+        [Tooltip("（可选）主响应菜单面板。")]
         public UnityEngine.UI.Graphic panel;
 
-        [Tooltip("(Optional) Image to show PC portrait during response menu.")]
+        [Tooltip("（可选）在 Response Menu 期间显示 PC 头像的图像。")]
         public UnityEngine.UI.Image pcImage;
 
-        [Tooltip("(Optional) Text element to show PC name during response menu.")]
+        [Tooltip("（可选）在 Response Menu 期间显示 PC 名称的文本元素。")]
         public UITextField pcName;
 
-        [Tooltip("Set PC Image to actor portrait's native size. Image's Rect Transform can't use Stretch anchors.")]
+        [Tooltip("将 PC Image 设为角色头像的原生大小。Image 的 Rect Transform 不能使用 Stretch 锚点。")]
         public bool usePortraitNativeSize = false;
 
-        [Tooltip("(Optional) Slider for timed menus.")]
+        [Tooltip("（可选）定时菜单的滑块。")]
         public UnityEngine.UI.Slider timerSlider;
 
-        [Tooltip("Assign design-time positioned buttons starting with first or last button.")]
+        [Tooltip("从第一个或最后一个按钮开始分配设计时定位的按钮。")]
         public ResponseButtonAlignment buttonAlignment = ResponseButtonAlignment.ToFirst;
 
-        [Tooltip("Show buttons that aren't assigned to any responses. If using a 'dialogue wheel' for example, you'll want to show unused buttons so the entire wheel structure is visible.")]
+        [Tooltip("显示未分配给任何响应的按钮。例如使用对话轮盘时，你会希望显示未使用的按钮，以便整个轮盘结构可见。")]
         public bool showUnusedButtons = false;
 
-        [Tooltip("Design-time positioned response buttons. (Optional if Button Template is assigned.)")]
+        [Tooltip("设计时定位的响应按钮。（如果已分配 Button Template，则可选。）")]
         public StandardUIResponseButton[] buttons;
 
-        [Tooltip("Template from which to instantiate response buttons. (Optional if using Buttons list above.)")]
+        [Tooltip("用于实例化响应按钮的模板。（如果使用上面的 Buttons 列表，则可选。）")]
         public StandardUIResponseButton buttonTemplate;
 
-        [Tooltip("If using Button Template, instantiate buttons under this GameObject.")]
+        [Tooltip("如果使用 Button Template，则在此 GameObject 下实例化按钮。")]
         public UnityEngine.UI.Graphic buttonTemplateHolder;
 
-        [Tooltip("(Optional) Scrollbar to use if instantiated button holder is in a scroll rect.")]
+        [Tooltip("（可选）如果实例化的按钮容器位于 Scroll Rect 中，则使用此滚动条。")]
         public UnityEngine.UI.Scrollbar buttonTemplateScrollbar;
 
-        [Tooltip("(Optional) Component that enables or disables scrollbar as necessary for content.")]
+        [Tooltip("（可选）根据内容需要启用或禁用滚动条的组件。")]
         public UIScrollbarEnabler scrollbarEnabler;
 
-        [Tooltip("Reset the scroll bar to this value when preparing response menu. To skip resetting the scrollbar, specify a negative value.")]
+        [Tooltip("准备 Response Menu 时将滚动条重置为此值。若要跳过重置滚动条，请指定负值。")]
         public float buttonTemplateScrollbarResetValue = 1;
 
-        [Tooltip("Automatically set up explicit joystick/keyboard navigation for instantiated template buttons instead of using Automatic navigation.")]
+        [Tooltip("为实例化的模板按钮自动设置明确的手柄/键盘导航，而不是使用 Automatic navigation。")]
         public bool explicitNavigationForTemplateButtons = true;
 
-        [Tooltip("If explicit navigation is enabled, loop around when navigating past end of menu.")]
+        [Tooltip("如果启用了明确导航，在导航到菜单末尾后循环回绕。")]
         public bool loopExplicitNavigation = false;
 
         public UIAutonumberSettings autonumber = new UIAutonumberSettings();
 
-        [Tooltip("If non-zero, prevent input for this duration in seconds when opening menu.")]
+        [Tooltip("如果非零，则在打开菜单时于此时长内阻止输入。")]
         public float blockInputDuration = 0;
 
-        [Tooltip("During block input duration, keep selected response button in selected visual state.")]
+        [Tooltip("在阻止输入期间，让选中的响应按钮保持选中视觉状态。")]
         public bool showSelectionWhileInputBlocked = false;
 
-        [Tooltip("Log a warning if a response button text is blank.")]
+        [Tooltip("如果响应按钮文本为空，则记录警告。")]
         public bool warnOnEmptyResponseText = false;
 
         public UnityEvent onContentChanged = new UnityEvent();
 
-        [Tooltip("When focusing panel, set this animator trigger.")]
+        [Tooltip("聚焦面板时，设置此 Animator 触发器。")]
         public string focusAnimationTrigger = string.Empty;
 
-        [Tooltip("When unfocusing panel, set this animator trigger.")]
+        [Tooltip("取消聚焦面板时，设置此 Animator 触发器。")]
         public string unfocusAnimationTrigger = string.Empty;
 
-        [Tooltip("Wait for panels within this dialogue UI (not external) to close before showing menu.")]
+        [Tooltip("在显示菜单前，等待此 dialogue UI 内的面板（非外部面板）关闭。")]
         public bool waitForClose = false;
 
         /// <summary>
